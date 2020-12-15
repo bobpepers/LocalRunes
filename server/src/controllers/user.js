@@ -66,61 +66,6 @@ export const fetchUser = async (req, res, next) => {
           },
         ],
       },
-      {
-        model: db.webslot,
-        as: 'webslots',
-        required: false,
-        where: {
-          active: true,
-        },
-        attributes: {
-          exclude: [
-            'userId',
-          ],
-        },
-        include: [
-          {
-            model: db.domain,
-            as: 'domain',
-            attributes: {
-              exclude: [
-                'userId',
-                'createdAt',
-                'id',
-              ],
-            },
-          },
-          {
-            model: db.order,
-            as: 'order',
-            where: {
-              phase: 'active',
-            },
-            required: false,
-            include: [
-              {
-                model: db.SurfTicket,
-                as: 'surfTicket',
-                attributes: {
-                  exclude: [
-                    'code',
-                  ],
-                },
-              },
-            ],
-          },
-        ],
-      },
-      {
-        model: db.domain,
-        as: 'domains',
-        through: { attributes: [] },
-        attributes: {
-          exclude: [
-            'id',
-          ],
-        },
-      },
 
     ],
   });

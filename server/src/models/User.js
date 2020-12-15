@@ -133,16 +133,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'avatar.png',
       allowNull: false,
     },
-    banners_amount: {
-      type: DataTypes.SMALLINT,
-      allowNull: false,
-      defaultValue: 4,
-    },
-    publishers_amount: {
-      type: DataTypes.SMALLINT,
-      allowNull: false,
-      defaultValue: 4,
-    },
   };
 
   // 2: The model options.

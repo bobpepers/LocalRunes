@@ -31,13 +31,9 @@ const Home = () => {
     <div className="height100 content">
       <Grid container>
         <Info />
-        <Volume />
-        <Activity />
         {/* <Globe /> */}
         {/* <Domains /> */}
         {/* <Banner /> */}
-        <AdvertisersPublishers />
-        <Runebase />
         <div
           style={{
             width: '100%',
@@ -61,7 +57,7 @@ const Home = () => {
             }}
             allowtransparency="true"
           />
-          <Exchanges />
+          {/*  <Exchanges /> */}
         </div>
       </Grid>
     </div>

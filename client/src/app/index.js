@@ -31,6 +31,8 @@ import reducers from './reducers';
 import Routes from './routes';
 import history from './history';
 import Header from './components/Header';
+import FooterMenu from './components/FooterMenu';
+
 // import Footer from './components/Footer';
 import Notifier from './containers/Alert';
 
@@ -172,6 +174,7 @@ function App() {
             <Snow />
             <Header />
             <Routes />
+            <FooterMenu />
             <Footer />
             <CookieConsent
               location="bottom"

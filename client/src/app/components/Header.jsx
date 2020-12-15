@@ -16,6 +16,12 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFaucet } from '@fortawesome/free-solid-svg-icons';
+import Badge from '@material-ui/core/Badge';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import MobileNav from '../assets/images/mobileNav.svg';
 // import 'bootstrap/dist/css/bootstrap.css';
 
@@ -28,10 +34,14 @@ class Header extends Component {
       prevHash: '',
       currentHash: '',
       chainInfo: false,
+      anchorEl: null,
+      open: false,
     };
     this.toggleMenu = this.toggleMenu.bind(this);
     this.updateHeight = this.updateHeight.bind(this);
     this.detectHashChange = this.detectHashChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   toggleMenu() {
@@ -58,6 +68,14 @@ class Header extends Component {
     if (this.state.height != this.div.clientHeight) {
       this.setState({ height: this.div.clientHeight });
     }
+  }
+
+  handleClick(event) {
+    this.setState({ anchorEl: event.currentTarget, open: Boolean(event.currentTarget) });
+  }
+
+  handleClose(event) {
+    this.setState({ anchorEl: event.currentTarget, open: false });
   }
 
   detectHashChange() {
@@ -93,48 +111,79 @@ class Header extends Component {
         return 'nl';
       }
     }
+    console.log(this.props.user);
     return (
       <header className="rootRow header" style={{ height: this.state.height }}>
         <Navbar ref={(div) => { this.div = div; }} fixed="top" className="navbar navbar-default" expand="lg">
-          <Link to={this.props.authenticated ? '/' : '/'} className="nav-link">RunesX</Link>
+          <Link to={this.props.authenticated ? '/' : '/'} className="nav-link">LocalRunes.com</Link>
           <button className="navbar-toggler" type="button" onClick={this.toggleMenu}>
             <MobileNav />
           </button>
           <Navbar.Collapse id="basic-navbar-nav" className={`collapse navbar-collapse ${show}`}>
             <Nav className="mr-auto rNavbar">
-              <Link className="nav-link" to="/surf">
-                <LiveTvIcon />
-                {' '}
-                Surf
+              <Link className="nav-link" to="/buy-runes">
+                Buy RUNES
               </Link>
-              {/*
-<Link className="nav-link" to="/click">
-                <MouseIcon />
-                {' '}
-                Click
+              <Link className="nav-link" to="/sell-runes">
+                Sell RUNES
               </Link>
-              */}
-              <Link className="nav-link" to="/faucet">
-                <FontAwesomeIcon icon={faFaucet} />
-                {' '}
-                Faucet
-              </Link>
-              <Link className="nav-link" to="/lottery">
-                <AttachMoneyIcon />
-                {' '}
-                Lottery
-              </Link>
-              <Link onClick={this.toggleMenu} className="nav-link" to="/dashboard">
-                <DashboardIcon />
-                {' '}
-                Dashboard
-              </Link>
+              {
+              this.props.authenticated
+                 && (
+                 <>
+                   <Link className="nav-link" to="/post-ad">
+                     Post a Trade
+                   </Link>
+                   <Link className="nav-link" to="/dashboard">
+                     {this.props.user && this.props.user.username}
+                   </Link>
+                 </>
+                 )
+            }
+
             </Nav>
+            <ul>
+              {
+              this.props.authenticated
+                && (
+                  <>
+                    <li>
+                      <MenuItem>
+                        <IconButton
+                          aria-label="show notifications"
+                          color="inherit"
+                          onClick={this.handleClick}
+                        >
+                          <Badge badgeContent={11} color="secondary">
+                            <NotificationsIcon />
+                          </Badge>
+                        </IconButton>
+                      </MenuItem>
+                      <Menu
+                        id="simple-menu"
+                        anchorEl={this.state.anchorEl}
+                        keepMounted
+                        open={this.state.open}
+                        onClose={this.handleClose}
+                      >
+                        <MenuItem onClick={this.handleClose}>Advertisement #1</MenuItem>
+                        <MenuItem onClick={this.handleClose}>Advertisement #2</MenuItem>
+                        <MenuItem onClick={this.handleClose}>Advertisement #3</MenuItem>
+                      </Menu>
+                    </li>
+                  </>
+
+                )
+
+            }
+
+            </ul>
             <ul>
               {
               this.props.authenticated
                 ? (
                   <>
+
                     <li>
                       <Link className="nav-link" to="/signout">
                         <ExitToAppIcon />
@@ -148,10 +197,10 @@ class Header extends Component {
                 : (
                   <>
                     <li>
-                      <Link className="nav-link" to="/signin">{t('signin')}</Link>
+                      <Link className="nav-link" to="/signup">Sign up free</Link>
                     </li>
                     <li>
-                      <Link className="nav-link" to="/signup">{t('signup')}</Link>
+                      <Link className="nav-link" to="/signin">Sign in</Link>
                     </li>
                   </>
 
@@ -201,7 +250,10 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
-  return { authenticated: state.auth.authenticated };
+  return {
+    authenticated: state.auth.authenticated,
+    user: state.user.data,
+  };
 }
 
 export default connect(mapStateToProps)(withTranslation()(Header));

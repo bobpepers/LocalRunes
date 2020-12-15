@@ -6,7 +6,7 @@ import ScrollAnimation from 'react-animate-on-scroll';
 import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getRequestRegister } from '../actions/registered';
-import Logo from '../assets/images/logo';
+import Logo from '../assets/images/LG2.png';
 
 const InfoContainer = (props) => {
   const {
@@ -68,7 +68,7 @@ const InfoContainer = (props) => {
           delay={0}
           offset={0}
         >
-          <Logo />
+          <img src={Logo} alt="logo" />
         </ScrollAnimation>
       </Grid>
       <Grid
@@ -105,7 +105,7 @@ const InfoContainer = (props) => {
               delay={0}
               offset={0}
             >
-              <h2 className="position-relative">RunesX Beta</h2>
+              <h2 className="position-relative">Buy & Sell RUNES Easily.</h2>
             </ScrollAnimation>
             <ScrollAnimation
               animateIn="bounceIn"
@@ -114,25 +114,8 @@ const InfoContainer = (props) => {
               delay={0}
               offset={0}
             >
-              <h3 className="position-relative">Boost your websites traffic</h3>
-            </ScrollAnimation>
-            <ScrollAnimation
-              animateIn="bounceIn"
-              animateOut="bounceOut"
-              duration={2}
-              delay={0}
-              offset={0}
-            >
-              <p className="position-relative">Manual Traffic Exchange</p>
-            </ScrollAnimation>
-            <ScrollAnimation
-              animateIn="bounceIn"
-              animateOut="bounceOut"
-              duration={2}
-              delay={0}
-              offset={0}
-            >
-              <p className="position-relative">Traditional Banner Advertising</p>
+              <p className="position-relative">Trade Cryptocurrencies Locally or Online using secure escrow service.</p>
+              <p className="position-relative">With Low fees & many ways of payment methods for you to complete your Trade Digitally.</p>
             </ScrollAnimation>
           </div>
         </div>

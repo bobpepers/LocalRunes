@@ -24,6 +24,8 @@ import Admin from './views/admin/Admin';
 import AdApproval from './views/AdApproval';
 import withTracker from './hooks/withTracker';
 import Faucet from './views/Faucet';
+import BuyRunes from './views/BuyRunes';
+import SellRunes from './views/SellRunes';
 
 import requireAuth from './components/hoc/RequireAuth';
 import requireNotAuth from './components/hoc/RequireNotAuth';
@@ -44,6 +46,14 @@ const Routes = (props) => {
         exact
         path="/"
         component={withTracker(Home)}
+      />
+      <Route
+        path="/buy-runes"
+        component={requireAuth(withTracker(BuyRunes))}
+      />
+      <Route
+        path="/sell-runes"
+        component={requireAuth(withTracker(SellRunes))}
       />
       <Route
         path="/surf"
