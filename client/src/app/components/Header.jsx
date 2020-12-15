@@ -148,28 +148,38 @@ class Header extends Component {
                 && (
                   <>
                     <li>
-                      <MenuItem>
-                        <IconButton
-                          aria-label="show notifications"
-                          color="inherit"
-                          onClick={this.handleClick}
-                        >
-                          <Badge badgeContent={11} color="secondary">
-                            <NotificationsIcon />
-                          </Badge>
-                        </IconButton>
-                      </MenuItem>
-                      <Menu
-                        id="simple-menu"
-                        anchorEl={this.state.anchorEl}
-                        keepMounted
-                        open={this.state.open}
-                        onClose={this.handleClose}
+                      <NavDropdown
+                        className="langPadding toggleLangWrapper"
+                        title={(
+                          <IconButton
+                            aria-label="show notifications"
+                            color="inherit"
+                            onClick={this.handleClick}
+                          >
+                            <Badge badgeContent={3} color="secondary">
+                              <NotificationsIcon />
+                            </Badge>
+                          </IconButton>
+              )}
+                        id="basic-nav-dropdown"
                       >
-                        <MenuItem onClick={this.handleClose}>Advertisement #1</MenuItem>
-                        <MenuItem onClick={this.handleClose}>Advertisement #2</MenuItem>
-                        <MenuItem onClick={this.handleClose}>Advertisement #3</MenuItem>
-                      </Menu>
+                        <NavDropdown.Item onClick={this.handleClose}>
+                          <div>
+                            Advertisement #1
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={this.handleClose}>
+                          <div>
+                            Advertisement #1
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={this.handleClose}>
+                          <div>
+                            Advertisement #1
+                          </div>
+                        </NavDropdown.Item>
+                      </NavDropdown>
+
                     </li>
                   </>
 
