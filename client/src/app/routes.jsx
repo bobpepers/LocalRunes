@@ -26,6 +26,12 @@ import withTracker from './hooks/withTracker';
 import Faucet from './views/Faucet';
 import BuyRunes from './views/BuyRunes';
 import SellRunes from './views/SellRunes';
+import Terms from './views/Terms';
+import Privacy from './views/Privacy';
+import AboutUs from './views/AboutUs';
+import Profile from './views/Profile';
+import Wallet from './views/Wallet';
+import PostAd from './views/PostAd';
 
 import requireAuth from './components/hoc/RequireAuth';
 import requireNotAuth from './components/hoc/RequireNotAuth';
@@ -124,6 +130,30 @@ const Routes = (props) => {
       <Route
         path="/ads"
         component={withTracker(AdApproval)}
+      />
+      <Route
+        path="/aboutus"
+        component={withTracker(Terms)}
+      />
+      <Route
+        path="/terms"
+        component={withTracker(AboutUs)}
+      />
+      <Route
+        path="/policy"
+        component={withTracker(Privacy)}
+      />
+      <Route
+        path="/wallet"
+        component={requireAuth(withTracker(Wallet))}
+      />
+      <Route
+        path="/profile"
+        component={requireAuth(withTracker(Profile))}
+      />
+      <Route
+        path="/post-ad"
+        component={requireAuth(withTracker(PostAd))}
       />
     </>
   )

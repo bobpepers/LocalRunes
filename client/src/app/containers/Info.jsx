@@ -114,7 +114,7 @@ const InfoContainer = (props) => {
               delay={0}
               offset={0}
             >
-              <p className="position-relative">Trade Cryptocurrencies Locally or Online using secure escrow service.</p>
+              <p className="position-relative">Trade RUNES Online using secure escrow service.</p>
               <p className="position-relative">With Low fees & many ways of payment methods for you to complete your Trade Digitally.</p>
             </ScrollAnimation>
           </div>

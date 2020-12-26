@@ -134,9 +134,7 @@ class Header extends Component {
                    <Link className="nav-link" to="/post-ad">
                      Post a Trade
                    </Link>
-                   <Link className="nav-link" to="/dashboard">
-                     {this.props.user && this.props.user.username}
-                   </Link>
+
                  </>
                  )
             }
@@ -188,6 +186,19 @@ class Header extends Component {
             }
 
             </ul>
+            {
+              this.props.authenticated
+                 && (
+                 <>
+                   <Link className="nav-link" to="/wallet">
+                     <ExitToAppIcon />
+                     {' '}
+                     Wallet
+                   </Link>
+                 </>
+                 )
+            }
+
             <ul>
               {
               this.props.authenticated
@@ -195,11 +206,42 @@ class Header extends Component {
                   <>
 
                     <li>
-                      <Link className="nav-link" to="/signout">
-                        <ExitToAppIcon />
-                        {' '}
-                        Logout
-                      </Link>
+                      <NavDropdown
+                        className="langPadding toggleLangWrapper"
+                        title={(this.props.user && this.props.user.username)}
+                        id="basic-nav-dropdown"
+                      >
+                        <NavDropdown.Item onClick={this.handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/profile">
+                              My Account
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={this.handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/dashboard">
+                              Public Profle
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={this.handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/dashboard">
+                              Dashboard
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={this.handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/signout">
+                              <ExitToAppIcon />
+                              {' '}
+                              Logout
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                      </NavDropdown>
                     </li>
                   </>
 

@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import ReactGlobe from 'react-globe';
 import {
   Grid,
-  Link,
 } from '@material-ui/core';
 import LanguageIcon from '@material-ui/icons/Language';
 import SearchIcon from '@material-ui/icons/Search';
 import Globe from 'react-globe.gl';
 import * as d3 from 'd3';
+import { Link } from 'react-router-dom';
 import { getRequestRegister } from '../actions/registered';
 import runebaseloop from '../assets/images/runebaseloop.gif';
 import theme from '../theme';
@@ -31,14 +31,14 @@ const FooterMenu = (props) => {
         </Grid>
         <Grid item xs={4} className="text-center">
           <h3>About</h3>
-          <p>About us</p>
-          <p>Terms of service</p>
-          <p>Privacy policy</p>
+          <Link className="nav-link" to="/aboutus">About us</Link>
+          <Link className="nav-link" to="/terms">Terms of service</Link>
+          <Link className="nav-link" to="/policy">Privacy policy</Link>
         </Grid>
         <Grid item xs={4} className="text-center">
           <h3>Follow us</h3>
-          <p>Facebook</p>
-          <p>Twitter</p>
+          <a href="#">Facebook</a>
+          <a href="#">Twitter</a>
         </Grid>
       </Grid>
     </div>
