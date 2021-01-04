@@ -13,7 +13,7 @@ import * as actions from '../actions/auth';
 import AboutUsImage from '../assets/images/about.svg'
 // import Globe from '../containers/Globe';
 
-const Home = () => {
+const AboutUs = () => {
   console.log('RunesX Home View');
 
   return (
@@ -31,11 +31,13 @@ const Home = () => {
           </p>
           <p>
             People from different countries can exchange their local currency into Runes. We allow users to create advertisements where they can choose the payment method and exchange rate for buying and selling Runes from and to other LocalRunes’ users. By replying to these advertisements, a trade chat is opened and escrow protection is automatically activated. Escrow protects both buyer and seller by keeping the runes safe until the payment is done and the seller releases runes to the buyer. LocalRunes also provides a web wallet from where you can send and receive Runes transactions.
-
+          </p>
+          <p>Please contact us at the following email:</p>
+          <p>
+            support@localrunes.com
           </p>
           <p>
-            Please contact us at the following email:
-            support@localrunes.com: If you need assistance with an order or transaction.
+            If you need assistance with an order or transaction.
           </p>
         </Grid>
       </Grid>
@@ -45,4 +47,4 @@ const Home = () => {
 
 const mapStateToProps = (state) => ({ errorMessage: state.auth.error })
 
-export default withRouter(connect(mapStateToProps, actions)(Home));
+export default withRouter(connect(mapStateToProps, actions)(AboutUs));

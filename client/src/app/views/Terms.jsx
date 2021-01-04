@@ -146,6 +146,8 @@ const Home = () => {
           <h3>TERMINATION</h3>
           <p>
             You may terminate this agreement with LocalRunes, and close your Account at any time, following settlement of any pending transactions.
+          </p>
+          <p>
             You also agree that LocalRunes may, by giving notice, in its sole discretion terminate Your access to the Site and to Your Account, including without limitation, our right to: limit, suspend or terminate the service and Members' Accounts, prohibit access to the Site and its content, services and tools, delay or remove hosted content, and take technical and legal steps to keep Members off the Site if we think that they are creating problems or possible legal liabilities, infringing the intellectual property rights of third parties, or acting inconsistently with the letter or spirit of these Terms. Additionally, we may, in appropriate circumstances and at our discretion, suspend or terminate Accounts of Members for any reason, including without limitation:
           </p>
           <p>
@@ -179,10 +181,17 @@ const Home = () => {
           </p>
           <p>
             We also reserve the right to cancel unconfirmed Accounts or Accounts that have been inactive for a period of 6 months or more, and/or to modify or discontinue our Site or Service or request to verify information to be able to continue using the Service. Members agree that LocalRunes will not be liable to them or to any third party for termination of their Account or access to the Site.
-            Unless with an acceptable reason, one person ID number is allowed to open one account only. We will close all other accounts and keep one active account only.
-            The suspension of an Account shall not affect the payment of the commissions due for past Transactions. Upon termination, Members shall communicate a valid bank account to allow for the transfer of any currencies credited to their account. Said bank account shall be held by the Member. Bitcoins/Runes may be transferred to a valid bank account only after conversion into a currency. LocalRunes shall transfer the currencies as soon as possible following the Member's request in the time frames specified by LocalRunes.
-            LocalRunes will send to You the credit balance of Your account, however in circumstances a number of intermediaries may be involved in an international payment and these or the beneficiary bank may deduct charges. We will use reasonable efforts to ensure that such charges are disclosed to You prior to sending Your payment, however where they cannot be avoided, You acknowledge that these charges cannot always be calculated in advance, and that you agree to be responsible for such charges.
 
+          </p>
+          <p>
+            Unless with an acceptable reason, one person ID number is allowed to open one account only. We will close all other accounts and keep one active account only.
+          </p>
+          <p>
+            The suspension of an Account shall not affect the payment of the commissions due for past Transactions. Upon termination, Members shall communicate a valid bank account to allow for the transfer of any currencies credited to their account. Said bank account shall be held by the Member. Bitcoins/Runes may be transferred to a valid bank account only after conversion into a currency. LocalRunes shall transfer the currencies as soon as possible following the Member's request in the time frames specified by LocalRunes.
+
+          </p>
+          <p>
+            LocalRunes will send to You the credit balance of Your account, however in circumstances a number of intermediaries may be involved in an international payment and these or the beneficiary bank may deduct charges. We will use reasonable efforts to ensure that such charges are disclosed to You prior to sending Your payment, however where they cannot be avoided, You acknowledge that these charges cannot always be calculated in advance, and that you agree to be responsible for such charges.
           </p>
         </Grid>
         <Grid item xs={12}>
@@ -191,6 +200,9 @@ const Home = () => {
           </h3>
           <p>
             All services are provided without warranty of any kind, either express or implied. We do not represent that this Site will be available 100% of the time to meet your needs. We will strive to provide You with the Service as soon as possible but there are no guarantees that access will not be interrupted, or that there will be no delays, failures, errors, omissions or loss of transmitted information.
+
+          </p>
+          <p>
             We will use reasonable endeavours to ensure that the Site can normally be accessed by You in accordance with these Terms of Use. We may suspend use of the Site for maintenance and will make reasonable efforts to give you notice. You acknowledge that this may not be possible in an emergency.
           </p>
         </Grid>

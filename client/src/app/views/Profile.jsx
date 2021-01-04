@@ -161,7 +161,7 @@ const Profile = (props) => {
   };
 
   return (
-    <Grid container>
+    <Grid container className="surfContainer">
       <Grid item xs={4}>
         <div className="avatar-image-wrapper">
           <div className="avatar-image" onClick={onAvatarClick}>
@@ -174,6 +174,35 @@ const Profile = (props) => {
             {user ? user.username : ''}
           </p>
         </div>
+        <div>
+          <h3>Basic Information</h3>
+          <p>
+            User Name:
+            {' '}
+            {user ? user.username : ''}
+          </p>
+          <p>
+            Full Name:
+          </p>
+          <p>
+            Email:
+          </p>
+          <p>
+            Phone Number:
+          </p>
+          <p>
+            Account Created:
+          </p>
+          <p>
+            Trust: Trusted By 0 people
+          </p>
+          <p>
+            Blocks: Blocked by 0 people
+          </p>
+        </div>
+      </Grid>
+      <Grid item xs={8}>
+        <h3>Update Info</h3>
       </Grid>
       <div className="App">
         <div>
