@@ -20,7 +20,6 @@ import Activity from '../containers/Activity';
 import Info from '../containers/Info';
 import Volume from '../containers/Volume';
 import Runebase from '../containers/Runebase';
-import Exchanges from '../components/Exchanges';
 import AdvertisersPublishers from '../components/AdvertisersPublishers';
 // import Globe from '../containers/Globe';
 

@@ -10,29 +10,17 @@ import {
   // Button,
 } from '@material-ui/core';
 import * as actions from '../actions/auth';
-// import Contact from '../components/Contact';
-// import Community from '../components/Community';
-// import Exchanges from '../components/Exchanges';
-// import Download from '../components/Download';
-// import Banner from '../components/Banner';
-// import Domains from '../containers/Domains';
-import Activity from '../containers/Activity';
-import Info from '../containers/Info';
-import Volume from '../containers/Volume';
-import Runebase from '../containers/Runebase';
-import Exchanges from '../components/Exchanges';
-import AdvertisersPublishers from '../components/AdvertisersPublishers';
-import TermsImage from '../assets/images/terms.svg'
+import AboutUsImage from '../assets/images/about.svg'
 // import Globe from '../containers/Globe';
 
 const Home = () => {
   console.log('RunesX Home View');
 
   return (
-    <div className="height100 content">
+    <div className="height100 content surfContainer">
       <Grid container align="center" alignConent="center" alignItems="center">
         <Grid item xs={8} align="center" alignItems="center">
-          <TermsImage />
+          <AboutUsImage />
         </Grid>
         <Grid item xs={12}>
           <h3 className="mb15">About us</h3>

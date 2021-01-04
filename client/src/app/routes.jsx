@@ -62,16 +62,8 @@ const Routes = (props) => {
         component={requireAuth(withTracker(SellRunes))}
       />
       <Route
-        path="/surf"
-        component={requireAuth(withTracker(Surf))}
-      />
-      <Route
         path="/dashboard"
         component={requireAuth(withTracker(Dashboard))}
-      />
-      <Route
-        path="/click"
-        component={requireAuth(withTracker(Click))}
       />
       <Route
         path="/signin"
@@ -116,28 +108,16 @@ const Routes = (props) => {
         component={requireAuth(withTracker(UserList))}
       />
       <Route
-        path="/lottery"
-        component={Jackpot}
-      />
-      <Route
         path="/admin"
         component={requireAuth(withTracker(Admin))}
       />
       <Route
-        path="/faucet"
-        component={withTracker(Faucet)}
-      />
-      <Route
-        path="/ads"
-        component={withTracker(AdApproval)}
-      />
-      <Route
         path="/aboutus"
-        component={withTracker(Terms)}
+        component={withTracker(AboutUs)}
       />
       <Route
         path="/terms"
-        component={withTracker(AboutUs)}
+        component={withTracker(Terms)}
       />
       <Route
         path="/policy"

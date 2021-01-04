@@ -11,19 +11,6 @@ import {
 } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import * as actions from '../actions/auth';
-// import Contact from '../components/Contact';
-// import Community from '../components/Community';
-// import Exchanges from '../components/Exchanges';
-// import Download from '../components/Download';
-// import Banner from '../components/Banner';
-// import Domains from '../containers/Domains';
-import Activity from '../containers/Activity';
-import Info from '../containers/Info';
-import Volume from '../containers/Volume';
-import Runebase from '../containers/Runebase';
-import Exchanges from '../components/Exchanges';
-import AdvertisersPublishers from '../components/AdvertisersPublishers';
-// import Globe from '../containers/Globe';
 
 const PostAd = () => {
   console.log('RunesX Home View');
