@@ -117,10 +117,14 @@ const Admin = (props) => {
 
   const dispatch = useDispatch();
   useEffect(() => dispatch(fetchUserData()), [dispatch]);
+
+  let counterIdentity = 0;
   useEffect(() => {
-    console.log('props user');
-    console.log(props.user);
-  }, [props.user]);
+    counterIdentity = 0;
+    for (let i = 0; i < user.length; i++) {
+      if (user[i].identityVerified === 'pending') counterIdentity++;
+    }
+  }, [user]);
   useEffect(() => {
     document.title = 'RunesX - Admin Dashboard';
   }, []);
@@ -198,7 +202,7 @@ const Admin = (props) => {
             <ListItemIcon>
               <LiveTvIcon />
             </ListItemIcon>
-            <ListItemText primary="Publishers" />
+            <ListItemText primary={`Pending Identity (${counterIdentity})`} />
           </ListItem>
           <ListItem
             button

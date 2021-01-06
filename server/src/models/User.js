@@ -133,6 +133,32 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'avatar.png',
       allowNull: false,
     },
+    phoneNumber: {
+      type: DataTypes.BIGINT,
+      defaultValue: 0,
+    },
+    phoneNumberVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    identityFront: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    identityBack: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    identityVerified: {
+      type: DataTypes.ENUM,
+      defaultValue: 'init',
+      values: [
+        'init',
+        'pending',
+        'rejected',
+        'accepted',
+      ],
+    },
   };
 
   // 2: The model options.

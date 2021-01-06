@@ -57,6 +57,10 @@ import bannerOrders from './bannerOrders';
 import buyAdzoneslot from './buyAdzoneslot';
 import createReport from './createReport';
 
+import verifyPhoneCode from './verifyPhoneCode';
+import getPhoneCode from './getPhoneCode';
+import uploadIdentity from './uploadIdentity';
+
 const rootReducer = combineReducers({
   form,
   auth: auth,
@@ -109,7 +113,11 @@ const rootReducer = combineReducers({
   adminBanners: adminBanners,
   adminReviewBanners: adminReviewBanners,
   adminReviewPublishers: adminReviewPublishers,
-  adminDomains: adminDomains,  
+  adminDomains: adminDomains,
+  
+  verifyPhoneCode: verifyPhoneCode,
+  getPhoneCode: getPhoneCode,
+  uploadIdentity: uploadIdentity,
   
 });
 

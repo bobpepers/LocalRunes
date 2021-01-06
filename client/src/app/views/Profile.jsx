@@ -1,5 +1,8 @@
 import React, {
-  useEffect, useState, useRef, useCallback,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
 } from 'react';
 import {
   Grid,
@@ -8,14 +11,43 @@ import {
   Modal,
   CircularProgress,
 } from '@material-ui/core';
+import {
+  reduxForm,
+  Field,
+  formValueSelector,
+  change,
+} from 'redux-form';
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
 import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { lighten, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import ReactCrop from 'react-image-crop';
+import Backdrop from '@material-ui/core/Backdrop';
 import Referrals from '../containers/Referrals';
+import PhoneVerify from '../containers/PhoneVerify';
+import IdentityVerify from '../containers/IdentityVerify';
 import 'react-image-crop/dist/ReactCrop.css';
 import uploadAvatarAction from '../actions/uploadAvatar';
 import 'blueimp-canvas-to-blob/js/canvas-to-blob';
+import * as actions from '../actions/auth';
+import Fade from '@material-ui/core/Fade';
+import { idleUploadIdentity } from '../actions/identity';
+
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+
+}));
 // Increase pixel density for crop preview quality on retina screens.
 const pixelRatio = window.devicePixelRatio || 1;
 
@@ -53,23 +85,35 @@ function getModalStyle() {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    overflow: 'auto',
-    position: 'absolute',
-    width: '80vw',
-    height: '80vh',
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-}));
+const renderField = ({
+  input, type, placeholder, meta: { touched, error },
+}) => (
+  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
+    <FormControl
+      variant="outlined"
+      fullWidth
+    >
+      <TextField
+        // className="outlined-email-field"
+        label="E-mail"
+        type={type}
+        variant="outlined"
+        inputProps={{ className: 'outlined-email-field' }}
+        {...input}
+      />
+      { touched && error && <div className="form-error">{error}</div> }
+    </FormControl>
+  </div>
+);
 
 const Profile = (props) => {
   const {
     user,
     uploadAvatar,
+    handleSubmit,
+    signinUser,
+    verifyPhoneCodeProp,
+    uploadIdentity,
   } = props;
   const dispatch = useDispatch();
   const [upImg, setUpImg] = useState(false);
@@ -82,17 +126,55 @@ const Profile = (props) => {
   const [modalStyle] = React.useState(getModalStyle);
   const [rerender, setRerender] = useState(1);
 
+  const [open, setOpen] = React.useState(false);
+  const [openIdentity, setOpenIdentity] = React.useState(false);
+
+  const handleOpenIdentityVerify = () => {
+    setOpenIdentity(true);
+  };
+
+  const handleCloseIdentityVerify = () => {
+    setOpenIdentity(false);
+  };
+
+  const handleOpenPhoneVerify = () => {
+    setOpen(true);
+  };
+
+  const handleClosePhoneVerify = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     setUpImg(false)
   }, [uploadAvatar]);
+
   useEffect(() => {
 
   }, [user]);
 
+  useEffect(() => {
+    dispatch(idleUploadIdentity());
+  }, []);
+
+  useEffect(() => {
+    if (verifyPhoneCodeProp) {
+      setOpen(false);
+    }
+  }, [verifyPhoneCodeProp]);
+
+  useEffect(() => {
+    if (uploadIdentity) {
+      setOpenIdentity(false);
+    }
+  }, [uploadIdentity]);
+
   const handleClose = () => {
     setUpImg(false);
   }
-
+  const handleFormSubmit = async (props) => {
+    await signinUser(props);
+  }
   const uploadAvatarImage = (previewCanvas, crop) => {
     if (!crop || !previewCanvas) {
       return;
@@ -169,12 +251,7 @@ const Profile = (props) => {
             <span className="avatarEditHoverText">Edit</span>
           </div>
         </div>
-        <div className="avater-username">
-          <p>
-            {user ? user.username : ''}
-          </p>
-        </div>
-        <div>
+        <div className="text-center">
           <h3>Basic Information</h3>
           <p>
             User Name:
@@ -183,15 +260,25 @@ const Profile = (props) => {
           </p>
           <p>
             Full Name:
+            {' '}
+            {user ? user.firstname : ''}
+            {' '}
+            {user ? user.lastname : ''}
           </p>
           <p>
             Email:
+            {' '}
+            {user ? user.email : ''}
           </p>
           <p>
             Phone Number:
+            {' '}
+            {user ? `+${user.phoneNumber}` : ''}
           </p>
           <p>
             Account Created:
+            {' '}
+            {user ? user.createdAt : ''}
           </p>
           <p>
             Trust: Trusted By 0 people
@@ -203,6 +290,109 @@ const Profile = (props) => {
       </Grid>
       <Grid item xs={8}>
         <h3>Update Info</h3>
+        <div className="form-container index600 shadow-w signinContainer content">
+          <Grid container alignItems="center" justify="center">
+            <Grid item xs={12}>
+              <form onSubmit={handleSubmit(handleFormSubmit)}>
+                <Grid item>
+                  <Field
+                    name="text"
+                    component={renderField}
+                    type="text"
+                    placeholder="Email"
+                  />
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" color="primary" type="submit" className="btn" fullWidth size="large">
+                    Update
+                  </Button>
+                </Grid>
+              </form>
+            </Grid>
+            <Grid item xs={12}>
+              <h3>Update Password</h3>
+              <p>Change Password</p>
+            </Grid>
+            <Grid item xs={12}>
+              <h3>Verification</h3>
+              <p>E-mail verified: Yes</p>
+              <p>
+                Identity verified:
+                {' '}
+                {user && user.identityVerified === 'init' && (
+                  <Button type="button" onClick={handleOpenIdentityVerify}>
+                    Verify Identity
+                  </Button>
+                )}
+                {user && user.identityVerified === 'rejected' && (
+                  <>
+                    <Button type="button" onClick={handleOpenIdentityVerify}>
+                      Verify Identity
+                    </Button>
+                    <p>Rejected</p>
+                  </>
+                )}
+                {user && user.identityVerified === 'pending' && (
+                  <p>Pending</p>
+                )}
+                {user && user.identityVerified === 'accepted' && (
+                  <p>Accepted</p>
+                )}
+
+              </p>
+              <p>
+                Phone Number Verified:
+                {' '}
+                {user && user.phoneNumberVerified ? 'Yes' : (
+                  <Button type="button" onClick={handleOpenPhoneVerify}>
+                    Add PhoneNumber
+                  </Button>
+                )}
+
+              </p>
+              <div>
+
+                <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  className={classes.modal}
+                  open={openIdentity}
+                  onClose={handleCloseIdentityVerify}
+                  closeAfterTransition
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    timeout: 500,
+                  }}
+                >
+                  <Fade in={openIdentity}>
+                    <div className={classes.paper}>
+                      <IdentityVerify />
+                    </div>
+                  </Fade>
+                </Modal>
+
+                <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  className={classes.modal}
+                  open={open}
+                  onClose={handleClosePhoneVerify}
+                  closeAfterTransition
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    timeout: 500,
+                  }}
+                >
+                  <Fade in={open}>
+                    <div className={classes.paper}>
+                      <PhoneVerify />
+                    </div>
+                  </Fade>
+                </Modal>
+              </div>
+            </Grid>
+          </Grid>
+        </div>
       </Grid>
       <div className="App">
         <div>
@@ -300,12 +490,35 @@ const Profile = (props) => {
   )
 }
 
+const validate = (formProps) => {
+  const errors = {};
+  if (!formProps.email) {
+    errors.email = 'Email is required'
+  }
+
+  if (!formProps.password) {
+    errors.password = 'Password is required'
+  }
+
+  if (!formProps.captchaResponse) {
+    errors.captchaResponse = 'Please validate the captcha.';
+  }
+
+  return errors;
+}
+
+const selector = formValueSelector('profile');
+
 const mapStateToProps = (state) => {
   console.log(state.uploadAvatar);
   return {
+    uploadIdentity: state.uploadIdentity.data,
+    errorMessage: state.auth.error,
     uploadAvatar: state.uploadAvatar,
     user: state.user.data,
+    verifyPhoneCodeProp: state.verifyPhoneCode.data,
   }
 }
 
-export default connect(mapStateToProps, null)(Profile);
+// export default connect(mapStateToProps, null)(Profile);
+export default connect(mapStateToProps, actions)(reduxForm({ form: 'profile', validate })(Profile));

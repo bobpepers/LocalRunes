@@ -12,6 +12,15 @@ import {
   adComplete,
 } from './controllers/ad';
 import {
+  getPhoneCode,
+  verifyPhoneCode,
+} from './controllers/verifyPhone';
+
+import {
+  uploadIdentity,
+} from './controllers/identity';
+
+import {
   uploadAvatar,
 } from './controllers/upload';
 import {
@@ -304,6 +313,74 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         console.log(res.locals.withdrawals);
         res.json({
           withdrawals: res.locals.withdrawals,
+        });
+      }
+    });
+
+  app.post('/api/getphonecode',
+    IsAuthenticated,
+    insertIp,
+    getPhoneCode,
+    (req, res) => {
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      if (res.locals.phonecode) {
+        res.json({
+          phoneCode: res.locals.phonecode,
+        });
+      }
+    });
+
+  app.post('/api/verifyphonecode',
+    IsAuthenticated,
+    insertIp,
+    verifyPhoneCode,
+    (req, res) => {
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+
+      if (res.locals.verifyphonecode && res.locals.phoneNumber && res.locals.phoneNumberVerified) {
+        res.json({
+          verifyphonecode: res.locals.verifyphonecode,
+          phoneNumber: res.locals.phoneNumber,
+          phoneNumberVerified: res.locals.phoneNumberVerified,
+        });
+      }
+    });
+
+  app.post('/api/upload/identity',
+    IsAuthenticated,
+    isUserBanned,
+    storeIp,
+    ensuretfa,
+    upload.fields([{
+      name: 'front',
+      maxCount: 1,
+    }, {
+      name: 'back',
+      maxCount: 1,
+    }]),
+    uploadIdentity,
+    (req, res) => {
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      if (res.locals.identityFront && res.locals.identityBack && res.locals.identityVerified) {
+        res.json({
+          identityBack: res.locals.identityBack,
+          identityFront: res.locals.identityFront,
+          identityVerified: res.locals.identityVerified,
         });
       }
     });

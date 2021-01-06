@@ -18,6 +18,8 @@ import {
   UPDATE_AVATAR_PATH,
   BUY_BANNERSLOT,
   BUY_PUBLISHERSLOT,
+  UPDATE_USER_PHONE,
+  UPDATE_USER_IDENTITY,
 } from '../actions/types/index';
 
 const initialState = {
@@ -204,6 +206,33 @@ export default function userReducer(
         data: {
           ...state.data,
           avatar_path: action.payload.data,
+        },
+        loading: false,
+        error: null,
+      };
+
+    case UPDATE_USER_PHONE:
+      console.log(action.payload);
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          phoneNumber: action.payload.phoneNumber,
+          phoneNumberVerified: action.payload.phoneNumberVerified,
+        },
+        loading: false,
+        error: null,
+      };
+
+    case UPDATE_USER_IDENTITY:
+      console.log(action.payload);
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          identityFront: action.payload.identityFront,
+          identityBack: action.payload.identityBack,
+          identityVerified: action.payload.identityVerified,
         },
         loading: false,
         error: null,
