@@ -275,6 +275,24 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'referrerID',
       as: 'referrer',
     });
+
+    UserModel.hasMany(model.trusted, {
+      foreignKey: 'userId',
+      as: 'trustedBy',
+    });
+    UserModel.hasMany(model.trusted, {
+      foreignKey: 'trustedId',
+      as: 'trustedUsers',
+    });
+
+    UserModel.hasMany(model.blocked, {
+      foreignKey: 'userId',
+      as: 'blocked',
+    });
+    UserModel.hasMany(model.blocked, {
+      foreignKey: 'blockedId',
+      as: 'blockedUsers',
+    });
   };
 
   return UserModel;

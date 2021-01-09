@@ -59,6 +59,8 @@ import {
   // fetchUsers,
   fetchUserCount,
 } from './controllers/users';
+import trustUser from './controllers/trust';
+
 import {
   fetchDomains,
 } from './controllers/domain';
@@ -114,7 +116,7 @@ import {
   withdraw,
 } from './controllers/wallet';
 import fetchJackpots from './controllers/jackpot';
-import { fetchUser } from './controllers/user';
+import { fetchUser, fetchSpecificUser } from './controllers/user';
 
 import passportService from './services/passport';
 import {
@@ -1580,6 +1582,60 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
+  app.post('/api/getuser',
+    (req, res, next) => {
+      console.log('api get user start');
+      console.log('api get user start');
+      console.log('api get user start');
+      console.log('api get user start');
+      console.log('api get user start');
+      console.log('api get user start');
+      console.log('api get user start');
+      console.log('api get user start');
+      console.log('api get user start');
+      console.log('api get user start');
+      next();
+    },
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    fetchSpecificUser,
+    (req, res, next) => {
+      console.log('before send specificuser');
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      if (res.locals.user) {
+        res.json(res.locals.user);
+      }
+    });
+
+  app.post('/api/trust',
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    trustUser,
+    (req, res, next) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      if (res.locals.trusted) {
+        res.json({ trusted: res.locals.trusted });
+      }
+      if (res.locals.removed) {
+        res.json({ removed: res.locals.removed });
+      }
+      if (res.locals.user) {
+        res.json(res.locals.user);
+      }
+    });
   // User Create Order
   app.post('/api/banners/order/create',
     IsAuthenticated,

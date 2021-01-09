@@ -1,68 +1,135 @@
-import React, {
-  useEffect,
-  useState,
-  // Fragment,
-} from 'react';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import {
-  Grid,
-  // Button,
-} from '@material-ui/core';
-import * as actions from '../actions/auth';
-// import Contact from '../components/Contact';
-// import Community from '../components/Community';
-// import Exchanges from '../components/Exchanges';
-// import Download from '../components/Download';
-// import Banner from '../components/Banner';
-// import Domains from '../containers/Domains';
-import Activity from '../containers/Activity';
-import Info from '../containers/Info';
-import Volume from '../containers/Volume';
-import Runebase from '../containers/Runebase';
-import AdvertisersPublishers from '../components/AdvertisersPublishers';
-// import Globe from '../containers/Globe';
+import React, { useEffect } from 'react';
+import { connect, useDispatch } from 'react-redux';
+import { Grid } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Transactions from '../components/Transactions';
+import { fetchUserData } from '../actions/user';
 
-const Home = () => {
-  console.log('RunesX Home View');
-
+const WalletContainer = (props) => {
+  const {
+    user: {
+      wallet,
+    },
+  } = props;
+  const dispatch = useDispatch();
+  useEffect(() => dispatch(fetchUserData()), [dispatch]);
   return (
-    <div className="height100 content">
+    <div className="surfContainer">
       <Grid container>
-        <Info />
-        {/* <Globe /> */}
-        {/* <Domains /> */}
-        {/* <Banner /> */}
-        <div
-          style={{
-            width: '100%',
-            textAlign: 'center',
-            paddingBottom: '40px',
-            zIndex: 50,
-          }}
-          className="spacing-top"
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem walletMenuItemActive"
         >
-          <iframe
-            title="a-ads leaderboard 2"
-            data-aa="1500077"
-            src="//ad.a-ads.com/1500077?size=728x90"
-            scrolling="no"
-            style={{
-              width: '728px',
-              height: '90px',
-              border: '0px',
-              padding: 0,
-              overflow: 'hidden',
-            }}
-            allowtransparency="true"
+          <Link className="nav-link" to="/wallet">
+            <p className="text-center">
+              Overview
+            </p>
+          </Link>
+
+        </Grid>
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem"
+        >
+          <Link className="nav-link" to="/wallet/receive">
+            <p className="text-center">
+              Receive
+            </p>
+          </Link>
+        </Grid>
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem"
+        >
+          <Link className="nav-link" to="/wallet/send">
+            <p className="text-center">
+              Send
+            </p>
+          </Link>
+        </Grid>
+      </Grid>
+      <Grid
+        container
+      >
+        <Grid
+          container
+          item
+          xs={12}
+          sm={4}
+          md={4}
+          className="glass"
+          justify="center"
+        >
+          <span className="dashboardWalletItem">Available</span>
+          <span>
+            {wallet ? (wallet.available / 1e8) : 'loading'}
+            {' '}
+            RUNES
+          </span>
+        </Grid>
+        <Grid
+          item
+          container
+          xs={12}
+          sm={4}
+          md={4}
+          className="glass"
+          justify="center"
+        >
+          <span className="dashboardWalletItem">Locked</span>
+          <span className="dashboardWalletItem">
+            {wallet ? (wallet.locked / 1e8) : 'loading'}
+            {' '}
+            RUNES
+          </span>
+        </Grid>
+        <Grid
+          item
+          container
+          xs={12}
+          sm={4}
+          md={4}
+          className="glass"
+          justify="center"
+        >
+          <span className="dashboardWalletItem">Total</span>
+          <span className="dashboardWalletItem">
+            {wallet ? ((wallet.available + wallet.locked) / 1e8) : 'loading'}
+            {' '}
+            RUNES
+          </span>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          className="transactionsContainer"
+        >
+          <Transactions
+            addresses={wallet && wallet.addresses || []}
+            transactions={wallet && wallet.addresses && wallet.addresses[0] ? wallet.addresses[0].transactions : []}
           />
-          {/*  <Exchanges /> */}
-        </div>
+        </Grid>
       </Grid>
     </div>
   )
 }
 
-const mapStateToProps = (state) => ({ errorMessage: state.auth.error })
+function mapStateToProps(state) {
+  return {
+    websites: state.website.list,
+    user: state.user.data,
+  };
+}
 
-export default withRouter(connect(mapStateToProps, actions)(Home));
+WalletContainer.propTypes = {
+  user: PropTypes.shape({
+    wallet: PropTypes.arrayOf.isRequired,
+
+  }).isRequired,
+};
+
+export default connect(mapStateToProps)(WalletContainer);

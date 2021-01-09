@@ -15,6 +15,9 @@ import ResetPassword from './components/resetPassword/ResetPassword';
 import ResetPasswordVerify from './components/resetPassword/ResetPasswordVerify';
 import ResetPasswordNew from './components/resetPassword/ResetPasswordNew';
 
+import Deposit from './components/Deposit';
+import Withdraw from './components/Withdraw';
+
 import Dashboard from './views/Dashboard';
 import Surf from './views/Surf';
 import Click from './views/Click';
@@ -32,6 +35,7 @@ import AboutUs from './views/AboutUs';
 import Profile from './views/Profile';
 import Wallet from './views/Wallet';
 import PostAd from './views/PostAd';
+import PublicProfile from './views/PublicProfile';
 
 import requireAuth from './components/hoc/RequireAuth';
 import requireNotAuth from './components/hoc/RequireNotAuth';
@@ -125,11 +129,26 @@ const Routes = (props) => {
       />
       <Route
         path="/wallet"
+        exact
         component={requireAuth(withTracker(Wallet))}
+      />
+      <Route
+        path="/wallet/send"
+        exact
+        component={requireAuth(withTracker(Withdraw))}
+      />
+      <Route
+        path="/wallet/receive"
+        exact
+        component={requireAuth(withTracker(Deposit))}
       />
       <Route
         path="/profile"
         component={requireAuth(withTracker(Profile))}
+      />
+      <Route
+        path="/public_profile/*"
+        component={requireAuth(withTracker(PublicProfile))}
       />
       <Route
         path="/post-ad"

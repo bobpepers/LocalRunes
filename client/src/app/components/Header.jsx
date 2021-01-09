@@ -220,7 +220,7 @@ class Header extends Component {
                         </NavDropdown.Item>
                         <NavDropdown.Item onClick={this.handleClose}>
                           <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/dashboard">
+                            <Link style={{ color: '#000' }} className="nav-link" to={`/public_profile/${this.props.user && this.props.user.username}`}>
                               Public Profle
                             </Link>
                           </div>

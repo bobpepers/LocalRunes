@@ -60,6 +60,8 @@ import createReport from './createReport';
 import verifyPhoneCode from './verifyPhoneCode';
 import getPhoneCode from './getPhoneCode';
 import uploadIdentity from './uploadIdentity';
+import specificUser from './fetchSpecificUser';
+
 
 const rootReducer = combineReducers({
   form,
@@ -118,6 +120,7 @@ const rootReducer = combineReducers({
   verifyPhoneCode: verifyPhoneCode,
   getPhoneCode: getPhoneCode,
   uploadIdentity: uploadIdentity,
+  specificUser: specificUser,
   
 });
 

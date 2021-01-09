@@ -32,7 +32,16 @@ import AdminReviewBanners from './AdminReviewBanners';
 import AdminReviewPublishers from './AdminReviewPublishers';
 import AdminUser from './AdminUser';
 import AdminDomains from './AdminDomains';
-
+import AdminFeeConfig from './AdminFeeConfig';
+import AdminCountryManagement from './AdminCountryManagement';
+import AdminCurrencyManagement from './AdminCurrencyManagement';
+import AdminOrderManagement from './AdminOrderManagement';
+import AdminAdManagement from './AdminAdManagement';
+import AdminPaymentMethodManagement from './AdminPaymentMethodManagement';
+import AdminDashboard from './AdminDashboard';
+import {
+  fetchAdminUserListData,
+} from '../../actions/admin';
 // import * as actions from '../actions/user';
 
 const drawerWidth = 240;
@@ -94,11 +103,15 @@ const useStyles = makeStyles((theme) => ({
 const Admin = (props) => {
   const {
     user,
+    adminUserList,
   } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [openSubMenuWallet, setOpenSubMenuWallet] = useState(true);
   const [selectedUser, setSelectedUser] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => dispatch(fetchAdminUserListData()), [dispatch]);
+  useEffect(() => {}, [adminUserList]);
 
   const [dashboardPath, setDashboardPath] = useState('users');
 
@@ -115,16 +128,16 @@ const Admin = (props) => {
   }
   useEffect(() => {}, [dashboardPath]);
 
-  const dispatch = useDispatch();
   useEffect(() => dispatch(fetchUserData()), [dispatch]);
 
   let counterIdentity = 0;
   useEffect(() => {
     counterIdentity = 0;
-    for (let i = 0; i < user.length; i++) {
-      if (user[i].identityVerified === 'pending') counterIdentity++;
+    console.log(adminUserList);
+    for (let i = 0; i < adminUserList.length; i++) {
+      if (adminUserList[i].identityVerified === 'pending') counterIdentity++;
     }
-  }, [user]);
+  }, [adminUserList]);
   useEffect(() => {
     document.title = 'RunesX - Admin Dashboard';
   }, []);
@@ -173,6 +186,28 @@ const Admin = (props) => {
         <List>
           <ListItem
             button
+            key="dashboard"
+            className={dashboardPath === 'dashboard' && 'sideMenuActive'}
+            onClick={() => handleMenuClick('dashboard')}
+          >
+            <ListItemIcon>
+              <LiveTvIcon />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </ListItem>
+          <ListItem
+            button
+            key="feeConfig"
+            className={dashboardPath === 'feeConfig' && 'sideMenuActive'}
+            onClick={() => handleMenuClick('feeConfig')}
+          >
+            <ListItemIcon>
+              <LiveTvIcon />
+            </ListItemIcon>
+            <ListItemText primary="Fee configuration" />
+          </ListItem>
+          <ListItem
+            button
             key="users"
             className={dashboardPath === 'users' && 'sideMenuActive'}
             onClick={() => handleMenuClick('users')}
@@ -180,7 +215,62 @@ const Admin = (props) => {
             <ListItemIcon>
               <LiveTvIcon />
             </ListItemIcon>
-            <ListItemText primary="Users" />
+            <ListItemText primary="User Managment" />
+          </ListItem>
+          <ListItem
+            button
+            key="countryManagment"
+            className={dashboardPath === 'countryManagment' && 'sideMenuActive'}
+            onClick={() => handleMenuClick('countryManagment')}
+          >
+            <ListItemIcon>
+              <LiveTvIcon />
+            </ListItemIcon>
+            <ListItemText primary="Country Management" />
+          </ListItem>
+          <ListItem
+            button
+            key="currencyManagment"
+            className={dashboardPath === 'currencyManagment' && 'sideMenuActive'}
+            onClick={() => handleMenuClick('currencyManagment')}
+          >
+            <ListItemIcon>
+              <LiveTvIcon />
+            </ListItemIcon>
+            <ListItemText primary="Currency Managment" />
+          </ListItem>
+          <ListItem
+            button
+            key="orderManagment"
+            className={dashboardPath === 'orderManagment' && 'sideMenuActive'}
+            onClick={() => handleMenuClick('orderManagment')}
+          >
+            <ListItemIcon>
+              <LiveTvIcon />
+            </ListItemIcon>
+            <ListItemText primary="Order Managment" />
+          </ListItem>
+          <ListItem
+            button
+            key="adManagement"
+            className={dashboardPath === 'adManagement' && 'sideMenuActive'}
+            onClick={() => handleMenuClick('adManagement')}
+          >
+            <ListItemIcon>
+              <LiveTvIcon />
+            </ListItemIcon>
+            <ListItemText primary="Ads Managment" />
+          </ListItem>
+          <ListItem
+            button
+            key="paymentMethodManagement"
+            className={dashboardPath === 'paymentMethodManagement' && 'sideMenuActive'}
+            onClick={() => handleMenuClick('paymentMethodManagement')}
+          >
+            <ListItemIcon>
+              <LiveTvIcon />
+            </ListItemIcon>
+            <ListItemText primary="Payment Method Managment" />
           </ListItem>
           <ListItem
             button
@@ -195,65 +285,62 @@ const Admin = (props) => {
           </ListItem>
           <ListItem
             button
-            key="publishers"
-            className={dashboardPath === 'publishers' && 'sideMenuActive'}
-            onClick={() => handleMenuClick('publishers')}
+            key="identity"
+            className={dashboardPath === 'identity' && 'sideMenuActive'}
+            onClick={() => handleMenuClick('identity')}
           >
             <ListItemIcon>
               <LiveTvIcon />
             </ListItemIcon>
             <ListItemText primary={`Pending Identity (${counterIdentity})`} />
           </ListItem>
-          <ListItem
-            button
-            key="banners"
-            className={dashboardPath === 'banners' && 'sideMenuActive'}
-            onClick={() => handleMenuClick('banners')}
-          >
-            <ListItemIcon>
-              <LiveTvIcon />
-            </ListItemIcon>
-            <ListItemText primary="Banners" />
-          </ListItem>
-
-          <ListItem
-            button
-            key="reviewPublishers"
-            className={dashboardPath === 'reviewPublishers' && 'sideMenuActive'}
-            onClick={() => handleMenuClick('reviewPublishers')}
-          >
-            <ListItemIcon>
-              <FontAwesomeIcon icon={faBullhorn} />
-            </ListItemIcon>
-            <ListItemText primary="Review Publishers" />
-          </ListItem>
-          <ListItem
-            button
-            key="reviewBanners"
-            className={dashboardPath === 'reviewBanners' && 'sideMenuActive'}
-            onClick={() => handleMenuClick('reviewBanners')}
-          >
-            <ListItemIcon>
-              <ShowChartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Review Banners" />
-          </ListItem>
-          <ListItem
-            button
-            key="domains"
-            className={dashboardPath === 'domains' && 'sideMenuActive'}
-            onClick={() => handleMenuClick('domains')}
-          >
-            <ListItemIcon>
-              <ShowChartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Domains" />
-          </ListItem>
         </List>
         <Divider />
       </Drawer>
 
       <div className={`${classes.content} w-100`}>
+
+        {
+          dashboardPath === 'dashboard' && (
+          <AdminDashboard />
+          )
+        }
+        {
+          dashboardPath === 'users' && (
+          <AdminUserList />
+          )
+        }
+        {
+          dashboardPath === 'feeConfig' && (
+          <AdminFeeConfig />
+          )
+        }
+        {
+          dashboardPath === 'countryManagment' && (
+          <AdminCountryManagement />
+          )
+        }
+        {
+          dashboardPath === 'currencyManagment' && (
+          <AdminCurrencyManagement />
+          )
+        }
+        {
+          dashboardPath === 'orderManagment' && (
+          <AdminOrderManagement />
+          )
+        }
+        {
+          dashboardPath === 'adManagement' && (
+          <AdminAdManagement />
+          )
+        }
+        {
+          dashboardPath === 'paymentMethodManagement' && (
+          <AdminPaymentMethodManagement />
+          )
+        }
+
         {
           dashboardPath === 'users' && (
           <AdminUserList
@@ -275,7 +362,7 @@ const Admin = (props) => {
           )
         }
         {
-          dashboardPath === 'publishers' && (
+          dashboardPath === 'identity' && (
           <AdminPublishers />
           )
         }
@@ -307,6 +394,7 @@ const Admin = (props) => {
 
 function mapStateToProps(state) {
   return {
+    adminUserList: state.adminUserList,
     user: state.user.data,
     errorMessage: state.auth.error,
     // users: state.user.list,

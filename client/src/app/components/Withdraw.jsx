@@ -13,12 +13,15 @@ import {
   reset,
 } from 'redux-form';
 import { makeStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import * as actions from '../actions';
+import { fetchUserData } from '../actions/user';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -91,12 +94,16 @@ const Withdraw = (props) => {
     createWithdrawPost,
     webslotId,
     idleWithdraw,
-    wallet,
+    user: {
+      wallet,
+    },
   } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [fee, setFee] = useState(0);
   const [total, setTotal] = useState(0);
+  const dispatch = useDispatch();
+  useEffect(() => dispatch(fetchUserData()), [dispatch]);
 
   useEffect(() => {
     if (createWithdrawPost.phase == 1) {
@@ -125,6 +132,42 @@ const Withdraw = (props) => {
 
   return (
     <div className="form-container index600 shadow-w signinContainer content">
+      <Grid container>
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem"
+        >
+          <Link className="nav-link" to="/wallet">
+            <p className="text-center">
+              Overview
+            </p>
+          </Link>
+
+        </Grid>
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem"
+        >
+          <Link className="nav-link" to="/wallet/receive">
+            <p className="text-center">
+              Receive
+            </p>
+          </Link>
+        </Grid>
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem walletMenuItemActive"
+        >
+          <Link className="nav-link" to="/wallet/send">
+            <p className="text-center">
+              Send
+            </p>
+          </Link>
+        </Grid>
+      </Grid>
       <form onSubmit={handleSubmit(myHandleSubmit)}>
         <Grid container direction="column" spacing={3}>
           <Grid item>
@@ -149,7 +192,7 @@ const Withdraw = (props) => {
             <p>
               Available:
               {' '}
-              {(wallet.available / 1e8)}
+              {(wallet && wallet.available / 1e8)}
               {' '}
               RUNES
             </p>
@@ -201,7 +244,14 @@ function mapStateToProps(state) {
     createWithdrawPost: state.createWithdraw,
     errorMessage: state.form.withdraw ? state.form.withdraw.syncErrors : '',
     recaptchaValue: selector(state, 'captchaResponse'),
+    user: state.user.data,
   }
 }
+
+Withdraw.propTypes = {
+  user: PropTypes.shape({
+    wallet: PropTypes.arrayOf.isRequired,
+  }).isRequired,
+};
 
 export default connect(mapStateToProps, actions)(reduxForm({ form: 'withdraw', validate, onSubmitSuccess })(Withdraw));

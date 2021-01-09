@@ -8,6 +8,9 @@ import {
   UPDATE_WALLET,
   UPDATE_WEBSLOT,
   UPDATE_JACKPOT_TICKETS,
+  FETCH_SPECIFICUSER_BEGIN,
+  FETCH_SPECIFICUSER_FAIL,
+  FETCH_SPECIFICUSER_SUCCESS,
   // UPDATE_PRICE,
 } from './types/index';
 
@@ -78,6 +81,53 @@ export function onUpdateWebslot(data) {
     });
   }
 }
+
+export function fetchSpecificUserData(user) {
+  return function (dispatch) {
+    console.log('START FETCH SPECIFIC USER');
+    console.log('START FETCH SPECIFIC USER');
+
+    console.log('START FETCH SPECIFIC USER');
+    console.log('START FETCH SPECIFIC USER');
+    console.log('START FETCH SPECIFIC USER');
+    console.log('START FETCH SPECIFIC USER');
+    console.log('START FETCH SPECIFIC USER');
+    console.log(user);
+    console.log(user);
+    dispatch({
+      type: FETCH_SPECIFICUSER_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.post(`${process.env.API_URL}/getuser`, { user })
+      .then((response) => {
+        console.log('get specific user response');
+        console.log('get specific user response');
+        console.log('get specific user response');
+        console.log('get specific user response');
+        console.log('get specific user response');
+        console.log('get specific user response');
+        console.log('get specific user response');
+        console.log('get specific user response');
+        console.log(response);
+        dispatch({
+          type: FETCH_SPECIFICUSER_SUCCESS,
+          payload: response.data,
+        });
+      }).catch((error) => {
+        console.log('get specific user error');
+        console.log('get specific user error');
+        console.log('get specific user error');
+        console.log('get specific user error');
+        console.log('get specific user error');
+        console.log(error);
+        dispatch({
+          type: FETCH_SPECIFICUSER_FAIL,
+          payload: error,
+        });
+      });
+  }
+}
+
 // export function onUpdatePrice(data) {
 //  return function (dispatch) {
 //    dispatch({

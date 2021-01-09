@@ -1,15 +1,60 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Transactions from '../components/Transactions';
+import { fetchUserData } from '../actions/user';
 
 const WalletContainer = (props) => {
   const {
-    wallet,
-    addresses,
+
+    user: {
+      wallet: {
+        addresses,
+      },
+    },
   } = props;
+  const dispatch = useDispatch();
+  useEffect(() => dispatch(fetchUserData()), [dispatch]);
   return (
     <div>
+      <Grid container>
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem walletMenuItemActive"
+        >
+          <Link className="nav-link" to="/wallet">
+            <p className="text-center">
+              Overview
+            </p>
+          </Link>
+
+        </Grid>
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem"
+        >
+          <Link className="nav-link" to="/wallet/receive">
+            <p className="text-center">
+              Receive
+            </p>
+          </Link>
+        </Grid>
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem"
+        >
+          <Link className="nav-link" to="/wallet/send">
+            <p className="text-center">
+              Send
+            </p>
+          </Link>
+        </Grid>
+      </Grid>
       <Grid
         container
       >
@@ -68,7 +113,7 @@ const WalletContainer = (props) => {
         >
           <Transactions
             addresses={addresses || []}
-            transactions={addresses[0] ? addresses[0].transactions : []}
+            transactions={addresses && addresses[0] ? addresses[0].transactions : []}
           />
         </Grid>
       </Grid>
@@ -79,7 +124,15 @@ const WalletContainer = (props) => {
 function mapStateToProps(state) {
   return {
     websites: state.website.list,
+    user: state.user.data,
   };
 }
+
+WalletContainer.propTypes = {
+  user: PropTypes.shape({
+    wallet: PropTypes.arrayOf.isRequired,
+
+  }).isRequired,
+};
 
 export default connect(mapStateToProps)(WalletContainer);

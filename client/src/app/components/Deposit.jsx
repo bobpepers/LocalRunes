@@ -9,6 +9,7 @@ import {
   Fab,
   Tooltip,
 } from '@material-ui/core';
+import { connect, useDispatch } from 'react-redux';
 import AddIcon from '@material-ui/icons/Add';
 import {
   reduxForm,
@@ -17,14 +18,15 @@ import {
   change,
   reset,
 } from 'redux-form';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import QRCode from 'qrcode';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Captcha from './Captcha';
 import * as actions from '../actions';
+import { fetchUserData } from '../actions/user';
 
 let imagePath = '';
 
@@ -60,27 +62,36 @@ const useStyles = makeStyles((theme) => ({
 const Deposit = (props) => {
   const {
     errorMessage,
+    user: {
+      wallet,
+    },
   } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [address, setAddress] = useState('');
   const [copySuccessful, setCopySuccessful] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => dispatch(fetchUserData()), [dispatch]);
 
   useEffect(() => {
-    setAddress(props.addresses[0] ? props.addresses[0].address : '');
-  }, [props.addresses[0]]) // pass `value` as a dependency
-
-  useEffect(() => {
-    if (props.addresses.length > 0) {
-      QRCode.toDataURL(props.addresses[0].address, (err, imageUrl) => {
-        if (err) {
-          console.log('Could not generate QR code', err);
-          return;
-        }
-        imagePath = imageUrl;
-      });
+    if (wallet && wallet.addresses) {
+      setAddress(wallet && wallet.addresses ? wallet.addresses[0].address : '');
     }
-  }, [props.addresses]);
+  }, [wallet]) // pass `value` as a dependency
+
+  useEffect(() => {
+    if (wallet) {
+      if (wallet.addresses.length > 0) {
+        QRCode.toDataURL(wallet.addresses[0].address, (err, imageUrl) => {
+          if (err) {
+            console.log('Could not generate QR code', err);
+            return;
+          }
+          imagePath = imageUrl;
+        });
+      }
+    }
+  }, [wallet]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(`${address}`);
@@ -94,36 +105,73 @@ const Deposit = (props) => {
   }, [copySuccessful]) // pass `value` as a dependency
 
   return (
-    <Grid
-      container
-      direction="column"
-      alignItems="center"
-      justify="center"
-      item
-      xs={12}
-      className="height100"
-    >
-      <div>
-        <Grid container>
-          <Grid
-            item
-            xs={12}
-            className="text-center"
-            style={{ display: 'block' }}
-          >
-            <img src={imagePath} alt="Deposit QR Code" />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-          >
-            <div>
-              <p className="text-center">Runebase Address</p>
-              <div className="borderAddress">
-                <p className="text-center">
-                  {address}
-                </p>
-                {
+    <div className="surfContainer">
+      <Grid container>
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem"
+        >
+          <Link className="nav-link" to="/wallet">
+            <p className="text-center">
+              Overview
+            </p>
+          </Link>
+
+        </Grid>
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem walletMenuItemActive"
+        >
+          <Link className="nav-link" to="/wallet/receive">
+            <p className="text-center">
+              Receive
+            </p>
+          </Link>
+        </Grid>
+        <Grid
+          item
+          xs={4}
+          className="walletMenuItem"
+        >
+          <Link className="nav-link" to="/wallet/send">
+            <p className="text-center">
+              Send
+            </p>
+          </Link>
+        </Grid>
+      </Grid>
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justify="center"
+        item
+        xs={12}
+        className="height100"
+      >
+        <div>
+          <Grid container>
+            <Grid
+              item
+              xs={12}
+              className="text-center"
+              style={{ display: 'block' }}
+            >
+              <img src={imagePath} alt="Deposit QR Code" />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+            >
+              <div>
+                <p className="text-center">Runebase Address</p>
+                <div className="borderAddress">
+                  <p className="text-center">
+                    {address}
+                  </p>
+                  {
             copySuccessful
               ? (
                 <p className="text-center" style={{ color: 'green' }}>
@@ -131,26 +179,28 @@ const Deposit = (props) => {
                 </p>
               ) : null
           }
-                <Tooltip title="Copy Runebase Address" aria-label="show">
-                  <Button
+                  <Tooltip title="Copy Runebase Address" aria-label="show">
+                    <Button
                       // className="borderAddress copyAddressButton"
-                    variant="contained"
-                    color="primary"
-                    fullWidth
+                      variant="contained"
+                      color="primary"
+                      fullWidth
                       // style={{ padding: 0, float: 'right' }}
-                    onClick={copyToClipboard}
-                  >
+                      onClick={copyToClipboard}
+                    >
 
-                    <FileCopyIcon />
-                    Copy
-                  </Button>
-                </Tooltip>
+                      <FileCopyIcon />
+                      Copy
+                    </Button>
+                  </Tooltip>
+                </div>
               </div>
-            </div>
+            </Grid>
           </Grid>
-        </Grid>
-      </div>
-    </Grid>
+        </div>
+      </Grid>
+    </div>
+
   );
 }
 const onSubmitSuccess = (result, dispatch) => {
@@ -177,6 +227,14 @@ const selector = formValueSelector('createWebslot');
 const mapStateToProps = (state) => ({
   errorMessage: state.auth.error,
   recaptchaValue: selector(state, 'captchaResponse'),
+  user: state.user.data,
 })
+
+Deposit.propTypes = {
+  user: PropTypes.shape({
+    wallet: PropTypes.arrayOf.isRequired,
+    webslots: PropTypes.arrayOf.isRequired,
+  }).isRequired,
+};
 
 export default connect(mapStateToProps, actions)(reduxForm({ form: 'createWebslot', validate, onSubmitSuccess })(Deposit));
