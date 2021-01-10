@@ -5,33 +5,33 @@ const { Sequelize, Transaction, Op } = require('sequelize');
 /**
  * Fetch PriceInfo
  */
-const trustUser = async (req, res, next) => {
+const blockUser = async (req, res, next) => {
   console.log('wtf');
-  const userToTrust = await db.user.findOne({
+  const userToBlock = await db.user.findOne({
     where: {
       username: req.body.username,
     },
   });
 
-  if (!userToTrust) {
+  if (!userToBlock) {
     res.locals.error = 'USER_TO_TRUST_NOT_FOUND';
     return next();
   }
 
-  const trust = await db.trusted.findOne({
+  const block = await db.blocked.findOne({
     where: {
       userId: req.user.id,
-      trustedId: userToTrust.id,
+      blockedId: userToBlock.id,
     },
   });
   // let newRecord;
-  if (!trust) {
-    const newRecord = await db.trusted.create({
+  if (!block) {
+    const newRecord = await db.blocked.create({
       userId: req.user.id,
-      trustedId: userToTrust.id,
+      blockedId: userToBlock.id,
     });
     console.log('created');
-    res.locals.trusted = await db.trusted.findOne({
+    res.locals.blocked = await db.blocked.findOne({
       where: {
         id: newRecord.id,
       },
@@ -39,13 +39,13 @@ const trustUser = async (req, res, next) => {
       include: [
         {
           model: db.user,
-          as: 'userTrust',
+          as: 'userBlock',
           required: false,
           attributes: ['username'],
         },
         {
           model: db.user,
-          as: 'userTrusted',
+          as: 'userBlocked',
           required: false,
           attributes: ['username'],
         },
@@ -53,9 +53,9 @@ const trustUser = async (req, res, next) => {
     });
     return next();
   }
-  trust.destroy();
+  block.destroy();
   res.locals.removed = req.body.username;
   return next();
 };
 
-export default trustUser;
+export default blockUser;

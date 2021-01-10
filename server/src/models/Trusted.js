@@ -28,11 +28,11 @@ module.exports = (sequelize, DataTypes) => {
 
   TrustedModel.associate = (model) => {
     TrustedModel.belongsTo(model.user, {
-      as: 'trustedUsers',
+      as: 'userTrust',
       foreignKey: 'userId',
     });
     TrustedModel.belongsTo(model.user, {
-      as: 'trusted',
+      as: 'userTrusted',
       foreignKey: 'trustedId',
     });
   };

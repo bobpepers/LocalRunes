@@ -1,35 +1,35 @@
 import axios from 'axios';
 import {
-  POST_TRUST_BEGIN,
-  POST_TRUST_SUCCESS,
-  POST_TRUST_FAIL,
-  ADD_TRUST,
-  DELETE_TRUST,
+  POST_BLOCK_BEGIN,
+  POST_BLOCK_SUCCESS,
+  POST_BLOCK_FAIL,
+  ADD_BLOCK,
+  DELETE_BLOCK,
   ENQUEUE_SNACKBAR,
 } from './types/index';
 
-export function trustAction(username) {
+export function blockAction(username) {
   return function (dispatch) {
     return new Promise((resolve) => {
       dispatch({
-        type: POST_TRUST_BEGIN,
+        type: POST_BLOCK_BEGIN,
       });
-      axios.post(`${process.env.API_URL}/trust`, { username })
+      axios.post(`${process.env.API_URL}/block`, { username })
         .then((response) => {
           if (response.data.removed) {
             dispatch({
-              type: DELETE_TRUST,
+              type: DELETE_BLOCK,
               payload: response.data.removed,
             });
           }
-          if (response.data.trusted) {
+          if (response.data.blocked) {
             dispatch({
-              type: ADD_TRUST,
-              payload: response.data.trusted,
+              type: ADD_BLOCK,
+              payload: response.data.blocked,
             });
           }
           dispatch({
-            type: POST_TRUST_SUCCESS,
+            type: POST_BLOCK_SUCCESS,
             payload: response.data,
           });
           dispatch({
@@ -47,7 +47,7 @@ export function trustAction(username) {
         .catch((error) => {
           console.log(error);
           dispatch({
-            type: POST_TRUST_FAIL,
+            type: POST_BLOCK_FAIL,
             payload: error,
           });
           if (error.response) {

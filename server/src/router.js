@@ -60,6 +60,7 @@ import {
   fetchUserCount,
 } from './controllers/users';
 import trustUser from './controllers/trust';
+import blockUser from './controllers/blocked';
 
 import {
   fetchDomains,
@@ -1628,6 +1629,29 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
       if (res.locals.trusted) {
         res.json({ trusted: res.locals.trusted });
+      }
+      if (res.locals.removed) {
+        res.json({ removed: res.locals.removed });
+      }
+      if (res.locals.user) {
+        res.json(res.locals.user);
+      }
+    });
+
+  app.post('/api/block',
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    blockUser,
+    (req, res, next) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      if (res.locals.blocked) {
+        res.json({ blocked: res.locals.blocked });
       }
       if (res.locals.removed) {
         res.json({ removed: res.locals.removed });

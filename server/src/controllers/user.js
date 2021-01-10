@@ -117,8 +117,31 @@ export const fetchSpecificUser = async (req, res, next) => {
       },
       {
         model: db.trusted,
+        as: 'trustedUsers',
         required: false,
-        as: 'trusted',
+        attributes: ['id'],
+        include: [
+          {
+            model: db.user,
+            required: false,
+            as: 'userTrust',
+            attributes: ['username'],
+          },
+        ],
+      },
+      {
+        model: db.blocked,
+        as: 'blockedUsers',
+        required: false,
+        attributes: ['id'],
+        include: [
+          {
+            model: db.user,
+            required: false,
+            as: 'userBlock',
+            attributes: ['username'],
+          },
+        ],
       },
 
     ],

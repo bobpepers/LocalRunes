@@ -13,6 +13,7 @@ import * as actions from '../actions/auth';
 import PolicyImage from '../assets/images/policy.svg';
 import { fetchSpecificUserData } from '../actions/user';
 import { trustAction } from '../actions/trust';
+import { blockAction } from '../actions/block';
 // import Globe from '../containers/Globe';
 
 const PublicProfile = (props) => {
@@ -25,13 +26,26 @@ const PublicProfile = (props) => {
   } = props;
   console.log('RunesX Home View');
   const userName = params[0];
-  console.log(userName);
   const dispatch = useDispatch();
   useEffect(() => dispatch(fetchSpecificUserData(userName)), [dispatch]);
   useEffect(() => {}, [specificUser, user]);
   const clickTrust = (specificuserName) => {
-    console.log(specificuserName);
     dispatch(trustAction(specificuserName));
+  }
+  const clickBlock = (specificuserName) => {
+    dispatch(blockAction(specificuserName));
+  }
+
+  const userTrusted = (username) => {
+    if (specificUser && specificUser.trustedUsers) {
+      return specificUser.trustedUsers.some((el) => el.userTrust.username === username);
+    }
+  }
+
+  const userBlocked = (username) => {
+    if (specificUser && specificUser.blockedUsers) {
+      return specificUser.blockedUsers.some((el) => el.userBlock.username === username);
+    }
   }
 
   return (
@@ -89,10 +103,18 @@ const PublicProfile = (props) => {
             email: verified
           </p>
           <p>
-            Trusted by 0 people
+            Trusted by
+            {' '}
+            {specificUser && specificUser.trustedUsers ? specificUser.trustedUsers.length : '0' }
+            {' '}
+            people
           </p>
           <p>
-            Blocked by 0 people
+            Blocked by
+            {' '}
+            {specificUser && specificUser.blockedUsers ? specificUser.blockedUsers.length : '0' }
+            {' '}
+            people
           </p>
         </Grid>
         <Grid container item xs={4} align="center" alignItems="center">
@@ -103,6 +125,7 @@ const PublicProfile = (props) => {
               </p>
             ) : (
               <>
+
                 <Grid container item xs={6}>
                   <Button
                     variant="contained"
@@ -110,7 +133,8 @@ const PublicProfile = (props) => {
                     color="primary"
                     onClick={() => clickTrust(specificUser && specificUser.username)}
                   >
-                    Trust
+
+                    {userTrusted(user && user.username) ? 'Untrust' : 'Trust'}
                   </Button>
                 </Grid>
                 <Grid container item xs={6}>
@@ -118,8 +142,9 @@ const PublicProfile = (props) => {
                     variant="contained"
                     size="large"
                     color="primary"
+                    onClick={() => clickBlock(specificUser && specificUser.username)}
                   >
-                    Block
+                    {userBlocked(user && user.username) ? 'Unblock' : 'Block'}
                   </Button>
                 </Grid>
               </>

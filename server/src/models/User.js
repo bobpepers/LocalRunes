@@ -287,7 +287,7 @@ module.exports = (sequelize, DataTypes) => {
 
     UserModel.hasMany(model.blocked, {
       foreignKey: 'userId',
-      as: 'blocked',
+      as: 'blockedBy',
     });
     UserModel.hasMany(model.blocked, {
       foreignKey: 'blockedId',
