@@ -159,6 +159,10 @@ module.exports = (sequelize, DataTypes) => {
         'accepted',
       ],
     },
+    bio: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
   };
 
   // 2: The model options.

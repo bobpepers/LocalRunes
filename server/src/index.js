@@ -427,11 +427,11 @@ startSync(io, onlineUsers);
 
 // setInterval(patchDeposits, 60 * 60 * 1000);
 
-removeStaleTickets(onlineUsers);
+// removeStaleTickets(onlineUsers);
 // Run every hour at 15 minute mark
-const schedulePatchTickets = schedule.scheduleJob('*/1 * * * *', () => {
-  removeStaleTickets(onlineUsers);
-});
+// const schedulePatchTickets = schedule.scheduleJob('*/1 * * * *', () => {
+//  removeStaleTickets(onlineUsers);
+// });
 
 patchDeposits();
 // Run every hour at 10 minute mark
@@ -445,24 +445,24 @@ const schedulePriceUpdate = schedule.scheduleJob('*/5 * * * *', () => {
   updatePrice(io);
 });
 
-drawJackpot(sub, pub, expired_subKey);
+// drawJackpot(sub, pub, expired_subKey);
 // Run every 2 hours at 5 minute mark
-db.cronjob.findOne({
-  where: {
-    type: 'drawJackpot',
-    state: 'executing',
-  },
-}).then((exist) => {
-  const scheduleJackpotDrawPatcher = schedule.scheduleJob(new Date(exist.expression), (fireDate) => {
-    console.log(`This job was supposed to run at ${fireDate}, but actually ran at ${new Date()}`);
-    drawJackpot(sub, pub, expired_subKey);
-  });
-}).catch((error) => {
-  console.log(error);
-});
-const scheduleJackpotDrawPatcher = schedule.scheduleJob('5 */2 * * *', () => {
-  drawJackpot(sub, pub, expired_subKey);
-});
+// db.cronjob.findOne({
+// where: {
+//   type: 'drawJackpot',
+//   state: 'executing',
+// },
+// }).then((exist) => {
+// const scheduleJackpotDrawPatcher = schedule.scheduleJob(new Date(exist.expression), (fireDate) => {
+//    console.log(`This job was supposed to run at ${fireDate}, but actually ran at ${new Date()}`);
+//    drawJackpot(sub, pub, expired_subKey);
+//  });
+// }).catch((error) => {
+//  console.log(error);
+// });
+// const scheduleJackpotDrawPatcher = schedule.scheduleJob('5 */2 * * *', () => {
+//  drawJackpot(sub, pub, expired_subKey);
+// });
 // setInterval(drawJackpot, 5 * 60 * 1000);
 
 // Archive activity daily older then 3 days
@@ -470,8 +470,8 @@ archiveActivity();
 setInterval(archiveActivity, 24 * 60 * 60 * 1000);
 
 // Remove banner Tickets older then 3 hours
-removeBannerTickets();
-setInterval(removeBannerTickets, 3 * 60 * 60 * 1000);
+// removeBannerTickets();
+// setInterval(removeBannerTickets, 3 * 60 * 60 * 1000);
 
 // archive activity every 5 minutes
 const scheduleArchiveActivity = schedule.scheduleJob('*/5 * * * *', () => {

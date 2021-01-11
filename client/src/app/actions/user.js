@@ -11,6 +11,8 @@ import {
   FETCH_SPECIFICUSER_BEGIN,
   FETCH_SPECIFICUSER_FAIL,
   FETCH_SPECIFICUSER_SUCCESS,
+  ENQUEUE_SNACKBAR,
+  UPDATE_BIO,
   // UPDATE_PRICE,
 } from './types/index';
 
@@ -84,47 +86,91 @@ export function onUpdateWebslot(data) {
 
 export function fetchSpecificUserData(user) {
   return function (dispatch) {
-    console.log('START FETCH SPECIFIC USER');
-    console.log('START FETCH SPECIFIC USER');
-
-    console.log('START FETCH SPECIFIC USER');
-    console.log('START FETCH SPECIFIC USER');
-    console.log('START FETCH SPECIFIC USER');
-    console.log('START FETCH SPECIFIC USER');
-    console.log('START FETCH SPECIFIC USER');
-    console.log(user);
-    console.log(user);
     dispatch({
       type: FETCH_SPECIFICUSER_BEGIN,
     });
     // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
     axios.post(`${process.env.API_URL}/getuser`, { user })
       .then((response) => {
-        console.log('get specific user response');
-        console.log('get specific user response');
-        console.log('get specific user response');
-        console.log('get specific user response');
-        console.log('get specific user response');
-        console.log('get specific user response');
-        console.log('get specific user response');
-        console.log('get specific user response');
         console.log(response);
         dispatch({
           type: FETCH_SPECIFICUSER_SUCCESS,
           payload: response.data,
         });
       }).catch((error) => {
-        console.log('get specific user error');
-        console.log('get specific user error');
-        console.log('get specific user error');
-        console.log('get specific user error');
-        console.log('get specific user error');
         console.log(error);
         dispatch({
           type: FETCH_SPECIFICUSER_FAIL,
           payload: error,
         });
       });
+  }
+}
+
+export function changeBioAction(bio) {
+  return function (dispatch) {
+    return new Promise((resolve) => {
+      axios.post(`${process.env.API_URL}/update/bio`, { bio })
+        .then((response) => {
+          console.log(response);
+          dispatch({
+            type: UPDATE_BIO,
+            payload: response.data,
+          });
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Success: Bio Changed',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'success',
+              },
+            },
+          });
+          resolve();
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response) {
+          // client received an error response (5xx, 4xx)
+            console.log(error.response);
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: `${error.response.status}: ${error.response.data.error}`,
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'error',
+                },
+              },
+            });
+          } else if (error.request) {
+          // client never received a response, or request never left
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: 'Connection Timeout',
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'error',
+                },
+              },
+            });
+          } else {
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: 'Unknown Error',
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'error',
+                },
+              },
+            });
+          }
+          resolve();
+        });
+    });
   }
 }
 

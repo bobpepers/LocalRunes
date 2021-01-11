@@ -33,6 +33,7 @@ import 'blueimp-canvas-to-blob/js/canvas-to-blob';
 import * as actions from '../actions/auth';
 import Fade from '@material-ui/core/Fade';
 import { idleUploadIdentity } from '../actions/identity';
+import { changeBioAction } from '../actions/user';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -85,24 +86,31 @@ function getModalStyle() {
   };
 }
 
-const renderField = ({
-  input, type, placeholder, meta: { touched, error },
+const renderTextField = ({
+  input,
+  type,
+  placeholder,
+  meta: {
+    touched,
+    error,
+  },
 }) => (
-  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
-    <FormControl
+  <div className={`addWebsite-description-wrapper input-group ${touched && error ? 'has-error' : ''}`}>
+    <TextField
+      // id="outlined-multiline-static"
+      label="Bio"
+      multiline
+      style={{ width: '100%' }}
+      rows={6}
+      defaultValue=""
+      inputProps={{
+        maxLength: 400,
+        // className: 'outlined-adornment-field',
+      }}
       variant="outlined"
-      fullWidth
-    >
-      <TextField
-        // className="outlined-email-field"
-        label="E-mail"
-        type={type}
-        variant="outlined"
-        inputProps={{ className: 'outlined-email-field' }}
-        {...input}
-      />
-      { touched && error && <div className="form-error">{error}</div> }
-    </FormControl>
+      {...input}
+    />
+    { touched && error && <div className="form-error">{error}</div> }
   </div>
 );
 
@@ -114,6 +122,7 @@ const Profile = (props) => {
     signinUser,
     verifyPhoneCodeProp,
     uploadIdentity,
+
   } = props;
   const dispatch = useDispatch();
   const [upImg, setUpImg] = useState(false);
@@ -125,9 +134,13 @@ const Profile = (props) => {
   const [completedCrop, setCompletedCrop] = useState(null);
   const [modalStyle] = React.useState(getModalStyle);
   const [rerender, setRerender] = useState(1);
+  const [descriptionLength, setDescriptionLength] = useState(0);
 
   const [open, setOpen] = React.useState(false);
   const [openIdentity, setOpenIdentity] = React.useState(false);
+  const onBasicFieldChange = (event, newValue, previousValue, name) => {
+    setDescriptionLength(newValue.length);
+  }
 
   const handleOpenIdentityVerify = () => {
     setOpenIdentity(true);
@@ -150,7 +163,8 @@ const Profile = (props) => {
   }, [uploadAvatar]);
 
   useEffect(() => {
-
+    dispatch(change('profile', 'description', user.bio));
+    setDescriptionLength(user && user.bio && user.bio.length);
   }, [user]);
 
   useEffect(() => {
@@ -172,8 +186,8 @@ const Profile = (props) => {
   const handleClose = () => {
     setUpImg(false);
   }
-  const handleFormSubmit = async (props) => {
-    await signinUser(props);
+  const handleFormSubmit = async (bio) => {
+    await dispatch(changeBioAction(bio));
   }
   const uploadAvatarImage = (previewCanvas, crop) => {
     if (!crop || !previewCanvas) {
@@ -289,18 +303,24 @@ const Profile = (props) => {
         </div>
       </Grid>
       <Grid item xs={8}>
-        <h3>Update Info</h3>
+        <h3>Update Bio</h3>
         <div className="form-container index600 shadow-w signinContainer content">
           <Grid container alignItems="center" justify="center">
             <Grid item xs={12}>
               <form onSubmit={handleSubmit(handleFormSubmit)}>
                 <Grid item>
                   <Field
-                    name="text"
-                    component={renderField}
-                    type="text"
-                    placeholder="Email"
+                    name="description"
+                    component={renderTextField}
+                    type="description"
+                    placeholder="Bio"
+                    onChange={onBasicFieldChange}
                   />
+                  <div>
+                    {descriptionLength}
+                    {' '}
+                    / 400
+                  </div>
                 </Grid>
                 <Grid item>
                   <Button variant="contained" color="primary" type="submit" className="btn" fullWidth size="large">

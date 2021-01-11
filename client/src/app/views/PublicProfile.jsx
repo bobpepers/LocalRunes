@@ -100,7 +100,9 @@ const PublicProfile = (props) => {
             {specificUser && specificUser.identityVerified === 'rejected' && 'Not Verified' }
           </p>
           <p>
-            email: verified
+            email:
+            {' '}
+            {specificUser && specificUser.authused ? 'Verified' : 'Not Verified' }
           </p>
           <p>
             Trusted by
@@ -121,7 +123,7 @@ const PublicProfile = (props) => {
           <Grid container item xs={12}>
             {specificUser && specificUser.username === user.username ? (
               <p>
-                Can't Block
+                Can't Trust or Block yourself
               </p>
             ) : (
               <>

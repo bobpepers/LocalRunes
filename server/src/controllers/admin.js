@@ -147,6 +147,12 @@ export const fetchAdminUser = async (req, res, next) => {
  * isAdmin
  */
 export const acceptWithdraw = async (req, res, next) => {
+  console.log('aceept withdraw');
+  console.log('aceept withdraw');
+  console.log('aceept withdraw');
+  console.log('aceept withdraw');
+  console.log('aceept withdraw');
+  console.log('aceept withdraw');
   await db.sequelize.transaction({
     isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   }, async (t) => {
@@ -178,7 +184,21 @@ export const acceptWithdraw = async (req, res, next) => {
       throw new Error('TRANSACTION_NOT_EXIST');
     }
     const amount = (((transaction.amount / 100) * 95) / 1e8);
-    const response = await getInstance().sendToAddress(transaction.to_from, amount);
+    console.log((amount.toFixed(8)).toString());
+    console.log('before reps');
+    const response = await getInstance().sendToAddress(transaction.to_from, (amount.toFixed(8)).toString());
+    console.log('999999999999');
+    console.log('999999999999');
+    console.log('999999999999');
+    console.log('999999999999');
+    console.log('999999999999');
+    console.log('999999999999');
+    console.log('999999999999');
+    console.log('999999999999');
+    console.log('999999999999');
+    console.log('999999999999');
+    console.log(amount);
+    console.log(response);
     res.locals.transaction = await transaction.update(
       {
         txid: response,
@@ -189,36 +209,36 @@ export const acceptWithdraw = async (req, res, next) => {
         lock: t.LOCK.UPDATE,
       },
     );
-    const activity = await db.activity.create(
-      {
-        spenderId: transaction.address.wallet.userId,
-        type: 'withdrawAccepted',
-        txId: transaction.id,
-      },
-      {
-        transaction: t,
-        lock: t.LOCK.UPDATE,
-      },
-    );
-    res.locals.activity = await db.activity.findOne({
-      where: {
-        id: activity.id,
-      },
-      attributes: [
-        'createdAt',
-        'type',
-      ],
-      include: [
-        {
-          model: db.user,
-          as: 'spender',
-          required: false,
-          attributes: ['username'],
-        },
-      ],
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
+    // const activity = await db.activity.create(
+    //   {
+    //     spenderId: transaction.address.wallet.userId,
+    //     type: 'withdrawAccepted',
+    //     txId: transaction.id,
+    //   },
+    //   {
+    //     transaction: t,
+    //     lock: t.LOCK.UPDATE,
+    //   },
+    // );
+    // res.locals.activity = await db.activity.findOne({
+    //   where: {
+    //     id: activity.id,
+    //   },
+    //   attributes: [
+    //     'createdAt',
+    //     'type',
+    //   ],
+    //   include: [
+    //     {
+    //       model: db.user,
+    //       as: 'spender',
+    //       required: false,
+    //       attributes: ['username'],
+    //     },
+    //   ],
+    //   transaction: t,
+    //   lock: t.LOCK.UPDATE,
+    // });
     t.afterCommit(() => {
       console.log('complete');
       next();
@@ -291,36 +311,36 @@ export const rejectWithdraw = async (req, res, next) => {
       },
     );
 
-    const activity = await db.activity.create(
-      {
-        spenderId: transaction.address.wallet.userId,
-        type: 'withdrawRejected',
-        txId: res.locals.transaction.id,
-      },
-      {
-        transaction: t,
-        lock: t.LOCK.UPDATE,
-      },
-    );
-    res.locals.activity = await db.activity.findOne({
-      where: {
-        id: activity.id,
-      },
-      attributes: [
-        'createdAt',
-        'type',
-      ],
-      include: [
-        {
-          model: db.user,
-          as: 'spender',
-          required: false,
-          attributes: ['username'],
-        },
-      ],
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
+    // const activity = await db.activity.create(
+    //   {
+    //     spenderId: transaction.address.wallet.userId,
+    //     type: 'withdrawRejected',
+    //     txId: res.locals.transaction.id,
+    //   },
+    //   {
+    //     transaction: t,
+    //     lock: t.LOCK.UPDATE,
+    //   },
+    // );
+    // res.locals.activity = await db.activity.findOne({
+    //   where: {
+    //     id: activity.id,
+    //   },
+    //   attributes: [
+    //     'createdAt',
+    //     'type',
+    //   ],
+    //   include: [
+    //     {
+    //       model: db.user,
+    //       as: 'spender',
+    //       required: false,
+    //       attributes: ['username'],
+    //     },
+    //   ],
+    //   transaction: t,
+    //   lock: t.LOCK.UPDATE,
+    // });
 
     t.afterCommit(() => {
       console.log('Withdrawal Rejected');

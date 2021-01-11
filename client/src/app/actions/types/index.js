@@ -332,3 +332,4 @@ export const POST_BLOCK_FAIL = 'POST_BLOCK_FAIL';
 
 export const ADD_BLOCK = 'ADD_BLOCK';
 export const DELETE_BLOCK = 'DELETE_BLOCK';
+export const UPDATE_BIO = 'UPDATE_BIO';

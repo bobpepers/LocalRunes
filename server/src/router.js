@@ -117,7 +117,7 @@ import {
   withdraw,
 } from './controllers/wallet';
 import fetchJackpots from './controllers/jackpot';
-import { fetchUser, fetchSpecificUser } from './controllers/user';
+import { fetchUser, fetchSpecificUser, updateBio } from './controllers/user';
 
 import passportService from './services/passport';
 import {
@@ -916,6 +916,25 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
       if (res.locals.publisher) {
         res.json(res.locals.publisher);
+      }
+    });
+
+  app.post('/api/update/bio',
+    IsAuthenticated,
+    isUserBanned,
+    storeIp,
+    ensuretfa,
+    updateBio,
+    (req, res) => {
+      console.log('ADDED PUBLISHER');
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      if (res.locals.bio) {
+        res.json(res.locals.bio);
       }
     });
 

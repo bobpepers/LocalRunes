@@ -151,6 +151,33 @@ export const fetchSpecificUser = async (req, res, next) => {
   next();
 };
 
+export const updateBio = async (req, res, next) => {
+  if (!req.body.bio.description) {
+    res.locals.error = 'BIO_NOT_FOUND';
+    return next();
+  }
+  if (req.body.bio.description > 400) {
+    res.locals.error = 'BIO_LENGTH_TOO_LONG';
+    return next();
+  }
+  const bio = await db.user.update(
+    {
+      bio: req.body.bio.description,
+    },
+    {
+      where: {
+        id: req.user.id,
+      },
+    },
+  );
+  if (!bio) {
+    res.locals.error = "UPDATE_BIO_ERROR";
+    return next();
+  }
+  res.locals.bio = bio;
+  next();
+};
+
 /**
  * Fetch Wallet
  */
