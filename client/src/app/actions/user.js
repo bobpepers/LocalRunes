@@ -13,6 +13,7 @@ import {
   FETCH_SPECIFICUSER_SUCCESS,
   ENQUEUE_SNACKBAR,
   UPDATE_BIO,
+  UPDATE_STORESTATUS,
   // UPDATE_PRICE,
 } from './types/index';
 
@@ -121,6 +122,73 @@ export function changeBioAction(bio) {
             type: ENQUEUE_SNACKBAR,
             notification: {
               message: 'Success: Bio Changed',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'success',
+              },
+            },
+          });
+          resolve();
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response) {
+          // client received an error response (5xx, 4xx)
+            console.log(error.response);
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: `${error.response.status}: ${error.response.data.error}`,
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'error',
+                },
+              },
+            });
+          } else if (error.request) {
+          // client never received a response, or request never left
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: 'Connection Timeout',
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'error',
+                },
+              },
+            });
+          } else {
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: 'Unknown Error',
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'error',
+                },
+              },
+            });
+          }
+          resolve();
+        });
+    });
+  }
+}
+
+export function changeStoreStatus() {
+  return function (dispatch) {
+    return new Promise((resolve) => {
+      axios.post(`${process.env.API_URL}/update/store/status`)
+        .then((response) => {
+          console.log(response);
+          dispatch({
+            type: UPDATE_STORESTATUS,
+            payload: response.data.store,
+          });
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Success: Store Open/Closed',
               key: new Date().getTime() + Math.random(),
               options: {
                 variant: 'success',

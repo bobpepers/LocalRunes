@@ -51,6 +51,9 @@ import adminPublishers from "./admin/adminPublishers";
 import adminReviewPublishers from "./admin/adminReviewPublishers";
 import adminReviewBanners from "./admin/adminReviewBanners";
 import adminDomains from "./admin/adminDomains";
+import adminCountries from "./admin/adminCountries";
+import adminCurrencies from "./admin/adminCurrencies";
+
 import removeBannerOrder from './removeBannerOrder';
 import addAdzone from './addAdZone';
 import bannerOrders from './bannerOrders';
@@ -116,7 +119,9 @@ const rootReducer = combineReducers({
   adminReviewBanners: adminReviewBanners,
   adminReviewPublishers: adminReviewPublishers,
   adminDomains: adminDomains,
-  
+  adminCountries: adminCountries,
+  adminCurrencies: adminCurrencies,
+
   verifyPhoneCode: verifyPhoneCode,
   getPhoneCode: getPhoneCode,
   uploadIdentity: uploadIdentity,

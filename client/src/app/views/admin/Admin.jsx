@@ -195,7 +195,7 @@ const Admin = (props) => {
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem
+          {/* <ListItem
             button
             key="feeConfig"
             className={dashboardPath === 'feeConfig' && 'sideMenuActive'}
@@ -205,7 +205,7 @@ const Admin = (props) => {
               <LiveTvIcon />
             </ListItemIcon>
             <ListItemText primary="Fee configuration" />
-          </ListItem>
+          </ListItem> */}
           <ListItem
             button
             key="users"

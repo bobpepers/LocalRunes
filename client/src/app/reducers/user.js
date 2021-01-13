@@ -20,6 +20,7 @@ import {
   BUY_PUBLISHERSLOT,
   UPDATE_USER_PHONE,
   UPDATE_USER_IDENTITY,
+  UPDATE_STORESTATUS,
 } from '../actions/types/index';
 
 const initialState = {
@@ -181,6 +182,17 @@ export default function userReducer(
               ...state.data.wallet.addresses,
             },
           },
+        },
+        loading: false,
+        error: null,
+      };
+
+    case UPDATE_STORESTATUS:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          open_store: action.payload,
         },
         loading: false,
         error: null,

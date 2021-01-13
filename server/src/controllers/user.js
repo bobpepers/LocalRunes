@@ -178,6 +178,46 @@ export const updateBio = async (req, res, next) => {
   next();
 };
 
+export const updateStoreStatus = async (req, res, next) => {
+  console.log("updateStoreStatus");
+  const store = await db.user.findOne(
+    {
+      where: {
+        id: req.user.id,
+      },
+    },
+  );
+  console.log(store);
+  if (!store) {
+    res.locals.error = "UPDATE_STORE_STATUS_ERROR";
+    return next();
+  }
+  const updatedStore = await store.update(
+    {
+      open_store: !store.open_store,
+    },
+    {
+      where: {
+        id: req.user.id,
+      },
+    },
+  );
+  if (!updatedStore) {
+    res.locals.error = "UPDATE_STORE_STATUS_ERROR";
+    return next();
+  }
+  console.log(updatedStore);
+  if (updatedStore.open_store) {
+    res.locals.store = 'true';
+  } else {
+    res.locals.store = 'false';
+  }
+
+  console.log(res.locals.store);
+  console.log("updateStoreStatus end");
+  next();
+};
+
 /**
  * Fetch Wallet
  */

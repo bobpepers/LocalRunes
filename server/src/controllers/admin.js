@@ -147,12 +147,6 @@ export const fetchAdminUser = async (req, res, next) => {
  * isAdmin
  */
 export const acceptWithdraw = async (req, res, next) => {
-  console.log('aceept withdraw');
-  console.log('aceept withdraw');
-  console.log('aceept withdraw');
-  console.log('aceept withdraw');
-  console.log('aceept withdraw');
-  console.log('aceept withdraw');
   await db.sequelize.transaction({
     isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   }, async (t) => {
@@ -735,6 +729,56 @@ export const fetchAdminDomains = async (req, res, next) => {
     console.log(req.body);
     console.log('req body');
     res.locals.domains = await db.domain.findAll({});
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const fetchAdminCountries = async (req, res, next) => {
+  try {
+    res.locals.countries = await db.country.findAll({});
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const addAdminCountries = async (req, res, next) => {
+  try {
+    res.locals.countries = await db.country.create({
+      iso: req.body.iso,
+      name: req.body.country,
+      status: true,
+    });
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const fetchAdminCurrencies = async (req, res, next) => {
+  try {
+    res.locals.currencies = await db.currency.findAll({});
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const addAdminCurrencies = async (req, res, next) => {
+  try {
+    res.locals.currencies = await db.currency.create({
+      currency_name: req.body.name,
+    });
     next();
   } catch (error) {
     console.log(error);

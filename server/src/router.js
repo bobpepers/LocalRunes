@@ -105,6 +105,10 @@ import {
   banAdminUser,
   banAdminDomain,
   fetchAdminDomains,
+  fetchAdminCountries,
+  addAdminCountries,
+  addAdminCurrencies,
+  fetchAdminCurrencies,
 } from './controllers/admin';
 
 import {
@@ -117,7 +121,12 @@ import {
   withdraw,
 } from './controllers/wallet';
 import fetchJackpots from './controllers/jackpot';
-import { fetchUser, fetchSpecificUser, updateBio } from './controllers/user';
+import {
+  fetchUser,
+  fetchSpecificUser,
+  updateBio,
+  updateStoreStatus,
+} from './controllers/user';
 
 import passportService from './services/passport';
 import {
@@ -316,6 +325,90 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         console.log(res.locals.withdrawals);
         res.json({
           withdrawals: res.locals.withdrawals,
+        });
+      }
+    });
+
+  app.get('/api/admin/countries/all',
+    IsAuthenticated,
+    isAdmin,
+    fetchAdminCountries,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.countries) {
+        console.log(res.locals.countries);
+        res.json({
+          countries: res.locals.countries,
+        });
+      }
+    });
+
+  app.post('/api/admin/countries/add',
+    IsAuthenticated,
+    isAdmin,
+    addAdminCountries,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.countries) {
+        console.log(res.locals.countries);
+        res.json({
+          countries: res.locals.countries,
+        });
+      }
+    });
+
+  app.get('/api/admin/currencies/all',
+    IsAuthenticated,
+    isAdmin,
+    fetchAdminCurrencies,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.currencies) {
+        console.log(res.locals.currencies);
+        res.json({
+          currencies: res.locals.currencies,
+        });
+      }
+    });
+
+  app.post('/api/admin/currencies/add',
+    IsAuthenticated,
+    isAdmin,
+    addAdminCurrencies,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.currencies) {
+        console.log(res.locals.currencies);
+        res.json({
+          currencies: res.locals.currencies,
         });
       }
     });
@@ -916,6 +1009,29 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
       if (res.locals.publisher) {
         res.json(res.locals.publisher);
+      }
+    });
+
+  app.post('/api/update/store/status',
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    updateStoreStatus,
+    (req, res) => {
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      console.log(res.locals.store);
+      console.log('res.locals.store');
+      if (res.locals.store === 'true') {
+        res.json({ store: true });
+      }
+      if (res.locals.store === 'false') {
+        res.json({ store: false });
       }
     });
 

@@ -33,7 +33,10 @@ import 'blueimp-canvas-to-blob/js/canvas-to-blob';
 import * as actions from '../actions/auth';
 import Fade from '@material-ui/core/Fade';
 import { idleUploadIdentity } from '../actions/identity';
-import { changeBioAction } from '../actions/user';
+import {
+  changeBioAction,
+  changeStoreStatus,
+} from '../actions/user';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -140,7 +143,11 @@ const Profile = (props) => {
   const [openIdentity, setOpenIdentity] = React.useState(false);
   const onBasicFieldChange = (event, newValue, previousValue, name) => {
     setDescriptionLength(newValue.length);
-  }
+  };
+  const handleChangeStoreStatus = () => {
+    console.log('2222222222222');
+    dispatch(changeStoreStatus());
+  };
 
   const handleOpenIdentityVerify = () => {
     setOpenIdentity(true);
@@ -266,7 +273,29 @@ const Profile = (props) => {
           </div>
         </div>
         <div className="text-center">
-          <h3>Basic Information</h3>
+          <h3>Store Information</h3>
+          <p>
+            {user && user.open_store ? (
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleChangeStoreStatus}
+              >
+                Close Your Store
+              </Button>
+            )
+              : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleChangeStoreStatus}
+                >
+                  Open Your Store
+                </Button>
+              )}
+
+          </p>
+          {user && user.open_store ? (<p style={{ color: 'green' }}>Store Open</p>) : (<p style={{ color: 'red' }}>Store Closed</p>)}
           <p>
             User Name:
             {' '}

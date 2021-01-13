@@ -31,6 +31,21 @@ import {
   FETCH_ADMINDOMAINS_BEGIN,
   FETCH_ADMINDOMAINS_SUCCESS,
   FETCH_ADMINDOMAINS_FAIL,
+  FETCH_ADMINCOUNTRIES_BEGIN,
+  FETCH_ADMINCOUNTRIES_SUCCESS,
+  FETCH_ADMINCOUNTRIES_FAIL,
+  ADD_ADMINCOUNTRIES_BEGIN,
+  ADD_ADMINCOUNTRIES_SUCCESS,
+  ADD_ADMINCOUNTRIES_FAIL,
+  ADD_ADMINCOUNTRY,
+  FETCH_ADMINCURRENCIES_BEGIN,
+  FETCH_ADMINCURRENCIES_SUCCESS,
+  FETCH_ADMINCURRENCIES_FAIL,
+  UPDATE_ADMIN_CURRENCIES,
+  ADD_ADMINCURRENCY,
+  ADD_ADMINCURRENCY_BEGIN,
+  ADD_ADMINCURRENCY_SUCCESS,
+  ADD_ADMINCURRENCY_FAIL,
 } from './types/index';
 
 /**
@@ -849,6 +864,276 @@ export function fetchAdminDomains() {
       }).catch((error) => {
         dispatch({
           type: FETCH_ADMINDOMAINS_FAIL,
+          payload: error,
+        });
+
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function fetchAdminCountryData() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINCOUNTRIES_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.get(`${process.env.API_URL}/admin/countries/all`)
+      .then((response) => {
+        dispatch({
+          type: FETCH_ADMINCOUNTRIES_SUCCESS,
+          payload: response.data.countries,
+        });
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINCOUNTRIES_FAIL,
+          payload: error,
+        });
+
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function addAdminCountry(obj) {
+  return function (dispatch) {
+    dispatch({
+      type: ADD_ADMINCOUNTRIES_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.post(`${process.env.API_URL}/admin/countries/add`, obj)
+      .then((response) => {
+        dispatch({
+          type: ADD_ADMINCOUNTRIES_SUCCESS,
+          payload: response.data.countries,
+        });
+        dispatch({
+          type: ADD_ADMINCOUNTRY,
+          payload: response.data.countries,
+        });
+        dispatch({
+          type: ENQUEUE_SNACKBAR,
+          notification: {
+            message: 'Success: added country',
+            key: new Date().getTime() + Math.random(),
+            options: {
+              variant: 'success',
+            },
+          },
+        });
+      }).catch((error) => {
+        dispatch({
+          type: ADD_ADMINCOUNTRIES_FAIL,
+          payload: error,
+        });
+
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function fetchAdminCurrencyData() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINCURRENCIES_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.get(`${process.env.API_URL}/admin/currencies/all`)
+      .then((response) => {
+        dispatch({
+          type: FETCH_ADMINCURRENCIES_SUCCESS,
+          payload: response.data.currencies,
+        });
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINCURRENCIES_FAIL,
+          payload: error,
+        });
+
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function addAdminCurrency(obj) {
+  return function (dispatch) {
+    dispatch({
+      type: ADD_ADMINCURRENCY_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.post(`${process.env.API_URL}/admin/currencies/add`, obj)
+      .then((response) => {
+        console.log('response');
+        console.log('response');
+        console.log('response');
+        console.log('response');
+        console.log('response');
+        console.log('response');
+        console.log('response');
+        console.log('response');
+        console.log('response');
+        console.log(response.data.currencies);
+        dispatch({
+          type: ADD_ADMINCURRENCY,
+          payload: response.data.currencies,
+        });
+        dispatch({
+          type: ENQUEUE_SNACKBAR,
+          notification: {
+            message: 'Success: added currency',
+            key: new Date().getTime() + Math.random(),
+            options: {
+              variant: 'success',
+            },
+          },
+        });
+      }).catch((error) => {
+        dispatch({
+          type: ADD_ADMINCURRENCY_FAIL,
           payload: error,
         });
 

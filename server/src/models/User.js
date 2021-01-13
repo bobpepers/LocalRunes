@@ -163,6 +163,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    open_store: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   };
 
   // 2: The model options.

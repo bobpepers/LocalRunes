@@ -35,69 +35,17 @@ const AdminPublishers = (props) => {
 
   return (
     <div className="content index600 height100 w-100 transactions transaction">
-      <TableContainer>
-        <Table
-          size="small"
-          aria-label="simple table"
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell>id</TableCell>
-              <TableCell align="right">domain</TableCell>
-              <TableCell align="right">impressions</TableCell>
-              <TableCell align="right">earned</TableCell>
-              <TableCell align="right">verified</TableCell>
-              <TableCell align="right">review</TableCell>
-              <TableCell align="right">banned</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {adminPublishers
-            && adminPublishers.data
-            && adminPublishers.data.map((publisher, i) => {
-              console.log(publisher);
-              return (
-                <TableRow key={i}>
-                  <TableCell component="th" scope="row">
-                    {publisher.id}
-                  </TableCell>
-                  <TableCell align="right">
-                    {publisher.subdomain && publisher.subdomain !== 'www' ? `${publisher.subdomain}.` : ''}
-                    {publisher.domain.domain}
-                  </TableCell>
-                  <TableCell align="right">{publisher.impressions}</TableCell>
-                  <TableCell align="right">...</TableCell>
-                  <TableCell align="right">{publisher.verified ? 'verified' : 'unverified'}</TableCell>
-                  <TableCell align="right">{publisher.review}</TableCell>
-                  <TableCell align="right">
-                    {publisher.banned
-                      ? (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="large"
-                          onClick={() => ban(publisher.id)}
-                        >
-                          Unban
-                        </Button>
-                      )
-                      : (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="large"
-                          onClick={() => ban(publisher.id)}
-                        >
-                          Ban
-                        </Button>
-                      )}
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Grid container>
+        <Grid item xs={4}>
+          321
+        </Grid>
+        <Grid item xs={4}>
+          321
+        </Grid>
+        <Grid item xs={4}>
+          321
+        </Grid>
+      </Grid>
     </div>
   )
 }

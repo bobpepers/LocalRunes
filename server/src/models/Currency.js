@@ -6,18 +6,9 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    iso: {
+    currency_name: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    status: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: 0,
     },
   };
 
@@ -27,14 +18,14 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   // 3: Define the Domain model.
-  const CountryModel = sequelize.define('country', modelDefinition, modelOptions);
+  const CurrencyModel = sequelize.define('currency', modelDefinition, modelOptions);
 
-  CountryModel.associate = (model) => {
+  CurrencyModel.associate = (model) => {
     // DomainModel.hasMany(model.publisher, {
     //  as: 'publisher',
     // });
 
   };
 
-  return CountryModel;
+  return CurrencyModel;
 };
