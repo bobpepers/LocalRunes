@@ -53,6 +53,7 @@ import adminReviewBanners from "./admin/adminReviewBanners";
 import adminDomains from "./admin/adminDomains";
 import adminCountries from "./admin/adminCountries";
 import adminCurrencies from "./admin/adminCurrencies";
+import adminPaymentMethods from "./admin/adminPaymentMethods";
 
 import removeBannerOrder from './removeBannerOrder';
 import addAdzone from './addAdZone';
@@ -64,7 +65,8 @@ import verifyPhoneCode from './verifyPhoneCode';
 import getPhoneCode from './getPhoneCode';
 import uploadIdentity from './uploadIdentity';
 import specificUser from './fetchSpecificUser';
-
+import paymentMethods from './paymentMethods';
+import currencies from './currencies';
 
 const rootReducer = combineReducers({
   form,
@@ -121,11 +123,14 @@ const rootReducer = combineReducers({
   adminDomains: adminDomains,
   adminCountries: adminCountries,
   adminCurrencies: adminCurrencies,
+  adminPaymentMethods: adminPaymentMethods,
 
   verifyPhoneCode: verifyPhoneCode,
   getPhoneCode: getPhoneCode,
   uploadIdentity: uploadIdentity,
   specificUser: specificUser,
+  paymentMethods: paymentMethods,
+  currencies: currencies,
   
 });
 

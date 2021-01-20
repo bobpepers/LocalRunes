@@ -46,6 +46,11 @@ import {
   ADD_ADMINCURRENCY_BEGIN,
   ADD_ADMINCURRENCY_SUCCESS,
   ADD_ADMINCURRENCY_FAIL,
+  FETCH_ADMINPAYMENTMETHOD_BEGIN,
+  FETCH_ADMINPAYMENTMETHOD_SUCCESS,
+  FETCH_ADMINPAYMENTMETHOD_FAIL,
+  UPDATE_ADMIN_PAYMENTMETHOD,
+  ADD_ADMINPAYMENTMETHOD,
 } from './types/index';
 
 /**
@@ -1107,15 +1112,6 @@ export function addAdminCurrency(obj) {
     // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
     axios.post(`${process.env.API_URL}/admin/currencies/add`, obj)
       .then((response) => {
-        console.log('response');
-        console.log('response');
-        console.log('response');
-        console.log('response');
-        console.log('response');
-        console.log('response');
-        console.log('response');
-        console.log('response');
-        console.log('response');
         console.log(response.data.currencies);
         dispatch({
           type: ADD_ADMINCURRENCY,
@@ -1137,6 +1133,141 @@ export function addAdminCurrency(obj) {
           payload: error,
         });
 
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function fetchAdminPaymentMethodData() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINPAYMENTMETHOD_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.get(`${process.env.API_URL}/admin/paymentmethod/all`)
+      .then((response) => {
+        console.log('response.data.paymentMethod');
+        console.log('response.data.paymentMethod');
+        console.log('response.data.paymentMethod');
+        console.log('response.data.paymentMethod');
+        console.log('response.data.paymentMethod');
+        console.log('response.data.paymentMethod');
+        console.log('response.data.paymentMethod');
+        console.log('response.data.paymentMethod');
+        console.log('response.data.paymentMethod');
+        console.log(response.data.paymentMethod);
+        dispatch({
+          type: FETCH_ADMINPAYMENTMETHOD_SUCCESS,
+          payload: response.data.paymentMethod,
+        });
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINPAYMENTMETHOD_FAIL,
+          payload: error,
+        });
+
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function addAdminPaymentMethod(obj) {
+  return function (dispatch) {
+    dispatch({
+      type: ADD_ADMINCURRENCY_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.post(`${process.env.API_URL}/admin/paymentmethod/add`, obj)
+      .then((response) => {
+        console.log('response.data.paymentMethod');
+        console.log(response.data.paymentMethod);
+        dispatch({
+          type: ADD_ADMINPAYMENTMETHOD,
+          payload: response.data.paymentMethod,
+        });
+        dispatch({
+          type: ENQUEUE_SNACKBAR,
+          notification: {
+            message: 'Success: added paymentMethod',
+            key: new Date().getTime() + Math.random(),
+            options: {
+              variant: 'success',
+            },
+          },
+        });
+      }).catch((error) => {
         if (error.response) {
           // client received an error response (5xx, 4xx)
           console.log(error.response);

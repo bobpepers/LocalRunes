@@ -109,6 +109,8 @@ import {
   addAdminCountries,
   addAdminCurrencies,
   fetchAdminCurrencies,
+  addAdminPaymentMethod,
+  fetchAdminPaymentMethod,
 } from './controllers/admin';
 
 import {
@@ -141,6 +143,9 @@ import {
   istfa,
 } from './controllers/tfa';
 import fetchPriceInfo from './controllers/price';
+import fetchPaymentMethods from './controllers/paymentMethods';
+import fetchCurrencies from './controllers/currencies';
+import addPostAd from './controllers/postAd';
 
 import storeIp from './helpers/storeIp';
 import {
@@ -772,6 +777,48 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
+  app.get('/api/admin/paymentmethod/all',
+    IsAuthenticated,
+    isAdmin,
+    fetchAdminPaymentMethod,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.paymentMethod) {
+        console.log(res.locals.paymentMethod);
+        res.json({
+          paymentMethod: res.locals.paymentMethod,
+        });
+      }
+    });
+
+  app.post('/api/admin/paymentmethod/add',
+    IsAuthenticated,
+    isAdmin,
+    addAdminPaymentMethod,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.paymentMethod) {
+        console.log(res.locals.paymentMethod);
+        res.json({
+          paymentMethod: res.locals.paymentMethod,
+        });
+      }
+    });
+
   app.post('/api/admin/banners/review/accept',
     IsAuthenticated,
     isAdmin,
@@ -1054,6 +1101,29 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
+  app.post('/api/postad/add',
+    (req, res, next) => {
+      console.log('55');
+      next();
+    },
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    addPostAd,
+    (req, res) => {
+      console.log('ADDED PUBLISHER');
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      if (res.locals.postAd) {
+        res.json({ postAd: res.locals.postAd });
+      }
+    });
+
   app.post('/api/publisher/adzone/add',
     IsAuthenticated,
     isUserBanned,
@@ -1092,6 +1162,49 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
       if (res.locals.publishers) {
         res.json(res.locals.publishers);
+      }
+    });
+
+  app.get('/api/paymentmethods',
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    fetchPaymentMethods,
+    (req, res) => {
+      console.log('ADDED PUBLISHER');
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      if (res.locals.paymentMethods) {
+        console.log(res.locals.paymentMethods);
+        console.log('banners');
+        res.json({ paymentMethods: res.locals.paymentMethods });
+      }
+    });
+
+  app.get('/api/currencies',
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    fetchCurrencies,
+    (req, res) => {
+      console.log('fetchCurrencies');
+      console.log('ADDED fetchCurrencies');
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      if (res.locals.currencies) {
+        console.log(res.locals.currencies);
+        console.log('banners');
+        res.json({ currencies: res.locals.currencies });
       }
     });
 

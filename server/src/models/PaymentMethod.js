@@ -6,9 +6,18 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    currency_name: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
     },
   };
 
@@ -18,13 +27,13 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   // 3: Define the Domain model.
-  const CurrencyModel = sequelize.define('currency', modelDefinition, modelOptions);
+  const PaymentMethodModel = sequelize.define('paymentMethod', modelDefinition, modelOptions);
 
-  CurrencyModel.associate = (model) => {
-    CurrencyModel.hasMany(model.postAd, {
+  PaymentMethodModel.associate = (model) => {
+    PaymentMethodModel.hasMany(model.postAd, {
       as: 'postAd',
     });
   };
 
-  return CurrencyModel;
+  return PaymentMethodModel;
 };

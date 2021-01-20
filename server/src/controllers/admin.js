@@ -786,3 +786,49 @@ export const addAdminCurrencies = async (req, res, next) => {
     next();
   }
 };
+
+export const fetchAdminPaymentMethod = async (req, res, next) => {
+  try {
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+    console.log("555555555555555555555");
+
+    res.locals.paymentMethod = await db.paymentMethod.findAll({});
+    console.log(res.locals.paymentMethod);
+    console.log(res.locals.paymentMethod);
+    console.log(res.locals.paymentMethod);
+    console.log(res.locals.paymentMethod);
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const addAdminPaymentMethod = async (req, res, next) => {
+  try {
+    res.locals.paymentMethod = await db.paymentMethod.create({
+      name: req.body.name,
+      description: req.body.description,
+      status: true,
+    });
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};

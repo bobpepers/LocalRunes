@@ -243,6 +243,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'publisher',
     });
 
+    UserModel.hasMany(model.postAd, {
+      as: 'postAd',
+    });
+
     UserModel.hasMany(model.activityArchive, {
       as: 'archivedSpender',
       foreignKey: 'spenderId',
