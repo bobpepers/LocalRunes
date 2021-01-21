@@ -145,7 +145,7 @@ import {
 import fetchPriceInfo from './controllers/price';
 import fetchPaymentMethods from './controllers/paymentMethods';
 import fetchCurrencies from './controllers/currencies';
-import addPostAd from './controllers/postAd';
+import { addPostAd, fetchPostAd } from './controllers/postAd';
 
 import storeIp from './helpers/storeIp';
 import {
@@ -1121,6 +1121,31 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
       if (res.locals.postAd) {
         res.json({ postAd: res.locals.postAd });
+      }
+    });
+
+  app.post('/api/postad',
+    (req, res, next) => {
+      console.log('55');
+      next();
+    },
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    fetchPostAd,
+    (req, res) => {
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      if (res.locals.buy) {
+        res.json({ buy: res.locals.buy });
+      }
+      if (res.locals.sell) {
+        res.json({ sell: res.locals.sell });
       }
     });
 

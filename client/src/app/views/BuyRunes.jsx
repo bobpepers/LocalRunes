@@ -4,16 +4,28 @@ import React, {
   // Fragment,
 } from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import {
   Grid,
   // Button,
 } from '@material-ui/core';
 import * as actions from '../actions/auth';
 import Info from '../containers/Info';
+import {
+  fetchPostAdData,
+} from '../actions/postAd';
 
-const Home = () => {
+const Home = (props) => {
+  const {
+    postAd,
+  } = props;
   console.log('RunesX Home View');
+  const dispatch = useDispatch();
+  useEffect(() => dispatch(fetchPostAdData('buy')), [dispatch]);
+  useEffect(() => {
+    console.log('6666666666666666');
+    console.log(postAd);
+  }, [postAd]);
 
   return (
     <div className="height100 content">
@@ -52,6 +64,9 @@ const Home = () => {
   )
 }
 
-const mapStateToProps = (state) => ({ errorMessage: state.auth.error })
+const mapStateToProps = (state) => ({
+  postAd: state.postAd,
+  errorMessage: state.auth.error,
+})
 
 export default withRouter(connect(mapStateToProps, actions)(Home));

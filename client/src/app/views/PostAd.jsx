@@ -34,7 +34,8 @@ import {
 } from '../actions/currencies';
 
 import {
-  postAdAction,
+  addPostAdAction,
+  fetchPostAdData,
 } from '../actions/postAd';
 
 const renderTextField = ({
@@ -140,10 +141,12 @@ const PostAd = (props) => {
   console.log('RunesX Home View');
   useEffect(() => dispatch(fetchPaymentMethodData()), [dispatch]);
   useEffect(() => dispatch(fetchCurrenciesData()), [dispatch]);
+
   useEffect(() => {}, [paymentMethods, currencies]);
 
   const handleFormSubmit = async (obj) => {
-    await dispatch(postAdAction(obj));
+    console.log(obj);
+    await dispatch(addPostAdAction(obj));
   }
 
   return (

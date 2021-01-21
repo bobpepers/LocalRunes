@@ -67,6 +67,7 @@ import uploadIdentity from './uploadIdentity';
 import specificUser from './fetchSpecificUser';
 import paymentMethods from './paymentMethods';
 import currencies from './currencies';
+import postAd from './postAd';
 
 const rootReducer = combineReducers({
   form,
@@ -131,6 +132,7 @@ const rootReducer = combineReducers({
   specificUser: specificUser,
   paymentMethods: paymentMethods,
   currencies: currencies,
+  postAd: postAd,
   
 });
 

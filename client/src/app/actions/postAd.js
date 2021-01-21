@@ -3,9 +3,12 @@ import {
   ENQUEUE_SNACKBAR,
   ADD_POSTAD_BEGIN,
   ADD_POSTAD,
+  FETCH_POSTAD_FAIL,
+  FETCH_POSTAD_SUCCESS,
+  FETCH_POSTAD_BEGIN,
 } from './types/index';
 
-export function postAdAction(obj) {
+export function addPostAdAction(obj) {
   console.log('2222222222222222222222');
   return function (dispatch) {
     dispatch({
@@ -68,6 +71,26 @@ export function postAdAction(obj) {
             },
           });
         }
+      });
+  }
+}
+
+export function fetchPostAdData(type) {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_POSTAD_BEGIN,
+    });
+    axios.post(`${process.env.API_URL}/postad`, { type })
+      .then((response) => {
+        dispatch({
+          type: FETCH_POSTAD_SUCCESS,
+          payload: response.data,
+        })
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_POSTAD_FAIL,
+          payload: error,
+        })
       });
   }
 }
