@@ -68,6 +68,7 @@ import specificUser from './fetchSpecificUser';
 import paymentMethods from './paymentMethods';
 import currencies from './currencies';
 import postAd from './postAd';
+import trade from './trade';
 
 const rootReducer = combineReducers({
   form,
@@ -133,6 +134,7 @@ const rootReducer = combineReducers({
   paymentMethods: paymentMethods,
   currencies: currencies,
   postAd: postAd,
+  trade: trade,
   
 });
 

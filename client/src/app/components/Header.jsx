@@ -23,6 +23,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MobileNav from '../assets/images/mobileNav.svg';
+import Notifications from './Notifications';
 // import 'bootstrap/dist/css/bootstrap.css';
 
 class Header extends Component {
@@ -146,6 +147,7 @@ class Header extends Component {
                 && (
                   <>
                     <li>
+                      <Notifications />
                       <NavDropdown
                         className="langPadding toggleLangWrapper"
                         title={(

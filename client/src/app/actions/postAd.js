@@ -82,6 +82,8 @@ export function fetchPostAdData(type) {
     });
     axios.post(`${process.env.API_URL}/postad`, { type })
       .then((response) => {
+        console.log('FETCH_POSTAD_SUCCESS');
+        console.log(response);
         dispatch({
           type: FETCH_POSTAD_SUCCESS,
           payload: response.data,

@@ -63,8 +63,26 @@ export const fetchPostAd = async (req, res, next) => {
       where: {
         type: req.body.type,
       },
+      include: [
+        {
+          model: db.user,
+          as: 'user',
+          required: false,
+          attributes: ['username'],
+        },
+        {
+          model: db.paymentMethod,
+          as: 'paymentMethod',
+          required: false,
+        },
+        {
+          model: db.currency,
+          as: 'currency',
+          required: false,
+        },
+      ],
     });
-  }.
+  }
   if (req.body.type === 'sell') {
     res.locals.sell = await db.postAd.findAll({
       where: {

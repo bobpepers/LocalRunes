@@ -154,6 +154,14 @@ import {
   rateLimiterMiddlewareFaucet,
 } from './helpers/rateLimiter';
 
+import {
+  startTrade,
+  tradeInit,
+  tradeAccept,
+  tradeDispute,
+  tradeDone,
+} from './controllers/trade';
+
 const isbot = require('isbot');
 
 const path = require('path');
@@ -1098,6 +1106,29 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
       if (res.locals.bio) {
         res.json(res.locals.bio);
+      }
+    });
+
+  app.post('/api/trade/start',
+    (req, res, next) => {
+      console.log("start");
+      next();
+    },
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    startTrade,
+    (req, res) => {
+      console.log('ADDED PUBLISHER');
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      if (res.locals.trade) {
+        res.json(res.locals.trade);
       }
     });
 

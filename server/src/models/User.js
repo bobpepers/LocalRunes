@@ -305,6 +305,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'blockedId',
       as: 'blockedUsers',
     });
+    UserModel.hasMany(model.trade, {
+      foreignKey: 'userId',
+      as: 'user',
+    });
   };
 
   return UserModel;

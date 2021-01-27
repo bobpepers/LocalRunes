@@ -9,13 +9,41 @@ import {
   Grid,
   // Button,
 } from '@material-ui/core';
-import * as actions from '../actions/auth';
-import Info from '../containers/Info';
+
 import {
   fetchPostAdData,
 } from '../actions/postAd';
+import Info from '../containers/Info';
+import * as actions from '../actions/auth';
+import TableAds from '../components/TableAds';
 
-const Home = (props) => {
+const headers = [
+  'Seller',
+  'Payment Method',
+  'Price / RUNES',
+  'Limits',
+  'Actions',
+];
+
+const headCells = [
+  {
+    id: 'seller', numeric: false, disablePadding: true, label: 'Seller',
+  },
+  {
+    id: 'paymentMethod', numeric: true, disablePadding: false, label: 'Payment Method',
+  },
+  {
+    id: 'price', numeric: true, disablePadding: false, label: 'Price / RUNES',
+  },
+  {
+    id: 'limits', numeric: true, disablePadding: false, label: 'Limits',
+  },
+  {
+    id: 'actions', numeric: true, disablePadding: false, label: 'Actions',
+  },
+];
+
+const BuyRunes = (props) => {
   const {
     postAd,
   } = props;
@@ -30,35 +58,10 @@ const Home = (props) => {
   return (
     <div className="height100 content">
       <Grid container>
-        <Info />
-        {/* <Globe /> */}
-        {/* <Domains /> */}
-        {/* <Banner /> */}
-        <div
-          style={{
-            width: '100%',
-            textAlign: 'center',
-            paddingBottom: '40px',
-            zIndex: 50,
-          }}
-          className="spacing-top"
-        >
-          <iframe
-            title="a-ads leaderboard 2"
-            data-aa="1500077"
-            src="//ad.a-ads.com/1500077?size=728x90"
-            scrolling="no"
-            style={{
-              width: '728px',
-              height: '90px',
-              border: '0px',
-              padding: 0,
-              overflow: 'hidden',
-            }}
-            allowtransparency="true"
-          />
-          {/*  <Exchanges /> */}
-        </div>
+        <TableAds
+          headCells={headCells || []}
+          postAd={postAd ? postAd.buy : []}
+        />
       </Grid>
     </div>
   )
@@ -69,4 +72,4 @@ const mapStateToProps = (state) => ({
   errorMessage: state.auth.error,
 })
 
-export default withRouter(connect(mapStateToProps, actions)(Home));
+export default withRouter(connect(mapStateToProps, actions)(BuyRunes));
