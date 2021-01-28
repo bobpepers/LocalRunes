@@ -148,38 +148,6 @@ class Header extends Component {
                   <>
                     <li>
                       <Notifications />
-                      <NavDropdown
-                        className="langPadding toggleLangWrapper"
-                        title={(
-                          <IconButton
-                            aria-label="show notifications"
-                            color="inherit"
-                            onClick={this.handleClick}
-                          >
-                            <Badge badgeContent={3} color="secondary">
-                              <NotificationsIcon />
-                            </Badge>
-                          </IconButton>
-              )}
-                        id="basic-nav-dropdown"
-                      >
-                        <NavDropdown.Item onClick={this.handleClose}>
-                          <div>
-                            Advertisement #1
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={this.handleClose}>
-                          <div>
-                            Advertisement #1
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={this.handleClose}>
-                          <div>
-                            Advertisement #1
-                          </div>
-                        </NavDropdown.Item>
-                      </NavDropdown>
-
                     </li>
                   </>
 

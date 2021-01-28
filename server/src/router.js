@@ -160,6 +160,7 @@ import {
   tradeAccept,
   tradeDispute,
   tradeDone,
+  fetchTrade,
 } from './controllers/trade';
 
 const isbot = require('isbot');
@@ -1129,6 +1130,32 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
       if (res.locals.trade) {
         res.json(res.locals.trade);
+      }
+    });
+
+  app.post('/api/trade',
+    (req, res, next) => {
+      console.log("start TRADE");
+      next();
+    },
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    fetchTrade,
+    (req, res) => {
+      console.log('API TRADE');
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      console.log(res.locals.trade);
+      if (res.locals.trade) {
+        res.json({
+          trade: res.locals.trade,
+        });
       }
     });
 

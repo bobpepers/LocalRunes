@@ -23,6 +23,7 @@ export const startTrade = async (req, res, next) => {
     const trade = await db.trade.create({
       userId: req.user.id,
       postAdId: postAd.id,
+      type: 'init',
     }, {
       transaction: t,
       lock: t.LOCK.UPDATE,
@@ -53,4 +54,12 @@ export const tradeDispute = async (req, res, next) => {
 
 export const tradeDone = async (req, res, next) => {
 
+};
+
+export const fetchTrade = async (req, res, next) => {
+  const trade = await db.trade.findAll({
+
+  });
+  res.locals.trade = trade;
+  next();
 };

@@ -1,7 +1,7 @@
 import {
-  POST_TRADE_BEGIN,
-  POST_TRADE_SUCCESS,
-  POST_TRADE_FAIL,
+  FETCH_TRADE_BEGIN,
+  FETCH_TRADE_SUCCESS,
+  FETCH_TRADE_FAIL,
 } from '../actions/types/index';
 
 const initialState = {
@@ -11,19 +11,27 @@ const initialState = {
 };
 export default (state = initialState, action) => {
   switch (action.type) {
-    case POST_TRADE_BEGIN:
+    case FETCH_TRADE_BEGIN:
       return {
         ...state,
         isFetching: true,
         error: null,
       };
-    case POST_TRADE_SUCCESS:
+    case FETCH_TRADE_SUCCESS:
+      console.log('trade success post');
+      console.log('trade success post');
+      console.log('trade success post');
+      console.log('trade success post');
+      console.log('trade success post');
+      console.log('trade success post');
+      console.log('trade success post');
+      console.log(action.payload);
       return {
         ...state,
         data: action.payload,
         isFetching: false,
       };
-    case POST_TRADE_FAIL:
+    case FETCH_TRADE_FAIL:
       return {
         ...state,
         error: action.payload.response.data.error,

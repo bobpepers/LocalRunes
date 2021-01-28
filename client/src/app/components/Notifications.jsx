@@ -21,12 +21,17 @@ const Notifications = (props) => {
   useEffect(() => {
     console.log(trade);
   });
+  useEffect(() => {
+    console.log(trade);
+  }, [trade]);
   const [open, setOpen] = useState(false);
   const handleClick = (event) => {
     // this.setState({ anchorEl: event.currentTarget, open: Boolean(event.currentTarget) });
   }
 
-  const handleClose = (event) => {
+  const handleClose = (type, id) => {
+    console.log(type);
+    console.log(id);
     // this.setState({ anchorEl: event.currentTarget, open: false });
   }
 
@@ -40,28 +45,23 @@ const Notifications = (props) => {
           color="inherit"
           onClick={handleClick}
         >
-          <Badge badgeContent={3} color="secondary">
+          <Badge badgeContent={trade.length} color="secondary">
             <NotificationsIcon />
           </Badge>
         </IconButton>
               )}
       id="basic-nav-dropdown"
     >
-      <NavDropdown.Item onClick={handleClose}>
-        <div>
-          Advertisement #1
-        </div>
-      </NavDropdown.Item>
-      <NavDropdown.Item onClick={handleClose}>
-        <div>
-          Advertisement #1
-        </div>
-      </NavDropdown.Item>
-      <NavDropdown.Item onClick={handleClose}>
-        <div>
-          Advertisement #1
-        </div>
-      </NavDropdown.Item>
+      {trade.map((item) => (
+        <NavDropdown.Item onClick={() => handleClose(item.type, item.id)}>
+          <div>
+            Trade #
+            {item.id}
+            {' - '}
+            {item.type}
+          </div>
+        </NavDropdown.Item>
+      ))}
     </NavDropdown>
 
   )

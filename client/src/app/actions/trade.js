@@ -97,11 +97,17 @@ export function fetchTradeData() {
     });
     axios.post(`${process.env.API_URL}/trade`)
       .then((response) => {
-        console.log('FETCH_POSTAD_SUCCESS');
-        console.log(response);
+        console.log('FETCH_TRADE_SUCCESS');
+        console.log('FETCH_TRADE_SUCCESS');
+        console.log('FETCH_TRADE_SUCCESS');
+        console.log('FETCH_TRADE_SUCCESS');
+        console.log('FETCH_TRADE_SUCCESS');
+        console.log('FETCH_TRADE_SUCCESS');
+        console.log('FETCH_TRADE_SUCCESS');
+        console.log(response.data.trade);
         dispatch({
           type: FETCH_TRADE_SUCCESS,
-          payload: response.data,
+          payload: response.data.trade,
         })
       }).catch((error) => {
         dispatch({
