@@ -69,6 +69,8 @@ import paymentMethods from './paymentMethods';
 import currencies from './currencies';
 import postAd from './postAd';
 import trade from './trade';
+import tradeSecondStep from './tradeSecondStep';
+
 
 const rootReducer = combineReducers({
   form,
@@ -135,6 +137,7 @@ const rootReducer = combineReducers({
   currencies: currencies,
   postAd: postAd,
   trade: trade,
+  tradeSecond: tradeSecondStep,
   
 });
 

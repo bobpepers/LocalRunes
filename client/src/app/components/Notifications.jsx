@@ -10,12 +10,14 @@ import { withTranslation } from 'react-i18next';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import { useHistory } from 'react-router-dom';
 import {
   fetchTradeData,
 } from '../actions/trade';
 
 const Notifications = (props) => {
   const { trade } = props;
+  const history = useHistory();
   const dispatch = useDispatch();
   useEffect(() => dispatch(fetchTradeData()), [dispatch]);
   useEffect(() => {
@@ -30,6 +32,12 @@ const Notifications = (props) => {
   }
 
   const handleClose = (type, id) => {
+    if (type === 'init') {
+      history.push(`/trade/init/${id}`);
+    }
+    if (type === 's') {
+      history.push(`/trade/${id}`);
+    }
     console.log(type);
     console.log(id);
     // this.setState({ anchorEl: event.currentTarget, open: false });

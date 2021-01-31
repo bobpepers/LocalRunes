@@ -63,3 +63,32 @@ export const fetchTrade = async (req, res, next) => {
   res.locals.trade = trade;
   next();
 };
+
+export const secondTrade = async (req, res, next) => {
+  console.log('123');
+  await db.sequelize.transaction({
+    isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
+  }, async (t) => {
+    const trade = await db.trade.findOne({
+      where: {
+        userId: req.user.id,
+        id: req.body.id,
+      },
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+    if (!trade) {
+      throw new Error('TRADE_NOT_FOUND');
+    }
+    console.log(trade);
+
+    res.locals.trade = trade;
+    t.afterCommit(() => {
+      next();
+    });
+  }).catch((err) => {
+    console.log(err.message);
+    res.locals.error = err.message;
+    next();
+  });
+};
