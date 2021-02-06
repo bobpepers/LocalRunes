@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -21,6 +21,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import { useHistory } from 'react-router-dom';
 import {
   startTrade,
 } from '../actions/trade';
@@ -198,13 +199,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EnhancedTable(props) {
+function EnhancedTable(props) {
   const {
     headCells,
     postAd,
+    currentTrade,
   } = props;
   const rows = [];
   const dispatch = useDispatch();
+
+  const history = useHistory();
+
+  useEffect(() => {
+    console.log('currentTrade');
+    console.log('currentTrade');
+
+    console.log('currentTrade');
+    console.log('currentTrade');
+    console.log('currentTrade');
+    console.log('currentTrade');
+    console.log('currentTrade');
+    console.log('currentTrade');
+    console.log('currentTrade');
+    console.log(currentTrade);
+    if (currentTrade.type === 'init') {
+      console.log(currentTrade);
+      history.push(`/trade/init/${currentTrade.id}`);
+    }
+  }, [currentTrade]);
 
   postAd.forEach((item) => {
     rows.push(
@@ -366,3 +388,13 @@ export default function EnhancedTable(props) {
     </div>
   );
 }
+
+function mapStateToProps(state) {
+  return {
+    currentTrade: state.currentTrade.data,
+  }
+}
+
+// export default AlertDialogSlide;
+
+export default connect(mapStateToProps, null)(EnhancedTable);

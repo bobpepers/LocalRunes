@@ -31,20 +31,28 @@ export function startTrade(id) {
       });
       axios.post(`${process.env.API_URL}/trade/start`, { id })
         .then((response) => {
-          if (response.data.trade) {
-            dispatch({
-              type: DELETE_TRADE,
-              payload: response.data.trade,
-            });
-          }
+          // if (response.data.trade) {
+          //  dispatch({
+          //    type: DELETE_TRADE,
+          //    payload: response.data.trade,
+          //  });
+          // }
           dispatch({
             type: POST_TRADE_SUCCESS,
-            payload: response.data,
+            payload: response.data.trade,
           });
+          dispatch({
+            type: ADD_TRADE,
+            payload: response.data.trade,
+          })
+          dispatch({
+            type: FETCH_CURRENT_TRADE_SUCCESS,
+            payload: response.data.trade,
+          })
           dispatch({
             type: ENQUEUE_SNACKBAR,
             notification: {
-              message: 'Success: Surf Started',
+              message: 'Success: Trade Init',
               key: new Date().getTime() + Math.random(),
               options: {
                 variant: 'success',

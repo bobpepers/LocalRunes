@@ -7,7 +7,7 @@ import {
 const initialState = {
   volume: 0,
   isFetching: true, // Default to fetching..
-  error: null
+  error: null,
 };
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -15,19 +15,19 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isFetching: true,
-        error: null
+        error: null,
       };
     case FETCH_RUNESVOLUME_SUCCESS:
       return {
         ...state,
         volume: action.payload,
-        isFetching: false
+        isFetching: false,
       };
     case FETCH_RUNESVOLUME_FAILURE:
       return {
         ...state,
         error: action.error,
-        isFetching: false
+        isFetching: false,
       };
     default:
       return state;

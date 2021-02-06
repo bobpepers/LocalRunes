@@ -1133,7 +1133,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         });
       }
       if (res.locals.trade) {
-        res.json(res.locals.trade);
+        res.json({ trade: res.locals.trade });
       }
     });
 

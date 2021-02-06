@@ -18,6 +18,21 @@ export default (state = initialState, action) => {
         error: null,
       };
     case FETCH_CURRENT_TRADE_SUCCESS:
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log('FETCH_CURRENT_TRADE_SUCCESS');
+      console.log(action.payload);
+
       return {
         ...state,
         data: action.payload,
