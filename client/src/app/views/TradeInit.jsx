@@ -35,6 +35,7 @@ import {
 
 import {
   tradeSecondStepAction,
+  cancelTradeAction,
 } from '../actions/trade';
 
 const renderField = ({
@@ -118,6 +119,10 @@ const TradeInit = (props) => {
     console.log(obj);
     await dispatch(tradeSecondStepAction(obj, id));
   }
+  const cancelTrade = async () => {
+    // console.log(obj);
+    await dispatch(cancelTradeAction(id));
+  }
 
   return (
     <div className="height100 content surfContainer">
@@ -156,6 +161,19 @@ const TradeInit = (props) => {
                   size="large"
                 >
                   Start Trade
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  // type="submit"
+                  className="btn"
+                  fullWidth
+                  size="large"
+                  onClick={() => cancelTrade()}
+                >
+                  Cancel Trade
                 </Button>
               </Grid>
             </Grid>

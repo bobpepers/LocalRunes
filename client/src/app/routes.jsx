@@ -38,6 +38,7 @@ import PostAd from './views/PostAd';
 import PublicProfile from './views/PublicProfile';
 import TradeInit from './views/TradeInit';
 import Trade from './views/Trade';
+import TradeRequested from './views/TradeRequested';
 
 import requireAuth from './components/hoc/RequireAuth';
 import requireNotAuth from './components/hoc/RequireNotAuth';
@@ -160,6 +161,11 @@ const Routes = (props) => {
         exact
         path="/trade/init/:id"
         component={requireAuth(withTracker(TradeInit))}
+      />
+      <Route
+        exact
+        path="/trade/requested/:id"
+        component={requireAuth(withTracker(TradeRequested))}
       />
       <Route
         exact

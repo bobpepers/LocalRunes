@@ -70,6 +70,10 @@ import currencies from './currencies';
 import postAd from './postAd';
 import trade from './trade';
 import tradeSecondStep from './tradeSecondStep';
+import currentTrade from './currentTrade';
+import cancelTrade from './cancelTrade';
+import acceptTrade from './acceptTrade';
+
 
 
 const rootReducer = combineReducers({
@@ -138,6 +142,9 @@ const rootReducer = combineReducers({
   postAd: postAd,
   trade: trade,
   tradeSecond: tradeSecondStep,
+  currentTrade: currentTrade,
+  cancelTrade: cancelTrade,
+  acceptTrade: acceptTrade,
   
 });
 

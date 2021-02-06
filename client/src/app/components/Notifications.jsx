@@ -35,6 +35,9 @@ const Notifications = (props) => {
     if (type === 'init') {
       history.push(`/trade/init/${id}`);
     }
+    if (type === 'requested') {
+      history.push(`/trade/requested/${id}`);
+    }
     if (type === 's') {
       history.push(`/trade/${id}`);
     }

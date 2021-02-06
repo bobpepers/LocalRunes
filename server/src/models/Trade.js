@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM,
       values: [
         'init',
+        'requested',
         'accepted',
         'disputed',
         'done',
@@ -29,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
     amount: {
       type: DataTypes.BIGINT,
       allowNull: true,
+    },
+    reponseTime: {
+      allowNull: true,
+      type: DataTypes.DATE,
     },
   };
 
