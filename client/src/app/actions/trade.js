@@ -255,8 +255,13 @@ export function cancelTradeAction(id) {
     axios.post(`${process.env.API_URL}/trade/cancel`, { id })
       .then((response) => {
         console.log(response.data.trade);
+
         dispatch({
           type: CANCEL_TRADE_SUCCESS,
+          payload: response.data.trade,
+        })
+        dispatch({
+          type: DELETE_TRADE,
           payload: response.data.trade,
         })
       }).catch((error) => {

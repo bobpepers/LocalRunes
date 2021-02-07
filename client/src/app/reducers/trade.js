@@ -4,6 +4,7 @@ import {
   FETCH_TRADE_FAIL,
   ADD_TRADE,
   UPDATE_TRADE,
+  DELETE_TRADE,
 } from '../actions/types/index';
 
 const initialState = {
@@ -41,6 +42,14 @@ export default (state = initialState, action) => {
           },
           ...state.data,
         ],
+        isFetching: false,
+      };
+
+    case DELETE_TRADE:
+      console.log(action.payload);
+      return {
+        ...state,
+        data: state.data.filter((item) => item.id !== action.payload.id),
         isFetching: false,
       };
 
