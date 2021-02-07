@@ -124,7 +124,7 @@ const TradeRequested = (props) => {
             <Grid item xs={12}>
               <p>{currentTrade && currentTrade.amount}</p>
             </Grid>
-            {currentTrade && currentTrade.user && user && user.data && currentTrade.user.username === user.data.username && (
+            {currentTrade && currentTrade.postAd && currentTrade.postAd.user && user && user.data && currentTrade.postAd.user.username === user.data.username && (
               <Grid item xs={12}>
                 <Button
                   variant="contained"

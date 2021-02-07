@@ -4,7 +4,7 @@ import React, {
   // Fragment,
 } from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import {
   Grid,
   // Button,
@@ -22,9 +22,24 @@ import Volume from '../containers/Volume';
 import Runebase from '../containers/Runebase';
 import AdvertisersPublishers from '../components/AdvertisersPublishers';
 // import Globe from '../containers/Globe';
+import {
+  fetchCurrentTradeIdle,
+  secondTradeIdleAction,
+  cancelTradeIdleAction,
+} from '../actions/trade';
 
 const Home = () => {
   console.log('RunesX Home View');
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(cancelTradeIdleAction());
+  }, []);
+  useEffect(() => {
+    dispatch(fetchCurrentTradeIdle());
+  }, []);
+  useEffect(() => {
+    dispatch(secondTradeIdleAction());
+  }, []);
 
   return (
     <div className="height100 content">

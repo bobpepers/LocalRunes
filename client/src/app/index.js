@@ -25,6 +25,7 @@ import {
   onUpdateJackpotTickets,
   onUpdatePrice,
   onUpdateJackpot,
+  onUpdateTrade,
 } from './actions'
 
 import reducers from './reducers';
@@ -79,6 +80,10 @@ socket.on('insertTransaction', (data) => {
 
 socket.on('updateWallet', (data) => {
   store.dispatch(onUpdateWallet(data.wallet));
+});
+
+socket.on('updateTrade', (data) => {
+  store.dispatch(onUpdateTrade(data.trade));
 });
 
 socket.on('Activity', (data) => {

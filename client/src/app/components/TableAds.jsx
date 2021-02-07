@@ -24,6 +24,8 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { useHistory } from 'react-router-dom';
 import {
   startTrade,
+  secondTradeIdleAction,
+  fetchCurrentTradeIdle,
 } from '../actions/trade';
 
 function createData(username, paymentMethod, price, limit, type, id) {
@@ -209,6 +211,14 @@ function EnhancedTable(props) {
   const dispatch = useDispatch();
 
   const history = useHistory();
+
+  useEffect(() => {
+    dispatch(fetchCurrentTradeIdle());
+  }, []);
+
+  useEffect(() => {
+    dispatch(secondTradeIdleAction());
+  }, []);
 
   useEffect(() => {
     console.log('currentTrade');

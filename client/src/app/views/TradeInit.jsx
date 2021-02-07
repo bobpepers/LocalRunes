@@ -3,7 +3,7 @@ import React, {
   useState,
   // Fragment,
 } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import {
   Grid,
@@ -17,6 +17,7 @@ import {
   Select,
 } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
+
 import {
   reduxForm,
   Field,
@@ -36,6 +37,8 @@ import {
 import {
   tradeSecondStepAction,
   cancelTradeAction,
+  secondTradeIdleAction,
+  cancelTradeIdleAction,
 } from '../actions/trade';
 
 const renderField = ({
@@ -89,6 +92,8 @@ const TradeInit = (props) => {
     handleSubmit,
     paymentMethods,
     currencies,
+    currentTrade,
+    cancelTrade,
     match: {
       params: {
         id,
@@ -102,24 +107,52 @@ const TradeInit = (props) => {
 
   useEffect(() => {}, [paymentMethods, currencies]);
   useEffect(() => {
-    console.log('id');
-    console.log('id');
-    console.log('id');
-    console.log('id');
-    console.log('id');
-    console.log('id');
-    console.log('id');
-    console.log('id');
-    console.log('id');
-    console.log('id');
-    console.log(id);
+    dispatch(secondTradeIdleAction());
   }, []);
+  useEffect(() => {
+    dispatch(cancelTradeIdleAction());
+  }, []);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    console.log('cancelTrade');
+    console.log('cancelTrade');
+    console.log('cancelTrade');
+    console.log('cancelTrade');
+    console.log('cancelTrade');
+    console.log('cancelTrade');
+    console.log('cancelTrade');
+    console.log('cancelTrade');
+    console.log('cancelTrade');
+    console.log('cancelTrade');
+    console.log('cancelTrade');
+    console.log(cancelTrade);
+    if (cancelTrade.type === 'canceled') {
+      history.push('/');
+    }
+  }, [cancelTrade]);
+
+  useEffect(() => {
+    if (currentTrade.type === 'requested') {
+      console.log(currentTrade);
+      history.push(`/trade/requested/${currentTrade.id}`);
+    }
+  }, [currentTrade]);
+
+  useEffect(() => {
+    console.log(currentTrade);
+    if (currentTrade.type === 'requested') {
+      console.log(currentTrade);
+      history.push(`/trade/requested/${currentTrade.id}`);
+    }
+  }, [currentTrade]);
 
   const handleFormSubmit = async (obj) => {
     console.log(obj);
     await dispatch(tradeSecondStepAction(obj, id));
   }
-  const cancelTrade = async () => {
+  const cancelTradeFunc = async () => {
     // console.log(obj);
     await dispatch(cancelTradeAction(id));
   }
@@ -171,7 +204,7 @@ const TradeInit = (props) => {
                   className="btn"
                   fullWidth
                   size="large"
-                  onClick={() => cancelTrade()}
+                  onClick={() => cancelTradeFunc()}
                 >
                   Cancel Trade
                 </Button>
@@ -201,6 +234,8 @@ const mapStateToProps = (state) => ({
   errorMessage: state.auth.error,
   paymentMethods: state.paymentMethods,
   currencies: state.currencies,
+  currentTrade: state.currentTrade.data,
+  cancelTrade: state.cancelTrade.data,
 })
 
 // export default withRouter(connect(mapStateToProps, actions)(PostAd));

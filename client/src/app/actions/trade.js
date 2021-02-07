@@ -3,6 +3,7 @@ import {
   POST_TRADE_BEGIN,
   POST_TRADE_SUCCESS,
   POST_TRADE_FAIL,
+  POST_TRADE_IDLE,
   ADD_TRADE,
   DELETE_TRADE,
   ENQUEUE_SNACKBAR,
@@ -12,15 +13,19 @@ import {
   POST_TRADE_SECOND_BEGIN,
   POST_TRADE_SECOND_SUCCESS,
   POST_TRADE_SECOND_FAIL,
+  POST_TRADE_SECOND_IDLE,
   FETCH_CURRENT_TRADE_BEGIN,
   FETCH_CURRENT_TRADE_SUCCESS,
   FETCH_CURRENT_TRADE_FAIL,
+  FETCH_CURRENT_TRADE_IDLE,
   CANCEL_TRADE_BEGIN,
   CANCEL_TRADE_SUCCESS,
   CANCEL_TRADE_FAIL,
   ACCEPT_TRADE_BEGIN,
   ACCEPT_TRADE_SUCCESS,
   ACCEPT_TRADE_FAIL,
+  UPDATE_TRADE,
+  CANCEL_TRADE_IDLE,
 } from './types/index';
 
 export function startTrade(id) {
@@ -146,16 +151,20 @@ export function tradeSecondStepAction(obj, id) {
       });
       axios.post(`${process.env.API_URL}/trade/second`, { obj, id })
         .then((response) => {
-          if (response.data.trade) {
-            dispatch({
-              type: DELETE_TRADE,
-              payload: response.data.trade,
-            });
-          }
+          // if (response.data.trade) {
+          //  dispatch({
+          //    type: DELETE_TRADE,
+          //    payload: response.data.trade,
+          //  });
+          // }
           dispatch({
             type: POST_TRADE_SECOND_SUCCESS,
-            payload: response.data,
+            payload: response.data.trade,
           });
+          dispatch({
+            type: FETCH_CURRENT_TRADE_SUCCESS,
+            payload: response.data.trade,
+          })
           dispatch({
             type: ENQUEUE_SNACKBAR,
             notification: {
@@ -277,5 +286,37 @@ export function acceptTradeAction(id) {
           payload: error,
         })
       });
+  }
+}
+
+export function onUpdateTrade(data) {
+  return function (dispatch) {
+    dispatch({
+      type: UPDATE_TRADE,
+      payload: data,
+    });
+  }
+}
+
+export function secondTradeIdleAction() {
+  return function (dispatch) {
+    dispatch({
+      type: POST_TRADE_SECOND_IDLE,
+    });
+  }
+}
+
+export function fetchCurrentTradeIdle() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_CURRENT_TRADE_IDLE,
+    });
+  }
+}
+export function cancelTradeIdleAction() {
+  return function (dispatch) {
+    dispatch({
+      type: CANCEL_TRADE_IDLE,
+    });
   }
 }

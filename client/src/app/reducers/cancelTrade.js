@@ -2,15 +2,22 @@ import {
   CANCEL_TRADE_BEGIN,
   CANCEL_TRADE_SUCCESS,
   CANCEL_TRADE_FAIL,
+  CANCEL_TRADE_IDLE,
 } from '../actions/types/index';
 
 const initialState = {
   data: [],
-  isFetching: true, // Default to fetching..
+  isFetching: false, // Default to fetching..
   error: null,
 };
 export default (state = initialState, action) => {
   switch (action.type) {
+    case CANCEL_TRADE_IDLE:
+      return {
+        data: [],
+        isFetching: false, // Default to fetching..
+        error: null,
+      };
     case CANCEL_TRADE_BEGIN:
       return {
         ...state,

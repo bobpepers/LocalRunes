@@ -2,15 +2,22 @@ import {
   POST_TRADE_SECOND_BEGIN,
   POST_TRADE_SECOND_SUCCESS,
   POST_TRADE_SECOND_FAIL,
+  POST_TRADE_SECOND_IDLE,
 } from '../actions/types/index';
 
 const initialState = {
   data: [],
-  isFetching: true, // Default to fetching..
+  isFetching: false, // Default to fetching..
   error: null,
 };
 export default (state = initialState, action) => {
   switch (action.type) {
+    case POST_TRADE_SECOND_IDLE:
+      return {
+        data: [],
+        isFetching: false, // Default to fetching..
+        error: null,
+      };
     case POST_TRADE_SECOND_BEGIN:
       return {
         ...state,

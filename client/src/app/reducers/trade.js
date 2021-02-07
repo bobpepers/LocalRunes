@@ -3,6 +3,7 @@ import {
   FETCH_TRADE_SUCCESS,
   FETCH_TRADE_FAIL,
   ADD_TRADE,
+  UPDATE_TRADE,
 } from '../actions/types/index';
 
 const initialState = {
@@ -40,6 +41,30 @@ export default (state = initialState, action) => {
           },
           ...state.data,
         ],
+        isFetching: false,
+      };
+
+    case UPDATE_TRADE:
+      console.log('UPDATE_TRADE');
+      console.log('UPDATE_TRADE');
+      console.log('UPDATE_TRADE');
+      console.log('UPDATE_TRADE');
+      console.log('UPDATE_TRADE');
+      console.log('UPDATE_TRADE');
+      console.log('UPDATE_TRADE');
+      console.log('UPDATE_TRADE');
+      console.log(action.payload);
+      const updatedChangeData = Object.values(
+        []
+          .concat(state.data, action.payload)
+          .reduce(
+            (r, c) => ((r[c.id] = Object.assign(r[c.id] || {}, c)), r),
+            {},
+          ),
+      );
+      return {
+        ...state,
+        data: updatedChangeData,
         isFetching: false,
       };
     default:

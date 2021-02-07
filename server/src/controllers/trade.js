@@ -224,6 +224,14 @@ export const secondTrade = async (req, res, next) => {
         userId: req.user.id,
         id: req.body.id,
       },
+      include: [
+        {
+          model: db.postAd,
+          as: 'postAd',
+          required: true,
+          // attributes: ['username'],
+        },
+      ],
       transaction: t,
       lock: t.LOCK.UPDATE,
     });
