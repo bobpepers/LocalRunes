@@ -73,6 +73,7 @@ import tradeSecondStep from './tradeSecondStep';
 import currentTrade from './currentTrade';
 import cancelTrade from './cancelTrade';
 import acceptTrade from './acceptTrade';
+import message from './message';
 
 
 
@@ -145,6 +146,7 @@ const rootReducer = combineReducers({
   currentTrade: currentTrade,
   cancelTrade: cancelTrade,
   acceptTrade: acceptTrade,
+  message: message,
   
 });
 

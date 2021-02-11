@@ -46,13 +46,12 @@ module.exports = (sequelize, DataTypes) => {
   const TradeModel = sequelize.define('trade', modelDefinition, modelOptions);
 
   // 4: Wallet belongs to User
-
   TradeModel.associate = (model) => {
     TradeModel.belongsTo(model.user, { as: 'user' });
     TradeModel.belongsTo(model.postAd, { as: 'postAd' });
+    TradeModel.hasMany(model.messages, { as: 'messages' });
   };
 
   // 5: Wallet has many addresses
-
   return TradeModel;
 };

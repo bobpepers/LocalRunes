@@ -187,6 +187,10 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   UserModel.associate = (model) => {
+    UserModel.hasMany(model.messages, {
+      as: 'messages',
+    });
+
     UserModel.hasMany(model.jackpot, {
       as: 'winner_one',
     });

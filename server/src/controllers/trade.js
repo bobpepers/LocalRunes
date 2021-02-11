@@ -146,20 +146,26 @@ export const fetchTrade = async (req, res, next) => {
 };
 
 export const fetchCurrentTrade = async (req, res, next) => {
-  console.log('fetchCurrentTrade');
-  console.log('fetchCurrentTrade');
-  console.log('fetchCurrentTrade');
-  console.log('fetchCurrentTrade');
-  console.log('fetchCurrentTrade');
-  console.log('fetchCurrentTrade');
-  console.log('fetchCurrentTrade');
-  console.log('fetchCurrentTrade');
   console.log(req.body.id);
   const trade = await db.trade.findOne({
     where: {
       id: req.body.id,
     },
     include: [
+      {
+        model: db.messages,
+        as: 'messages',
+        required: false,
+        // attributes: ['username'],
+        include: [
+          {
+            model: db.user,
+            as: 'user',
+            required: true,
+            attributes: ['username'],
+          },
+        ],
+      },
       {
         model: db.user,
         as: 'user',
@@ -352,6 +358,7 @@ export const acceptCurrentTrade = async (req, res, next) => {
   }, async (t) => {
     console.log(req.body);
     console.log(req.user.id);
+
     const trade = await db.trade.findOne({
       where: {
         id: req.body.id,
@@ -371,6 +378,7 @@ export const acceptCurrentTrade = async (req, res, next) => {
       transaction: t,
       lock: t.LOCK.UPDATE,
     });
+
     if (!trade) {
       res.locals.error = "UNABLE_TO_FIND_TRADE";
       return next();
@@ -400,7 +408,7 @@ export const acceptCurrentTrade = async (req, res, next) => {
         throw new Error('NOT_ENOUGH_FUNDS');
       }
 
-      res.locals.wallet = walletBuy.update({
+      res.locals.wallet = await walletBuy.update({
         available: walletBuy.available - trade.amount,
         locked: walletBuy.locked + trade.amount,
       }, {
@@ -425,7 +433,7 @@ export const acceptCurrentTrade = async (req, res, next) => {
         throw new Error('NOT_ENOUGH_FUNDS');
       }
 
-      res.locals.wallet = walletSell.update({
+      res.locals.wallet = await walletSell.update({
         available: walletSell.available - trade.amount,
         locked: walletSell.locked + trade.amount,
       }, {
@@ -436,7 +444,7 @@ export const acceptCurrentTrade = async (req, res, next) => {
       return next();
     }
 
-    res.locals.error = "UNABLE_TO_CANCEL_TRADE";
+    res.locals.error = "UNABLE_TO_ACCEPT_TRADE";
     t.afterCommit(() => {
       next();
     });

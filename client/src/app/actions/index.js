@@ -22,3 +22,4 @@ export * from './publisher';
 export * from './banner';
 export * from './report';
 export * from './trade';
+export * from './message';

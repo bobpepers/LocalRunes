@@ -3,7 +3,7 @@ import React, {
   useState,
   // Fragment,
 } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import {
   Grid,
@@ -75,6 +75,7 @@ const TradeRequested = (props) => {
     },
   } = props;
   const dispatch = useDispatch();
+  const history = useHistory();
   console.log('RunesX Home View');
   useEffect(() => dispatch(fetchSingleTradeData(id)), [dispatch]);
 
@@ -88,6 +89,13 @@ const TradeRequested = (props) => {
     console.log('currenTrade');
     console.log('currenTrade');
     console.log(currentTrade);
+  }, [currentTrade]);
+
+  useEffect(() => {
+    if (currentTrade.type === 'accepted') {
+      console.log(currentTrade);
+      history.push(`/trade/${currentTrade.id}`);
+    }
   }, [currentTrade]);
 
   const cancelTrade = async () => {

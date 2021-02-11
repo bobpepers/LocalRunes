@@ -233,12 +233,37 @@ export function fetchSingleTradeData(id) {
     });
     axios.post(`${process.env.API_URL}/trade/current`, { id })
       .then((response) => {
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
+        console.log('response.data.trade');
         console.log(response.data.trade);
         dispatch({
           type: FETCH_CURRENT_TRADE_SUCCESS,
           payload: response.data.trade,
         })
       }).catch((error) => {
+        console.log('error.data.trade');
+        console.log('error.data.trade');
+        console.log('error.data.trade');
+        console.log('error.data.trade');
+        console.log('error.data.trade');
+        console.log('error.data.trade');
+        console.log('error.data.trade');
+        console.log('error.data.trade');
+        console.log('error.data.trade');
+
+        console.log(error);
         dispatch({
           type: FETCH_CURRENT_TRADE_FAIL,
           payload: error,

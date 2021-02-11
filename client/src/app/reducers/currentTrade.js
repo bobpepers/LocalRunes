@@ -3,6 +3,7 @@ import {
   FETCH_CURRENT_TRADE_SUCCESS,
   FETCH_CURRENT_TRADE_FAIL,
   FETCH_CURRENT_TRADE_IDLE,
+  ADD_MESSAGE,
 } from '../actions/types/index';
 
 const initialState = {
