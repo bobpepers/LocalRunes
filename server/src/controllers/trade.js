@@ -179,6 +179,12 @@ export const fetchCurrentTrade = async (req, res, next) => {
         // attributes: ['username'],
         include: [
           {
+            model: db.currency,
+            as: 'currency',
+            required: true,
+            // attributes: ['username'],
+          },
+          {
             model: db.user,
             as: 'user',
             required: true,

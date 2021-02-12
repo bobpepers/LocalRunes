@@ -3,7 +3,7 @@ import {
   FETCH_CURRENT_TRADE_SUCCESS,
   FETCH_CURRENT_TRADE_FAIL,
   FETCH_CURRENT_TRADE_IDLE,
-  ADD_MESSAGE,
+  INSERT_MESSAGE,
 } from '../actions/types/index';
 
 const initialState = {
@@ -52,6 +52,37 @@ export default (state = initialState, action) => {
         error: action.payload.response.data.error,
         isFetching: false,
       };
+    case INSERT_MESSAGE:
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      console.log('INSERT_MESSAGE');
+      const existsInArray = state.data.id !== action.payload.message.tradeId;
+      if (existsInArray) {
+        return state;
+      }
+
+      console.log(action.payload);
+
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          messages: [...state.data.messages, action.payload.message],
+        },
+        isFetching: false,
+      };
+
     default:
       return state;
   }

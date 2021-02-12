@@ -26,6 +26,7 @@ import {
   onUpdatePrice,
   onUpdateJackpot,
   onUpdateTrade,
+  onInsertMessage,
 } from './actions'
 
 import reducers from './reducers';
@@ -68,6 +69,10 @@ socket.on('Online', (data) => {
 
 socket.on('Volume', (data) => {
   store.dispatch(onVolume(data));
+});
+
+socket.on('insertMessage', (data) => {
+  store.dispatch(onInsertMessage(data));
 });
 
 socket.on('updateTransaction', (data) => {

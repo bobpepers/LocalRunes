@@ -6,6 +6,7 @@ import {
   POST_MESSAGE_IDLE,
   ADD_MESSAGE,
   ENQUEUE_SNACKBAR,
+  INSERT_MESSAGE,
 } from './types/index';
 
 export function sendMessageAction(message, id) {
@@ -87,6 +88,15 @@ export function sendMessageAction(message, id) {
           }
           resolve();
         });
+    });
+  }
+}
+
+export function onInsertMessage(data) {
+  return function (dispatch) {
+    dispatch({
+      type: INSERT_MESSAGE,
+      payload: data,
     });
   }
 }

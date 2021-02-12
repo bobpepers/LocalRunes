@@ -130,13 +130,33 @@ const Trade = (props) => {
     <div className="height100 content surfContainer">
       <Grid container>
         <Grid container item xs={12}>
-          title
+          <h3>
+            Ad #
+            {currentTrade && currentTrade.postAd && currentTrade.postAd.id}
+            {' '}
+            | Trade #
+            {currentTrade && currentTrade.id}
+          </h3>
         </Grid>
         <Grid container item xs={6}>
           <Grid container item xs={12}>
             Trade Status:
           </Grid>
           <Grid container item xs={12}>
+            <Grid container item xs={12}>
+              {currentTrade && currentTrade.messages ? currentTrade.messages.map((item, index) => (
+                <p className="w-100">
+                  (
+                  {item.createdAt}
+                  )
+                  {' '}
+                  {item.user.username}
+                  :
+                  {' '}
+                  {item.message}
+                </p>
+              )) : ''}
+            </Grid>
             <Grid item xs={12}>
               <h3>Send message to </h3>
             </Grid>
@@ -163,16 +183,7 @@ const Trade = (props) => {
                 </Grid>
               </form>
             </Grid>
-            <Grid container item xs={12}>
-              {currentTrade && currentTrade.messages ? currentTrade.messages.map((item, index) => (
-                <p>
-                  {item.user.username}
-                  :
-                  {' '}
-                  {item.message}
-                </p>
-              )) : ''}
-            </Grid>
+
           </Grid>
           <Grid container item xs={12}>
             <Grid container item xs={12}>
@@ -209,10 +220,16 @@ const Trade = (props) => {
               {currentTrade && currentTrade.postAd && ((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
             </Grid>
             <Grid container item xs={6}>
-              Transaction status
+              Currency
             </Grid>
             <Grid container item xs={6}>
               done
+            </Grid>
+            <Grid container item xs={6}>
+              Transaction status
+            </Grid>
+            <Grid container item xs={6}>
+              running
             </Grid>
           </Grid>
         </Grid>

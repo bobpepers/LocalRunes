@@ -1133,12 +1133,12 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         });
       }
       if (onlineUsers[res.locals.trade.userId.toString()]) {
-        onlineUsers[res.locals.trade.userId.toString()].emit('updateMessage', {
+        onlineUsers[res.locals.trade.userId.toString()].emit('insertMessage', {
           message: res.locals.message,
         });
       }
       if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
-        onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateMessage', {
+        onlineUsers[res.locals.trade.postAd.userId.toString()].emit('insertMessage', {
           message: res.locals.message,
         });
       }
