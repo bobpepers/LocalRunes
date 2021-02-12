@@ -370,7 +370,28 @@ export const acceptCurrentTrade = async (req, res, next) => {
         id: req.body.id,
         type: 'requested',
       },
+
       include: [
+        {
+          model: db.messages,
+          as: 'messages',
+          required: false,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+        {
+          model: db.user,
+          as: 'user',
+          required: true,
+          attributes: ['username'],
+        },
         {
           where: {
             userId: req.user.id,
@@ -379,6 +400,20 @@ export const acceptCurrentTrade = async (req, res, next) => {
           as: 'postAd',
           required: true,
           // attributes: ['username'],
+          include: [
+            {
+              model: db.currency,
+              as: 'currency',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
         },
       ],
       transaction: t,
@@ -403,7 +438,7 @@ export const acceptCurrentTrade = async (req, res, next) => {
     if (trade.postAd.type === 'buy') {
       const walletBuy = await db.wallet.findOne({
         where: {
-          userId: trade.userId,
+          userId: trade.postAd.userId,
         },
         transaction: t,
         lock: t.LOCK.UPDATE,
@@ -428,7 +463,7 @@ export const acceptCurrentTrade = async (req, res, next) => {
     if (trade.postAd.type === 'sell') {
       const walletSell = await db.wallet.findOne({
         where: {
-          userId: trade.postAd.userId,
+          userId: trade.userId,
         },
         transaction: t,
         lock: t.LOCK.UPDATE,
@@ -568,14 +603,14 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
         console.log('done sell');
         res.locals.walletUserOne = await db.wallet.findOne({
           where: {
-            userId: trade.postAd.userId,
+            userId: trade.userId,
           },
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
         res.locals.walletUserTwo = await db.wallet.findOne({
           where: {
-            userId: trade.userId,
+            userId: trade.postAd.userId,
           },
           transaction: t,
           lock: t.LOCK.UPDATE,
@@ -584,14 +619,14 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
       if (trade.postAd.type === "buy") {
         const walletUserOne = await db.wallet.findOne({
           where: {
-            userId: trade.postAd.userId,
+            userId: trade.userId,
           },
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
         const walletUserTwo = await db.wallet.findOne({
           where: {
-            userId: trade.userId,
+            userId: trade.postAd.userId,
           },
           transaction: t,
           lock: t.LOCK.UPDATE,

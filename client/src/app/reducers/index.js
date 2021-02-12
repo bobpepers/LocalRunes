@@ -74,6 +74,7 @@ import currentTrade from './currentTrade';
 import cancelTrade from './cancelTrade';
 import acceptTrade from './acceptTrade';
 import message from './message';
+import countries from './countries';
 
 
 
@@ -147,6 +148,7 @@ const rootReducer = combineReducers({
   cancelTrade: cancelTrade,
   acceptTrade: acceptTrade,
   message: message,
+  countries: countries,
   
 });
 

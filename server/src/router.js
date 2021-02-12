@@ -7,10 +7,7 @@ import {
   destroySession,
   isUserBanned,
 } from './controllers/auth';
-import {
-  adStart,
-  adComplete,
-} from './controllers/ad';
+
 import {
   getPhoneCode,
   verifyPhoneCode,
@@ -23,25 +20,7 @@ import {
 import {
   uploadAvatar,
 } from './controllers/upload';
-import {
-  addPublisher,
-  fetchPublishers,
-  verifyPublisher,
-  buyPublisherslot,
-} from './controllers/publisher';
-import {
-  addAdZone,
-  fetchAdzones,
-  buyAdzoneslot,
-} from './controllers/adzone';
-import {
-  addBanner,
-  fetchBanners,
-  createBannerOrder,
-  cancelBannerOrder,
-  fetchBannerOrders,
-  buyBannerslot,
-} from './controllers/banner';
+
 import {
   insertIp,
   isIpBanned,
@@ -62,29 +41,8 @@ import {
 import trustUser from './controllers/trust';
 import blockUser from './controllers/blocked';
 
-import {
-  fetchDomains,
-} from './controllers/domain';
-import {
-  fetchWebslots,
-  createWebslot,
-  deactivateWebslot,
-  buyWebslot,
-} from './controllers/webslot';
-import {
-  createReport,
-} from './controllers/report';
 import walletNotify from './controllers/walletNotify';
-import {
-  createWebslotOrder,
-  cancelWebslotOrder,
-  fetchSurfOrders,
-} from './controllers/order';
-import {
-  fetchFaucetRecord,
-  claimFaucet,
-  fetchFaucetRolls,
-} from './controllers/faucet';
+
 import {
   isAdmin,
   fetchAdminWithdrawals,
@@ -92,19 +50,7 @@ import {
   rejectWithdraw,
   fetchAdminUserList,
   fetchAdminUser,
-  fetchAdminReviewBanners,
-  fetchAdminReviewPublishers,
-  fetchAdminBanners,
-  fetchAdminPublishers,
-  acceptAdminReviewPublisher,
-  rejectAdminReviewPublisher,
-  acceptAdminReviewBanner,
-  rejectAdminReviewBanner,
-  banAdminBanner,
-  banAdminPublisher,
   banAdminUser,
-  banAdminDomain,
-  fetchAdminDomains,
   fetchAdminCountries,
   addAdminCountries,
   addAdminCurrencies,
@@ -114,11 +60,6 @@ import {
 } from './controllers/admin';
 
 import {
-  surfComplete,
-  surfStart,
-} from './controllers/surf';
-
-import {
   fetchWallet,
   withdraw,
 } from './controllers/wallet';
@@ -126,7 +67,6 @@ import {
   createMessage,
 } from './controllers/messages';
 
-import fetchJackpots from './controllers/jackpot';
 import {
   fetchUser,
   fetchSpecificUser,
@@ -149,6 +89,7 @@ import {
 import fetchPriceInfo from './controllers/price';
 import fetchPaymentMethods from './controllers/paymentMethods';
 import fetchCurrencies from './controllers/currencies';
+import fetchCountries from './controllers/countries';
 import { addPostAd, fetchPostAd } from './controllers/postAd';
 
 import storeIp from './helpers/storeIp';
@@ -504,255 +445,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
-  app.get('/api/admin/publishers/all',
-    IsAuthenticated,
-    isAdmin,
-    fetchAdminPublishers,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.publishers) {
-        console.log(res.locals.publishers);
-        res.json({
-          publishers: res.locals.publishers,
-        });
-      }
-    });
-
-  app.get('/api/admin/publishers/review',
-    IsAuthenticated,
-    isAdmin,
-    fetchAdminReviewPublishers,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.publishers) {
-        console.log(res.locals.publishers);
-        res.json({
-          publishers: res.locals.publishers,
-        });
-      }
-    });
-
-  app.get('/api/admin/banners/all',
-    IsAuthenticated,
-    isAdmin,
-    fetchAdminBanners,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.banners) {
-        console.log(res.locals.banners);
-        res.json({
-          banners: res.locals.banners,
-        });
-      }
-    });
-
-  app.get('/api/admin/domains/all',
-    IsAuthenticated,
-    isAdmin,
-    fetchAdminDomains,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.domains) {
-        console.log(res.locals.domains);
-        res.json({
-          domains: res.locals.domains,
-        });
-      }
-    });
-
-  app.post('/api/soup/start',
-    (req, res, next) => {
-      if (isbot(req.get('user-agent'))) {
-        res.status(401).send({
-          error: 'BOT_NOT_ALLOWED',
-        });
-      } else {
-        next();
-      }
-    },
-    adStart,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.ad) {
-        console.log(res.locals.ad);
-        res.json({
-          ad: res.locals.ad,
-        });
-      }
-    });
-
-  app.post('/api/soup/complete',
-    (req, res, next) => {
-      if (isbot(req.get('user-agent'))) {
-        res.status(401).send({
-          error: 'BOT_NOT_ALLOWED',
-        });
-      } else {
-        next();
-      }
-    },
-    adComplete,
-    (req, res) => {
-      // res.locals.jackpot = updatedJackpot;
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-          },
-        });
-      }
-      if (res.locals.activity) {
-        console.log(res.locals.activity);
-        console.log('res.locals.activity');
-        io.emit('Activity', res.locals.activity);
-      }
-
-      if (res.locals.jackpot) {
-        io.emit('updateJackpot', {
-          total_tickets: res.locals.jackpot.total_tickets,
-          jackpot_amount: res.locals.jackpot.jackpot_amount,
-        });
-      }
-
-      if (res.locals.advertiserWallet) {
-        if (onlineUsers[res.locals.advertiserWallet.userId.toString()]) {
-          onlineUsers[res.locals.advertiserWallet.userId.toString()].emit('updateUniqueImpression', {
-            wallet: res.locals.advertiserWallet,
-            jackpot_tickets: res.locals.jackpotTicketsAdvertiser,
-          });
-        }
-        if (res.locals.referredActivity1) {
-          console.log(res.locals.referredActivity1);
-          console.log('referredActivity1');
-          io.emit('Activity', res.locals.referredActivity1);
-        }
-      }
-      if (res.locals.publisherWallet) {
-        if (onlineUsers[res.locals.publisherWallet.userId.toString()]) {
-          onlineUsers[res.locals.publisherWallet.userId.toString()].emit('updateUniqueImpression', {
-            wallet: res.locals.publisherWallet,
-            jackpot_tickets: res.locals.jackpotTicketsPublisher,
-          });
-        }
-        if (res.locals.referredActivity2) {
-          console.log(res.locals.referredActivity1);
-          console.log('referredActivity1');
-          io.emit('Activity', res.locals.referredActivity2);
-        }
-      }
-      if (res.locals.lastStats) {
-        console.log(res.locals.lastStats);
-        sub.subscribe(expired_subKey, () => {
-          pub.setex('impressionVolume:', 99999999999999, res.locals.lastStats.impression);
-          pub.setex(`impression:${res.locals.lastStats.impression}`, 86400, res.locals.price);
-        });
-      }
-      if (res.locals.ad) {
-        console.log(res.locals.ad);
-        res.json({
-          ad: res.locals.ad,
-        });
-      }
-    });
-
-  app.get('/api/admin/banners/review',
-    IsAuthenticated,
-    isAdmin,
-    fetchAdminReviewBanners,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.banners) {
-        console.log(res.locals.banners);
-        res.json({
-          banners: res.locals.banners,
-        });
-      }
-    });
-
-  app.post('/api/admin/publishers/ban',
-    IsAuthenticated,
-    isAdmin,
-    banAdminPublisher,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.publishers) {
-        console.log(res.locals.publishers);
-        res.json({
-          publishers: res.locals.publishers,
-        });
-      }
-    });
-
-  app.post('/api/admin/banners/ban',
-    IsAuthenticated,
-    isAdmin,
-    banAdminBanner,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.banners) {
-        console.log(res.locals.banners);
-        res.json({
-          banners: res.locals.banners,
-        });
-      }
-    });
-
   app.post('/api/admin/users/ban',
     IsAuthenticated,
     isAdmin,
@@ -770,27 +462,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         console.log(res.locals.users);
         res.json({
           users: res.locals.users,
-        });
-      }
-    });
-
-  app.post('/api/admin/domains/ban',
-    IsAuthenticated,
-    isAdmin,
-    banAdminDomain,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.domains) {
-        console.log(res.locals.domains);
-        res.json({
-          domains: res.locals.domains,
         });
       }
     });
@@ -833,87 +504,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         console.log(res.locals.paymentMethod);
         res.json({
           paymentMethod: res.locals.paymentMethod,
-        });
-      }
-    });
-
-  app.post('/api/admin/banners/review/accept',
-    IsAuthenticated,
-    isAdmin,
-    acceptAdminReviewBanner,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.banners) {
-        console.log(res.locals.banners);
-        res.json({
-          banners: res.locals.banners,
-        });
-      }
-    });
-
-  app.post('/api/admin/banners/review/reject',
-    IsAuthenticated,
-    isAdmin,
-    rejectAdminReviewBanner,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.banners) {
-        console.log(res.locals.banners);
-        res.json({
-          banners: res.locals.banners,
-        });
-      }
-    });
-
-  app.post('/api/admin/publishers/review/reject',
-    IsAuthenticated,
-    isAdmin,
-    rejectAdminReviewPublisher,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: {
-            message: res.locals.error,
-            resend: false,
-          },
-        });
-      }
-      if (res.locals.publishers) {
-        console.log(res.locals.publishers);
-        res.json({
-          publishers: res.locals.publishers,
-        });
-      }
-    });
-
-  app.post('/api/admin/publishers/review/accept',
-    IsAuthenticated,
-    isAdmin,
-    acceptAdminReviewPublisher,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.publishers) {
-        console.log(res.locals.publishers);
-        res.json({
-          publishers: res.locals.publishers,
         });
       }
     });
@@ -1054,28 +644,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     storeIp,
     unlocktfa);
-
-  app.post('/api/publisher/add',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    addPublisher,
-    (req, res) => {
-      console.log('ADDED PUBLISHER');
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.publisher) {
-        res.json(res.locals.publisher);
-      }
-    });
 
   app.post('/api/update/store/status',
     IsAuthenticated,
@@ -1445,47 +1013,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
-  app.post('/api/publisher/adzone/add',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    addAdZone,
-    (req, res) => {
-      console.log('ADDED ADZONE');
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.adzones) {
-        res.json(res.locals.adzones);
-      }
-    });
-
-  app.post('/api/publisher/verify',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    verifyPublisher,
-    (req, res) => {
-      console.log('ADDED PUBLISHER');
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.publishers) {
-        res.json(res.locals.publishers);
-      }
-    });
-
   app.get('/api/paymentmethods',
     IsAuthenticated,
     isUserBanned,
@@ -1529,91 +1056,25 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
-  app.get('/api/banner/all',
+  app.get('/api/countries',
     IsAuthenticated,
     isUserBanned,
-    storeIp,
+    // storeIp,
     ensuretfa,
-    fetchBanners,
+    fetchCountries,
     (req, res) => {
-      console.log('ADDED PUBLISHER');
+      console.log('fetchCurrencies');
+      console.log('ADDED fetchCurrencies');
       if (res.locals.error) {
         console.log(res.locals.error);
         res.status(401).send({
           error: res.locals.error,
         });
       }
-      if (res.locals.banners) {
-        console.log(res.locals.banners);
+      if (res.locals.countries) {
+        console.log(res.locals.countries);
         console.log('banners');
-        res.json(res.locals.banners);
-      }
-    });
-
-  app.get('/api/publisher/all',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    fetchPublishers,
-    (req, res) => {
-      console.log('ADDED PUBLISHER');
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.publishers) {
-        res.json(res.locals.publishers);
-      }
-    });
-
-  app.post('/api/banner/add',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    upload.single('banner'),
-    addBanner,
-    (req, res) => {
-      console.log('ADDED BANNER');
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.banner) {
-        res.json(res.locals.banner);
-      }
-    });
-
-  app.post('/api/banner/order/cancel',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    cancelBannerOrder,
-    (req, res) => {
-      console.log(req.body);
-      console.log('yow');
-      if (res.locals.error) {
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.order) {
-        res.json({
-          order: res.locals.order,
-          wallet: res.locals.wallet,
-        });
+        res.json({ countries: res.locals.countries });
       }
     });
 
@@ -1659,30 +1120,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
-  app.get('/api/domains',
-    fetchDomains);
-
-  app.get('/api/jackpots',
-    fetchJackpots,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.jackpots) {
-        res.json({
-          jackpots: res.locals.jackpots,
-        });
-      }
-    });
-
-  app.get('/api/orders/surf',
-    fetchSurfOrders);
-
-  app.get('/api/orders/banner',
-    fetchBannerOrders);
-
   app.get('/api/logout',
     insertIp,
     storeIp,
@@ -1694,85 +1131,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
 
   app.get('/api/users/total',
     fetchUserCount);
-
-  app.get('/api/webslots',
-    IsAuthenticated,
-    isUserBanned,
-    ensuretfa,
-    fetchWebslots);
-
-  app.get('/api/faucetrecord',
-    IsAuthenticated,
-    isUserBanned,
-    ensuretfa,
-    fetchFaucetRecord,
-    (req, res) => {
-      console.log('FAUCET RECORD');
-      console.log(res.locals.faucetRecord);
-      if (res.locals.error) {
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.faucetRecord) {
-        res.json({
-          faucetRecord: res.locals.faucetRecord,
-        });
-      }
-    });
-
-  app.get('/api/faucetrolls',
-    IsAuthenticated,
-    isUserBanned,
-    ensuretfa,
-    fetchFaucetRolls,
-    (req, res) => {
-      console.log('FAUCET RECORD');
-      console.log(res.locals.faucetRolls);
-      if (res.locals.error) {
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.faucetRolls) {
-        res.json({
-          faucetRolls: res.locals.faucetRolls,
-        });
-      }
-    });
-
-  app.post('/api/faucetclaim',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    rateLimiterMiddlewareFaucet,
-    verifyMyCaptcha,
-    claimFaucet,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.jackpot) {
-        io.emit('updateJackpot', {
-          total_tickets: res.locals.jackpot.total_tickets,
-          jackpot_amount: res.locals.jackpot.jackpot_amount,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.faucetRecord && res.locals.wallet && res.locals.faucetRoll) {
-        res.json({
-          jackpot_tickets: res.locals.jackpot_tickets,
-          wallet: res.locals.wallet,
-          faucetRecord: res.locals.faucetRecord,
-          faucetRoll: res.locals.faucetRoll,
-        });
-      }
-    });
 
   app.get('/api/activity/all',
     fetchActivity,
@@ -1808,281 +1166,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
-  app.post('/api/webslot/buy',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    // rateLimiterMiddlewareIp,
-    // rateLimiterMiddlewareUser,
-    buyWebslot,
-    (req, res) => {
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.user && res.locals.wallet) {
-        res.json({
-          wallet: res.locals.wallet,
-          webslot_amount: res.locals.user.webslot_amount,
-          jackpot_tickets: res.locals.user.jackpot_tickets,
-        });
-      }
-    });
-
-  app.post('/api/banners/buy',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    // rateLimiterMiddlewareIp,
-    // rateLimiterMiddlewareUser,
-    buyBannerslot,
-    (req, res) => {
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.user && res.locals.wallet) {
-        res.json({
-          wallet: res.locals.wallet,
-          banners_amount: res.locals.user.banners_amount,
-          jackpot_tickets: res.locals.user.jackpot_tickets,
-        });
-      }
-    });
-
-  app.post('/api/publishers/buy',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    // rateLimiterMiddlewareIp,
-    // rateLimiterMiddlewareUser,
-    buyPublisherslot,
-    (req, res) => {
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.user && res.locals.wallet) {
-        res.json({
-          wallet: res.locals.wallet,
-          publishers_amount: res.locals.user.publishers_amount,
-          jackpot_tickets: res.locals.user.jackpot_tickets,
-        });
-      }
-    });
-
-  app.post('/api/adzone/buy',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    // rateLimiterMiddlewareIp,
-    // rateLimiterMiddlewareUser,
-    buyAdzoneslot,
-    (req, res) => {
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.user && res.locals.wallet) {
-        res.json({
-          wallet: res.locals.wallet,
-          publisherId: res.locals.publisher.id,
-          adzones_amount: res.locals.publisher.adzones_amount,
-          jackpot_tickets: res.locals.user.jackpot_tickets,
-        });
-      }
-    });
-
-  app.post('/api/webslots/create',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    createWebslot,
-    (req, res, next) => {
-      if (req.authErr === 'INVALID_URL') {
-        res.status(401).send({
-          errorType: 'invalid_url',
-          url: req.body.url,
-        });
-      }
-      if (res.locals.error) {
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      console.log(res.locals.webslot);
-      console.log(res.locals.domain);
-      console.log('sjj');
-      if (res.locals.webslot) {
-        res.json({
-          webslot: res.locals.webslot,
-          domain: res.locals.domain,
-        });
-      }
-    });
-
-  app.post('/api/report/create',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    verifyMyCaptcha,
-    createReport,
-    (req, res, next) => {
-      if (req.authErr === 'INVALID_URL') {
-        res.status(401).send({
-          errorType: 'invalid_url',
-          url: req.body.url,
-        });
-      }
-      if (res.locals.error) {
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-
-      if (res.locals.report) {
-        res.json({
-          report: res.locals.report,
-        });
-      }
-    });
-
-  app.post('/api/webslots/deactivate',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    deactivateWebslot,
-    (req, res) => {
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.webslot) {
-        res.json({
-          webslot: res.locals.webslot,
-        });
-      }
-    });
-
-  app.post('/api/surf/complete',
-    (req, res, next) => {
-      if (isbot(req.get('user-agent'))) {
-        res.status(401).send({
-          error: 'BOT_NOT_ALLOWED',
-        });
-      } else {
-        next();
-      }
-    },
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    rateLimiterMiddlewareIp,
-    rateLimiterMiddlewareUser,
-    isSurfCaptcha,
-    surfComplete,
-    (req, res, next) => {
-      console.log('surf complete');
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      } else {
-        // console.log(res.locals.order);
-        // console.log(res.locals.userWallet2);
-        // console.log(res.locals.userWallet1);
-        // console.log(res.locals.domain);
-        // console.log(res.locals.webslot);
-
-        // jackpot tickets for users.
-        // res.locals.user2_jackpot_tickets
-        // res.locals.user1_jackpot_tickets
-
-        if (res.locals.activity) {
-          io.emit('Activity', res.locals.activity);
-        }
-
-        if (res.locals.jackpot) {
-          io.emit('updateJackpot', {
-            total_tickets: res.locals.jackpot.total_tickets,
-            jackpot_amount: res.locals.jackpot.jackpot_amount,
-          });
-        }
-
-        if (res.locals.referredWallet1) {
-          if (onlineUsers[res.locals.referredWallet1.userId.toString()]) {
-            onlineUsers[res.locals.referredWallet1.userId.toString()].emit('updateWallet', {
-              wallet: res.locals.referredWallet1,
-            });
-          }
-          io.emit('Activity', res.locals.referredActivity1);
-        }
-        if (res.locals.referredWallet2) {
-          if (onlineUsers[res.locals.referredWallet2.userId.toString()]) {
-            onlineUsers[res.locals.referredWallet2.userId.toString()].emit('updateWallet', {
-              wallet: res.locals.referredWallet2,
-            });
-          }
-          io.emit('Activity', res.locals.referredActivity2);
-        }
-
-        if (onlineUsers[res.locals.userId2.toString()]) {
-          onlineUsers[res.locals.userId2.toString()].emit('updateSurfComplete', {
-            jackpot_tickets: res.locals.user2_jackpot_tickets,
-            wallet: res.locals.userWallet2,
-            order: res.locals.order,
-            webslot: res.locals.webslot,
-            domain: res.locals.domain,
-          });
-        }
-
-        sub.subscribe(expired_subKey, () => {
-          pub.setex('surfVolume:', 9999999999999999, res.locals.lastStats.surf);
-          pub.setex(`surf:${res.locals.lastStats.surf}`, 86400, res.locals.order.price);
-        });
-
-        res.json({
-          wallet: res.locals.userWallet1,
-          jackpot_tickets: res.locals.user1_jackpot_tickets,
-          surfcount: res.locals.surfcount,
-        });
-      }
-    });
-
   app.get('/api/volume',
     (req, res, next) => {
       console.log(volumeInfo);
@@ -2095,43 +1178,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       console.log('volumeInfo');
       console.log('volumeInfo');
       res.json(volumeInfo);
-    });
-
-  app.get('/api/surf/start',
-    (req, res, next) => {
-      console.log(req.get('user-agent'));
-      console.log(isbot(req.get('user-agent')));
-      console.log('user-agent');
-      if (isbot(req.get('user-agent'))) {
-        res.status(401).send({
-          error: 'BOT_NOT_ALLOWED',
-        });
-      } else {
-        next();
-      }
-    },
-    IsAuthenticated,
-    storeIp,
-    isUserBanned,
-    ensuretfa,
-    // rateLimiterMiddlewareIp,
-    // rateLimiterMiddlewareUser,
-    surfStart,
-    (req, res) => {
-      console.log('SURF STARTED');
-      if (res.locals.error) {
-        console.log(res.locals.error);
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        console.log('emit activity');
-        io.emit('Activity', res.locals.activity);
-      }
-      console.log(res.locals.surfTicket);
-      console.log('respons with surfTicket');
-      res.json(res.locals.surfTicket);
     });
 
   app.get('/api/user',
@@ -2227,77 +1273,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
       if (res.locals.user) {
         res.json(res.locals.user);
-      }
-    });
-  // User Create Order
-  app.post('/api/banners/order/create',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    createBannerOrder,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.order && res.locals.wallet) {
-        res.json({
-          order: res.locals.order,
-          wallet: res.locals.wallet,
-        });
-      }
-    });
-
-  // User Create Order
-  app.post('/api/webslot/order/create',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    createWebslotOrder,
-    (req, res) => {
-      if (res.locals.error) {
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.order && res.locals.wallet) {
-        res.json({
-          order: res.locals.order,
-          wallet: res.locals.wallet,
-        });
-      }
-    });
-
-  app.post('/api/webslot/order/cancel',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    cancelWebslotOrder,
-    (req, res) => {
-      console.log(req.body);
-      console.log('yow');
-      if (res.locals.error) {
-        res.status(401).send({
-          error: res.locals.error,
-        });
-      }
-      if (res.locals.activity) {
-        io.emit('Activity', res.locals.activity);
-      }
-      if (res.locals.order) {
-        res.json({
-          order: res.locals.order,
-        });
       }
     });
 

@@ -10,8 +10,8 @@ const BigNumber = require('bignumber.js');
 const { Sequelize, Transaction, Op } = require('sequelize');
 
 const countDecimals = function (value) {
-  if (Math.floor(value) === value) return 0;
-  return value.toString().split(".")[1].length || 0;
+  if ((value % 1) !== 0) { return value.toString().split(".")[1].length; }
+  return 0;
 };
 
 /**
@@ -53,6 +53,7 @@ export const addPostAd = async (req, res, next) => {
     paymentMethodId: req.body.paymentMethod,
     userId: req.user.id,
     location: req.body.location,
+    country: req.body.country,
   });
   next();
 };
@@ -80,6 +81,11 @@ export const fetchPostAd = async (req, res, next) => {
           as: 'currency',
           required: false,
         },
+        {
+          model: db.country,
+          as: 'country',
+          required: false,
+        },
       ],
     });
   }
@@ -88,6 +94,29 @@ export const fetchPostAd = async (req, res, next) => {
       where: {
         type: req.body.type,
       },
+      include: [
+        {
+          model: db.user,
+          as: 'user',
+          required: false,
+          attributes: ['username'],
+        },
+        {
+          model: db.paymentMethod,
+          as: 'paymentMethod',
+          required: false,
+        },
+        {
+          model: db.currency,
+          as: 'currency',
+          required: false,
+        },
+        {
+          model: db.country,
+          as: 'country',
+          required: false,
+        },
+      ],
     });
   }
 

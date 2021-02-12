@@ -53,6 +53,9 @@ module.exports = (sequelize, DataTypes) => {
     PostAdModel.belongsTo(model.user, {
       as: 'user',
     });
+    PostAdModel.belongsTo(model.country, {
+      as: 'country',
+    });
     PostAdModel.hasMany(model.trade, {
       foreignKey: 'postAdId',
       as: 'postAd',

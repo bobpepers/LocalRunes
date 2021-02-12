@@ -1,54 +1,75 @@
 import React, {
   useEffect,
-  useState,
+  // useState,
   // Fragment,
 } from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import {
   Grid,
   // Button,
 } from '@material-ui/core';
-import * as actions from '../actions/auth';
-import Info from '../containers/Info';
 
-const Home = () => {
+import {
+  fetchPostAdData,
+} from '../actions/postAd';
+// import Info from '../containers/Info';
+// import * as actions from '../actions/auth';
+import TableAds from '../components/TableAds';
+
+const headers = [
+  'Seller',
+  'Payment Method',
+  'Price / RUNES',
+  'Limits',
+  'Actions',
+];
+
+const headCells = [
+  {
+    id: 'seller', numeric: false, disablePadding: true, label: 'Seller',
+  },
+  {
+    id: 'paymentMethod', numeric: true, disablePadding: false, label: 'Payment Method',
+  },
+  {
+    id: 'price', numeric: true, disablePadding: false, label: 'Price / RUNES',
+  },
+  {
+    id: 'limits', numeric: true, disablePadding: false, label: 'Limits',
+  },
+  {
+    id: 'actions', numeric: true, disablePadding: false, label: 'Actions',
+  },
+];
+
+const sellRunes = (props) => {
+  const {
+    postAd,
+  } = props;
   console.log('RunesX Home View');
+  const dispatch = useDispatch();
+  useEffect(() => dispatch(fetchPostAdData('sell')), [dispatch]);
+  useEffect(() => {
+    console.log('6666666666666666');
+    console.log(postAd);
+  }, [postAd]);
 
   return (
     <div className="height100 content">
       <Grid container>
-        <Info />
-        <div
-          style={{
-            width: '100%',
-            textAlign: 'center',
-            paddingBottom: '40px',
-            zIndex: 50,
-          }}
-          className="spacing-top"
-        >
-          <iframe
-            title="a-ads leaderboard 2"
-            data-aa="1500077"
-            src="//ad.a-ads.com/1500077?size=728x90"
-            scrolling="no"
-            style={{
-              width: '728px',
-              height: '90px',
-              border: '0px',
-              padding: 0,
-              overflow: 'hidden',
-            }}
-            allowtransparency="true"
-          />
-          {/*  <Exchanges /> */}
-        </div>
+        <TableAds
+          headCells={headCells || []}
+          postAd={postAd && postAd.sell ? postAd.sell : []}
+        />
       </Grid>
     </div>
   )
 }
 
-const mapStateToProps = (state) => ({ errorMessage: state.auth.error })
+const mapStateToProps = (state) => ({
+  postAd: state.postAd,
+  // errorMessage: state.auth.error,
+})
 
-export default withRouter(connect(mapStateToProps, actions)(Home));
+export default withRouter(connect(mapStateToProps, null)(sellRunes));

@@ -1,6 +1,6 @@
 import React, {
   useEffect,
-  useState,
+  // useState,
   // Fragment,
 } from 'react';
 import { withRouter } from 'react-router-dom';
@@ -13,8 +13,8 @@ import {
 import {
   fetchPostAdData,
 } from '../actions/postAd';
-import Info from '../containers/Info';
-import * as actions from '../actions/auth';
+// import Info from '../containers/Info';
+// import * as actions from '../actions/auth';
 import TableAds from '../components/TableAds';
 
 const headers = [
@@ -60,7 +60,7 @@ const BuyRunes = (props) => {
       <Grid container>
         <TableAds
           headCells={headCells || []}
-          postAd={postAd ? postAd.buy : []}
+          postAd={postAd && postAd.buy ? postAd.buy : []}
         />
       </Grid>
     </div>
@@ -69,7 +69,7 @@ const BuyRunes = (props) => {
 
 const mapStateToProps = (state) => ({
   postAd: state.postAd,
-  errorMessage: state.auth.error,
+  // errorMessage: state.auth.error,
 })
 
-export default withRouter(connect(mapStateToProps, actions)(BuyRunes));
+export default withRouter(connect(mapStateToProps, null)(BuyRunes));

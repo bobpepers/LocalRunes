@@ -34,6 +34,10 @@ import {
 } from '../actions/currencies';
 
 import {
+  fetchCountriesData,
+} from '../actions/countries';
+
+import {
   addPostAdAction,
   fetchPostAdData,
 } from '../actions/postAd';
@@ -109,6 +113,7 @@ const renderField = ({
 const renderSelectField = ({
   input,
   label,
+  defaultValue,
   name,
   meta: { touched, error },
   children,
@@ -121,7 +126,7 @@ const renderSelectField = ({
       {...input}
       {...custom}
       inputProps={{
-        name,
+        name: input.name,
         // id: 'age-native-simple',
       }}
     >
@@ -136,11 +141,13 @@ const PostAd = (props) => {
     handleSubmit,
     paymentMethods,
     currencies,
+    countries,
   } = props;
   const dispatch = useDispatch();
   console.log('RunesX Home View');
   useEffect(() => dispatch(fetchPaymentMethodData()), [dispatch]);
   useEffect(() => dispatch(fetchCurrenciesData()), [dispatch]);
+  useEffect(() => dispatch(fetchCountriesData()), [dispatch]);
 
   useEffect(() => {}, [paymentMethods, currencies]);
 
@@ -180,6 +187,17 @@ const PostAd = (props) => {
                 </Field>
               </Grid>
               <Grid item xs={12}>
+                <Field
+                  name="country"
+                  component={renderSelectField}
+                  label="country"
+                  style={{ width: '100%' }}
+                >
+                  <option value="" />
+                  {countries && countries.data && countries.data.map((item) => <option value={item.id}>{item.name}</option>)}
+                </Field>
+              </Grid>
+              <Grid item xs={12}>
                 <p>Location</p>
                 <Field
                   name="location"
@@ -196,19 +214,12 @@ const PostAd = (props) => {
                   label="Payment Method"
                   style={{ width: '100%' }}
                 >
+                  <option value="" />
                   {paymentMethods && paymentMethods.data && paymentMethods.data.map((item) => <option value={item.id}>{item.name}</option>)}
                 </Field>
               </Grid>
               <Grid item xs={12}>
                 <h3>Additional Trade Information</h3>
-                <Field
-                  name="currency"
-                  component={renderSelectField}
-                  label="Currency"
-                  style={{ width: '100%' }}
-                >
-                  {currencies && currencies.data && currencies.data.map((item) => <option value={item.id}>{item.currency_name}</option>)}
-                </Field>
               </Grid>
               <Grid item xs={12}>
                 <p>Min. amount</p>
@@ -227,6 +238,17 @@ const PostAd = (props) => {
                   type="text"
                   placeholder="Max Amount"
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <Field
+                  name="currency"
+                  component={renderSelectField}
+                  label="Currency"
+                  style={{ width: '100%' }}
+                >
+                  <option value="" />
+                  {currencies && currencies.data && currencies.data.map((item) => <option value={item.id}>{item.currency_name}</option>)}
+                </Field>
               </Grid>
               <Grid item xs={12}>
                 <p>Price/RUNES</p>
@@ -266,6 +288,9 @@ const validate = (formProps) => {
   if (!formProps.location) {
     errors.location = 'Location is required'
   }
+  if (!formProps.country) {
+    errors.location = 'Country is required'
+  }
   if (!formProps.paymentMethod) {
     errors.paymentMethod = 'Payment Method is required'
   }
@@ -291,7 +316,14 @@ const mapStateToProps = (state) => ({
   errorMessage: state.auth.error,
   paymentMethods: state.paymentMethods,
   currencies: state.currencies,
+  countries: state.countries,
 })
 
 // export default withRouter(connect(mapStateToProps, actions)(PostAd));
-export default connect(mapStateToProps, actions)(reduxForm({ form: 'postad', validate })(PostAd));
+export default connect(mapStateToProps, actions)(reduxForm({
+  form: 'postad',
+  keepDirtyOnReinitialize: true,
+  enableReinitialize: true,
+  updateUnregisteredFields: true,
+  validate,
+})(PostAd));
