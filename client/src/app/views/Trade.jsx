@@ -39,8 +39,8 @@ import {
 } from '../actions/message';
 
 import {
-  cancelTradeAction,
-  acceptTradeAction,
+  cancelMainTradeAction,
+  acceptMainTradeAction,
   fetchSingleTradeData,
 } from '../actions/trade';
 
@@ -118,12 +118,12 @@ const Trade = (props) => {
 
   const cancelTrade = async () => {
     // console.log(obj);
-    await dispatch(cancelTradeAction(id));
+    await dispatch(cancelMainTradeAction(id));
   }
 
   const acceptTrade = async () => {
     // console.log(obj);
-    await dispatch(acceptTradeAction(id));
+    await dispatch(acceptMainTradeAction(id));
   }
 
   return (
@@ -137,6 +137,23 @@ const Trade = (props) => {
             | Trade #
             {currentTrade && currentTrade.id}
           </h3>
+        </Grid>
+        <Grid container item xs={12}>
+          <p>
+            advertisment #
+            {currentTrade && currentTrade.postAd && currentTrade.postAd.id}
+            {' '}
+            by
+            {' '}
+            {currentTrade && currentTrade.postAd && currentTrade.postAd.user && currentTrade.postAd.user.username }
+            {' '}
+            at the exchange rate
+            {' '}
+            {currentTrade && currentTrade.postAd && currentTrade.postAd.price / 1e8}
+            {' '}
+            {currentTrade && currentTrade.postAd && currentTrade.postAd.currency.currency_name}
+            /RUNES
+          </p>
         </Grid>
         <Grid container item xs={6}>
           <Grid container item xs={12}>
@@ -223,7 +240,7 @@ const Trade = (props) => {
               Currency
             </Grid>
             <Grid container item xs={6}>
-              done
+              {currentTrade && currentTrade.postAd && currentTrade.postAd.currency.currency_name}
             </Grid>
             <Grid container item xs={6}>
               Transaction status
@@ -234,16 +251,11 @@ const Trade = (props) => {
           </Grid>
         </Grid>
         <Grid container item xs={6}>
-          <Grid container item xs={12}>
-            rechts
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={12}>
-              <p>{currentTrade && currentTrade.amount}</p>
-            </Grid>
-            {currentTrade && currentTrade.postAd && currentTrade.postAd.user && user && user.data && currentTrade.postAd.user.username === user.data.username && (
+          <Grid item xs={12}>
+            <Grid container>
+              <Grid item xs={12}>
+                <p>{currentTrade && currentTrade.amount / 1e8}</p>
+              </Grid>
               <Grid item xs={12}>
                 <Button
                   variant="contained"
@@ -254,22 +266,98 @@ const Trade = (props) => {
                   size="large"
                   onClick={() => acceptTrade()}
                 >
-                  Accept Trade
+                  {// Buy
+                  }
+                  {
+                  currentTrade
+                  && user.data
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'buy'
+                  && currentTrade.userOneComplete === false
+                  && currentTrade.postAd.user.username === user.data.username
+                  && 'i have received payment'
+                  }
+                  {
+                  currentTrade
+                  && user.data
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'buy'
+                  && currentTrade.userOneComplete === true
+                  && currentTrade.postAd.user.username === user.data.username
+                  && 'Undo'
+                  }
+                  {
+                  currentTrade
+                  && user.data
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'buy'
+                  && currentTrade.userTwoComplete === false
+                  && currentTrade.user.username === user.data.username
+                  && 'i have sent payment'
+                  }
+                  {
+                  currentTrade
+                  && user.data
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'buy'
+                  && currentTrade.userTwoComplete === true
+                  && currentTrade.user.username === user.data.username
+                  && 'Undo'
+                  }
+                  {// Sell
+                  }
+                  {
+                  currentTrade
+                  && user.data
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'sell'
+                  && currentTrade.userOneComplete === false
+                  && currentTrade.postAd.user.username === user.data.username
+                  && 'i have sent payment'
+                  }
+                  {
+                  currentTrade
+                  && user.data
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'sell'
+                  && currentTrade.userOneComplete === true
+                  && currentTrade.postAd.user.username === user.data.username
+                  && 'Undo'
+                  }
+                  {
+                  currentTrade
+                  && user.data
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'sell'
+                  && currentTrade.userTwoComplete === false
+                  && currentTrade.user.username === user.data.username
+                  && 'i have received payment'
+                  }
+                  {
+                  currentTrade
+                  && user.data
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'sell'
+                  && currentTrade.userTwoComplete === true
+                  && currentTrade.user.username === user.data.username
+                  && 'Undo'
+                  }
                 </Button>
               </Grid>
-            )}
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                className="btn"
-                fullWidth
-                size="large"
-                onClick={() => cancelTrade()}
-              >
-                Cancel Trade
-              </Button>
+
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
+                  fullWidth
+                  size="large"
+                  onClick={() => cancelTrade()}
+                >
+                  Request Cancel Trade
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

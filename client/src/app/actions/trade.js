@@ -26,6 +26,12 @@ import {
   ACCEPT_TRADE_FAIL,
   UPDATE_TRADE,
   CANCEL_TRADE_IDLE,
+  CANCEL_MAIN_TRADE_BEGIN,
+  CANCEL_MAIN_TRADE_SUCCESS,
+  CANCEL_MAIN_TRADE_FAIL,
+  ACCEPT_MAIN_TRADE_BEGIN,
+  ACCEPT_MAIN_TRADE_SUCCESS,
+  ACCEPT_MAIN_TRADE_FAIL,
 } from './types/index';
 
 export function startTrade(id) {
@@ -292,6 +298,53 @@ export function cancelTradeAction(id) {
       }).catch((error) => {
         dispatch({
           type: CANCEL_TRADE_FAIL,
+          payload: error,
+        })
+      });
+  }
+}
+
+export function cancelMainTradeAction(id) {
+  return function (dispatch) {
+    dispatch({
+      type: CANCEL_MAIN_TRADE_BEGIN,
+    });
+    axios.post(`${process.env.API_URL}/trade/cancel`, { id })
+      .then((response) => {
+        console.log(response.data.trade);
+
+        dispatch({
+          type: CANCEL_MAIN_TRADE_SUCCESS,
+          payload: response.data.trade,
+        })
+        // dispatch({
+        //  type: DELETE_TRADE,
+        //  payload: response.data.trade,
+        // })
+      }).catch((error) => {
+        dispatch({
+          type: CANCEL_MAIN_TRADE_FAIL,
+          payload: error,
+        })
+      });
+  }
+}
+
+export function acceptMainTradeAction(id) {
+  return function (dispatch) {
+    dispatch({
+      type: ACCEPT_MAIN_TRADE_BEGIN,
+    });
+    axios.post(`${process.env.API_URL}/trade/main/accept`, { id })
+      .then((response) => {
+        console.log(response.data.trade);
+        dispatch({
+          type: ACCEPT_MAIN_TRADE_SUCCESS,
+          payload: response.data.trade,
+        })
+      }).catch((error) => {
+        dispatch({
+          type: ACCEPT_MAIN_TRADE_FAIL,
           payload: error,
         })
       });

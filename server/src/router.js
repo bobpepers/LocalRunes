@@ -169,6 +169,7 @@ import {
   fetchCurrentTrade,
   cancelCurrentTrade,
   acceptCurrentTrade,
+  acceptCurrentMainTrade,
 } from './controllers/trade';
 
 const isbot = require('isbot');
@@ -1280,6 +1281,51 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         if (onlineUsers[res.locals.wallet.userId.toString()]) {
           onlineUsers[res.locals.wallet.userId.toString()].emit('updateWallet', {
             wallet: res.locals.wallet,
+          });
+        }
+
+        if (onlineUsers[res.locals.trade.userId.toString()]) {
+          onlineUsers[res.locals.trade.userId.toString()].emit('updateTrade', {
+            trade: res.locals.trade,
+          });
+        }
+
+        if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+          onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateTrade', {
+            trade: res.locals.trade,
+          });
+        }
+      }
+    });
+
+  app.post('/api/trade/main/accept',
+    (req, res, next) => {
+      console.log("start TRADE");
+      next();
+    },
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    acceptCurrentMainTrade,
+    (req, res) => {
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+
+      if (!res.locals.error) {
+        if (onlineUsers[res.locals.walletUserOne.userId.toString()]) {
+          onlineUsers[res.locals.walletUserOne.userId.toString()].emit('updateWallet', {
+            wallet: res.locals.walletUserOne,
+          });
+        }
+
+        if (onlineUsers[res.locals.walletUserTwo.userId.toString()]) {
+          onlineUsers[res.locals.walletUserTwo.userId.toString()].emit('updateWallet', {
+            wallet: res.locals.walletUserTwo,
           });
         }
 

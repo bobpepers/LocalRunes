@@ -460,3 +460,143 @@ export const acceptCurrentTrade = async (req, res, next) => {
     next();
   });
 };
+
+export const acceptCurrentMainTrade = async (req, res, next) => {
+  await db.sequelize.transaction({
+    isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
+  }, async (t) => {
+    console.log(req.body);
+    console.log(req.user.id);
+
+    const trade = await db.trade.findOne({
+      where: {
+        id: req.body.id,
+        type: 'accepted',
+      },
+      include: [
+        {
+          model: db.postAd,
+          as: 'postAd',
+          required: true,
+          // attributes: ['username'],
+        },
+      ],
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+
+    if (!trade) {
+      res.locals.error = "UNABLE_TO_FIND_TRADE";
+      return next();
+    }
+
+    if (trade.postAd.userId === req.user.id) {
+      console.log('123');
+      if (trade.userOneComplete) {
+        console.log('trade.userOneComplete');
+        res.locals.trade = await trade.update({
+          userOneComplete: false,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      } else if (!trade.userOneComplete) {
+        res.locals.trade = await trade.update({
+          userOneComplete: true,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      }
+    }
+
+    if (trade.userId === req.user.id) {
+      console.log('123');
+      if (trade.userTwoComplete) {
+        res.locals.trade = await trade.update({
+          userTwoComplete: false,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      } else if (!trade.userTwoComplete) {
+        res.locals.trade = await trade.update({
+          userTwoComplete: true,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      }
+    }
+
+    if (trade.userOneComplete && trade.userTwoComplete) {
+      if (trade.postAd.type === "sell") {
+        console.log('done sell');
+        res.locals.walletUserOne = await db.wallet.findOne({
+          where: {
+            userId: trade.postAd.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        res.locals.walletUserTwo = await db.wallet.findOne({
+          where: {
+            userId: trade.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      }
+      if (trade.postAd.type === "buy") {
+        const walletUserOne = await db.wallet.findOne({
+          where: {
+            userId: trade.postAd.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        const walletUserTwo = await db.wallet.findOne({
+          where: {
+            userId: trade.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        console.log('walletUserOne');
+        console.log(walletUserOne);
+        console.log('walletUserTwo');
+        console.log(walletUserTwo);
+        if (trade.amount > walletUserTwo.locked) {
+          console.log('not enough locked funds');
+          throw new Error('NOT_ENOUGH_LOCKED_FUNDS');
+        }
+        res.locals.walletUserTwo = walletUserTwo.update({
+          locked: walletUserTwo - trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        res.locals.walletUserOne = walletUserOne.update({
+          available: walletUserOne + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        res.locals.trade = trade.update({
+          type: 'complete',
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      }
+    }
+
+    t.afterCommit(() => {
+      next();
+    });
+  }).catch((err) => {
+    console.log(err.message);
+    res.locals.error = err.message;
+    next();
+  });
+};
