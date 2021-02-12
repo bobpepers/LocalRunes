@@ -475,10 +475,44 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
       },
       include: [
         {
+          model: db.messages,
+          as: 'messages',
+          required: false,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+        {
+          model: db.user,
+          as: 'user',
+          required: true,
+          attributes: ['username'],
+        },
+        {
           model: db.postAd,
           as: 'postAd',
           required: true,
           // attributes: ['username'],
+          include: [
+            {
+              model: db.currency,
+              as: 'currency',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
         },
       ],
       transaction: t,
@@ -570,20 +604,20 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           console.log('not enough locked funds');
           throw new Error('NOT_ENOUGH_LOCKED_FUNDS');
         }
-        res.locals.walletUserTwo = walletUserTwo.update({
-          locked: walletUserTwo - trade.amount,
+        res.locals.walletUserTwo = await walletUserTwo.update({
+          locked: walletUserTwo.locked - trade.amount,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
-        res.locals.walletUserOne = walletUserOne.update({
-          available: walletUserOne + trade.amount,
+        res.locals.walletUserOne = await walletUserOne.update({
+          available: walletUserOne.available + trade.amount,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
-        res.locals.trade = trade.update({
-          type: 'complete',
+        res.locals.trade = await trade.update({
+          type: 'done',
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,

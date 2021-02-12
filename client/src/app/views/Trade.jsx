@@ -99,6 +99,10 @@ const Trade = (props) => {
     console.log('currenTrade');
     console.log('currenTrade');
     console.log(currentTrade);
+    if (currentTrade.userOneComplete === true && currentTrade.userTwoComplete === true) {
+      console.log(currentTrade);
+      history.push(`/trade/complete/${currentTrade.id}`);
+    }
   }, [currentTrade]);
 
   useEffect(() => {

@@ -32,6 +32,7 @@ import {
   ACCEPT_MAIN_TRADE_BEGIN,
   ACCEPT_MAIN_TRADE_SUCCESS,
   ACCEPT_MAIN_TRADE_FAIL,
+  UPDATE_CURRENT_TRADE,
 } from './types/index';
 
 export function startTrade(id) {
@@ -376,6 +377,14 @@ export function onUpdateTrade(data) {
   return function (dispatch) {
     dispatch({
       type: UPDATE_TRADE,
+      payload: data,
+    });
+  }
+}
+export function onUpdateCurrentTrade(data) {
+  return function (dispatch) {
+    dispatch({
+      type: UPDATE_CURRENT_TRADE,
       payload: data,
     });
   }

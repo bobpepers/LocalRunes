@@ -1276,7 +1276,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         });
       }
       console.log(res.locals.trade);
-      console.log(req.locals.wallet);
+      console.log(res.locals.wallet);
       if (!res.locals.error) {
         if (onlineUsers[res.locals.wallet.userId.toString()]) {
           onlineUsers[res.locals.wallet.userId.toString()].emit('updateWallet', {
@@ -1292,6 +1292,18 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
 
         if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
           onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateTrade', {
+            trade: res.locals.trade,
+          });
+        }
+
+        if (onlineUsers[res.locals.trade.userId.toString()]) {
+          onlineUsers[res.locals.trade.userId.toString()].emit('updateCurrentTrade', {
+            trade: res.locals.trade,
+          });
+        }
+
+        if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+          onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateCurrentTrade', {
             trade: res.locals.trade,
           });
         }
@@ -1317,16 +1329,20 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
 
       if (!res.locals.error) {
-        if (onlineUsers[res.locals.walletUserOne.userId.toString()]) {
-          onlineUsers[res.locals.walletUserOne.userId.toString()].emit('updateWallet', {
-            wallet: res.locals.walletUserOne,
-          });
+        if (res.locals.walletUserOne) {
+          if (onlineUsers[res.locals.walletUserOne.userId.toString()]) {
+            onlineUsers[res.locals.walletUserOne.userId.toString()].emit('updateWallet', {
+              wallet: res.locals.walletUserOne,
+            });
+          }
         }
 
-        if (onlineUsers[res.locals.walletUserTwo.userId.toString()]) {
-          onlineUsers[res.locals.walletUserTwo.userId.toString()].emit('updateWallet', {
-            wallet: res.locals.walletUserTwo,
-          });
+        if (res.locals.walletUserTwo) {
+          if (onlineUsers[res.locals.walletUserTwo.userId.toString()]) {
+            onlineUsers[res.locals.walletUserTwo.userId.toString()].emit('updateWallet', {
+              wallet: res.locals.walletUserTwo,
+            });
+          }
         }
 
         if (onlineUsers[res.locals.trade.userId.toString()]) {
@@ -1337,6 +1353,18 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
 
         if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
           onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateTrade', {
+            trade: res.locals.trade,
+          });
+        }
+
+        if (onlineUsers[res.locals.trade.userId.toString()]) {
+          onlineUsers[res.locals.trade.userId.toString()].emit('updateCurrentTrade', {
+            trade: res.locals.trade,
+          });
+        }
+
+        if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+          onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateCurrentTrade', {
             trade: res.locals.trade,
           });
         }

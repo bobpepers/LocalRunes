@@ -4,6 +4,7 @@ import {
   FETCH_CURRENT_TRADE_FAIL,
   FETCH_CURRENT_TRADE_IDLE,
   INSERT_MESSAGE,
+  UPDATE_CURRENT_TRADE,
 } from '../actions/types/index';
 
 const initialState = {
@@ -80,6 +81,26 @@ export default (state = initialState, action) => {
           ...state.data,
           messages: [...state.data.messages, action.payload.message],
         },
+        isFetching: false,
+      };
+    case UPDATE_CURRENT_TRADE:
+      console.log('UPDATE_CURRENT_TRADE');
+      console.log('UPDATE_CURRENT_TRADE');
+      console.log('UPDATE_CURRENT_TRADE');
+      console.log('UPDATE_CURRENT_TRADE');
+      console.log('UPDATE_CURRENT_TRADE');
+      console.log('UPDATE_CURRENT_TRADE');
+      console.log('UPDATE_CURRENT_TRADE');
+
+      console.log(action.payload.trade);
+      const existsInArrayCurrentTrade = state.data.id !== action.payload.id;
+      if (existsInArrayCurrentTrade) {
+        return state;
+      }
+
+      return {
+        ...state,
+        data: action.payload,
         isFetching: false,
       };
 
