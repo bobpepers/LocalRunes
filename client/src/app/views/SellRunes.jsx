@@ -30,10 +30,16 @@ const headCells = [
     id: 'seller', numeric: false, disablePadding: true, label: 'Seller',
   },
   {
+    id: 'country', numeric: true, disablePadding: false, label: 'Country',
+  },
+  {
     id: 'paymentMethod', numeric: true, disablePadding: false, label: 'Payment Method',
   },
   {
     id: 'price', numeric: true, disablePadding: false, label: 'Price / RUNES',
+  },
+  {
+    id: 'currency', numeric: true, disablePadding: false, label: 'Currency',
   },
   {
     id: 'limits', numeric: true, disablePadding: false, label: 'Limits',

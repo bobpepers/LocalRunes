@@ -28,9 +28,9 @@ import {
   fetchCurrentTradeIdle,
 } from '../actions/trade';
 
-function createData(username, paymentMethod, price, limit, type, id) {
+function createData(username, paymentMethod, price, limit, type, id, currency, country) {
   return {
-    username, paymentMethod, price, limit, type, id,
+    username, paymentMethod, price, limit, type, id, currency, country,
   };
 }
 
@@ -239,6 +239,8 @@ function EnhancedTable(props) {
   }, [currentTrade]);
 
   postAd.forEach((item) => {
+    console.log('item');
+    console.log(item);
     rows.push(
       createData(
         item.user.username,
@@ -247,6 +249,8 @@ function EnhancedTable(props) {
         `${item.min / 1e8} - ${item.max / 1e8}`,
         item.type,
         item.id,
+        item.currency.currency_name,
+        item.country.name,
       ),
     );
   });
@@ -257,7 +261,7 @@ function EnhancedTable(props) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -357,8 +361,10 @@ function EnhancedTable(props) {
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.username}
                       </TableCell>
+                      <TableCell align="right">{row.country}</TableCell>
                       <TableCell align="right">{row.paymentMethod}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
+                      <TableCell align="right">{row.currency}</TableCell>
                       <TableCell align="right">{row.limit}</TableCell>
                       <TableCell align="right">
                         <Button
@@ -382,7 +388,7 @@ function EnhancedTable(props) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25, 50, 100]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
