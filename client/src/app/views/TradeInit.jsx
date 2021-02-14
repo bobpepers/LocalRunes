@@ -39,6 +39,7 @@ import {
   cancelTradeAction,
   secondTradeIdleAction,
   cancelTradeIdleAction,
+  fetchSingleTradeData,
 } from '../actions/trade';
 
 const renderField = ({
@@ -94,6 +95,7 @@ const TradeInit = (props) => {
     currencies,
     currentTrade,
     cancelTrade,
+    values,
     match: {
       params: {
         id,
@@ -104,6 +106,7 @@ const TradeInit = (props) => {
   console.log('RunesX Home View');
   useEffect(() => dispatch(fetchPaymentMethodData()), [dispatch]);
   useEffect(() => dispatch(fetchCurrenciesData()), [dispatch]);
+  useEffect(() => dispatch(fetchSingleTradeData(id)), [dispatch]);
 
   useEffect(() => {}, [paymentMethods, currencies]);
   useEffect(() => {
@@ -164,12 +167,44 @@ const TradeInit = (props) => {
           <form onSubmit={handleSubmit(handleFormSubmit)}>
             <Grid container>
               <Grid item xs={12}>
+                <p>
+                  Price:
+                  {' '}
+                  {currentTrade && currentTrade.postAd && (currentTrade.postAd.price / 1e8)}
+                  {' '}
+                  {currentTrade && currentTrade.postAd && currentTrade.postAd.currency.currency_name}
+                </p>
+              </Grid>
+              <Grid item xs={12}>
                 <p>Amount</p>
                 <Field
                   name="amount"
                   component={renderField}
-                  type="text"
+                  type="number"
                   placeholder="Amount"
+                  onChange={(event, index, value) => {
+                    console.log('nummer');
+                    console.log(event.currentTarget.valueAsNumber);
+                    console.log((event.currentTarget.valueAsNumber * (currentTrade.postAd.price / 1e8)));
+                    // if (currentTrade.postAd) {
+                    dispatch(change('postad', 'total', (event.currentTarget.valueAsNumber * (currentTrade.postAd.price / 1e8))))
+                    // }
+                  }}
+                />
+                <p>Total</p>
+                <Field
+                  name="total"
+                  component={renderField}
+                  type="number"
+                  placeholder="Total"
+                  onChange={(event, index, value) => {
+                    console.log('values');
+                    console.log(values);
+                    console.log(event.currentTarget.valueAsNumber);
+                    console.log(value);
+                    console.log(((event.currentTarget.valueAsNumber * 1e8) / (currentTrade.postAd.price)));
+                    dispatch(change('postad', 'amount', (event.currentTarget.valueAsNumber / (currentTrade.postAd.price / 1e8))))
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -180,8 +215,11 @@ const TradeInit = (props) => {
                   label="Respond Time"
                   style={{ width: '100%' }}
                 >
+                  <option value="" />
                   <option value="15">15 Min</option>
                   <option value="30">30 Min</option>
+                  <option value="45">45 Min</option>
+                  <option value="60">1 Hour</option>
                 </Field>
               </Grid>
               <Grid item xs={12}>
@@ -236,6 +274,7 @@ const mapStateToProps = (state) => ({
   currencies: state.currencies,
   currentTrade: state.currentTrade.data,
   cancelTrade: state.cancelTrade.data,
+  values: selector(state, 'total', 'amount'),
 })
 
 // export default withRouter(connect(mapStateToProps, actions)(PostAd));

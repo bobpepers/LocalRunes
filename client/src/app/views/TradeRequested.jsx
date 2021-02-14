@@ -53,7 +53,7 @@ const renderer = ({
 
   return (
     <span className="w-100 text-center">
-      <h3 style={{ margin: 0, padding: 0 }}>Next claim in</h3>
+      <h3 style={{ margin: 0, padding: 0 }}>Time Left</h3>
       <h3 style={{ margin: 0, padding: 0 }}>
         {minutes}
         :
@@ -130,7 +130,7 @@ const TradeRequested = (props) => {
                 }
             </Grid>
             <Grid item xs={12}>
-              <p>{currentTrade && currentTrade.amount}</p>
+              <p>{currentTrade && (currentTrade.amount / 1e8)}</p>
             </Grid>
             {currentTrade && currentTrade.postAd && currentTrade.postAd.user && user && user.data && currentTrade.postAd.user.username === user.data.username && (
               <Grid item xs={12}>

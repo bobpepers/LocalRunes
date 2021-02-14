@@ -167,6 +167,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    volume: {
+      type: DataTypes.BIGINT,
+      defaultValue: 0,
+    },
   };
 
   // 2: The model options.

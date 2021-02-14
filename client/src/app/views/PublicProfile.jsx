@@ -66,7 +66,11 @@ const PublicProfile = (props) => {
             {specificUser && specificUser.lastname }
           </p>
           <p>
-            Trade Volume: 0 RUNES
+            Trade Volume:
+            {' '}
+            {specificUser && (specificUser.volume / 1e8) }
+            {' '}
+            RUNES
           </p>
           <p>
             Number of completed trades: 0

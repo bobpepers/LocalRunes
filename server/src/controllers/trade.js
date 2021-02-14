@@ -242,6 +242,20 @@ export const secondTrade = async (req, res, next) => {
           as: 'postAd',
           required: true,
           // attributes: ['username'],
+          include: [
+            {
+              model: db.currency,
+              as: 'currency',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
         },
       ],
       transaction: t,
@@ -640,6 +654,32 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+        const userVolumeOne = await db.user.findOne({
+          where: {
+            id: trade.postAd.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        const userVolumeTwo = await db.user.findOne({
+          where: {
+            id: trade.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        await userVolumeOne.update({
+          volume: userVolumeOne.volume + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        await userVolumeTwo.update({
+          volume: userVolumeTwo.volume + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
       }
       if (trade.postAd.type === "buy") {
         const walletUserOne = await db.wallet.findOne({
@@ -678,6 +718,32 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
         });
         res.locals.trade = await trade.update({
           type: 'done',
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        const userBuyVolumeOne = await db.user.findOne({
+          where: {
+            id: trade.postAd.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        const userBuyVolumeTwo = await db.user.findOne({
+          where: {
+            id: trade.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        await userBuyVolumeOne.update({
+          volume: userBuyVolumeOne.volume + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        await userBuyVolumeTwo.update({
+          volume: userBuyVolumeTwo.volume + trade.amount,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
