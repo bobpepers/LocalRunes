@@ -93,7 +93,6 @@ export const signin = async (req, res, next) => {
 
     console.log(req.user.id);
 
-
     console.log('Login Successful');
 
     next();
@@ -101,7 +100,6 @@ export const signin = async (req, res, next) => {
 };
 
 export const destroySession = async (req, res, next) => {
-
   req.logOut();
   req.session.destroy();
   next();
@@ -167,6 +165,7 @@ export const signup = async (req, res, next) => {
       authused: false,
       authexpires: verificationToken.expires,
       authtoken: verificationToken.token,
+      bio: ' ',
     }, {
       transaction: t,
       lock: t.LOCK.UPDATE,
