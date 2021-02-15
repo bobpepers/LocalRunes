@@ -47,16 +47,6 @@ module.exports = {
           key: 'id',
         },
       },
-      userOneCancel: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-      userTwoCancel: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
