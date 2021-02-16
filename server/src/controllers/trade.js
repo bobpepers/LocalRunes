@@ -676,12 +676,14 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
         });
         await userVolumeOne.update({
           volume: userVolumeOne.volume + trade.amount,
+          tradeCount: userVolumeOne.tradeCount + 1,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
         await userVolumeTwo.update({
           volume: userVolumeTwo.volume + trade.amount,
+          tradeCount: userVolumeTwo.tradeCount + 1,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
@@ -744,12 +746,14 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
         });
         await userBuyVolumeOne.update({
           volume: userBuyVolumeOne.volume + trade.amount,
+          tradeCount: userBuyVolumeOne.tradeCount + 1,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
         await userBuyVolumeTwo.update({
           volume: userBuyVolumeTwo.volume + trade.amount,
+          tradeCount: userBuyVolumeTwo.tradeCount + 1,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,

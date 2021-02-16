@@ -92,7 +92,6 @@ export const fetchSpecificUser = async (req, res, next) => {
         'password',
         'id',
         'authtoken',
-        'authused',
         'authexpires',
         'resetpasstoken',
         'resetpassused',

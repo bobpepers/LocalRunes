@@ -73,7 +73,9 @@ const PublicProfile = (props) => {
             RUNES
           </p>
           <p>
-            Number of completed trades: 0
+            Number of completed trades:
+            {' '}
+            {specificUser && specificUser.tradeCount }
           </p>
           <p>
             First purchase: 0

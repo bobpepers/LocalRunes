@@ -36,7 +36,19 @@ export const addPostAd = async (req, res, next) => {
       return next();
     }
   }
+  if (req.body.minAmount < 100) {
+    res.locals.error = 'MIN_AMOUNT_100_RUNES';
+    return next();
+  }
 
+  if (Number(req.body.minAmount) > Number(req.body.maxAmount)) {
+    res.locals.error = 'MIN_AMOUNT_MUST_BE_SMALLER_THEN_MAX';
+    return next();
+  }
+  if (Number(req.body.maxAmount) < Number(req.body.minAmount)) {
+    res.locals.error = 'MAX_AMOUNT_MUST_BE_LARGER_THEN_MIN';
+    return next();
+  }
   const runesPrice = new BigNumber(req.body.runesPrice).multipliedBy(1e8).toFixed(0);
   const minAmount = new BigNumber(req.body.minAmount).multipliedBy(1e8).toFixed(0);
   const maxAmount = new BigNumber(req.body.maxAmount).multipliedBy(1e8).toFixed(0);
