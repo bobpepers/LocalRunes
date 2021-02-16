@@ -610,6 +610,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       if (res.locals.activity) {
         io.emit('Activity', res.locals.activity);
       }
+
       console.log('Login Successful');
       res.json({
         username: req.username,

@@ -93,7 +93,7 @@ export function signinUser(props) {
           type: AUTH_USER,
           payload: response,
         });
-
+        window.location.href = '/dashboard';
         // history.push('/dashboard');
       })
       .catch((error) => {
@@ -178,7 +178,8 @@ export function signoutUser() {
     axios.get(`${process.env.API_URL}/logout`)
       .then((response) => {
         dispatch({ type: UNAUTH_USER });
-        history.push('/');
+        // history.push('/');
+        window.location.href = '/';
       })
       .catch((error) => {
         console.log(error);

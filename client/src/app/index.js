@@ -199,7 +199,7 @@ function App() {
           <Suspense fallback={<Loader />}>
             <Notifier />
             <ParticlesRunebase />
-            <Snow />
+            {/* <Snow /> */}
             <Header />
             <Routes />
             <FooterMenu />
@@ -211,7 +211,7 @@ function App() {
               style={{ background: '#2B373B', zIndex: 6000, marginBottom: '35px' }}
               buttonStyle={{ color: '#4e503b', fontSize: '13px' }}
             >
-              By continuing to browse RunesX.com, you agree to our use of cookies.
+              By continuing to browse localrunes.com, you agree to our use of cookies.
             </CookieConsent>
           </Suspense>
         </Router>

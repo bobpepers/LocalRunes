@@ -57,7 +57,7 @@ const Home = () => {
           }}
           className="spacing-top"
         >
-          <iframe
+          {/* <iframe
             title="a-ads leaderboard 2"
             data-aa="1500077"
             src="//ad.a-ads.com/1500077?size=728x90"
@@ -71,7 +71,7 @@ const Home = () => {
             }}
             allowtransparency="true"
           />
-          {/*  <Exchanges /> */}
+           <Exchanges /> */}
         </div>
       </Grid>
     </div>

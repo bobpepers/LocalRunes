@@ -398,6 +398,7 @@ io.on("connection", async (socket) => {
   const userId = socket.request.session.passport ? socket.request.session.passport.user : '';
   console.log('your user id');
   console.log(userId);
+  console.log(onlineUsers);
   if (userId !== '') {
     onlineUsers[userId] = socket;
     // onlineUsers.reduce((a, b) => { if (a.indexOf(b) < 0)a.push(b); return a; }, []);
