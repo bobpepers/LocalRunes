@@ -70,7 +70,7 @@ const walletNotify = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
-
+        console.log('2111111111111111111112222222222222222222222222222222222');
         res.locals.activity = await db.activity.findOne({
           where: {
             txId: res.locals.transaction[0].id,
@@ -97,6 +97,7 @@ const walletNotify = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+        console.log('3111111111111111111112222222222222222222222222222222222');
       }
 
       t.afterCommit(() => {

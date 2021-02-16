@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    transactionId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     type: {
       type: DataTypes.ENUM,
       values: [
@@ -52,7 +56,10 @@ module.exports = (sequelize, DataTypes) => {
     TransactionModel.hasMany(model.activity, {
       as: 'txActivity',
     });
-    TransactionModel.hasMany(model.activity, { as: 'transaction' });
+    TransactionModel.hasMany(model.activity, {
+      as: 'transaction',
+    });
+    // TransactionModel.hasMany(model.activity, { as: 'transaction' });
     TransactionModel.belongsTo(model.address, { as: 'address' });
     TransactionModel.belongsTo(model.block, { as: 'block' });
   };

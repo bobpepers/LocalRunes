@@ -63,8 +63,8 @@ module.exports = (sequelize, DataTypes) => {
   // 4: Wallet belongs to User
 
   PublisherModel.associate = (model) => {
-    PublisherModel.hasMany(model.activity, { as: 'activity' });
-    PublisherModel.hasMany(model.activityArchive, { as: 'activityArchive' });
+    // PublisherModel.hasMany(model.activity, { as: 'activity' });
+    // PublisherModel.hasMany(model.activityArchive, { as: 'activityArchive' });
     PublisherModel.belongsTo(model.user, { as: 'user' });
     PublisherModel.belongsTo(model.domain, { as: 'domain' });
     PublisherModel.hasMany(model.adzone, { as: 'adzone' });

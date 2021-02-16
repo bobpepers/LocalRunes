@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       as: 'report',
     });
     DomainModel.hasMany(model.webslot, { as: 'webslot' });
-    DomainModel.hasMany(model.activity, { as: 'domainActivity' });
+    // DomainModel.hasMany(model.activity, { as: 'domainActivity' });
     DomainModel.belongsToMany(model.user, {
       through: 'DomainUser',
       as: 'users',

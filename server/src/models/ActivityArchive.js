@@ -15,33 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         'resetpass',
         'resetpassComplete',
         'logout',
-        'surfStart',
-        'surfComplete',
-        'click',
         'depositAccepted',
         'depositComplete',
         'withdrawRequested',
         'withdrawAccepted',
         'withdrawComplete',
         'withdrawRejected',
-        'createSurfOrder',
-        'cancelSurfOrder',
-        'createClickOrder',
-        'cancelClickOrder',
-        'jackpot',
-        'buyTicket',
-        'buyWebslot',
-        'buyClickslot',
-        'newDomain',
         'banned',
         'referralBonus',
-        'faucetClaim',
-        'createBannerOrder',
-        'cancelBannerOrder',
-        'uniqueImpression',
-        'buyBannerslot',
-        'buyPublisherslot',
-        'buyAdzoneslot',
       ],
     },
     amount: {
@@ -67,12 +48,6 @@ module.exports = (sequelize, DataTypes) => {
   const ActivityArchiveModel = sequelize.define('activityArchive', modelDefinition, modelOptions);
 
   ActivityArchiveModel.associate = (model) => {
-    ActivityArchiveModel.belongsTo(model.publisher, {
-      as: 'publisher',
-    });
-    ActivityArchiveModel.belongsTo(model.bannerOrder, {
-      as: 'bannerOrder',
-    });
     ActivityArchiveModel.belongsTo(model.ip, {
       as: 'ip',
     });
@@ -84,20 +59,9 @@ module.exports = (sequelize, DataTypes) => {
       as: 'archivedEarner',
       foreignKey: 'earnerId',
     });
-    ActivityArchiveModel.belongsTo(model.order, {
-      as: 'order',
-      foreignKey: 'orderId',
-    });
-    ActivityArchiveModel.belongsTo(model.domain, {
-      as: 'domainActivity',
-      foreignKey: 'domainId',
-    });
     ActivityArchiveModel.belongsTo(model.transaction, {
       as: 'txActivity',
       foreignKey: 'txId',
-    });
-    ActivityArchiveModel.belongsTo(model.faucetRolls, {
-      as: 'faucetRoll',
     });
   };
 

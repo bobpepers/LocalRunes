@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
   OrderModel.associate = (model) => {
     OrderModel.belongsTo(model.webslot, { as: 'webslot' });
     OrderModel.hasMany(model.SurfTicket, { as: 'surfTicket' });
-    OrderModel.hasMany(model.activity, { as: 'order' });
+    // OrderModel.hasMany(model.activity, { as: 'order' });
   };
 
   return OrderModel;

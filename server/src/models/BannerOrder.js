@@ -40,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
 
   BannerOrder.associate = (model) => {
     BannerOrder.belongsTo(model.banner, { as: 'banner' });
-    BannerOrder.hasMany(model.activity, { as: 'activity' });
-    BannerOrder.hasMany(model.activityArchive, { as: 'activityArchive' });
+    // BannerOrder.hasMany(model.activity, { as: 'activity' });
+    // BannerOrder.hasMany(model.activityArchive, { as: 'activityArchive' });
     BannerOrder.hasMany(model.bannerOrderTickets, { as: 'bannerOrderTickets' });
     // BannerOrder.hasMany(model.SurfTicket, { as: 'surfTicket' });
     // BannerOrder.hasMany(model.activity, { as: 'order' });

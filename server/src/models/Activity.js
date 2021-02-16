@@ -15,33 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         'resetpass',
         'resetpassComplete',
         'logout',
-        'surfStart',
-        'surfComplete',
-        'click',
         'depositAccepted',
         'depositComplete',
         'withdrawRequested',
         'withdrawAccepted',
         'withdrawComplete',
         'withdrawRejected',
-        'createSurfOrder',
-        'cancelSurfOrder',
-        'createClickOrder',
-        'cancelClickOrder',
-        'jackpot',
-        'buyTicket',
-        'buyWebslot',
-        'buyClickslot',
-        'newDomain',
         'banned',
         'referralBonus',
-        'faucetClaim',
-        'createBannerOrder',
-        'cancelBannerOrder',
-        'uniqueImpression',
-        'buyBannerslot',
-        'buyPublisherslot',
-        'buyAdzoneslot',
       ],
     },
     amount: {
@@ -67,12 +48,6 @@ module.exports = (sequelize, DataTypes) => {
   const ActivityModel = sequelize.define('activity', modelDefinition, modelOptions);
 
   ActivityModel.associate = (model) => {
-    ActivityModel.belongsTo(model.publisher, {
-      as: 'publisher',
-    });
-    ActivityModel.belongsTo(model.bannerOrder, {
-      as: 'bannerOrder',
-    });
     ActivityModel.belongsTo(model.ip, {
       as: 'ip',
     });
@@ -84,20 +59,13 @@ module.exports = (sequelize, DataTypes) => {
       as: 'earner',
       foreignKey: 'earnerId',
     });
-    ActivityModel.belongsTo(model.order, {
-      as: 'order',
-      foreignKey: 'orderId',
-    });
-    ActivityModel.belongsTo(model.domain, {
-      as: 'domainActivity',
-      foreignKey: 'domainId',
-    });
     ActivityModel.belongsTo(model.transaction, {
       as: 'txActivity',
       foreignKey: 'txId',
     });
-    ActivityModel.belongsTo(model.faucetRolls, {
-      as: 'faucetRoll',
+    ActivityModel.belongsTo(model.transaction, {
+      as: 'transaction',
+      foreignKey: 'transactionId',
     });
   };
 
