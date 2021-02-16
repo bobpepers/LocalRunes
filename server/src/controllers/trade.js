@@ -264,6 +264,12 @@ export const secondTrade = async (req, res, next) => {
     if (!trade) {
       throw new Error('TRADE_NOT_FOUND');
     }
+    if (amount < trade.postAd.min) {
+      throw new Error('BELOW_MIN_AMOUNT');
+    }
+    if (amount > trade.postAd.max) {
+      throw new Error('ABOVE_MAX_AMOUNT');
+    }
     console.log(req.body);
     console.log('sponse timer');
     console.log(req.body.obj.repondTime);
