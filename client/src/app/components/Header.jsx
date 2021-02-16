@@ -22,6 +22,9 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import FaceIcon from '@material-ui/icons/Face';
 import MobileNav from '../assets/images/mobileNav.svg';
 import Notifications from './Notifications';
 // import 'bootstrap/dist/css/bootstrap.css';
@@ -156,19 +159,6 @@ class Header extends Component {
             }
 
             </ul>
-            {
-              this.props.authenticated
-                 && (
-                 <>
-                   <Link className="nav-link" to="/wallet">
-                     <ExitToAppIcon />
-                     {' '}
-                     Wallet
-                   </Link>
-                 </>
-                 )
-            }
-
             <ul>
               {
               this.props.authenticated
@@ -183,7 +173,18 @@ class Header extends Component {
                       >
                         <NavDropdown.Item onClick={this.handleClose}>
                           <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/wallet">
+                              <AccountBalanceWalletIcon />
+                              {' '}
+                              Wallet
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={this.handleClose}>
+                          <div>
                             <Link style={{ color: '#000' }} className="nav-link" to="/profile">
+                              <AccountCircleIcon />
+                              {' '}
                               My Account
                             </Link>
                           </div>
@@ -191,6 +192,8 @@ class Header extends Component {
                         <NavDropdown.Item onClick={this.handleClose}>
                           <div>
                             <Link style={{ color: '#000' }} className="nav-link" to={`/public_profile/${this.props.user && this.props.user.username}`}>
+                              <FaceIcon />
+                              {' '}
                               Public Profle
                             </Link>
                           </div>
@@ -198,6 +201,8 @@ class Header extends Component {
                         <NavDropdown.Item onClick={this.handleClose}>
                           <div>
                             <Link style={{ color: '#000' }} className="nav-link" to="/dashboard">
+                              <DashboardIcon />
+                              {' '}
                               Dashboard
                             </Link>
                           </div>
