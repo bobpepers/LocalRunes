@@ -42,6 +42,9 @@ export const addPostAd = async (req, res, next) => {
   const runesPrice = new BigNumber(req.body.runesPrice).multipliedBy(1e8).toFixed(0);
   const minAmount = new BigNumber(req.body.minAmount).multipliedBy(1e8).toFixed(0);
   const maxAmount = new BigNumber(req.body.maxAmount).multipliedBy(1e8).toFixed(0);
+  console.log('post add    123');
+  console.log(req.body.country);
+  console.log(req.body);
 
   res.locals.postAd = await db.postAd.create({
     type: req.body.type,
@@ -53,7 +56,7 @@ export const addPostAd = async (req, res, next) => {
     paymentMethodId: req.body.paymentMethod,
     userId: req.user.id,
     location: req.body.location,
-    country: req.body.country,
+    countryId: req.body.country,
   });
   next();
 };
