@@ -18,8 +18,6 @@ const countDecimals = function (value) {
  * Fetch PriceInfo
  */
 export const addPostAd = async (req, res, next) => {
-  console.log('12332145687');
-  console.log(req.body);
   if (req.body.price % 1 !== 0) {
     if (countDecimals(req.body.runesPrice) > 8) {
       res.locals.error = 'MAX_8_DECIMALS';
@@ -42,9 +40,6 @@ export const addPostAd = async (req, res, next) => {
   const runesPrice = new BigNumber(req.body.runesPrice).multipliedBy(1e8).toFixed(0);
   const minAmount = new BigNumber(req.body.minAmount).multipliedBy(1e8).toFixed(0);
   const maxAmount = new BigNumber(req.body.maxAmount).multipliedBy(1e8).toFixed(0);
-  console.log('post add    123');
-  console.log(req.body.country);
-  console.log(req.body);
 
   res.locals.postAd = await db.postAd.create({
     type: req.body.type,
