@@ -18,7 +18,7 @@ import {
 import TableAds from '../components/TableAds';
 
 const headers = [
-  'Seller',
+  'Buyer',
   'Payment Method',
   'Price / RUNES',
   'Limits',
@@ -27,7 +27,7 @@ const headers = [
 
 const headCells = [
   {
-    id: 'seller', numeric: false, disablePadding: true, label: 'Seller',
+    id: 'buyer', numeric: false, disablePadding: true, label: 'Buyer',
   },
   {
     id: 'country', numeric: true, disablePadding: false, label: 'Country',
@@ -55,7 +55,7 @@ const sellRunes = (props) => {
   } = props;
   console.log('RunesX Home View');
   const dispatch = useDispatch();
-  useEffect(() => dispatch(fetchPostAdData('sell')), [dispatch]);
+  useEffect(() => dispatch(fetchPostAdData('buy')), [dispatch]);
   useEffect(() => {
     console.log('6666666666666666');
     console.log(postAd);
@@ -66,7 +66,7 @@ const sellRunes = (props) => {
       <Grid container>
         <TableAds
           headCells={headCells || []}
-          postAd={postAd && postAd.sell ? postAd.sell : []}
+          postAd={postAd && postAd.buy ? postAd.buy : []}
         />
       </Grid>
     </div>

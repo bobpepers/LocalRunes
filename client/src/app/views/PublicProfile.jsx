@@ -58,13 +58,13 @@ const PublicProfile = (props) => {
             {' '}
             {specificUser && specificUser.username }
           </h4>
-          <p>
+          {/* <p>
             Full Name:
             {' '}
             {specificUser && specificUser.firstname }
             {' '}
             {specificUser && specificUser.lastname }
-          </p>
+          </p> */}
           <p>
             Trade Volume:
             {' '}
@@ -75,7 +75,7 @@ const PublicProfile = (props) => {
           <p>
             Number of completed trades:
             {' '}
-            {specificUser && specificUser.tradeCount }
+            {specificUser && specificUser.tradeCount ? specificUser.tradeCount.toString() : '0' }
           </p>
           <p>
             First purchase: 0
@@ -88,10 +88,10 @@ const PublicProfile = (props) => {
           <p>
             Language: english
           </p>
-          <p>
+          {/* <p>
             Phone Number: +
             {specificUser && specificUser.phoneNumber }
-          </p>
+          </p> */}
           <p>
             Phone verified:
             {' '}

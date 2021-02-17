@@ -55,7 +55,7 @@ const BuyRunes = (props) => {
   } = props;
   console.log('RunesX Home View');
   const dispatch = useDispatch();
-  useEffect(() => dispatch(fetchPostAdData('buy')), [dispatch]);
+  useEffect(() => dispatch(fetchPostAdData('sell')), [dispatch]);
   useEffect(() => {
     console.log('6666666666666666');
     console.log(postAd);
@@ -66,7 +66,7 @@ const BuyRunes = (props) => {
       <Grid container>
         <TableAds
           headCells={headCells || []}
-          postAd={postAd && postAd.buy ? postAd.buy : []}
+          postAd={postAd && postAd.sell ? postAd.sell : []}
         />
       </Grid>
     </div>

@@ -367,14 +367,25 @@ function EnhancedTable(props) {
                       <TableCell align="right">{row.currency}</TableCell>
                       <TableCell align="right">{row.limit}</TableCell>
                       <TableCell align="right">
+                        {row.type === 'buy' && (
                         <Button
                           onClick={() => handleClickTrade(row.id)}
                           variant="contained"
                           color="primary"
                         >
-                          {row.type}
+                          SELL
                         </Button>
+                        )}
 
+                        {row.type === 'sell' && (
+                        <Button
+                          onClick={() => handleClickTrade(row.id)}
+                          variant="contained"
+                          color="primary"
+                        >
+                          BUY
+                        </Button>
+                        )}
                       </TableCell>
                     </TableRow>
                   );

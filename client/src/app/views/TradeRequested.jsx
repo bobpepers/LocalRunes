@@ -112,12 +112,85 @@ const TradeRequested = (props) => {
     <div className="height100 content surfContainer">
       <Grid container>
         <Grid item xs={12}>
-          {currentTrade && currentTrade.id}
+          <p>
+            Trade id:
+            {' '}
+            {currentTrade && currentTrade.id}
+          </p>
+          <p>
+            Ad id:
+            {' '}
+            {currentTrade && currentTrade.postAd && currentTrade.postAd.id}
+          </p>
+          <p>
+            Amount:
+            {' '}
+            {currentTrade && (currentTrade.amount / 1e8)}
+          </p>
+          <p>
+            Price:
+            {' '}
+            {currentTrade && currentTrade.postAd && (currentTrade.postAd.price / 1e8)}
+            {' '}
+            {currentTrade && currentTrade.postAd && currentTrade.postAd.currency && currentTrade.postAd.currency.currency_name}
+          </p>
+          <p>
+            Total:
+            {' '}
+            {currentTrade && currentTrade.postAd && ((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {' '}
+            {currentTrade && currentTrade.postAd && currentTrade.postAd.currency && currentTrade.postAd.currency.currency_name}
+          </p>
+        </Grid>
+        <Grid item xs={12}>
+          {currentTrade
+          && currentTrade.postAd
+          && currentTrade.postAd.type === 'sell'
+          && currentTrade.postAd.user
+          && user
+          && user.username === currentTrade.user.username
+          && (
+          <p className="text-center">
+            You want to sell
+            {' '}
+            {currentTrade.amount / 1e8}
+            {' '}
+            RUNES to
+            {' '}
+            {currentTrade.postAd.user.username}
+            {' '}
+            for
+            {' '}
+            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {' '}
+            {currentTrade.postAd.currency.currency_name}
+          </p>
+          )}
+          {currentTrade
+          && currentTrade.postAd
+          && currentTrade.postAd.type === 'sell'
+          && currentTrade.postAd.user
+          && user
+          && user.username === currentTrade.postAd.user.username
+          && (
+          <p className="text-center">
+            {currentTrade.user.username}
+            {' '}
+            wants to sell
+            {' '}
+            {currentTrade.amount / 1e8}
+            {' '}
+            RUNES to you for
+            {' '}
+            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {' '}
+            {currentTrade.postAd.currency.currency_name}
+          </p>
+          )}
         </Grid>
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
-              <p>Time left:</p>
               {
                   currentTrade
                   && (
@@ -128,9 +201,6 @@ const TradeRequested = (props) => {
                   />
                   )
                 }
-            </Grid>
-            <Grid item xs={12}>
-              <p>{currentTrade && (currentTrade.amount / 1e8)}</p>
             </Grid>
             {currentTrade && currentTrade.postAd && currentTrade.postAd.user && user && user.data && currentTrade.postAd.user.username === user.data.username && (
               <Grid item xs={12}>
@@ -169,7 +239,7 @@ const TradeRequested = (props) => {
 
 const mapStateToProps = (state) => ({
   errorMessage: state.auth.error,
-  user: state.user,
+  user: state.user.data,
   currentTrade: state.currentTrade.data,
 })
 
