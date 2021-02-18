@@ -1,6 +1,6 @@
 import React, {
   useEffect,
-  useState,
+  // useState,
   // Fragment,
 } from 'react';
 import { withRouter } from 'react-router-dom';
@@ -9,75 +9,76 @@ import {
   Grid,
   // Button,
 } from '@material-ui/core';
-import * as actions from '../actions/auth';
-// import Contact from '../components/Contact';
-// import Community from '../components/Community';
-// import Exchanges from '../components/Exchanges';
-// import Download from '../components/Download';
-// import Banner from '../components/Banner';
-// import Domains from '../containers/Domains';
-import Activity from '../containers/Activity';
-import Info from '../containers/Info';
-import Volume from '../containers/Volume';
-import Runebase from '../containers/Runebase';
-import AdvertisersPublishers from '../components/AdvertisersPublishers';
-// import Globe from '../containers/Globe';
-import {
-  fetchCurrentTradeIdle,
-  secondTradeIdleAction,
-  cancelTradeIdleAction,
-} from '../actions/trade';
 
-const Home = () => {
+import {
+  fetchMyPostAdData,
+} from '../actions/postAd';
+// import Info from '../containers/Info';
+// import * as actions from '../actions/auth';
+import TableMyAds from '../components/TableMyAds';
+
+const headers = [
+  'Seller',
+  'Payment Method',
+  'Price / RUNES',
+  'Limits',
+  'Actions',
+];
+
+const headCells = [
+  {
+    id: 'name', numeric: false, disablePadding: true, label: 'Name',
+  },
+  {
+    id: 'country', numeric: true, disablePadding: false, label: 'Country',
+  },
+  {
+    id: 'paymentMethod', numeric: true, disablePadding: false, label: 'Payment Method',
+  },
+  {
+    id: 'price', numeric: true, disablePadding: false, label: 'Price / RUNES',
+  },
+  {
+    id: 'currency', numeric: true, disablePadding: false, label: 'Currency',
+  },
+  {
+    id: 'limits', numeric: true, disablePadding: false, label: 'Limits',
+  },
+  {
+    id: 'actions', numeric: true, disablePadding: false, label: 'Actions',
+  },
+];
+
+const Dashboard = (props) => {
+  const {
+    myAds,
+  } = props;
   console.log('RunesX Home View');
   const dispatch = useDispatch();
+  useEffect(() => dispatch(fetchMyPostAdData()), [dispatch]);
   useEffect(() => {
-    dispatch(cancelTradeIdleAction());
-  }, []);
-  useEffect(() => {
-    dispatch(fetchCurrentTradeIdle());
-  }, []);
-  useEffect(() => {
-    dispatch(secondTradeIdleAction());
-  }, []);
+    console.log('6666666666666666');
+    console.log(myAds);
+  }, [myAds]);
 
   return (
     <div className="height100 content">
       <Grid container>
-        <Info />
-        {/* <Globe /> */}
-        {/* <Domains /> */}
-        {/* <Banner /> */}
-        <div
-          style={{
-            width: '100%',
-            textAlign: 'center',
-            paddingBottom: '40px',
-            zIndex: 50,
-          }}
-          className="spacing-top"
-        >
-          <iframe
-            title="a-ads leaderboard 2"
-            data-aa="1500077"
-            src="//ad.a-ads.com/1500077?size=728x90"
-            scrolling="no"
-            style={{
-              width: '728px',
-              height: '90px',
-              border: '0px',
-              padding: 0,
-              overflow: 'hidden',
-            }}
-            allowtransparency="true"
+        <Grid item xs={12}>
+          <h3>Your Advertisements</h3>
+          <TableMyAds
+            headCells={headCells || []}
+            postAd={myAds || []}
           />
-          {/*  <Exchanges /> */}
-        </div>
+        </Grid>
       </Grid>
     </div>
   )
 }
 
-const mapStateToProps = (state) => ({ errorMessage: state.auth.error })
+const mapStateToProps = (state) => ({
+  myAds: state.myAds.data,
+  // errorMessage: state.auth.error,
+})
 
-export default withRouter(connect(mapStateToProps, actions)(Home));
+export default withRouter(connect(mapStateToProps, null)(Dashboard));

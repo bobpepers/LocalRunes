@@ -257,6 +257,12 @@ export const secondTrade = async (req, res, next) => {
             },
           ],
         },
+        {
+          model: db.user,
+          as: 'user',
+          required: true,
+          attributes: ['username'],
+        },
       ],
       transaction: t,
       lock: t.LOCK.UPDATE,
@@ -455,7 +461,7 @@ export const acceptCurrentTrade = async (req, res, next) => {
 
     console.log(newTrade);
 
-    if (trade.postAd.type === 'buy') {
+    if (trade.postAd.type === 'sell') {
       const walletBuy = await db.wallet.findOne({
         where: {
           userId: trade.postAd.userId,
@@ -480,7 +486,7 @@ export const acceptCurrentTrade = async (req, res, next) => {
       return next();
     }
 
-    if (trade.postAd.type === 'sell') {
+    if (trade.postAd.type === 'buy') {
       const walletSell = await db.wallet.findOne({
         where: {
           userId: trade.userId,
@@ -580,6 +586,19 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
     }
 
     if (trade.postAd.userId === req.user.id) {
+      if (trade.userOneCancel) {
+        res.locals.error = "UNABLE_TO_COMPLETE_CANCELED_TRADE";
+        return next();
+      }
+    }
+    if (trade.userId === req.user.id) {
+      if (trade.userTwoCancel) {
+        res.locals.error = "UNABLE_TO_COMPLETE_CANCELED_TRADE";
+        return next();
+      }
+    }
+
+    if (trade.postAd.userId === req.user.id) {
       console.log('123');
       if (trade.userOneComplete) {
         console.log('trade.userOneComplete');
@@ -619,7 +638,7 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
     }
 
     if (trade.userOneComplete && trade.userTwoComplete) {
-      if (trade.postAd.type === "sell") {
+      if (trade.postAd.type === "buy") {
         const walletUserOneSell = await db.wallet.findOne({
           where: {
             userId: trade.postAd.userId,
@@ -689,7 +708,7 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           lock: t.LOCK.UPDATE,
         });
       }
-      if (trade.postAd.type === "buy") {
+      if (trade.postAd.type === "sell") {
         const walletUserOne = await db.wallet.findOne({
           where: {
             userId: trade.userId,
@@ -754,6 +773,190 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
         await userBuyVolumeTwo.update({
           volume: userBuyVolumeTwo.volume + trade.amount,
           tradeCount: userBuyVolumeTwo.tradeCount + 1,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      }
+    }
+
+    t.afterCommit(() => {
+      next();
+    });
+  }).catch((err) => {
+    console.log(err.message);
+    res.locals.error = err.message;
+    next();
+  });
+};
+
+export const cancelCurrentMainTrade = async (req, res, next) => {
+  await db.sequelize.transaction({
+    isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
+  }, async (t) => {
+    console.log(req.body);
+    console.log(req.user.id);
+
+    const trade = await db.trade.findOne({
+      where: {
+        id: req.body.id,
+        type: 'accepted',
+      },
+      include: [
+        {
+          model: db.messages,
+          as: 'messages',
+          required: false,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+        {
+          model: db.user,
+          as: 'user',
+          required: true,
+          attributes: ['username'],
+        },
+        {
+          model: db.postAd,
+          as: 'postAd',
+          required: true,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.currency,
+              as: 'currency',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+      ],
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+
+    if (!trade) {
+      res.locals.error = "UNABLE_TO_FIND_TRADE";
+      return next();
+    }
+
+    if (trade.postAd.userId === req.user.id) {
+      if (trade.userOneComplete) {
+        res.locals.error = "UNABLE_TO_COMPLETE_CANCELED_TRADE";
+        return next();
+      }
+    }
+
+    if (trade.userId === req.user.id) {
+      if (trade.userTwoComplete) {
+        res.locals.error = "UNABLE_TO_COMPLETE_CANCELED_TRADE";
+        return next();
+      }
+    }
+
+    if (trade.postAd.userId === req.user.id) {
+      console.log('123');
+      if (trade.userOneCancel) {
+        console.log('trade.userOneComplete');
+        res.locals.trade = await trade.update({
+          userOneCancel: false,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      } else if (!trade.userOneCancel) {
+        res.locals.trade = await trade.update({
+          userOneCancel: true,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      }
+    }
+
+    if (trade.userId === req.user.id) {
+      console.log('123');
+      if (trade.userTwoCancel) {
+        res.locals.trade = await trade.update({
+          userTwoCancel: false,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      } else if (!trade.userTwoCancel) {
+        res.locals.trade = await trade.update({
+          userTwoCancel: true,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      }
+    }
+
+    if (trade.userOneCancel && trade.userTwoCancel) {
+      if (trade.postAd.type === "buy") {
+        const walletUserTwoSell = await db.wallet.findOne({
+          where: {
+            userId: trade.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        if (trade.amount < walletUserTwoSell.locked) {
+          console.log('not enough locked funds');
+          throw new Error('NOT_ENOUGH_LOCKED_FUNDS');
+        }
+        res.locals.walletUserTwo = await walletUserTwoSell.update({
+          locked: walletUserTwoSell.locked - trade.amount,
+          available: walletUserTwoSell.available + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        res.locals.trade = await trade.update({
+          type: 'canceled',
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      }
+      if (trade.postAd.type === "sell") {
+        const walletUserTwo = await db.wallet.findOne({
+          where: {
+            userId: trade.postAd.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        if (trade.amount < walletUserTwo.locked) {
+          console.log('not enough locked funds');
+          throw new Error('NOT_ENOUGH_LOCKED_FUNDS');
+        }
+        res.locals.walletUserTwo = await walletUserTwo.update({
+          locked: walletUserTwo.locked - trade.amount,
+          available: walletUserTwo.available + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        res.locals.trade = await trade.update({
+          type: 'canceled',
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,

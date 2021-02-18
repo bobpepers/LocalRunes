@@ -6,6 +6,12 @@ import {
   FETCH_POSTAD_FAIL,
   FETCH_POSTAD_SUCCESS,
   FETCH_POSTAD_BEGIN,
+  DELETE_POSTAD_BEGIN,
+  DELETE_POSTAD_SUCCESS,
+  DELETE_POSTAD_FAIL,
+  FETCH_MYPOSTAD_BEGIN,
+  FETCH_MYPOSTAD_SUCCESS,
+  FETCH_MYPOSTAD_FAIL,
 } from './types/index';
 
 export function addPostAdAction(obj) {
@@ -91,6 +97,51 @@ export function fetchPostAdData(type) {
       }).catch((error) => {
         dispatch({
           type: FETCH_POSTAD_FAIL,
+          payload: error,
+        })
+      });
+  }
+}
+
+export function deleteAd(type) {
+  return function (dispatch) {
+    dispatch({
+      type: DELETE_POSTAD_BEGIN,
+    });
+    axios.post(`${process.env.API_URL}/postad/delete`, { type })
+      .then((response) => {
+        console.log('FETCH_POSTAD_SUCCESS');
+        console.log(response);
+        dispatch({
+          type: DELETE_POSTAD_SUCCESS,
+          payload: response.data,
+        })
+      }).catch((error) => {
+        dispatch({
+          type: DELETE_POSTAD_FAIL,
+          payload: error,
+        })
+      });
+  }
+}
+
+export function fetchMyPostAdData(type) {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_MYPOSTAD_BEGIN,
+    });
+    axios.post(`${process.env.API_URL}/my/postad`, { type })
+      .then((response) => {
+        console.log('FETCH_MYPOSTAD_SUCCESS');
+        console.log(response);
+        dispatch({
+          type: FETCH_MYPOSTAD_SUCCESS,
+          payload: response.data.ads,
+        })
+      }).catch((error) => {
+        console.log(error);
+        dispatch({
+          type: FETCH_MYPOSTAD_FAIL,
           payload: error,
         })
       });

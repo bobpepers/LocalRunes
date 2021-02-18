@@ -75,7 +75,8 @@ import cancelTrade from './cancelTrade';
 import acceptTrade from './acceptTrade';
 import message from './message';
 import countries from './countries';
-
+import myAds from './myAds';
+import deleteAd from './deleteAd';
 
 
 const rootReducer = combineReducers({
@@ -149,6 +150,8 @@ const rootReducer = combineReducers({
   acceptTrade: acceptTrade,
   message: message,
   countries: countries,
+  myAds: myAds,
+  deleteAd: deleteAd,
   
 });
 

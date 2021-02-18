@@ -132,3 +132,35 @@ export const fetchPostAd = async (req, res, next) => {
 
   next();
 };
+
+export const fetchMyPostAd = async (req, res, next) => {
+  res.locals.ads = await db.postAd.findAll({
+    where: {
+      userId: req.user.id,
+    },
+    include: [
+      {
+        model: db.user,
+        as: 'user',
+        required: false,
+        attributes: ['username'],
+      },
+      {
+        model: db.paymentMethod,
+        as: 'paymentMethod',
+        required: false,
+      },
+      {
+        model: db.currency,
+        as: 'currency',
+        required: false,
+      },
+      {
+        model: db.country,
+        as: 'country',
+        required: false,
+      },
+    ],
+  });
+  next();
+};

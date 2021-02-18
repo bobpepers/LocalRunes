@@ -276,7 +276,7 @@ const Trade = (props) => {
                   currentTrade
                   && user.data
                   && currentTrade.postAd
-                  && currentTrade.postAd.type === 'buy'
+                  && currentTrade.postAd.type === 'sell'
                   && currentTrade.userOneComplete === false
                   && currentTrade.postAd.user.username === user.data.username
                   && 'i have received payment'
@@ -285,7 +285,7 @@ const Trade = (props) => {
                   currentTrade
                   && user.data
                   && currentTrade.postAd
-                  && currentTrade.postAd.type === 'buy'
+                  && currentTrade.postAd.type === 'sell'
                   && currentTrade.userOneComplete === true
                   && currentTrade.postAd.user.username === user.data.username
                   && 'Undo'
@@ -294,7 +294,7 @@ const Trade = (props) => {
                   currentTrade
                   && user.data
                   && currentTrade.postAd
-                  && currentTrade.postAd.type === 'buy'
+                  && currentTrade.postAd.type === 'sell'
                   && currentTrade.userTwoComplete === false
                   && currentTrade.user.username === user.data.username
                   && 'i have sent payment'
@@ -303,7 +303,7 @@ const Trade = (props) => {
                   currentTrade
                   && user.data
                   && currentTrade.postAd
-                  && currentTrade.postAd.type === 'buy'
+                  && currentTrade.postAd.type === 'sell'
                   && currentTrade.userTwoComplete === true
                   && currentTrade.user.username === user.data.username
                   && 'Undo'
@@ -314,7 +314,7 @@ const Trade = (props) => {
                   currentTrade
                   && user.data
                   && currentTrade.postAd
-                  && currentTrade.postAd.type === 'sell'
+                  && currentTrade.postAd.type === 'buy'
                   && currentTrade.userOneComplete === false
                   && currentTrade.postAd.user.username === user.data.username
                   && 'i have sent payment'
@@ -323,16 +323,16 @@ const Trade = (props) => {
                   currentTrade
                   && user.data
                   && currentTrade.postAd
-                  && currentTrade.postAd.type === 'sell'
+                  && currentTrade.postAd.type === 'buy'
                   && currentTrade.userOneComplete === true
                   && currentTrade.postAd.user.username === user.data.username
-                  && 'Undo'
+                  && 'Undo sent payment'
                   }
                   {
                   currentTrade
                   && user.data
                   && currentTrade.postAd
-                  && currentTrade.postAd.type === 'sell'
+                  && currentTrade.postAd.type === 'buy'
                   && currentTrade.userTwoComplete === false
                   && currentTrade.user.username === user.data.username
                   && 'i have received payment'
@@ -341,26 +341,59 @@ const Trade = (props) => {
                   currentTrade
                   && user.data
                   && currentTrade.postAd
-                  && currentTrade.postAd.type === 'sell'
+                  && currentTrade.postAd.type === 'buy'
                   && currentTrade.userTwoComplete === true
                   && currentTrade.user.username === user.data.username
-                  && 'Undo'
+                  && 'Undo received payment'
                   }
                 </Button>
               </Grid>
 
               <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  className="btn"
-                  fullWidth
-                  size="large"
-                  onClick={() => cancelTrade()}
-                >
-                  Request Cancel Trade
-                </Button>
+                {
+                  currentTrade
+                  && user.data
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'sell'
+                  && currentTrade.userTwoComplete === false
+                  && currentTrade.user.username === user.data.username
+                  && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    className="btn"
+                    fullWidth
+                    size="large"
+                    onClick={() => cancelTrade()}
+                  >
+                    Request Cancel Trade
+                  </Button>
+                  )
+                  }
+                {
+                  currentTrade
+                  && user.data
+                  && currentTrade.postAd
+                  && currentTrade.postAd.user
+                  && currentTrade.postAd.type === 'sell'
+                  && currentTrade.userOneComplete === false
+                  && currentTrade.postAd.user.username === user.data.username
+                  && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    className="btn"
+                    fullWidth
+                    size="large"
+                    onClick={() => cancelTrade()}
+                  >
+                    Request Cancel Trade
+                  </Button>
+                  )
+                  }
+
               </Grid>
             </Grid>
           </Grid>

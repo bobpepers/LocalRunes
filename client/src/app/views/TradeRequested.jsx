@@ -151,11 +151,11 @@ const TradeRequested = (props) => {
           && user.username === currentTrade.user.username
           && (
           <p className="text-center">
-            You want to sell
+            You want to buy
             {' '}
             {currentTrade.amount / 1e8}
             {' '}
-            RUNES to
+            RUNES from
             {' '}
             {currentTrade.postAd.user.username}
             {' '}
@@ -176,11 +176,11 @@ const TradeRequested = (props) => {
           <p className="text-center">
             {currentTrade.user.username}
             {' '}
-            wants to sell
+            wants to buy
             {' '}
             {currentTrade.amount / 1e8}
             {' '}
-            RUNES to you for
+            RUNES from you for
             {' '}
             {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
             {' '}
@@ -202,7 +202,7 @@ const TradeRequested = (props) => {
                   )
                 }
             </Grid>
-            {currentTrade && currentTrade.postAd && currentTrade.postAd.user && user && user.data && currentTrade.postAd.user.username === user.data.username && (
+            {currentTrade && currentTrade.postAd && currentTrade.postAd.user && user && user && currentTrade.postAd.user.username === user.username && (
               <Grid item xs={12}>
                 <Button
                   variant="contained"

@@ -310,7 +310,7 @@ export function cancelMainTradeAction(id) {
     dispatch({
       type: CANCEL_MAIN_TRADE_BEGIN,
     });
-    axios.post(`${process.env.API_URL}/trade/cancel`, { id })
+    axios.post(`${process.env.API_URL}/trade/main/cancel`, { id })
       .then((response) => {
         console.log(response.data.trade);
 
