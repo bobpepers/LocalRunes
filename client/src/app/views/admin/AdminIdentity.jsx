@@ -137,13 +137,13 @@ const AdminPendingIdentityView = (props) => {
                         >
                           X close
                         </span>
-                        <img src={`/api/identity/images/${userIdentity.username.toLowerCase()}/${userIdentity.identityFront}`} />
+                        <img src={`/api/identity/images/${userIdentity.username}/${userIdentity.identityFront}`} />
                       </div>
                     </Modal>
                   </TableCell>
                   <TableCell align="right">
                     <span onClick={handleOpenBack}>
-                      <img src={`/api/identity/images/${userIdentity.username.toLowerCase()}/${userIdentity.identityBack}`} />
+                      <img src={`/api/identity/images/${userIdentity.username}/${userIdentity.identityBack}`} />
                     </span>
                     <Modal
                       open={openBack}
@@ -164,7 +164,7 @@ const AdminPendingIdentityView = (props) => {
                         >
                           X close
                         </span>
-                        <img src={`/api/identity/images/${userIdentity.username.toLowerCase()}/${userIdentity.identityBack}`} />
+                        <img src={`/api/identity/images/${userIdentity.username}/${userIdentity.identityBack}`} />
                       </div>
                     </Modal>
                   </TableCell>
