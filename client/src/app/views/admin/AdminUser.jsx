@@ -50,10 +50,10 @@ const adminUserComponent = (props) => {
         ...adminUser.data.earner,
         ...adminUser.data.spender,
       ]);
-      setActivitiesArchive([
-        ...adminUser.data.archivedEarner,
-        ...adminUser.data.archivedSpender,
-      ]);
+      // setActivitiesArchive([
+      //  ...adminUser.data.archivedEarner,
+      //  ...adminUser.data.archivedSpender,
+      // ]);
     }
   }, [adminUser.data]);
 

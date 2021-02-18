@@ -49,6 +49,37 @@ export const fetchAdminWithdrawals = async (req, res, next) => {
   }
 };
 
+export const fetchAdminPendingIdentity = async (req, res, next) => {
+  try {
+    res.locals.users = await db.user.findAll({
+      // order: [['id', 'DESC']],
+      where: {
+        identityVerified: 'pending',
+      },
+      attributes: [
+        'id',
+        'username',
+        'email',
+        'banned',
+        'firstname',
+        'lastname',
+        'phoneNumber',
+        'identityFront',
+        'identityBack',
+        'identityVerified',
+      ],
+
+    });
+    console.log('after find all');
+    console.log(res.locals.users);
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
 /**
  * Fetch admin withdrawals
  */
@@ -105,34 +136,33 @@ export const fetchAdminUser = async (req, res, next) => {
           // required: false,
           as: 'earner',
         },
-        {
-          model: db.activityArchive,
-          // required: false,
-          as: 'archivedSpender',
-        },
-        {
-          model: db.activityArchive,
-          // required: false,
-          as: 'archivedEarner',
-        },
-
-        {
-          model: db.webslot,
-          as: 'webslots',
-          required: false,
-          include: [
-            {
-              model: db.order,
-              as: 'order',
-              required: false,
-            },
-            {
-              model: db.domain,
-              as: 'domain',
-              required: false,
-            },
-          ],
-        },
+        // {
+        //  model: db.activityArchive,
+        // required: false,
+        //  as: 'archivedSpender',
+        // },
+        // {
+        //  model: db.activityArchive,
+        // required: false,
+        //  as: 'archivedEarner',
+        // },
+        // {
+        //  model: db.webslot,
+        //  as: 'webslots',
+        //  required: false,
+        //  include: [
+        //    {
+        //      model: db.order,
+        //      as: 'order',
+        //      required: false,
+        //    },
+        //    {
+        //      model: db.domain,
+        //      as: 'domain',
+        //      required: false,
+        //    },
+        //  ],
+        // },
       ],
     });
     next();
@@ -575,6 +605,42 @@ export const rejectAdminReviewPublisher = async (req, res, next) => {
     });
     res.locals.publishers = await publisher.update({
       review: 'rejected',
+    });
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const acceptAdminPendingIdentity = async (req, res, next) => {
+  try {
+    const user = await db.user.findOne({
+      where: {
+        id: req.body.id,
+      },
+    });
+    res.locals.identity = await user.update({
+      identityVerified: 'accepted',
+    });
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const rejectAdminPendingIdentity = async (req, res, next) => {
+  try {
+    const user = await db.user.findOne({
+      where: {
+        id: req.body.id,
+      },
+    });
+    res.locals.identity = await user.update({
+      identityVerified: 'rejected',
     });
     next();
   } catch (error) {

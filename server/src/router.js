@@ -57,6 +57,9 @@ import {
   fetchAdminCurrencies,
   addAdminPaymentMethod,
   fetchAdminPaymentMethod,
+  fetchAdminPendingIdentity,
+  acceptAdminPendingIdentity,
+  rejectAdminPendingIdentity,
 } from './controllers/admin';
 
 import {
@@ -322,6 +325,72 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         console.log(res.locals.countries);
         res.json({
           countries: res.locals.countries,
+        });
+      }
+    });
+
+  app.get('/api/admin/identity/pending',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    fetchAdminPendingIdentity,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.users) {
+        console.log(res.locals.users);
+        res.json({
+          users: res.locals.users,
+        });
+      }
+    });
+
+  app.post('/api/admin/identity/accept',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    acceptAdminPendingIdentity,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.identity) {
+        console.log(res.locals.identity);
+        res.json({
+          identity: res.locals.identity,
+        });
+      }
+    });
+
+  app.post('/api/admin/identity/reject',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    rejectAdminPendingIdentity,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.identity) {
+        console.log(res.locals.identity);
+        res.json({
+          identity: res.locals.identity,
         });
       }
     });

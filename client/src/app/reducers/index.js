@@ -54,6 +54,7 @@ import adminDomains from "./admin/adminDomains";
 import adminCountries from "./admin/adminCountries";
 import adminCurrencies from "./admin/adminCurrencies";
 import adminPaymentMethods from "./admin/adminPaymentMethods";
+import adminPendingIdentity from "./admin/adminPendingIdentity";
 
 import removeBannerOrder from './removeBannerOrder';
 import addAdzone from './addAdZone';
@@ -135,6 +136,7 @@ const rootReducer = combineReducers({
   adminCountries: adminCountries,
   adminCurrencies: adminCurrencies,
   adminPaymentMethods: adminPaymentMethods,
+  adminPendingIdentity: adminPendingIdentity,
 
   verifyPhoneCode: verifyPhoneCode,
   getPhoneCode: getPhoneCode,
@@ -151,7 +153,7 @@ const rootReducer = combineReducers({
   message: message,
   countries: countries,
   myAds: myAds,
-  deleteAd: deleteAd,
+  deleteAd: deleteAd, 
   
 });
 

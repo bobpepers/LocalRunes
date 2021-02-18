@@ -10,27 +10,71 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Modal,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  fetchAdminPublishersData,
-  banAdminPublisher,
+  fetchAdminPendingIdentityData,
+  adminAcceptIdentity,
+  adminRejectIdentity,
 } from '../../actions/admin';
 // import { rejectWithdrawal, acceptWithdrawal } from '../../actions/adminWithdraw';
 
-const AdminPublishers = (props) => {
+function getModalStyle() {
+  return {
+    top: '75%',
+    left: '75%',
+    transform: 'translate(-75%, -75%)',
+  };
+}
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    position: 'absolute',
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
+
+const AdminPendingIdentityView = (props) => {
   const {
-    adminPublishers,
+    adminPendingIdentity,
   } = props;
   const dispatch = useDispatch();
-  useEffect(() => dispatch(fetchAdminPublishersData()), [dispatch]);
+  const classes = useStyles();
+  // getModalStyle is not a pure function, we roll the style only on the first render
+  const [modalStyle] = React.useState(getModalStyle);
+  const [openFront, setOpenFront] = React.useState(false);
+  const [openBack, setOpenBack] = React.useState(false);
+
+  const handleOpenFront = () => {
+    setOpenFront(true);
+  };
+
+  const handleCloseFront = () => {
+    setOpenFront(false);
+  };
+  const handleOpenBack = () => {
+    setOpenBack(true);
+  };
+
+  const handleCloseBack = () => {
+    setOpenBack(false);
+  };
+  useEffect(() => dispatch(fetchAdminPendingIdentityData()), [dispatch]);
   useEffect(() => {
     console.log('adminPublishers');
-    console.log(adminPublishers);
-  }, [adminPublishers]);
+    console.log(adminPendingIdentity);
+  }, [adminPendingIdentity]);
 
-  const ban = (id) => {
-    dispatch(banAdminPublisher(id));
+  const accept = (id) => {
+    dispatch(adminAcceptIdentity(id));
+  }
+  const reject = (id) => {
+    dispatch(adminRejectIdentity(id));
   }
 
   return (
@@ -43,54 +87,104 @@ const AdminPublishers = (props) => {
           <TableHead>
             <TableRow>
               <TableCell>id</TableCell>
-              <TableCell align="right">domain</TableCell>
-              <TableCell align="right">impressions</TableCell>
-              <TableCell align="right">earned</TableCell>
-              <TableCell align="right">verified</TableCell>
-              <TableCell align="right">review</TableCell>
-              <TableCell align="right">banned</TableCell>
+              <TableCell align="right">nickname</TableCell>
+              <TableCell align="right">fullname</TableCell>
+              <TableCell align="right">phone number</TableCell>
+              <TableCell align="right">front</TableCell>
+              <TableCell align="right">back</TableCell>
+              <TableCell align="right">action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {adminPublishers
-            && adminPublishers.data
-            && adminPublishers.data.map((publisher, i) => {
-              console.log(publisher);
+            {adminPendingIdentity
+            && adminPendingIdentity.map((userIdentity, i) => {
+              console.log(userIdentity);
               return (
                 <TableRow key={i}>
                   <TableCell component="th" scope="row">
-                    {publisher.id}
+                    {userIdentity.id}
+                  </TableCell>
+                  <TableCell align="right">{userIdentity.username}</TableCell>
+                  <TableCell align="right">
+                    {userIdentity.firstname}
+                    {' '}
+                    {userIdentity.lastname}
                   </TableCell>
                   <TableCell align="right">
-                    {publisher.subdomain && publisher.subdomain !== 'www' ? `${publisher.subdomain}.` : ''}
-                    {publisher.domain.domain}
+                    +
+                    {userIdentity.phoneNumber}
                   </TableCell>
-                  <TableCell align="right">{publisher.impressions}</TableCell>
-                  <TableCell align="right">...</TableCell>
-                  <TableCell align="right">{publisher.verified ? 'verified' : 'unverified'}</TableCell>
-                  <TableCell align="right">{publisher.review}</TableCell>
                   <TableCell align="right">
-                    {publisher.banned
-                      ? (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="large"
-                          onClick={() => ban(publisher.id)}
+                    <span onClick={handleOpenFront}>
+                      <img src={`/api/identity/images/${userIdentity.username.toLowerCase()}/${userIdentity.identityFront}`} />
+                    </span>
+                    <Modal
+                      open={openFront}
+                      onClose={handleCloseFront}
+                      aria-labelledby="simple-modal-title"
+                      aria-describedby="simple-modal-description"
+                    >
+                      <div style={modalStyle} className={classes.paper}>
+                        <span
+                          onClick={handleCloseFront}
+                          style={{
+                            position: 'relative',
+                            left: '95%',
+                            top: '5%',
+                            color: 'red',
+                            cursor: 'pointer',
+                          }}
                         >
-                          Unban
-                        </Button>
-                      )
-                      : (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="large"
-                          onClick={() => ban(publisher.id)}
+                          X close
+                        </span>
+                        <img src={`/api/identity/images/${userIdentity.username.toLowerCase()}/${userIdentity.identityFront}`} />
+                      </div>
+                    </Modal>
+                  </TableCell>
+                  <TableCell align="right">
+                    <span onClick={handleOpenBack}>
+                      <img src={`/api/identity/images/${userIdentity.username.toLowerCase()}/${userIdentity.identityBack}`} />
+                    </span>
+                    <Modal
+                      open={openBack}
+                      onClose={handleCloseBack}
+                      aria-labelledby="simple-modal-title"
+                      aria-describedby="simple-modal-description"
+                    >
+                      <div style={modalStyle} className={classes.paper}>
+                        <span
+                          onClick={handleCloseBack}
+                          style={{
+                            position: 'relative',
+                            left: '95%',
+                            top: '5%',
+                            color: 'red',
+                            cursor: 'pointer',
+                          }}
                         >
-                          Ban
-                        </Button>
-                      )}
+                          X close
+                        </span>
+                        <img src={`/api/identity/images/${userIdentity.username.toLowerCase()}/${userIdentity.identityBack}`} />
+                      </div>
+                    </Modal>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      onClick={() => accept(userIdentity.id)}
+                    >
+                      Accept
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      onClick={() => reject(userIdentity.id)}
+                    >
+                      Reject
+                    </Button>
                   </TableCell>
                 </TableRow>
               )
@@ -103,10 +197,9 @@ const AdminPublishers = (props) => {
 }
 
 function mapStateToProps(state) {
-  console.log(state.adminPublishers)
   return {
-    adminPublishers: state.adminPublishers,
+    adminPendingIdentity: state.adminPendingIdentity.data,
   };
 }
 
-export default connect(mapStateToProps, null)(AdminPublishers);
+export default connect(mapStateToProps, null)(AdminPendingIdentityView);

@@ -27,7 +27,7 @@ import * as actions from '../../actions/auth';
 import AdminUserList from './AdminUserList';
 import AdminWithdrawals from './AdminWithdrawals';
 import AdminBanners from './AdminBanners';
-import AdminPublishers from './AdminPublishers';
+import AdminIdentity from './AdminIdentity';
 import AdminReviewBanners from './AdminReviewBanners';
 import AdminReviewPublishers from './AdminReviewPublishers';
 import AdminUser from './AdminUser';
@@ -41,6 +41,7 @@ import AdminPaymentMethodManagement from './AdminPaymentMethodManagement';
 import AdminDashboard from './AdminDashboard';
 import {
   fetchAdminUserListData,
+  fetchAdminPendingIdentityData,
 } from '../../actions/admin';
 // import * as actions from '../actions/user';
 
@@ -104,6 +105,7 @@ const Admin = (props) => {
   const {
     user,
     adminUserList,
+    adminPendingIdentity,
   } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(true);
@@ -130,14 +132,12 @@ const Admin = (props) => {
 
   useEffect(() => dispatch(fetchUserData()), [dispatch]);
 
-  let counterIdentity = 0;
+  useEffect(() => dispatch(fetchAdminPendingIdentityData()), [dispatch]);
   useEffect(() => {
-    counterIdentity = 0;
-    console.log(adminUserList);
-    for (let i = 0; i < adminUserList.length; i++) {
-      if (adminUserList[i].identityVerified === 'pending') counterIdentity++;
-    }
-  }, [adminUserList]);
+    console.log('adminPublishers');
+    console.log(adminPendingIdentity);
+  }, [adminPendingIdentity]);
+
   useEffect(() => {
     document.title = 'RunesX - Admin Dashboard';
   }, []);
@@ -219,6 +219,17 @@ const Admin = (props) => {
           </ListItem>
           <ListItem
             button
+            key="identity"
+            className={dashboardPath === 'identity' && 'sideMenuActive'}
+            onClick={() => handleMenuClick('identity')}
+          >
+            <ListItemIcon>
+              <LiveTvIcon />
+            </ListItemIcon>
+            <ListItemText primary={`Pending Identity (${adminPendingIdentity && adminPendingIdentity.length ? adminPendingIdentity.length : 0})`} />
+          </ListItem>
+          <ListItem
+            button
             key="countryManagment"
             className={dashboardPath === 'countryManagment' && 'sideMenuActive'}
             onClick={() => handleMenuClick('countryManagment')}
@@ -283,17 +294,6 @@ const Admin = (props) => {
             </ListItemIcon>
             <ListItemText primary="Withdrawals" />
           </ListItem>
-          <ListItem
-            button
-            key="identity"
-            className={dashboardPath === 'identity' && 'sideMenuActive'}
-            onClick={() => handleMenuClick('identity')}
-          >
-            <ListItemIcon>
-              <LiveTvIcon />
-            </ListItemIcon>
-            <ListItemText primary={`Pending Identity (${counterIdentity})`} />
-          </ListItem>
         </List>
         <Divider />
       </Drawer>
@@ -303,11 +303,6 @@ const Admin = (props) => {
         {
           dashboardPath === 'dashboard' && (
           <AdminDashboard />
-          )
-        }
-        {
-          dashboardPath === 'users' && (
-          <AdminUserList />
           )
         }
         {
@@ -363,7 +358,7 @@ const Admin = (props) => {
         }
         {
           dashboardPath === 'identity' && (
-          <AdminPublishers />
+          <AdminIdentity />
           )
         }
         {
@@ -397,6 +392,7 @@ function mapStateToProps(state) {
     adminUserList: state.adminUserList,
     user: state.user.data,
     errorMessage: state.auth.error,
+    adminPendingIdentity: state.adminPendingIdentity.data,
     // users: state.user.list,
   };
 }
