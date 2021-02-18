@@ -95,20 +95,20 @@ const PublicProfile = (props) => {
           <p>
             Phone verified:
             {' '}
-            {specificUser && specificUser.phoneNumberVerified ? 'Verified' : 'Not Verified' }
+            {specificUser && specificUser.phoneNumberVerified ? (<span className="color-green">Verified</span>) : (<span className="color-red">Not Verified</span>) }
           </p>
           <p>
             Identity:
             {' '}
-            {specificUser && specificUser.identityVerified === 'init' && 'Not Verified' }
-            {specificUser && specificUser.identityVerified === 'pending' && 'Not Verified' }
-            {specificUser && specificUser.identityVerified === 'accepted' && 'Verified' }
-            {specificUser && specificUser.identityVerified === 'rejected' && 'Not Verified' }
+            {specificUser && specificUser.identityVerified === 'init' && (<span className="color-red">Not Verified</span>)}
+            {specificUser && specificUser.identityVerified === 'pending' && (<span className="color-red">Not Verified</span>) }
+            {specificUser && specificUser.identityVerified === 'accepted' && (<span className="color-green">Verified</span>)}
+            {specificUser && specificUser.identityVerified === 'rejected' && (<span className="color-red">Not Verified</span>) }
           </p>
           <p>
             email:
             {' '}
-            {specificUser && specificUser.authused ? 'Verified' : 'Not Verified' }
+            {specificUser && specificUser.authused ? (<span className="color-green">Verified</span>) : (<span className="color-red">Not Verified</span>) }
           </p>
           <p>
             Trusted by
@@ -159,7 +159,7 @@ const PublicProfile = (props) => {
             ) }
 
           </Grid>
-          <Grid container item xs={12}>
+          {/* <Grid container item xs={12}>
             <Grid container item xs={12}>
               <h3>
                 Feedback
@@ -175,7 +175,7 @@ const PublicProfile = (props) => {
                 Good trader, fast delivery
               </p>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid container item xs={12}>
           <h3>

@@ -410,10 +410,10 @@ const Profile = (props) => {
                   </>
                 )}
                 {user && user.identityVerified === 'pending' && (
-                  <p className="color-brown">Pending</p>
+                  <span className="color-brown">Pending</span>
                 )}
                 {user && user.identityVerified === 'accepted' && (
-                  <p className="color-green">Verified</p>
+                  <span className="color-green">Verified</span>
                 )}
 
               </p>
