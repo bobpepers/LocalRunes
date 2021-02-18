@@ -9,6 +9,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import Globe from 'react-globe.gl';
 import * as d3 from 'd3';
 import { Link } from 'react-router-dom';
+import TwitterIcon from '@material-ui/icons/Twitter';
+import FacebookIcon from '@material-ui/icons/Facebook';
 import { getRequestRegister } from '../actions/registered';
 import runebaseloop from '../assets/images/runebaseloop.gif';
 import theme from '../theme';
@@ -37,8 +39,21 @@ const FooterMenu = (props) => {
         </Grid>
         <Grid item xs={4} className="text-center">
           <h3>Follow us</h3>
-          <a href="#">Facebook</a>
-          <a href="#">Twitter</a>
+          <p>
+            <a href="https://www.facebook.com/localrunes">
+              <FacebookIcon />
+              {' '}
+              Facebook
+            </a>
+          </p>
+          <p>
+            <a href="https://twitter.com/LocalRunes">
+              <TwitterIcon />
+              {' '}
+              Twitter
+            </a>
+          </p>
+
         </Grid>
       </Grid>
     </div>
