@@ -116,7 +116,7 @@ const AdminPendingIdentityView = (props) => {
                   </TableCell>
                   <TableCell align="right">
                     <span onClick={handleOpenFront}>
-                      <img src={`/api/identity/images/${userIdentity.username.toLowerCase()}/${userIdentity.identityFront}`} />
+                      <img src={`/api/identity/images/${userIdentity.username}/${userIdentity.identityFront}`} />
                     </span>
                     <Modal
                       open={openFront}

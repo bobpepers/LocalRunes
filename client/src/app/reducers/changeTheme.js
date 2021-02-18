@@ -3,7 +3,7 @@ import {
 } from '../actions/types/index';
 
 const initialState = {
-  theme: 'dark',
+  theme: 'light',
 };
 
 export default (state = initialState, action) => {
