@@ -73,6 +73,7 @@ export const fetchPostAd = async (req, res, next) => {
     res.locals.buy = await db.postAd.findAll({
       where: {
         type: req.body.type,
+        active: true,
       },
       include: [
         {
@@ -103,6 +104,7 @@ export const fetchPostAd = async (req, res, next) => {
     res.locals.sell = await db.postAd.findAll({
       where: {
         type: req.body.type,
+        active: true,
       },
       include: [
         {
@@ -137,6 +139,7 @@ export const fetchMyPostAd = async (req, res, next) => {
   res.locals.ads = await db.postAd.findAll({
     where: {
       userId: req.user.id,
+      active: true,
     },
     include: [
       {
@@ -163,4 +166,79 @@ export const fetchMyPostAd = async (req, res, next) => {
     ],
   });
   next();
+};
+
+// To check if an array is empty using javascript
+function arrayIsEmpty(array) {
+  // If it's not an array, return FALSE.
+  if (!Array.isArray(array)) {
+    return false;
+  }
+  // If it is an array, check its length property
+  if (array.length == 0) {
+    // Return TRUE if the array is empty
+    return true;
+  }
+  // Otherwise, return FALSE.
+  return false;
+}
+
+export const deactivatePostAd = async (req, res, next) => {
+  await db.sequelize.transaction({
+    isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
+  }, async (t) => {
+    console.log(req.body);
+    console.log(req.user.id);
+
+    const advertisement = await db.postAd.findOne({
+      where: {
+        id: req.body.id,
+        active: true,
+      },
+      include: [
+        {
+          model: db.trade,
+          as: 'trade',
+          required: false,
+          where: {
+            type: {
+              [Op.or]: [
+                'requested',
+                'accepted',
+                'disputed',
+              ],
+            },
+          },
+        },
+      ],
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+
+    if (!advertisement) {
+      console.log('UNABLE_TO_FIND_ADVERTISEMENT');
+      throw new Error('UNABLE_TO_FIND_ADVERTISEMENT');
+    }
+
+    console.log(advertisement);
+    if (!arrayIsEmpty(advertisement.trade)) {
+      console.log('empty');
+      throw new Error('ADVERTISEMENT_HAS_ACTIVE_TRADES');
+    }
+
+    res.locals.postAd = await advertisement.update({
+      active: false,
+    }, {
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+
+    t.afterCommit(() => {
+      next();
+    });
+  }).catch((err) => {
+    console.log(err.message);
+    res.locals.error = err.message;
+    next();
+  });
 };

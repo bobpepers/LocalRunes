@@ -33,6 +33,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
   };
 
   // 2: The model options.
@@ -58,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     PostAdModel.hasMany(model.trade, {
       foreignKey: 'postAdId',
-      as: 'postAd',
+      as: 'trade',
     });
   };
 

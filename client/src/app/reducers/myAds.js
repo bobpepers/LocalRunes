@@ -2,6 +2,7 @@ import {
   FETCH_MYPOSTAD_BEGIN,
   FETCH_MYPOSTAD_SUCCESS,
   FETCH_MYPOSTAD_FAIL,
+  DELETE_MYPOSTAD,
 } from '../actions/types/index';
 
 const initialState = {
@@ -28,6 +29,13 @@ export default (state = initialState, action) => {
         ...state,
         error: action.payload.response.data.error,
         isFetching: false,
+      };
+    case DELETE_MYPOSTAD:
+      return {
+        ...state,
+        data: state.data.filter((ad) => ad.id !== action.payload.id),
+        loading: false,
+        error: null,
       };
     default:
       return state;

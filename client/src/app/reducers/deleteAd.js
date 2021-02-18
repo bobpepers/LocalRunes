@@ -2,7 +2,6 @@ import {
   DELETE_POSTAD_BEGIN,
   DELETE_POSTAD_SUCCESS,
   DELETE_POSTAD_FAIL,
-
 } from '../actions/types/index';
 
 const initialState = {

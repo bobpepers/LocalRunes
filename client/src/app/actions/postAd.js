@@ -12,6 +12,7 @@ import {
   FETCH_MYPOSTAD_BEGIN,
   FETCH_MYPOSTAD_SUCCESS,
   FETCH_MYPOSTAD_FAIL,
+  DELETE_MYPOSTAD,
 } from './types/index';
 
 export function addPostAdAction(obj) {
@@ -103,24 +104,65 @@ export function fetchPostAdData(type) {
   }
 }
 
-export function deleteAd(type) {
+export function deleteAd(id) {
   return function (dispatch) {
     dispatch({
       type: DELETE_POSTAD_BEGIN,
     });
-    axios.post(`${process.env.API_URL}/postad/delete`, { type })
+    axios.post(`${process.env.API_URL}/postad/deactivate`, { id })
       .then((response) => {
         console.log('FETCH_POSTAD_SUCCESS');
         console.log(response);
         dispatch({
           type: DELETE_POSTAD_SUCCESS,
-          payload: response.data,
-        })
+          payload: response.data.postAd,
+        });
+        dispatch({
+          type: DELETE_MYPOSTAD,
+          payload: response.data.postAd,
+        });
       }).catch((error) => {
         dispatch({
           type: DELETE_POSTAD_FAIL,
           payload: error,
-        })
+        });
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
       });
   }
 }
@@ -143,7 +185,7 @@ export function fetchMyPostAdData(type) {
         dispatch({
           type: FETCH_MYPOSTAD_FAIL,
           payload: error,
-        })
+        });
       });
   }
 }
