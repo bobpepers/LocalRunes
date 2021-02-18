@@ -29,8 +29,38 @@ export const uploadIdentity = async (req, res, next) => {
   await db.sequelize.transaction({
     isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   }, async (t) => {
+    const user = await db.user.findOne({
+      where: {
+        id: req.user.id,
+      },
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+    if (!user) {
+      throw new Error('USER_NOT_FOUND');
+    }
+    // Remove Old if rejected
+    if (user.identityVerified === 'rejected') {
+      try {
+        await fs.unlink(`${process.cwd()}/uploads/identity/${req.user.username}/${req.files.front[0].filename}`);
+      } catch (err) {
+        // throw new Error('UNABLE_TO_REMOVE_TEMP');
+      }
+      try {
+        await fs.unlink(`${process.cwd()}/uploads/identity/${req.user.username}/${req.files.back[0].filename}`);
+      } catch (err) {
+        // throw new Error('UNABLE_TO_REMOVE_TEMP');
+      }
+      try {
+        await fs.unlink(`${process.cwd()}/uploads/identity/${req.user.username}/${req.files.selfie[0].filename}`);
+      } catch (err) {
+        // throw new Error('UNABLE_TO_REMOVE_TEMP');
+      }
+    }
+
     let dataFront;
     let dataBack;
+    let dataSelfie;
     try {
       dataFront = await fs.readFile(`${process.cwd()}/uploads/temp/${req.files.front[0].filename}`);
     } catch (err) {
@@ -42,12 +72,22 @@ export const uploadIdentity = async (req, res, next) => {
       throw new Error('BACK_NOT_FOUND');
     }
     try {
+      dataSelfie = await fs.readFile(`${process.cwd()}/uploads/temp/${req.files.selfie[0].filename}`);
+    } catch (err) {
+      throw new Error('SELFIE_NOT_FOUND');
+    }
+    try {
       await sharp(dataFront).toFile(`${process.cwd()}/uploads/identity/${req.user.username}/${req.files.front[0].filename}`);
     } catch (err) {
       throw new Error('ERROR_RESIZE_IMAGE');
     }
     try {
       await sharp(dataBack).toFile(`${process.cwd()}/uploads/identity/${req.user.username}/${req.files.back[0].filename}`);
+    } catch (err) {
+      throw new Error('ERROR_RESIZE_IMAGE');
+    }
+    try {
+      await sharp(dataSelfie).toFile(`${process.cwd()}/uploads/identity/${req.user.username}/${req.files.selfie[0].filename}`);
     } catch (err) {
       throw new Error('ERROR_RESIZE_IMAGE');
     }
@@ -61,34 +101,20 @@ export const uploadIdentity = async (req, res, next) => {
     } catch (err) {
       throw new Error('UNABLE_TO_REMOVE_TEMP');
     }
-    const user = await db.user.findOne({
-      where: {
-        id: req.user.id,
-      },
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-    if (!user) {
-      throw new Error('USER_NOT_FOUND');
+    try {
+      await fs.unlink(`${process.cwd()}/uploads/temp/${req.files.selfie[0].filename}`);
+    } catch (err) {
+      throw new Error('UNABLE_TO_REMOVE_TEMP');
     }
+
     if (user.identityVerified === 'pending' || user.identityVerified === 'accepted') {
       throw new Error('ALREADY_PENDING_OR_ACCEPTED');
     }
-    if (user.identityVerified === 'rejected') {
-      try {
-        await fs.unlink(`${process.cwd()}/uploads/identity/${req.user.username}/${req.files.front[0].filename}`);
-      } catch (err) {
-        // throw new Error('UNABLE_TO_REMOVE_TEMP');
-      }
-      try {
-        await fs.unlink(`${process.cwd()}/uploads/identity/${req.user.username}/${req.files.front[0].filename}`);
-      } catch (err) {
-        // throw new Error('UNABLE_TO_REMOVE_TEMP');
-      }
-    }
+
     const updatedUser = await user.update({
       identityFront: `${req.files.front[0].filename}`,
       identityBack: `${req.files.back[0].filename}`,
+      identitySelfie: `${req.files.selfie[0].filename}`,
       identityVerified: 'pending',
     }, {
       transaction: t,
@@ -96,6 +122,7 @@ export const uploadIdentity = async (req, res, next) => {
     });
     res.locals.identityFront = updatedUser.identityFront;
     res.locals.identityBack = updatedUser.identityBack;
+    res.locals.identitySelfie = updatedUser.identitySelfie;
     res.locals.identityVerified = updatedUser.identityVerified;
     t.afterCommit(() => {
       next();

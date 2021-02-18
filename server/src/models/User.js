@@ -149,6 +149,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    identitySelfie: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     identityVerified: {
       type: DataTypes.ENUM,
       defaultValue: 'init',

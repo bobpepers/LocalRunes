@@ -66,6 +66,7 @@ export const fetchAdminPendingIdentity = async (req, res, next) => {
         'phoneNumber',
         'identityFront',
         'identityBack',
+        'identitySelfie',
         'identityVerified',
       ],
 

@@ -521,6 +521,9 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     }, {
       name: 'back',
       maxCount: 1,
+    }, {
+      name: 'selfie',
+      maxCount: 1,
     }]),
     uploadIdentity,
     (req, res) => {
@@ -530,10 +533,11 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
           error: res.locals.error,
         });
       }
-      if (res.locals.identityFront && res.locals.identityBack && res.locals.identityVerified) {
+      if (res.locals.identityFront && res.locals.identityBack && res.locals.identityVerified && res.locals.identitySelfie) {
         res.json({
           identityBack: res.locals.identityBack,
           identityFront: res.locals.identityFront,
+          identitySelfie: res.locals.identitySelfie,
           identityVerified: res.locals.identityVerified,
         });
       }

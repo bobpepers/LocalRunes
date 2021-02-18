@@ -49,6 +49,7 @@ const AdminPendingIdentityView = (props) => {
   const [modalStyle] = React.useState(getModalStyle);
   const [openFront, setOpenFront] = React.useState(false);
   const [openBack, setOpenBack] = React.useState(false);
+  const [openSelfie, setOpenSelfie] = React.useState(false);
 
   const handleOpenFront = () => {
     setOpenFront(true);
@@ -63,6 +64,14 @@ const AdminPendingIdentityView = (props) => {
 
   const handleCloseBack = () => {
     setOpenBack(false);
+  };
+
+  const handleOpenSelfie = () => {
+    setOpenSelfie(true);
+  };
+
+  const handleCloseSelfie = () => {
+    setOpenSelfie(false);
   };
   useEffect(() => dispatch(fetchAdminPendingIdentityData()), [dispatch]);
   useEffect(() => {
@@ -87,11 +96,12 @@ const AdminPendingIdentityView = (props) => {
           <TableHead>
             <TableRow>
               <TableCell>id</TableCell>
-              <TableCell align="right">nickname</TableCell>
-              <TableCell align="right">fullname</TableCell>
-              <TableCell align="right">phone number</TableCell>
-              <TableCell align="right">front</TableCell>
-              <TableCell align="right">back</TableCell>
+              <TableCell align="right">Nickname</TableCell>
+              <TableCell align="right">Full name</TableCell>
+              <TableCell align="right">Phone Number</TableCell>
+              <TableCell align="right">Front</TableCell>
+              <TableCell align="right">Back</TableCell>
+              <TableCell align="right">Selfie</TableCell>
               <TableCell align="right">action</TableCell>
             </TableRow>
           </TableHead>
@@ -168,6 +178,35 @@ const AdminPendingIdentityView = (props) => {
                       </div>
                     </Modal>
                   </TableCell>
+
+                  <TableCell align="right">
+                    <span onClick={handleOpenSelfie}>
+                      <img src={`/api/identity/images/${userIdentity.username}/${userIdentity.identitySelfie}`} />
+                    </span>
+                    <Modal
+                      open={openSelfie}
+                      onClose={handleCloseSelfie}
+                      aria-labelledby="simple-modal-title"
+                      aria-describedby="simple-modal-description"
+                    >
+                      <div style={modalStyle} className={classes.paper}>
+                        <span
+                          onClick={handleCloseSelfie}
+                          style={{
+                            position: 'relative',
+                            left: '95%',
+                            top: '5%',
+                            color: 'red',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          X close
+                        </span>
+                        <img src={`/api/identity/images/${userIdentity.username}/${userIdentity.identitySelfie}`} />
+                      </div>
+                    </Modal>
+                  </TableCell>
+
                   <TableCell align="right">
                     <Button
                       variant="contained"

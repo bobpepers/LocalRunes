@@ -12,6 +12,7 @@ export function uploadIdentity(data) {
   const formData = new FormData();
   formData.append('front', data.front);
   formData.append('back', data.back);
+  formData.append('selfie', data.selfie);
   const config = {
     headers: { 'content-type': 'multipart/form-data' },
   }
