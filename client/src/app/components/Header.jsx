@@ -25,6 +25,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import FaceIcon from '@material-ui/icons/Face';
+import SettingsIcon from '@material-ui/icons/Settings';
 import MobileNav from '../assets/images/mobileNav.svg';
 import Notifications from './Notifications';
 // import 'bootstrap/dist/css/bootstrap.css';
@@ -204,6 +205,15 @@ class Header extends Component {
                               <DashboardIcon />
                               {' '}
                               Dashboard
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={this.handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/settings">
+                              <SettingsIcon />
+                              {' '}
+                              Settings
                             </Link>
                           </div>
                         </NavDropdown.Item>

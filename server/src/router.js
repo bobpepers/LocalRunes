@@ -238,6 +238,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     IsAuthenticated,
     isAdmin,
     insertIp,
+    ensuretfa,
     acceptWithdraw,
     (req, res) => {
       if (res.locals.error) {
@@ -260,6 +261,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     IsAuthenticated,
     isAdmin,
     insertIp,
+    ensuretfa,
     rejectWithdraw,
     (req, res) => {
       if (res.locals.error) {
@@ -281,6 +283,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.get('/api/admin/withdrawals',
     IsAuthenticated,
     isAdmin,
+    ensuretfa,
     fetchAdminWithdrawals,
     (req, res) => {
       if (res.locals.error) {
@@ -302,6 +305,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.get('/api/admin/countries/all',
     IsAuthenticated,
     isAdmin,
+    ensuretfa,
     fetchAdminCountries,
     (req, res) => {
       if (res.locals.error) {
@@ -323,6 +327,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.post('/api/admin/countries/add',
     IsAuthenticated,
     isAdmin,
+    ensuretfa,
     addAdminCountries,
     (req, res) => {
       if (res.locals.error) {
@@ -344,6 +349,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.get('/api/admin/currencies/all',
     IsAuthenticated,
     isAdmin,
+    ensuretfa,
     fetchAdminCurrencies,
     (req, res) => {
       if (res.locals.error) {
@@ -365,6 +371,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.post('/api/admin/currencies/add',
     IsAuthenticated,
     isAdmin,
+    ensuretfa,
     addAdminCurrencies,
     (req, res) => {
       if (res.locals.error) {
@@ -387,6 +394,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     IsAuthenticated,
     insertIp,
     rateLimiterMiddlewarePhone,
+    ensuretfa,
     getPhoneCode,
     (req, res) => {
       if (res.locals.error) {
@@ -406,11 +414,13 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     IsAuthenticated,
     insertIp,
     rateLimiterMiddlewarePhone,
+    ensuretfa,
     resendVerification);
 
   app.post('/api/verifyphonecode',
     IsAuthenticated,
     insertIp,
+    ensuretfa,
     verifyPhoneCode,
     (req, res) => {
       if (res.locals.error) {
@@ -461,6 +471,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.post('/api/admin/users/ban',
     IsAuthenticated,
     isAdmin,
+    ensuretfa,
     banAdminUser,
     (req, res) => {
       if (res.locals.error) {
@@ -482,6 +493,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.get('/api/admin/paymentmethod/all',
     IsAuthenticated,
     isAdmin,
+    ensuretfa,
     fetchAdminPaymentMethod,
     (req, res) => {
       if (res.locals.error) {
@@ -503,6 +515,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.post('/api/admin/paymentmethod/add',
     IsAuthenticated,
     isAdmin,
+    ensuretfa,
     addAdminPaymentMethod,
     (req, res) => {
       if (res.locals.error) {
@@ -524,6 +537,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.get('/api/admin/userlist',
     IsAuthenticated,
     isAdmin,
+    ensuretfa,
     fetchAdminUserList,
     (req, res) => {
       if (res.locals.error) {
@@ -545,6 +559,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.post('/api/admin/user',
     IsAuthenticated,
     isAdmin,
+    ensuretfa,
     fetchAdminUser,
     (req, res) => {
       if (res.locals.error) {
@@ -1137,7 +1152,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     IsAuthenticated,
     isUserBanned,
     // storeIp,
-    ensuretfa,
+    // ensuretfa,
     fetchPaymentMethods,
     (req, res) => {
       console.log('ADDED PUBLISHER');
@@ -1158,7 +1173,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     IsAuthenticated,
     isUserBanned,
     // storeIp,
-    ensuretfa,
+    // ensuretfa,
     fetchCurrencies,
     (req, res) => {
       console.log('fetchCurrencies');
@@ -1180,7 +1195,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     IsAuthenticated,
     isUserBanned,
     // storeIp,
-    ensuretfa,
+    // ensuretfa,
     fetchCountries,
     (req, res) => {
       console.log('fetchCurrencies');

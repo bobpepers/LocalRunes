@@ -20,7 +20,7 @@ const FooterMenu = (props) => {
       style={{
         width: '100%',
         backgroundColor: '#222222',
-        zIndex: '5000',
+        zIndex: '500',
         color: '#ffffff',
       }}
     >
