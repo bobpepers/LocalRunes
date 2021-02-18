@@ -40,14 +40,14 @@ const FooterMenu = (props) => {
         <Grid item xs={4} className="text-center">
           <h3>Follow us</h3>
           <p>
-            <a href="https://www.facebook.com/localrunes">
+            <a target="_blank" rel="noreferrer" href="https://www.facebook.com/localrunes">
               <FacebookIcon />
               {' '}
               Facebook
             </a>
           </p>
           <p>
-            <a href="https://twitter.com/LocalRunes">
+            <a target="_blank" rel="noreferrer" href="https://twitter.com/LocalRunes">
               <TwitterIcon />
               {' '}
               Twitter
