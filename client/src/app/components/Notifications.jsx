@@ -56,14 +56,14 @@ const Notifications = (props) => {
           color="inherit"
           onClick={handleClick}
         >
-          <Badge badgeContent={trade.length} color="secondary">
+          <Badge badgeContent={trade && trade.length && trade.length} color="secondary">
             <NotificationsIcon />
           </Badge>
         </IconButton>
               )}
       id="basic-nav-dropdown"
     >
-      {trade.map((item) => (
+      {trade && trade.map((item) => (
         <NavDropdown.Item onClick={() => handleClose(item.type, item.id)}>
           <div>
             Trade #

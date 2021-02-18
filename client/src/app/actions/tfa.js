@@ -118,7 +118,8 @@ export function unlocktfa(props) {
           type: AUTH_USER_TFA,
           payload: response,
         });
-        history.push('/dashboard');
+        // history.push('/dashboard');
+        window.location.href = '/dashboard';
       })
       .catch((error) => {
         console.log(error);

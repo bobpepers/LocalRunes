@@ -124,6 +124,8 @@ const isbot = require('isbot');
 const path = require('path');
 const multer = require('multer');
 
+const appRoot = process.env.PWD;
+
 const storage = multer.diskStorage({
   // destination: `${__dirname}./uploads`,
   destination: './uploads/temp',
@@ -466,6 +468,16 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
           identityVerified: res.locals.identityVerified,
         });
       }
+    });
+
+  app.get('/api/identity/images/:name/:file',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    (req, res) => {
+      const { name } = req.params;
+      const { file } = req.params;
+      res.sendFile(`${appRoot}/uploads/identity/${name}/${file}`);
     });
 
   app.post('/api/admin/users/ban',
