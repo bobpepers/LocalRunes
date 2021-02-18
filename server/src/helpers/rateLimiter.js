@@ -53,20 +53,20 @@ const rateLimiterUser = new RateLimiterRedis(
   },
 );
 
-const rateLimiterFaucet = new RateLimiterRedis(
+const rateLimiterPhone = new RateLimiterRedis(
   {
-    points: 1,
+    points: 2,
     duration: 600, // per 600 seconds
     storeClient: redisClient,
     keyPrefix: 'faucet',
     blockDuration: 600,
     inmemoryBlockDuration: 600,
     execEvenly: false,
-    blockOnPointsConsumed: 1,
-    inmemoryBlockOnConsumed: 1,
+    blockOnPointsConsumed: 2,
+    inmemoryBlockOnConsumed: 2,
     insuranceLimiter: new RateLimiterMemory( // It will be used only on Redis error as insurance
       {
-        points: 1, // 1 is fair if you have 5 workers and 1 cluster
+        points: 2, // 1 is fair if you have 5 workers and 1 cluster
         duration: 600,
         execEvenly: false,
       },
@@ -74,19 +74,22 @@ const rateLimiterFaucet = new RateLimiterRedis(
   },
 );
 
-export const rateLimiterMiddlewareFaucet = (req, res, next) => {
+export const rateLimiterMiddlewarePhone = (req, res, next) => {
   // Requires ./helpers/storeIp.js to be run in middleware before executing this function
   // Consume 1 point for each action
 
-  rateLimiterFaucet.consume(res.locals.ip, 1) // or req.ip
+  rateLimiterPhone.consume(req.user.id, 1) // or req.ip
     .then((result) => {
       // rateLimiterFaucet.penalty(res.locals.ip, 1);
       next();
     })
     .catch((rejRes) => {
       console.log(rejRes);
-      console.log('too many requests from ip');
-      res.status(429).send('Too Many Requests');
+      console.log('too many requests from user');
+      res.status(401).send({
+        error: 'Too Many Requests, please wait 10 minutes',
+      });
+      // res.status(429).send('Too Many Requests, please wait 10 minutes');
     });
 };
 

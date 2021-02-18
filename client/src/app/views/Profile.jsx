@@ -324,10 +324,18 @@ const Profile = (props) => {
             {user ? user.createdAt : ''}
           </p>
           <p>
-            Trust: Trusted By 0 people
+            Trust: Trusted By
+            {' '}
+            {user && user.trustedUsers ? user.trustedUsers.length : '0' }
+            {' '}
+            people
           </p>
           <p>
-            Blocks: Blocked by 0 people
+            Blocks: Blocked by
+            {' '}
+            {user && user.blockedUsers ? user.blockedUsers.length : '0' }
+            {' '}
+            people
           </p>
         </div>
       </Grid>
@@ -360,40 +368,65 @@ const Profile = (props) => {
             </Grid>
             <Grid item xs={12}>
               <h3>Update Password</h3>
-              <p>Change Password</p>
+              <Button
+                type="button"
+                variant="contained"
+                color="primary"
+              >
+                Change Password
+              </Button>
             </Grid>
             <Grid item xs={12}>
               <h3>Verification</h3>
-              <p>E-mail verified: Yes</p>
+              <p>
+                E-mail verified:
+                {' '}
+                <span className="color-green">Verified</span>
+              </p>
               <p>
                 Identity verified:
                 {' '}
                 {user && user.identityVerified === 'init' && (
-                  <Button type="button" onClick={handleOpenIdentityVerify}>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleOpenIdentityVerify}
+                  >
                     Verify Identity
                   </Button>
                 )}
                 {user && user.identityVerified === 'rejected' && (
                   <>
-                    <Button type="button" onClick={handleOpenIdentityVerify}>
+                    <Button
+                      type="button"
+                      variant="contained"
+                      color="primary"
+                      onClick={handleOpenIdentityVerify}
+                    >
                       Verify Identity
                     </Button>
-                    <p>Rejected</p>
+                    <p className="color-red">Rejected</p>
                   </>
                 )}
                 {user && user.identityVerified === 'pending' && (
-                  <p>Pending</p>
+                  <p className="color-brown">Pending</p>
                 )}
                 {user && user.identityVerified === 'accepted' && (
-                  <p>Accepted</p>
+                  <p className="color-green">Verified</p>
                 )}
 
               </p>
               <p>
                 Phone Number Verified:
                 {' '}
-                {user && user.phoneNumberVerified ? 'Yes' : (
-                  <Button type="button" onClick={handleOpenPhoneVerify}>
+                {user && user.phoneNumberVerified ? (<span className="color-green">Verified</span>) : (
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleOpenPhoneVerify}
+                  >
                     Add PhoneNumber
                   </Button>
                 )}

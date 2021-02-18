@@ -101,7 +101,7 @@ import storeIp from './helpers/storeIp';
 import {
   rateLimiterMiddlewareUser,
   rateLimiterMiddlewareIp,
-  rateLimiterMiddlewareFaucet,
+  rateLimiterMiddlewarePhone,
 } from './helpers/rateLimiter';
 
 import {
@@ -386,6 +386,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.post('/api/getphonecode',
     IsAuthenticated,
     insertIp,
+    rateLimiterMiddlewarePhone,
     getPhoneCode,
     (req, res) => {
       if (res.locals.error) {
@@ -400,6 +401,12 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         });
       }
     });
+
+  app.post('/api/resend-verify-code',
+    IsAuthenticated,
+    insertIp,
+    rateLimiterMiddlewarePhone,
+    resendVerification);
 
   app.post('/api/verifyphonecode',
     IsAuthenticated,
@@ -584,9 +591,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         });
       }
     });
-
-  app.post('/api/resend-verify-code',
-    resendVerification);
 
   app.post('/api/signin',
     (req, res, next) => {
