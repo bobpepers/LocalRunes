@@ -25,6 +25,24 @@ import speakeasy from 'speakeasy';
 import QRCode from 'qrcode';
 import { enabletfa, idleEnabletfa } from '../../actions';
 
+const options = {
+  issuer: 'LocalRunes',
+  // name: `Pony Foo (${ user.email })`,
+  name: 'LocalRunes.com',
+  length: 64,
+}
+const { base32, otpauth_url } = speakeasy.generateSecret(options);
+
+let imagePath = '';
+
+QRCode.toDataURL(otpauth_url, (err, imageUrl) => {
+  if (err) {
+    console.log('Could not generate QR code', err);
+    return;
+  }
+  imagePath = imageUrl;
+});
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     position: 'fixed !important',
@@ -80,23 +98,7 @@ const Set2FA = (props) => {
   } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const options = {
-    issuer: 'LocalRunes',
-    // name: `Pony Foo (${ user.email })`,
-    name: `LocalRunes.com - ${user.email}`,
-    length: 64,
-  }
-  const { base32, otpauth_url } = speakeasy.generateSecret(options);
 
-  let imagePath = '';
-
-  QRCode.toDataURL(otpauth_url, (err, imageUrl) => {
-    if (err) {
-      console.log('Could not generate QR code', err);
-      return;
-    }
-    imagePath = imageUrl;
-  });
   console.log(imagePath);
   console.log(base32);
   console.log(otpauth_url);

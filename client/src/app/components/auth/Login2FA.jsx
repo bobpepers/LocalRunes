@@ -54,7 +54,7 @@ const LoginTFA = (props) => {
   }
 
   return (
-    <div className="form-container index600 shadow-w signinContainer content">
+    <div className="form-container index600 shadow-w signinContainer content minHeight300">
       <Grid
         container
         direction="column"

@@ -11,7 +11,7 @@ const Settings = (props) => {
       data,
     },
   } = props;
-  document.title = 'RunesX - Settings';
+  document.title = 'LocalRunes - Settings';
   const dispatch = useDispatch();
   useEffect(() => dispatch(fetchUserData()), [dispatch]);
   useEffect(() => {
@@ -19,7 +19,7 @@ const Settings = (props) => {
     // console.log(data && data.tfa);
   }, [props.user]);
   useEffect(() => {
-    document.title = 'RunesX - Settings';
+    document.title = 'LocalRunes - Settings';
   }, []);
   console.log('Views/Settings props.user.data.username');
   console.log(props.user.data ? data.tfa : '');
