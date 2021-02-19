@@ -369,7 +369,7 @@ function EnhancedTable(props) {
                       selected={isItemSelected}
                     >
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.username}
+                        {row.type}
                       </TableCell>
                       <TableCell align="right">{row.country}</TableCell>
                       <TableCell align="right">{row.paymentMethod}</TableCell>

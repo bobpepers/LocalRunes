@@ -1,6 +1,7 @@
 import React, {
   useEffect,
-  // useState,
+  useState,
+  useLayoutEffect,
   // Fragment,
 } from 'react';
 import { withRouter } from 'react-router-dom';
@@ -9,10 +10,27 @@ import {
   Grid,
   // Button,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 import {
   fetchPostAdData,
 } from '../actions/postAd';
+import {
+  fetchPaymentMethodData,
+} from '../actions/paymentMethods';
+
+import {
+  fetchCurrenciesData,
+} from '../actions/currencies';
+
+import {
+  fetchCountriesData,
+} from '../actions/countries';
 // import Info from '../containers/Info';
 // import * as actions from '../actions/auth';
 import TableAds from '../components/TableAds';
@@ -27,7 +45,7 @@ const headers = [
 
 const headCells = [
   {
-    id: 'buyer', numeric: false, disablePadding: true, label: 'Buyer',
+    id: 'seller', numeric: false, disablePadding: true, label: 'Seller',
   },
   {
     id: 'country', numeric: true, disablePadding: false, label: 'Country',
@@ -49,25 +67,122 @@ const headCells = [
   },
 ];
 
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    width: '100%',
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
+
 const BuyRunes = (props) => {
   const {
     postAd,
+    paymentMethods,
+    currencies,
+    countries,
   } = props;
   console.log('RunesX Home View');
   const dispatch = useDispatch();
-  useEffect(() => dispatch(fetchPostAdData('sell')), [dispatch]);
+  const classes = useStyles();
+  const [country, setCountry] = useState('all');
+  const [currency, setCurrency] = useState('all');
+  const [paymentMethod, setPaymentMethod] = useState('all');
+
+  useEffect(() => dispatch(fetchPaymentMethodData()), [dispatch]);
+  useEffect(() => dispatch(fetchCurrenciesData()), [dispatch]);
+  useEffect(() => dispatch(fetchCountriesData()), [dispatch]);
+  useEffect(() => dispatch(fetchPostAdData('sell', country, paymentMethod, currency)), [dispatch]);
+
+  const handleChangeCountry = (event) => {
+    setCountry(event.target.value);
+  };
+
+  const handleChangePaymentMethod = (event) => {
+    setPaymentMethod(event.target.value);
+  };
+
+  const handleChangeCurrency = (event) => {
+    setCurrency(event.target.value);
+  };
+
   useEffect(() => {
-    console.log('6666666666666666');
-    console.log(postAd);
-  }, [postAd]);
+    dispatch(fetchPostAdData('sell', country, paymentMethod, currency));
+  }, [country, paymentMethod, currency]);
+
+  useEffect(() => {}, [postAd]);
 
   return (
     <div className="height100 content">
       <Grid container>
-        <TableAds
-          headCells={headCells || []}
-          postAd={postAd && postAd.sell ? postAd.sell : []}
-        />
+        <Grid item xs={12}>
+          <h3>Buy Runes Online</h3>
+        </Grid>
+        <Grid container item xs={12}>
+          <Grid container item xs={12} sm={4}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel id="demo-simple-select-outlined-label">Country</InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={country}
+                onChange={handleChangeCountry}
+                label="Country"
+              >
+                <MenuItem value="all">
+                  <em>All</em>
+                </MenuItem>
+                {countries
+                && countries.map((item) => <MenuItem value={item.id}>{item.name}</MenuItem>)}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid container item xs={12} sm={4}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel id="demo-simple-select-outlined-label">Payment Method</InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={paymentMethod}
+                onChange={handleChangePaymentMethod}
+                label="Payment Method"
+              >
+                <MenuItem value="all">
+                  <em>All</em>
+                </MenuItem>
+                {paymentMethods
+                && paymentMethods.map((item) => <MenuItem value={item.id}>{item.name}</MenuItem>)}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid container item xs={12} sm={4}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel id="demo-simple-select-outlined-label">Currency</InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={currency}
+                onChange={handleChangeCurrency}
+                label="Currency"
+              >
+                <MenuItem value="all">
+                  <em>All</em>
+                </MenuItem>
+                {currencies
+                && currencies.map((item) => <MenuItem value={item.id}>{item.currency_name}</MenuItem>)}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <TableAds
+            headCells={headCells || []}
+            postAd={postAd && postAd.sell ? postAd.sell : []}
+          />
+        </Grid>
       </Grid>
     </div>
   )
@@ -75,6 +190,9 @@ const BuyRunes = (props) => {
 
 const mapStateToProps = (state) => ({
   postAd: state.postAd,
+  paymentMethods: state.paymentMethods.data,
+  currencies: state.currencies.data,
+  countries: state.countries.data,
   // errorMessage: state.auth.error,
 })
 

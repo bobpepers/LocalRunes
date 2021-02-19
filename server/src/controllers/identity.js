@@ -5,13 +5,6 @@ const sharp = require('sharp');
 const { Sequelize, Transaction, Op } = require('sequelize');
 
 export const uploadIdentity = async (req, res, next) => {
-  console.log('5555555555555555555');
-  console.log(req.files);
-  console.log('55555555555555555556');
-  console.log(req.files.front[0].filename);
-  console.log('55555555555555555557');
-  console.log(req.files.back[0].filename);
-
   try {
     await fs.mkdir(`${process.cwd()}/uploads/identity/${req.user.username}`);
   } catch (error) {
@@ -42,17 +35,17 @@ export const uploadIdentity = async (req, res, next) => {
     // Remove Old if rejected
     if (user.identityVerified === 'rejected') {
       try {
-        await fs.unlink(`${process.cwd()}/uploads/identity/${req.user.username}/${req.files.front[0].filename}`);
+        await fs.unlink(`${process.cwd()}/uploads/identity/${req.user.username}/${user.identityFront}`);
       } catch (err) {
         // throw new Error('UNABLE_TO_REMOVE_TEMP');
       }
       try {
-        await fs.unlink(`${process.cwd()}/uploads/identity/${req.user.username}/${req.files.back[0].filename}`);
+        await fs.unlink(`${process.cwd()}/uploads/identity/${req.user.username}/${user.identityBack}`);
       } catch (err) {
         // throw new Error('UNABLE_TO_REMOVE_TEMP');
       }
       try {
-        await fs.unlink(`${process.cwd()}/uploads/identity/${req.user.username}/${req.files.selfie[0].filename}`);
+        await fs.unlink(`${process.cwd()}/uploads/identity/${req.user.username}/${user.identitySelfie}`);
       } catch (err) {
         // throw new Error('UNABLE_TO_REMOVE_TEMP');
       }

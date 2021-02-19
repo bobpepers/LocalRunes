@@ -69,67 +69,56 @@ export const addPostAd = async (req, res, next) => {
 };
 
 export const fetchPostAd = async (req, res, next) => {
-  if (req.body.type === 'buy') {
-    res.locals.buy = await db.postAd.findAll({
-      where: {
-        type: req.body.type,
-        active: true,
+  console.log('(req.body.type)');
+  console.log(req.body.type);
+  const options = {
+    where: {
+      type: req.body.type,
+      active: true,
+    },
+    include: [
+      {
+        model: db.user,
+        as: 'user',
+        required: false,
+        attributes: ['username'],
       },
-      include: [
-        {
-          model: db.user,
-          as: 'user',
-          required: false,
-          attributes: ['username'],
-        },
-        {
-          model: db.paymentMethod,
-          as: 'paymentMethod',
-          required: false,
-        },
-        {
-          model: db.currency,
-          as: 'currency',
-          required: false,
-        },
-        {
-          model: db.country,
-          as: 'country',
-          required: false,
-        },
-      ],
-    });
+      {
+        model: db.paymentMethod,
+        as: 'paymentMethod',
+        required: false,
+      },
+      {
+        model: db.currency,
+        as: 'currency',
+        required: false,
+      },
+      {
+        model: db.country,
+        as: 'country',
+        required: false,
+      },
+    ],
+  };
+
+  if (req.body.currency !== 'all') {
+    options.where.currencyId = req.body.currency;
+  }
+
+  if (req.body.paymentMethod !== 'all') {
+    options.where.paymentMethodId = req.body.paymentMethod;
+  }
+
+  if (req.body.country !== 'all') {
+    options.where.countryId = req.body.country;
+  }
+
+  if (req.body.type === 'buy') {
+    res.locals.buy = await db.postAd.findAll(options);
+    console.log(res.locals.buy);
   }
   if (req.body.type === 'sell') {
-    res.locals.sell = await db.postAd.findAll({
-      where: {
-        type: req.body.type,
-        active: true,
-      },
-      include: [
-        {
-          model: db.user,
-          as: 'user',
-          required: false,
-          attributes: ['username'],
-        },
-        {
-          model: db.paymentMethod,
-          as: 'paymentMethod',
-          required: false,
-        },
-        {
-          model: db.currency,
-          as: 'currency',
-          required: false,
-        },
-        {
-          model: db.country,
-          as: 'country',
-          required: false,
-        },
-      ],
-    });
+    res.locals.sell = await db.postAd.findAll(options);
   }
 
   next();

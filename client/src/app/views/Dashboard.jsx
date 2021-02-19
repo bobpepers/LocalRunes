@@ -27,7 +27,7 @@ const headers = [
 
 const headCells = [
   {
-    id: 'name', numeric: false, disablePadding: true, label: 'Name',
+    id: 'type', numeric: false, disablePadding: true, label: 'Type',
   },
   {
     id: 'country', numeric: true, disablePadding: false, label: 'Country',
