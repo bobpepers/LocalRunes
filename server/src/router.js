@@ -75,6 +75,7 @@ import {
   fetchSpecificUser,
   updateBio,
   updateStoreStatus,
+  updateLastSeen,
 } from './controllers/user';
 
 import passportService from './services/passport';
@@ -466,6 +467,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     insertIp,
     rateLimiterMiddlewarePhone,
     ensuretfa,
+    updateLastSeen,
     getPhoneCode,
     (req, res) => {
       if (res.locals.error) {
@@ -486,12 +488,14 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     insertIp,
     rateLimiterMiddlewarePhone,
     ensuretfa,
+    updateLastSeen,
     resendVerification);
 
   app.post('/api/verifyphonecode',
     IsAuthenticated,
     insertIp,
     ensuretfa,
+    updateLastSeen,
     verifyPhoneCode,
     (req, res) => {
       if (res.locals.error) {
@@ -515,6 +519,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     storeIp,
     ensuretfa,
+    updateLastSeen,
     upload.fields([{
       name: 'front',
       maxCount: 1,
@@ -742,12 +747,14 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     storeIp,
     ensuretfa,
+    updateLastSeen,
     enabletfa);
 
   app.post('/api/2fa/disable',
     IsAuthenticated,
     storeIp,
     ensuretfa,
+    updateLastSeen,
     disabletfa);
 
   app.post('/api/2fa/unlock',
@@ -761,6 +768,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     updateStoreStatus,
     (req, res) => {
       if (res.locals.error) {
@@ -784,6 +792,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     storeIp,
     ensuretfa,
+    updateLastSeen,
     updateBio,
     (req, res) => {
       console.log('ADDED PUBLISHER');
@@ -803,6 +812,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     storeIp,
     ensuretfa,
+    updateLastSeen,
     createMessage,
     (req, res) => {
       console.log('ADDED PUBLISHER');
@@ -836,6 +846,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     startTrade,
     (req, res) => {
       console.log('ADDED PUBLISHER');
@@ -859,6 +870,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     secondTrade,
     (req, res) => {
       console.log('ADDED secondTrade');
@@ -895,6 +907,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     fetchCurrentTrade,
     (req, res) => {
       console.log('API TRADE');
@@ -921,6 +934,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     cancelCurrentTrade,
     (req, res) => {
       console.log('API TRADE');
@@ -947,6 +961,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     acceptCurrentTrade,
     (req, res) => {
       if (res.locals.error) {
@@ -999,6 +1014,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     acceptCurrentMainTrade,
     (req, res) => {
       if (res.locals.error) {
@@ -1060,6 +1076,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     cancelCurrentMainTrade,
     (req, res) => {
       if (res.locals.error) {
@@ -1121,6 +1138,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     fetchTrade,
     (req, res) => {
       console.log('API TRADE');
@@ -1147,6 +1165,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     addPostAd,
     (req, res) => {
       console.log('ADDED PUBLISHER');
@@ -1170,6 +1189,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     deactivatePostAd,
     (req, res) => {
       console.log('ADDED PUBLISHER');
@@ -1195,6 +1215,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     fetchPostAd,
     (req, res) => {
       if (res.locals.error) {
@@ -1220,6 +1241,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     fetchMyPostAd,
     (req, res) => {
       if (res.locals.error) {
@@ -1236,6 +1258,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.get('/api/paymentmethods',
     IsAuthenticated,
     isUserBanned,
+    updateLastSeen,
     // storeIp,
     // ensuretfa,
     fetchPaymentMethods,
@@ -1257,6 +1280,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.get('/api/currencies',
     IsAuthenticated,
     isUserBanned,
+    updateLastSeen,
     // storeIp,
     // ensuretfa,
     fetchCurrencies,
@@ -1279,6 +1303,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
   app.get('/api/countries',
     IsAuthenticated,
     isUserBanned,
+    updateLastSeen,
     // storeIp,
     // ensuretfa,
     fetchCountries,
@@ -1303,6 +1328,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     storeIp,
     ensuretfa,
+    updateLastSeen,
     upload.single('avatar'),
     uploadAvatar,
     (req, res) => {
@@ -1372,6 +1398,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     storeIp,
     ensuretfa,
+    updateLastSeen,
     fetchRecentUserActivity,
     (req, res) => {
       if (res.locals.error) {
@@ -1405,6 +1432,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     storeIp,
     ensuretfa,
+    updateLastSeen,
     fetchUser,
     (req, res, next) => {
       if (res.locals.error) {
@@ -1436,6 +1464,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     fetchSpecificUser,
     (req, res, next) => {
       console.log('before send specificuser');
@@ -1455,6 +1484,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     trustUser,
     (req, res, next) => {
       if (res.locals.error) {
@@ -1478,6 +1508,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     // storeIp,
     ensuretfa,
+    updateLastSeen,
     blockUser,
     (req, res, next) => {
       if (res.locals.error) {
@@ -1502,6 +1533,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isUserBanned,
     storeIp,
     ensuretfa,
+    updateLastSeen,
     withdraw,
     (req, res) => {
       if (res.locals.error) {

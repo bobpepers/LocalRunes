@@ -23,6 +23,11 @@ import { patchDeposits } from './helpers/patcher';
 import { removeStaleTickets } from './helpers/ticketPatcher';
 import { removeBannerTickets } from './helpers/removeBannerTickets';
 import archiveActivity from './helpers/archiveActivity';
+import {
+  setUserOnline,
+  setUserOffline,
+  patchUserOfflineStatus,
+} from './helpers/userOnlineStatus';
 
 logger.info('logger loader');
 const schedule = require('node-schedule');
@@ -401,6 +406,7 @@ io.on("connection", async (socket) => {
   console.log(onlineUsers);
   if (userId !== '') {
     onlineUsers[userId] = socket;
+    setUserOnline(userId);
     // onlineUsers.reduce((a, b) => { if (a.indexOf(b) < 0)a.push(b); return a; }, []);
   }
   io.emit('Online', Object.keys(onlineUsers).length);
@@ -409,6 +415,7 @@ io.on("connection", async (socket) => {
   socket.on("disconnect", () => {
     // onlineUsers = onlineUsers.filter((item) => item !== userId);
     delete onlineUsers[userId];
+    setUserOffline(userId);
     io.emit("Online", Object.keys(onlineUsers).length);
     console.log(Object.keys(onlineUsers).length);
     console.log("Client disconnected");
@@ -434,11 +441,10 @@ startSync(io, onlineUsers);
 //  removeStaleTickets(onlineUsers);
 // });
 
-patchDeposits();
-// Run every hour at 10 minute mark
-const schedulePatchDeposits = schedule.scheduleJob('10 */1 * * *', () => {
-  patchDeposits();
-});
+// patchDeposits();
+// const schedulePatchDeposits = schedule.scheduleJob('10 */1 * * *', () => {
+//  patchDeposits();
+// });
 
 updatePrice(io);
 // Update Price every 5 minutes
@@ -467,16 +473,21 @@ const schedulePriceUpdate = schedule.scheduleJob('*/5 * * * *', () => {
 // setInterval(drawJackpot, 5 * 60 * 1000);
 
 // Archive activity daily older then 3 days
-archiveActivity();
-setInterval(archiveActivity, 24 * 60 * 60 * 1000);
+
+// archiveActivity();
+// setInterval(archiveActivity, 24 * 60 * 60 * 1000);
+
+patchUserOfflineStatus(onlineUsers);
+// setInterval(patchUserOfflineStatus(onlineUsers), 3 * 60 * 60 * 1000);
+setInterval(() => patchUserOfflineStatus(onlineUsers), 3 * 60 * 60 * 1000);
 
 // Remove banner Tickets older then 3 hours
 // removeBannerTickets();
 // setInterval(removeBannerTickets, 3 * 60 * 60 * 1000);
 
 // archive activity every 5 minutes
-const scheduleArchiveActivity = schedule.scheduleJob('*/5 * * * *', () => {
-  archiveActivity();
-});
+// const scheduleArchiveActivity = schedule.scheduleJob('*/5 * * * *', () => {
+//  archiveActivity();
+// });
 
 console.log('server listening on:', port);

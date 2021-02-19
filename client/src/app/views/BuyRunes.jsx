@@ -91,11 +91,13 @@ const BuyRunes = (props) => {
   const [country, setCountry] = useState('all');
   const [currency, setCurrency] = useState('all');
   const [paymentMethod, setPaymentMethod] = useState('all');
+  const [userStatus, setUserStatus] = useState('all');
+  const [storeStatus, setStoreStatus] = useState('all');
 
   useEffect(() => dispatch(fetchPaymentMethodData()), [dispatch]);
   useEffect(() => dispatch(fetchCurrenciesData()), [dispatch]);
   useEffect(() => dispatch(fetchCountriesData()), [dispatch]);
-  useEffect(() => dispatch(fetchPostAdData('sell', country, paymentMethod, currency)), [dispatch]);
+  useEffect(() => dispatch(fetchPostAdData('sell', country, paymentMethod, currency, userStatus, storeStatus)), [dispatch]);
 
   const handleChangeCountry = (event) => {
     setCountry(event.target.value);
@@ -109,9 +111,17 @@ const BuyRunes = (props) => {
     setCurrency(event.target.value);
   };
 
+  const handleChangeUserStatus = (event) => {
+    setUserStatus(event.target.value);
+  };
+
+  const handleChangeStoreStatus = (event) => {
+    setStoreStatus(event.target.value);
+  };
+
   useEffect(() => {
-    dispatch(fetchPostAdData('sell', country, paymentMethod, currency));
-  }, [country, paymentMethod, currency]);
+    dispatch(fetchPostAdData('sell', country, paymentMethod, currency, userStatus, storeStatus));
+  }, [country, paymentMethod, currency, userStatus, storeStatus]);
 
   useEffect(() => {}, [postAd]);
 
@@ -122,6 +132,51 @@ const BuyRunes = (props) => {
           <h3>Buy Runes Online</h3>
         </Grid>
         <Grid container item xs={12}>
+          <Grid container item xs={12} sm={6}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel id="demo-simple-select-outlined-label">User Status</InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={userStatus}
+                onChange={handleChangeUserStatus}
+                label="User Status"
+              >
+                <MenuItem value="all">
+                  <em>All</em>
+                </MenuItem>
+                <MenuItem value="online">
+                  Online
+                </MenuItem>
+                <MenuItem value="offline">
+                  Offline
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid container item xs={12} sm={6}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel id="demo-simple-select-outlined-label">Store Status</InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={storeStatus}
+                onChange={handleChangeStoreStatus}
+                label="Store Status"
+              >
+                <MenuItem value="all">
+                  <em>All</em>
+                </MenuItem>
+                <MenuItem value="open">
+                  Open
+                </MenuItem>
+                <MenuItem value="closed">
+                  Closed
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
           <Grid container item xs={12} sm={4}>
             <FormControl variant="outlined" className={classes.formControl}>
               <InputLabel id="demo-simple-select-outlined-label">Country</InputLabel>

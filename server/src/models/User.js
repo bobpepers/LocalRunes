@@ -171,6 +171,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    online: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    lastSeen: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     volume: {
       type: DataTypes.BIGINT,
       defaultValue: 0,

@@ -71,6 +71,26 @@ export const addPostAd = async (req, res, next) => {
 export const fetchPostAd = async (req, res, next) => {
   console.log('(req.body.type)');
   console.log(req.body.type);
+  const userOptions = {};
+
+  if (req.body.userStatus !== 'all') {
+    if (req.body.userStatus === 'online') {
+      userOptions.online = true;
+    }
+    if (req.body.userStatus === 'offline') {
+      userOptions.online = false;
+    }
+  }
+
+  if (req.body.storeStatus !== 'all') {
+    if (req.body.storeStatus === 'open') {
+      userOptions.open_store = true;
+    }
+    if (req.body.storeStatus === 'closed') {
+      userOptions.open_store = false;
+    }
+  }
+
   const options = {
     where: {
       type: req.body.type,
@@ -80,8 +100,14 @@ export const fetchPostAd = async (req, res, next) => {
       {
         model: db.user,
         as: 'user',
-        required: false,
-        attributes: ['username'],
+        required: true,
+        where: userOptions,
+        attributes: [
+          'username',
+          'open_store',
+          'online',
+          'lastSeen',
+        ],
       },
       {
         model: db.paymentMethod,
@@ -113,12 +139,16 @@ export const fetchPostAd = async (req, res, next) => {
     options.where.countryId = req.body.country;
   }
 
+  console.log(options);
+  console.log(options.include[0]);
+
   if (req.body.type === 'buy') {
     res.locals.buy = await db.postAd.findAll(options);
     console.log(res.locals.buy);
   }
   if (req.body.type === 'sell') {
     res.locals.sell = await db.postAd.findAll(options);
+    console.log(res.locals.sell);
   }
 
   next();

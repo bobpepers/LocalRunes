@@ -21,16 +21,41 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import Moment from 'react-moment';
 import {
   startTrade,
   secondTradeIdleAction,
   fetchCurrentTradeIdle,
 } from '../actions/trade';
 
-function createData(username, paymentMethod, price, limit, type, id, currency, country) {
+function createData(
+  username,
+  paymentMethod,
+  price,
+  limit,
+  type,
+  id,
+  currency,
+  country,
+  online,
+  openStore,
+  lastSeen,
+) {
   return {
-    username, paymentMethod, price, limit, type, id, currency, country,
+    username,
+    paymentMethod,
+    price,
+    limit,
+    type,
+    id,
+    currency,
+    country,
+    online,
+    openStore,
+    lastSeen,
   };
 }
 
@@ -251,6 +276,9 @@ function EnhancedTable(props) {
         item.id,
         item.currency.currency_name,
         item.country.name,
+        item.user.online,
+        item.user.open_store,
+        item.user.lastSeen,
       ),
     );
   });
@@ -359,7 +387,31 @@ function EnhancedTable(props) {
                       selected={isItemSelected}
                     >
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.username}
+                        <p>
+                          <Link style={{ color: 'blue' }} to={`/public_profile/${row.username}`}>
+                            {row.username}
+                          </Link>
+                          {' '}
+                          <FiberManualRecordIcon
+                            fontSize="small"
+                            style={{
+                              color: row.online ? 'green' : 'red',
+                            }}
+                          />
+                          {' '}
+                          <ShoppingCartIcon
+                            fontSize="small"
+                            style={{
+                              color: row.openStore ? 'green' : 'red',
+                            }}
+                          />
+                        </p>
+                        <p>
+                          last seen:
+                          {' '}
+                          {row.lastSeen !== null ? (<Moment interval={1000} fromNow>{row.lastSeen}</Moment>) : 'never'}
+                        </p>
+
                       </TableCell>
                       <TableCell align="right">{row.country}</TableCell>
                       <TableCell align="right">{row.paymentMethod}</TableCell>
