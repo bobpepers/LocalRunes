@@ -101,6 +101,8 @@ import {
   deactivatePostAd,
 } from './controllers/postAd';
 
+import { endUnacceptedTrade } from './helpers/trade';
+
 import storeIp from './helpers/storeIp';
 import {
   rateLimiterMiddlewareUser,
@@ -124,6 +126,7 @@ import {
 } from './controllers/trade';
 
 const isbot = require('isbot');
+const schedule = require('node-schedule');
 
 const path = require('path');
 const multer = require('multer');
@@ -873,7 +876,6 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     updateLastSeen,
     secondTrade,
     (req, res) => {
-      console.log('ADDED secondTrade');
       if (res.locals.error) {
         console.log(res.locals.error);
         res.status(401).send({
@@ -882,6 +884,11 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
 
       if (!res.locals.error) {
+        console.log('scheduele trade end here');
+        const scheduleEndTrade = schedule.scheduleJob(res.locals.trade.reponseTime, () => {
+          endUnacceptedTrade(res.locals.trade, onlineUsers);
+        });
+
         if (onlineUsers[res.locals.trade.userId.toString()]) {
           onlineUsers[res.locals.trade.userId.toString()].emit('updateTrade', {
             trade: res.locals.trade,

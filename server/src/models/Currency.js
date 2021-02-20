@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    iso: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   };
 
   // 2: The model options.

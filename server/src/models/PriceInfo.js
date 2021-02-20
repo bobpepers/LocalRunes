@@ -10,6 +10,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    currency: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "USD",
+    },
   };
 
   // 2: The model options.

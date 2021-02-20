@@ -28,6 +28,7 @@ import {
   setUserOffline,
   patchUserOfflineStatus,
 } from './helpers/userOnlineStatus';
+import { patchUnacceptedTrades } from './helpers/trade';
 
 logger.info('logger loader');
 const schedule = require('node-schedule');
@@ -82,15 +83,6 @@ const volumeInfo = {
 function SubscribeExpired(e, r) {
   db.stats.findOne({}).then((exist) => {
     if (exist) {
-      console.log(exist);
-      console.log('exist');
-      console.log('exist');
-      console.log('exist');
-      console.log('exist');
-      console.log('exist');
-      console.log('exist');
-
-      console.log('exist');
       pub.set('jackpot:', Number(exist.jackpot));
       pub.set('surfVolume:', Number(exist.surf));
       pub.set('impressionVolume:', Number(exist.impression));
@@ -484,7 +476,9 @@ setInterval(() => patchUserOfflineStatus(onlineUsers), 3 * 60 * 60 * 1000);
 // Remove banner Tickets older then 3 hours
 // removeBannerTickets();
 // setInterval(removeBannerTickets, 3 * 60 * 60 * 1000);
-
+patchUnacceptedTrades();
+setInterval(() => patchUnacceptedTrades(onlineUsers), 3 * 60 * 60 * 1000);
+// setInterval(patchUnacceptedTrades, 5 * 60 * 1000);
 // archive activity every 5 minutes
 // const scheduleArchiveActivity = schedule.scheduleJob('*/5 * * * *', () => {
 //  archiveActivity();

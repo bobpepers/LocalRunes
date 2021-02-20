@@ -211,15 +211,6 @@ export const secondTrade = async (req, res, next) => {
   await db.sequelize.transaction({
     isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   }, async (t) => {
-    console.log('55555555555555555555555555555554545');
-    console.log('55555555555555555555555555555554545');
-    console.log('55555555555555555555555555555554545');
-    console.log('55555555555555555555555555555554545');
-    console.log('55555555555555555555555555555554545');
-    console.log('55555555555555555555555555555554545');
-    console.log('55555555555555555555555555555554545');
-    console.log('55555555555555555555555555555554545');
-    console.log('55555555555555555555555555555554545');
     console.log(req.body.obj.amount);
     const amount = new BigNumber(req.body.obj.amount).times(1e8).toNumber();
 
