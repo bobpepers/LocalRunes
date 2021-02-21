@@ -19,14 +19,12 @@ import Deposit from './components/Deposit';
 import Withdraw from './components/Withdraw';
 
 import Dashboard from './views/Dashboard';
-import Surf from './views/Surf';
-import Click from './views/Click';
 import Home from './views/Home';
-import Jackpot from './views/Jackpot';
+
 import Admin from './views/admin/Admin';
-import AdApproval from './views/AdApproval';
+
 import withTracker from './hooks/withTracker';
-import Faucet from './views/Faucet';
+
 import BuyRunes from './views/BuyRunes';
 import SellRunes from './views/SellRunes';
 import Terms from './views/Terms';

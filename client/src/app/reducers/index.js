@@ -6,7 +6,6 @@ import resetPassword from './resetPassword';
 import user from './user';
 import contact from './contact';
 import chainInfo from "./chainInfo";
-import website from "./website";
 import online from "./online";
 import registered from "./registered";
 import volume from "./volume";
@@ -61,7 +60,6 @@ const rootReducer = combineReducers({
   user: user,
   contact: contact,
   chaininfo: chainInfo,
-  website: website,
   online: online,
   registered: registered,
   volume: volume,

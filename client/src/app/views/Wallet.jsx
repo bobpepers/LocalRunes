@@ -120,7 +120,6 @@ const WalletContainer = (props) => {
 
 function mapStateToProps(state) {
   return {
-    websites: state.website.list,
     user: state.user.data,
   };
 }
@@ -128,7 +127,6 @@ function mapStateToProps(state) {
 WalletContainer.propTypes = {
   user: PropTypes.shape({
     wallet: PropTypes.arrayOf.isRequired,
-
   }).isRequired,
 };
 
