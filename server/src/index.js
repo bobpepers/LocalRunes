@@ -438,11 +438,11 @@ startSync(io, onlineUsers);
 //  patchDeposits();
 // });
 
-updatePrice(io);
+// updatePrice(io);
 // Update Price every 5 minutes
-const schedulePriceUpdate = schedule.scheduleJob('*/10 * * * *', () => {
-  updatePrice(io);
-});
+// const schedulePriceUpdate = schedule.scheduleJob('*/10 * * * *', () => {
+//  updatePrice(io);
+// });
 
 // drawJackpot(sub, pub, expired_subKey);
 // Run every 2 hours at 5 minute mark
