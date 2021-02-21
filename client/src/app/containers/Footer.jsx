@@ -7,9 +7,15 @@ import {
   connect,
   useDispatch,
 } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid,
   Tooltip,
+  Select,
+  InputLabel,
+  MenuItem,
+  FormHelperText,
+  FormControl,
 } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 // import actions from 'redux-form/lib/actions';
@@ -18,24 +24,60 @@ import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import ExposureIcon from '@material-ui/icons/Exposure';
-import ThemeToggle from '../components/ThemeToggle';
-import { getPrice } from '../actions';
 import { fetchUserData } from '../actions/user';
+import { getPrice } from '../actions';
+import ThemeToggle from '../components/ThemeToggle';
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 const Footer = (props) => {
   const {
     t,
     error,
     loading,
+    price,
+    user,
+    online,
   } = props;
 
   const dispatch = useDispatch();
   const [onlineCount, setOnlineCount] = useState('');
+  const classes = useStyles();
+  const [currencyState, setCurrencyState] = useState('USD');
+  const [currencyData, setCurrencyData] = useState([{ id: 1, currency: 'USD', price: 0 }]);
+  const handleChange = (event) => {
+    // console.log(event.currentTarget.value)
+    const { value } = event.currentTarget;
+    setCurrencyState(value);
+    setCurrencyData(price && price.filter((object) => object.currency === value));
+  };
 
   useEffect(() => dispatch(fetchUserData()), [dispatch]);
   useEffect(() => dispatch(getPrice()), [dispatch]);
-  useEffect(() => {}, [props.price]);
-  useEffect(() => {}, [props.user]);
+
+  useEffect(() => {
+    if (price) {
+      console.log(currencyState);
+
+      console.log(currencyData);
+    }
+  }, [price, currencyState]);
+  useEffect(() => {
+    if (price) {
+      setCurrencyData(price.filter((object) => object.currency === currencyState));
+    }
+  }, [price]);
+  useEffect(() => {
+
+  }, [price, user, currencyState, currencyData]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -62,7 +104,7 @@ const Footer = (props) => {
             <p className="noBottomMargin floatLeft">
               <FiberManualRecordIcon />
               {' '}
-              {onlineCount !== '' ? onlineCount : props.online}
+              {onlineCount !== '' ? onlineCount : online}
             </p>
           </Tooltip>
         </Grid>
@@ -79,30 +121,12 @@ const Footer = (props) => {
               <AccountBalanceWalletIcon />
               {' '}
               {
-             props.user && props.user.wallet
-               ? ((props.user.wallet.available + props.user.wallet.locked) / 1e8)
+             user && user.wallet
+               ? ((user.wallet.available + user.wallet.locked) / 1e8)
                : 0
             }
-            </p>
-          </Tooltip>
-        </Grid>
-        <Grid
-          item
-          container
-          justify="center"
-          xs={4}
-          sm={4}
-          md={2}
-        >
-          <Tooltip title="Lottery tickets" aria-label="show">
-            <p className="noBottomMargin floatLeft">
-              <ConfirmationNumberIcon />
               {' '}
-              {
-             props.user && props.user
-               ? props.user.jackpot_tickets
-               : 0
-            }
+              {currencyState}
             </p>
           </Tooltip>
         </Grid>
@@ -119,12 +143,14 @@ const Footer = (props) => {
             <p className="noBottomMargin">
               <ExposureIcon />
               {' '}
-              ~$
+              ~
               {
-             props.user && props.user.wallet
-               ? (((props.user.wallet.available + props.user.wallet.locked) / 1e8) * props.price.price).toFixed(3)
+             user && user.wallet && currencyData.length
+               ? (((user.wallet.available + user.wallet.locked) / 1e8) * currencyData[0].price).toFixed(3)
                : 0
             }
+              {' '}
+              {currencyState}
             </p>
           </Tooltip>
         </Grid>
@@ -141,10 +167,39 @@ const Footer = (props) => {
             <p className="noBottomMargin">
               <LocalOfferIcon />
               {' '}
-              {props.price.price}
+              {currencyData.length && currencyData[0].price}
               {' '}
-              $
+              {currencyState}
             </p>
+          </Tooltip>
+        </Grid>
+        <Grid
+          item
+          container
+          justify="center"
+          xs={4}
+          sm={4}
+          md={2}
+        >
+          <Tooltip title="Currency Selection" aria-label="show">
+            <FormControl className={classes.formControl}>
+              {/* <InputLabel htmlFor="age-native-simple">Currency</InputLabel> */}
+              <Select
+                native
+                value={currencyState}
+                onChange={handleChange}
+                inputProps={{
+                  name: 'currency',
+                  id: 'age-native-simple',
+                }}
+              >
+                {price && price.map((currency, index) =>
+                  // console.log(currency);
+                  (
+                    <option value={currency.currency}>{currency.currency}</option>
+                  ))}
+              </Select>
+            </FormControl>
           </Tooltip>
         </Grid>
         <Grid
@@ -164,7 +219,7 @@ const Footer = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-  price: state.price,
+  price: state.price.data,
   online: state.online.people,
   // wallet: state.user.data.user,
   user: state.user.data,

@@ -7,12 +7,8 @@ const { Sequelize, Transaction, Op } = require('sequelize');
  */
 const fetchPriceInfo = async (req, res, next) => {
   try {
-    const priceRecord = await db.priceInfo.findOne({
-      where: {
-        id: 1,
-      },
-    });
-    res.locals.price = priceRecord.price;
+    const priceRecord = await db.priceInfo.findAll({});
+    res.locals.price = priceRecord;
     next();
   } catch (error) {
     res.locals.error = error;

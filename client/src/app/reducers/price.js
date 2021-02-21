@@ -5,7 +5,7 @@ import {
 } from '../actions/types/index';
 
 const initialState = {
-  price: 0,
+  data: [],
   isFetching: false, // Default to fetching..
   error: null,
 };
@@ -20,7 +20,7 @@ export default (state = initialState, action) => {
     case FETCH_PRICE_SUCCESS:
       return {
         ...state,
-        price: action.payload.price,
+        data: action.payload.price,
         isFetching: false,
       };
     case FETCH_PRICE_FAIL:

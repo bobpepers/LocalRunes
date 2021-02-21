@@ -38,7 +38,6 @@ const updatePrice = async (io) => {
         price: data.data.price_usd,
       });
 
-      io.emit('updatePrice', price);
       const currencies = await db.currency.findAll({ });
       console.log(currencies);
       currencies.forEach(async (currency) => {
@@ -96,6 +95,8 @@ const updatePrice = async (io) => {
                 console.error(error);
               });
             }
+            const priceRecords = await db.priceInfo.findAll({});
+            io.emit('updatePrice', priceRecords);
             t.afterCommit(() => {
               console.log('commited');
             });
