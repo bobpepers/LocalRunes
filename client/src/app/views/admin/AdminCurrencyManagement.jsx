@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 // import { Link } from 'react-router-dom';
 import {
@@ -83,6 +83,48 @@ const AdminCurrencies = (props) => {
     handleSubmit,
   } = props;
   const dispatch = useDispatch();
+  const [data, setData] = useState([]);
+  const [inEditMode, setInEditMode] = useState({
+    status: false,
+    rowKey: null,
+  });
+  const [unitIso, setUnitIso] = useState(null);
+  const [unitName, setUnitName] = useState(null);
+  const onEdit = ({ id, currentUnitIso, currentUnitName }) => {
+    setInEditMode({
+      status: true,
+      rowKey: id,
+    })
+    setUnitIso(currentUnitIso);
+    setUnitName(currentUnitName);
+  }
+
+  const onSave = async ({ id }) => {
+    // await updateCurrency();
+    console.log(id);
+    console.log(unitName);
+    console.log(unitIso);
+    await dispatch(updateCurrency(id, unitName, unitIso));
+    setInEditMode({
+      status: false,
+      rowKey: null,
+    })
+    // reset the unit price state value
+    setUnitIso(null);
+    setUnitName(null);
+  }
+
+  const onCancel = () => {
+    // reset the inEditMode state value
+    setInEditMode({
+      status: false,
+      rowKey: null,
+    })
+    // reset the unit price state value
+    setUnitIso(null);
+    setUnitName(null);
+  }
+
   useEffect(() => dispatch(fetchAdminCurrencyData()), [dispatch]);
   useEffect(() => {
     console.log('adminCurrencies');
@@ -156,20 +198,65 @@ const AdminCurrencies = (props) => {
                     {currency.id}
                   </TableCell>
                   <TableCell align="right">
-                    {currency.currency_name}
+                    {
+                                    inEditMode.status && inEditMode.rowKey === currency.id ? (
+                                      <input
+                                        value={unitName}
+                                        onChange={(event) => setUnitName(event.target.value)}
+                                      />
+                                    ) : (
+                                      currency.currency_name
+                                    )
+                                }
                   </TableCell>
                   <TableCell align="right">
-                    {currency.iso}
+                    {
+                                    inEditMode.status && inEditMode.rowKey === currency.id ? (
+                                      <input
+                                        value={unitIso}
+                                        onChange={(event) => setUnitIso(event.target.value)}
+                                      />
+                                    ) : (
+                                      currency.iso
+                                    )
+                                }
+
                   </TableCell>
                   <TableCell align="right">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="large"
-                      onClick={() => update(currency.id)}
-                    >
-                      Update
-                    </Button>
+                    {
+                                    inEditMode.status && inEditMode.rowKey === currency.id ? (
+                                      <>
+                                        <Button
+                                          variant="contained"
+                                          color="primary"
+                                          size="large"
+                                          onClick={() => onSave({ id: currency.id, iso: unitIso, name: unitName })}
+                                        >
+                                          Save
+                                        </Button>
+
+                                        <Button
+                                          variant="contained"
+                                          color="primary"
+                                          size="large"
+                                          style={{ marginLeft: 8 }}
+                                          onClick={() => onCancel()}
+                                        >
+                                          Cancel
+                                        </Button>
+                                      </>
+                                    ) : (
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                        onClick={() => onEdit({ id: currency.id, currentUnitIso: currency.iso, currentUnitName: currency.currency_name })}
+                                      >
+                                        Edit
+                                      </Button>
+                                    )
+                                }
+
                     {/* {country.status
                       ? (
                         <Button

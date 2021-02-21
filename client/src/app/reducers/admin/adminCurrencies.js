@@ -2,8 +2,8 @@ import {
   FETCH_ADMINCURRENCIES_BEGIN,
   FETCH_ADMINCURRENCIES_SUCCESS,
   FETCH_ADMINCURRENCIES_FAIL,
-  UPDATE_ADMIN_CURRENCIES,
   ADD_ADMINCURRENCY,
+  UPDATE_ADMINCURRENCY,
 } from '../../actions/types/index';
 
 const initialState = {
@@ -41,18 +41,19 @@ export default function adminPublishersReducer(
         data: null,
       };
 
-    case UPDATE_ADMIN_CURRENCIES:
+    case UPDATE_ADMINCURRENCY:
       return {
         ...state,
         loading: false,
         data: [
           ...state.data.map(
-            (publisher) => (publisher.id === action.payload.id
+            (currency) => (currency.id === action.payload.id
               ? action.payload
-              : publisher),
+              : currency),
           ),
         ],
       };
+
     case ADD_ADMINCURRENCY:
       console.log('FETCH_ADMINPUBLISHERS_SUCCESS');
       console.log(action.payload);

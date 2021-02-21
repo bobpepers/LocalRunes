@@ -899,3 +899,26 @@ export const addAdminPaymentMethod = async (req, res, next) => {
     next();
   }
 };
+
+export const updateAdminCurrency = async (req, res, next) => {
+  try {
+    const currency = await db.currency.findOne({
+      where: {
+        id: req.body.id,
+      },
+    });
+    if (!currency) {
+      throw new Error('CURRENCY_NOT_EXIST');
+    }
+    res.locals.currency = await currency.update({
+      currency_name: req.body.name,
+      iso: req.body.iso,
+    });
+    console.log(req.body);
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};

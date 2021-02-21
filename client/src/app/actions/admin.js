@@ -1368,10 +1368,13 @@ export function fetchAdminPaymentMethodData() {
   }
 }
 
-export function updateCurrency(obj) {
+export function updateCurrency(id, name, iso) {
   return function (dispatch) {
     // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
-    axios.post(`${process.env.API_URL}/admin/currency/update`, { obj })
+    console.log(id);
+    console.log(name);
+    console.log(iso);
+    axios.post(`${process.env.API_URL}/admin/currency/update`, { id, name, iso })
       .then((response) => {
         console.log('response.data.currency');
         console.log(response.data.currency);
