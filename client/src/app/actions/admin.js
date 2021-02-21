@@ -56,6 +56,7 @@ import {
   FETCH_ADMINPENDINGIDENTITY_FAIL,
   REMOVE_ADMINPENDINGIDENTITY,
   UPDATE_ADMINCURRENCY,
+  UPDATE_ADMINCOUNTRY,
 } from './types/index';
 
 export function adminRejectIdentity(id) {
@@ -1105,13 +1106,24 @@ export function addAdminCountry(obj) {
     // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
     axios.post(`${process.env.API_URL}/admin/countries/add`, obj)
       .then((response) => {
+        console.log('country added');
+        console.log('country added');
+        console.log('country added');
+        console.log('country added');
+        console.log('country added');
+        console.log('country added');
+        console.log('country added');
+        console.log('country added');
+        console.log('country added');
+        console.log('country added');
+        console.log(response.data.country);
         dispatch({
           type: ADD_ADMINCOUNTRIES_SUCCESS,
-          payload: response.data.countries,
+          payload: response.data.country,
         });
         dispatch({
           type: ADD_ADMINCOUNTRY,
-          payload: response.data.countries,
+          payload: response.data.country,
         });
         dispatch({
           type: ENQUEUE_SNACKBAR,
@@ -1327,6 +1339,74 @@ export function fetchAdminPaymentMethodData() {
           payload: error,
         });
 
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function updateCountry(id, name, iso, currency) {
+  return function (dispatch) {
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    console.log(id);
+    console.log(name);
+    console.log(iso);
+    axios.post(`${process.env.API_URL}/admin/country/update`, {
+      id, name, iso, currency,
+    })
+      .then((response) => {
+        console.log('response.data.currency');
+        console.log(response.data.country);
+        dispatch({
+          type: UPDATE_ADMINCOUNTRY,
+          payload: response.data.country,
+        });
+        dispatch({
+          type: ENQUEUE_SNACKBAR,
+          notification: {
+            message: 'Success: update country',
+            key: new Date().getTime() + Math.random(),
+            options: {
+              variant: 'success',
+            },
+          },
+        });
+      }).catch((error) => {
         if (error.response) {
           // client received an error response (5xx, 4xx)
           console.log(error.response);

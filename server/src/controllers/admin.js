@@ -806,7 +806,15 @@ export const fetchAdminDomains = async (req, res, next) => {
 
 export const fetchAdminCountries = async (req, res, next) => {
   try {
-    res.locals.countries = await db.country.findAll({});
+    res.locals.countries = await db.country.findAll({
+      include: [
+        {
+          model: db.currency,
+          as: 'currency',
+          required: false,
+        },
+      ],
+    });
     next();
   } catch (error) {
     console.log(error);
@@ -817,10 +825,23 @@ export const fetchAdminCountries = async (req, res, next) => {
 
 export const addAdminCountries = async (req, res, next) => {
   try {
-    res.locals.countries = await db.country.create({
+    const country = await db.country.create({
       iso: req.body.iso,
       name: req.body.country,
+      currencyId: req.body.currency,
       status: true,
+    });
+    res.locals.country = await db.country.findOne({
+      where: {
+        id: country.id,
+      },
+      include: [
+        {
+          model: db.currency,
+          as: 'currency',
+          required: false,
+        },
+      ],
     });
     next();
   } catch (error) {
@@ -856,27 +877,7 @@ export const addAdminCurrencies = async (req, res, next) => {
 
 export const fetchAdminPaymentMethod = async (req, res, next) => {
   try {
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-    console.log("555555555555555555555");
-
     res.locals.paymentMethod = await db.paymentMethod.findAll({});
-    console.log(res.locals.paymentMethod);
-    console.log(res.locals.paymentMethod);
-    console.log(res.locals.paymentMethod);
-    console.log(res.locals.paymentMethod);
     next();
   } catch (error) {
     console.log(error);
@@ -892,6 +893,42 @@ export const addAdminPaymentMethod = async (req, res, next) => {
       description: req.body.description,
       status: true,
     });
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const updateAdminCountry = async (req, res, next) => {
+  try {
+    const country = await db.country.findOne({
+      where: {
+        id: req.body.id,
+      },
+    });
+    if (!country) {
+      throw new Error('CURRENCY_NOT_EXIST');
+    }
+    await country.update({
+      name: req.body.name,
+      iso: req.body.iso,
+      currencyId: req.body.currency,
+    });
+    res.locals.country = await db.country.findOne({
+      where: {
+        id: req.body.id,
+      },
+      include: [
+        {
+          model: db.currency,
+          as: 'currency',
+          required: false,
+        },
+      ],
+    });
+    console.log(req.body);
     next();
   } catch (error) {
     console.log(error);

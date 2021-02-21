@@ -61,6 +61,7 @@ import {
   acceptAdminPendingIdentity,
   rejectAdminPendingIdentity,
   updateAdminCurrency,
+  updateAdminCountry,
 } from './controllers/admin';
 
 import {
@@ -414,10 +415,10 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
           },
         });
       }
-      if (res.locals.countries) {
-        console.log(res.locals.countries);
+      if (res.locals.country) {
+        console.log(res.locals.country);
         res.json({
-          countries: res.locals.countries,
+          country: res.locals.country,
         });
       }
     });
@@ -484,6 +485,27 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         // console.log(res.locals.currency);
         res.json({
           currency: res.locals.currency,
+        });
+      }
+    });
+  app.post('/api/admin/country/update',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    updateAdminCountry,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.country) {
+        // console.log(res.locals.currency);
+        res.json({
+          country: res.locals.country,
         });
       }
     });

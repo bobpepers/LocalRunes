@@ -4,6 +4,7 @@ import {
   FETCH_ADMINCOUNTRIES_FAIL,
   UPDATE_ADMIN_COUNTRIES,
   ADD_ADMINCOUNTRY,
+  UPDATE_ADMINCOUNTRY,
 } from '../../actions/types/index';
 
 const initialState = {
@@ -53,12 +54,35 @@ export default function adminPublishersReducer(
           ),
         ],
       };
-    case ADD_ADMINCOUNTRY:
+    case UPDATE_ADMINCOUNTRY:
       return {
         ...state,
         loading: false,
         data: [
-          ...action.payload,
+          ...state.data.map(
+            (country) => (country.id === action.payload.id
+              ? action.payload
+              : country),
+          ),
+        ],
+      };
+
+    case ADD_ADMINCOUNTRY:
+      console.log('ADD_ADMINCOUNTRY');
+      console.log('ADD_ADMINCOUNTRY');
+      console.log('ADD_ADMINCOUNTRY');
+      console.log('ADD_ADMINCOUNTRY');
+      console.log('ADD_ADMINCOUNTRY');
+
+      console.log('ADD_ADMINCOUNTRY');
+      console.log('ADD_ADMINCOUNTRY');
+      console.log(state.data);
+      console.log(action.payload);
+      return {
+        ...state,
+        loading: false,
+        data: [
+          action.payload,
           ...state.data,
         ],
       };
