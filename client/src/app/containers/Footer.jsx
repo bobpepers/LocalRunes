@@ -126,7 +126,7 @@ const Footer = (props) => {
                : 0
             }
               {' '}
-              {currencyState}
+              RUNES
             </p>
           </Tooltip>
         </Grid>
