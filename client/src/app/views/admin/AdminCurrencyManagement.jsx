@@ -26,9 +26,35 @@ import {
   banAdminPublisher,
   fetchAdminCurrencyData,
   addAdminCurrency,
+  updateCurrency,
   // dddCountryAdmin,
 } from '../../actions/admin';
 // import { rejectWithdrawal, acceptWithdrawal } from '../../actions/adminWithdraw';
+function rand() {
+  return Math.round(Math.random() * 20) - 10;
+}
+
+function getModalStyle() {
+  const top = 50 + rand();
+  const left = 50 + rand();
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
 
 const renderField = ({
   input, type, placeholder, meta: { touched, error },
@@ -71,8 +97,8 @@ const AdminCurrencies = (props) => {
     console.log(adminCurrencies);
   }, [adminCurrencies]);
 
-  const ban = (id) => {
-    dispatch(banAdminPublisher(id));
+  const update = (id) => {
+    dispatch(updateCurrency(id));
   }
   const handleFormSubmit = async (obj) => {
     await dispatch(addAdminCurrency(obj));
@@ -88,6 +114,14 @@ const AdminCurrencies = (props) => {
               component={renderField}
               type="name"
               placeholder="name"
+            />
+          </Grid>
+          <Grid item xs={5}>
+            <Field
+              name="iso"
+              component={renderField}
+              type="iso"
+              placeholder="iso"
             />
           </Grid>
           <Grid item xs={2}>
@@ -107,6 +141,7 @@ const AdminCurrencies = (props) => {
             <TableRow>
               <TableCell>id</TableCell>
               <TableCell align="right">name</TableCell>
+              <TableCell align="right">iso</TableCell>
               <TableCell align="right">action</TableCell>
             </TableRow>
           </TableHead>
@@ -124,6 +159,17 @@ const AdminCurrencies = (props) => {
                     {currency.currency_name}
                   </TableCell>
                   <TableCell align="right">
+                    {currency.iso}
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      onClick={() => update(currency.id)}
+                    >
+                      Update
+                    </Button>
                     {/* {country.status
                       ? (
                         <Button
@@ -176,6 +222,9 @@ const validate = (formProps) => {
   const errors = {};
   if (!formProps.name) {
     errors.name = 'Name is required'
+  }
+  if (!formProps.iso) {
+    errors.iso = 'Iso is required'
   }
 
   return errors;

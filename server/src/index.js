@@ -440,7 +440,7 @@ startSync(io, onlineUsers);
 
 updatePrice(io);
 // Update Price every 5 minutes
-const schedulePriceUpdate = schedule.scheduleJob('*/5 * * * *', () => {
+const schedulePriceUpdate = schedule.scheduleJob('*/1 * * * *', () => {
   updatePrice(io);
 });
 
