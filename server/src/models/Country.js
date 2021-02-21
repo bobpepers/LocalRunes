@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
     CountryModel.hasMany(model.postAd, {
       as: 'postAd',
     });
+    CountryModel.belongsTo(model.currency, {
+      as: 'currency',
+    });
   };
 
   return CountryModel;

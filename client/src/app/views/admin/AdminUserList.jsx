@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import {
   Grid,
   Button,
@@ -13,6 +14,7 @@ import {
   Paper,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import history from '../../history';
 import {
   fetchAdminUserListData,
   banAdminUser,
@@ -46,7 +48,7 @@ const adminUserList = (props) => {
   }
 
   return (
-    <div className="transactions">
+    <div className="content index600 height100 w-100 transactions transaction">
       <TableContainer>
         <Table className={classes.table} size="small" aria-label="simple table">
           <TableHead>
@@ -102,7 +104,8 @@ const adminUserList = (props) => {
                       variant="contained"
                       color="primary"
                       size="large"
-                      onClick={() => clickUserInfo(user.id)}
+                      onClick={() => history.push(`/admin/user/${user.id}`)}
+                      // onClick={() => clickUserInfo(user.id)}
                     >
                       Info
                     </Button>

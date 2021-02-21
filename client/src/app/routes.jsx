@@ -22,6 +22,12 @@ import Dashboard from './views/Dashboard';
 import Home from './views/Home';
 
 import Admin from './views/admin/Admin';
+import AdminCountryManagement from './views/admin/AdminCountryManagement';
+import AdminCurrencyManagement from './views/admin/AdminCurrencyManagement';
+import AdminPaymentMethodManagement from './views/admin/AdminPaymentMethodManagement';
+import AdminUserList from './views/admin/AdminUserList';
+import AdminUser from './views/admin/AdminUser';
+import AdminWithdrawals from './views/admin/AdminWithdrawals';
 
 import withTracker from './hooks/withTracker';
 
@@ -115,10 +121,7 @@ const Routes = (props) => {
         path="/users"
         component={requireAuth(withTracker(UserList))}
       />
-      <Route
-        path="/admin"
-        component={requireAuth(withTracker(Admin))}
-      />
+
       <Route
         path="/aboutus"
         component={withTracker(AboutUs)}
@@ -187,6 +190,41 @@ const Routes = (props) => {
         exact
         path="/settings"
         component={requireAuth(withTracker(Settings))}
+      />
+      <Route
+        path="/admin"
+        exact
+        component={requireAuth(withTracker(Admin))}
+      />
+      <Route
+        path="/admin/countries"
+        exact
+        component={requireAuth(withTracker(AdminCountryManagement))}
+      />
+      <Route
+        path="/admin/currencies"
+        exact
+        component={requireAuth(withTracker(AdminCurrencyManagement))}
+      />
+      <Route
+        path="/admin/paymentmethods"
+        exact
+        component={requireAuth(withTracker(AdminPaymentMethodManagement))}
+      />
+      <Route
+        path="/admin/users"
+        exact
+        component={requireAuth(withTracker(AdminUserList))}
+      />
+      <Route
+        path="/admin/withdrawals"
+        exact
+        component={requireAuth(withTracker(AdminWithdrawals))}
+      />
+      <Route
+        path="/admin/user/:id"
+        exact
+        component={requireAuth(withTracker(AdminUser))}
       />
     </>
   )

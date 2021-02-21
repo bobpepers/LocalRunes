@@ -28,6 +28,9 @@ module.exports = (sequelize, DataTypes) => {
     CurrencyModel.hasMany(model.postAd, {
       as: 'postAd',
     });
+    CurrencyModel.hasMany(model.country, {
+      as: 'country',
+    });
   };
 
   return CurrencyModel;

@@ -14,7 +14,9 @@ import {
   TablePagination,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { fetchAdminUserData } from '../../actions/admin';
+import history from '../../history';
 import { rejectWithdrawal, acceptWithdrawal } from '../../actions/adminWithdraw';
 
 const useStyles = makeStyles({
@@ -27,6 +29,11 @@ const adminUserComponent = (props) => {
   const {
     adminUser,
     selectedUser,
+    match: {
+      params: {
+        id,
+      },
+    },
   } = props;
   // const currentLocation = window.location.pathname.split('/');
   const classes = useStyles();
@@ -39,7 +46,7 @@ const adminUserComponent = (props) => {
   const [pageActivity, setPageActivity] = React.useState(0);
   const [rowsPerPageActivityArchive, setRowsPerPageActivityArchive] = React.useState(25);
   const [pageActivityArchive, setPageActivityArchive] = React.useState(0);
-  useEffect(() => dispatch(fetchAdminUserData({ id: selectedUser })), [dispatch]);
+  useEffect(() => dispatch(fetchAdminUserData({ id: 3 })), [dispatch]);
   useEffect(() => {
 
   }, [adminUser]);
@@ -91,6 +98,21 @@ const adminUserComponent = (props) => {
   if (adminUser.data) {
     return (
       <div className="content index600 height100">
+        <Button
+          style={{
+            fontSize: '35px',
+            color: 'black',
+            position: 'absolote',
+            left: '0',
+            top: '0',
+          }}
+          variant="contained"
+          color="primary"
+          onClick={() => history.push('/admin/users')}
+        >
+          <ArrowBackIcon />
+
+        </Button>
         <h3 className="shadow-w text-center">{adminUser.data.username}</h3>
         <Grid container>
           <Grid item xs={4}>
@@ -106,80 +128,7 @@ const adminUserComponent = (props) => {
             <p className="shadow-w text-center">{(adminUser.data.wallet.available / 1e8) + (adminUser.data.wallet.locked / 1e8)}</p>
           </Grid>
           <Grid item xs={12}>
-            <h2 className="shadow-w text-center">Webslots</h2>
-            {adminUser.data.webslots
-            && adminUser.data.webslots
-              .map((webslot, i) => {
-                console.log(webslot);
-                return (
-                  <Grid container>
-                    <Grid item xs={12}>
-                      <p className="shadow-w text-center">
-                        Webslot id:
-                        {' '}
-                        {webslot.id}
-                      </p>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <p className="shadow-w text-center">Orders:</p>
-                    </Grid>
-                    <TableContainer component={Paper}>
-                      <Table className={classes.table} size="small" aria-label="simple table">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>id</TableCell>
-                            <TableCell align="right">price</TableCell>
-                            <TableCell align="right">amount</TableCell>
-                            <TableCell align="right">filled</TableCell>
-                            <TableCell align="right">phase</TableCell>
-                            <TableCell align="right">created</TableCell>
-                            <TableCell align="right">updated</TableCell>
-                            <TableCell align="right">cancel</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {webslot.order.length > 0
-                        && webslot.order
-                          .sort((a, b) => b.id - a.id)
-                          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                          .map((order, i) => {
-                            console.log(order);
-                            return (
-                              <TableRow key={i}>
-                                <TableCell component="th" scope="row">
-                                  {order.id}
-                                </TableCell>
-                                <TableCell align="right">{order.price / 1e8}</TableCell>
-                                <TableCell align="right">{order.amount}</TableCell>
-                                <TableCell align="right">{order.filled}</TableCell>
-                                <TableCell align="right">{order.phase}</TableCell>
-                                <TableCell align="right">{order.createdAt}</TableCell>
-                                <TableCell align="right">
-                                  {order.updatedAt}
-                                </TableCell>
-                                <TableCell align="right">
-                                  x
-                                </TableCell>
-                              </TableRow>
-                            )
-                          })}
-                        </TableBody>
-                      </Table>
-                      <TablePagination
-                        rowsPerPageOptions={[25, 50, 100]}
-                        component="div"
-                        count={webslot.order.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onChangePage={handleChangePage}
-                        onChangeRowsPerPage={handleChangeRowsPerPage}
-                      />
-                    </TableContainer>
-                  </Grid>
-                )
-              })}
             <Grid item xs={12}>
-
               <Grid container>
                 <Grid item xs={12}>
                   <h2 className="shadow-w text-center">

@@ -41,7 +41,7 @@ const AdminWithdrawals = (props) => {
   };
 
   return (
-    <div className="w-100 transactions">
+    <div className="content index600 height100 w-100 transactions transaction">
       <TableContainer>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>

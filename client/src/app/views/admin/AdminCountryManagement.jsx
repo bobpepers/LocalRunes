@@ -22,7 +22,7 @@ import {
   change,
 } from 'redux-form';
 import {
-  fetchAdminPublishersData,
+  fetchAdminCurrencyData,
   banAdminPublisher,
   fetchAdminCountryData,
   addAdminCountry,
@@ -83,10 +83,12 @@ const AdminPublishers = (props) => {
   const {
     adminPublishers,
     adminCountries,
+    adminCurrencies,
     handleSubmit,
   } = props;
   const dispatch = useDispatch();
   useEffect(() => dispatch(fetchAdminCountryData()), [dispatch]);
+  useEffect(() => dispatch(fetchAdminCurrencyData()), [dispatch]);
   useEffect(() => {}, [adminCountries]);
 
   const ban = (id) => {
@@ -100,7 +102,7 @@ const AdminPublishers = (props) => {
     <div className="content index600 height100 w-100 transactions transaction">
       <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: '100%' }}>
         <Grid container>
-          <Grid item xs={5}>
+          <Grid item xs={3}>
             <Field
               name="iso"
               component={renderField}
@@ -108,7 +110,15 @@ const AdminPublishers = (props) => {
               placeholder="iso"
             />
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={4}>
+            <Field
+              name="country"
+              component={renderField}
+              type="country"
+              placeholder="country"
+            />
+          </Grid>
+          <Grid item xs={3}>
             <Field
               name="country"
               component={renderField}
@@ -194,11 +204,9 @@ const AdminPublishers = (props) => {
 }
 
 function mapStateToProps(state) {
-  console.log(state.adminPublishers);
-  console.log(state.adminCountries);
   return {
-    adminPublishers: state.adminPublishers,
     adminCountries: state.adminCountries,
+    adminCurrencies: state.adminCurrencies,
   };
 }
 

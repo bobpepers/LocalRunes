@@ -162,6 +162,72 @@ class Header extends Component {
             </ul>
             <ul>
               {
+              this.props.authenticated && this.props.user.role === 4 && (
+                <li>
+                  <NavDropdown
+                    className="langPadding toggleLangWrapper"
+                    title="Admin"
+                    id="basic-nav-dropdown"
+                  >
+                    <NavDropdown.Item onClick={this.handleClose}>
+                      <div>
+                        <Link style={{ color: '#000' }} className="nav-link" to="/admin">
+                          <AccountBalanceWalletIcon />
+                          {' '}
+                          Dashboard
+                        </Link>
+                      </div>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item onClick={this.handleClose}>
+                      <div>
+                        <Link style={{ color: '#000' }} className="nav-link" to="/admin/users">
+                          <AccountCircleIcon />
+                          {' '}
+                          User Managment
+                        </Link>
+                      </div>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item onClick={this.handleClose}>
+                      <div>
+                        <Link style={{ color: '#000' }} className="nav-link" to="/admin/countries">
+                          <FaceIcon />
+                          {' '}
+                          Countries
+                        </Link>
+                      </div>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item onClick={this.handleClose}>
+                      <div>
+                        <Link style={{ color: '#000' }} className="nav-link" to="/admin/currencies">
+                          <DashboardIcon />
+                          {' '}
+                          Currencies
+                        </Link>
+                      </div>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item onClick={this.handleClose}>
+                      <div>
+                        <Link style={{ color: '#000' }} className="nav-link" to="/admin/paymentmethods">
+                          <SettingsIcon />
+                          {' '}
+                          Payment Methods
+                        </Link>
+                      </div>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item onClick={this.handleClose}>
+                      <div>
+                        <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals">
+                          <SettingsIcon />
+                          {' '}
+                          Withdrawals
+                        </Link>
+                      </div>
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                </li>
+              )
+  }
+              {
               this.props.authenticated
                 ? (
                   <>
