@@ -103,6 +103,10 @@ const Trade = (props) => {
       console.log(currentTrade);
       history.push(`/trade/complete/${currentTrade.id}`);
     }
+    if (currentTrade.userOneCancel === true && currentTrade.userTwoCancel === true) {
+      console.log(currentTrade);
+      history.push(`/trade/canceled/${currentTrade.id}`);
+    }
   }, [currentTrade]);
 
   useEffect(() => {

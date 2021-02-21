@@ -40,6 +40,7 @@ import TradeInit from './views/TradeInit';
 import Trade from './views/Trade';
 import TradeRequested from './views/TradeRequested';
 import TradeComplete from './views/TradeComplete';
+import TradeCanceled from './views/TradeCanceled';
 import Settings from './views/Settings';
 
 import requireAuth from './components/hoc/RequireAuth';
@@ -178,6 +179,11 @@ const Routes = (props) => {
         exact
         path="/trade/complete/:id"
         component={requireAuth(withTracker(TradeComplete))}
+      />
+      <Route
+        exact
+        path="/trade/canceled/:id"
+        component={requireAuth(withTracker(TradeCanceled))}
       />
       <Route
         exact

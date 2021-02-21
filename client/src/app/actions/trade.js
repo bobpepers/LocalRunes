@@ -240,37 +240,11 @@ export function fetchSingleTradeData(id) {
     });
     axios.post(`${process.env.API_URL}/trade/current`, { id })
       .then((response) => {
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log('response.data.trade');
-        console.log(response.data.trade);
         dispatch({
           type: FETCH_CURRENT_TRADE_SUCCESS,
           payload: response.data.trade,
         })
       }).catch((error) => {
-        console.log('error.data.trade');
-        console.log('error.data.trade');
-        console.log('error.data.trade');
-        console.log('error.data.trade');
-        console.log('error.data.trade');
-        console.log('error.data.trade');
-        console.log('error.data.trade');
-        console.log('error.data.trade');
-        console.log('error.data.trade');
-
-        console.log(error);
         dispatch({
           type: FETCH_CURRENT_TRADE_FAIL,
           payload: error,
@@ -296,11 +270,58 @@ export function cancelTradeAction(id) {
           type: DELETE_TRADE,
           payload: response.data.trade,
         })
+        dispatch({
+          type: ENQUEUE_SNACKBAR,
+          notification: {
+            message: 'Success: Trade Canceled',
+            key: new Date().getTime() + Math.random(),
+            options: {
+              variant: 'success',
+            },
+          },
+        });
       }).catch((error) => {
         dispatch({
           type: CANCEL_TRADE_FAIL,
           payload: error,
-        })
+        });
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
       });
   }
 }
@@ -326,7 +347,44 @@ export function cancelMainTradeAction(id) {
         dispatch({
           type: CANCEL_MAIN_TRADE_FAIL,
           payload: error,
-        })
+        });
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
       });
   }
 }
@@ -347,7 +405,44 @@ export function acceptMainTradeAction(id) {
         dispatch({
           type: ACCEPT_MAIN_TRADE_FAIL,
           payload: error,
-        })
+        });
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
       });
   }
 }
@@ -369,6 +464,43 @@ export function acceptTradeAction(id) {
           type: ACCEPT_TRADE_FAIL,
           payload: error,
         })
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
       });
   }
 }
