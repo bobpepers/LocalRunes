@@ -12,6 +12,7 @@ const updatePrice = async (io) => {
       defaults: {
         id: 1,
         price: "0",
+        currency: "USD",
       },
     });
 
@@ -41,19 +42,23 @@ const updatePrice = async (io) => {
       const currencies = await db.currency.findAll({ });
       console.log(currencies);
       currencies.forEach(async (currency) => {
-        const createFirstRecord = await db.priceInfo.findOrCreate({
-          where: {
-            currency: currency.iso,
-          },
-          defaults: {
-            price: "0",
-            currency: currency.iso,
-          },
-        });
-        if (!createFirstRecord) {
-          console.log('already exists');
-        } else {
-          console.log('Created...');
+        console.log('loop1');
+        if (currency.iso !== null || currency.iso !== "USD") {
+          const createFirstRecord = await db.priceInfo.findOrCreate({
+            where: {
+              currency: currency.iso,
+            },
+            defaults: {
+              price: "0",
+              currency: currency.iso,
+            },
+          });
+          console.log(currency.iso);
+          if (!createFirstRecord) {
+            console.log('already exists');
+          } else {
+            console.log('Created...');
+          }
         }
       });
 
@@ -63,45 +68,41 @@ const updatePrice = async (io) => {
         },
       });
 
+      const promises = [];
+
       currencies.forEach(async (currency) => {
+        console.log('loop 2');
         if (currency.iso !== null || currency.iso !== "USD") {
-          await db.sequelize.transaction({
-            isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
-          }, async (t) => {
-            const priceRecord = await db.priceInfo.findOne({
-              where: {
-                currency: currency.iso,
-              },
-              transaction: t,
-              lock: t.LOCK.UPDATE,
-            });
-            if (priceRecord) {
-              const options = {
-                method: 'GET',
-                url: 'https://currency-exchange.p.rapidapi.com/exchange',
-                params: { from: 'USD', to: currency.iso, q: '1.0' },
-                headers: {
-                  'x-rapidapi-key': '8528ecd0edmsh41097fa10b02dfep1924ddjsn50d8487ba8c9',
-                  'x-rapidapi-host': 'currency-exchange.p.rapidapi.com',
+          const options = {
+            method: 'GET',
+            url: 'https://currency-exchange.p.rapidapi.com/exchange',
+            params: { from: 'USD', to: currency.iso, q: '1.0' },
+            headers: {
+              'x-rapidapi-key': '8528ecd0edmsh41097fa10b02dfep1924ddjsn50d8487ba8c9',
+              'x-rapidapi-host': 'currency-exchange.p.rapidapi.com',
+            },
+          };
+          promises.push(
+            axios.request(options).then(async (response) => {
+              console.log('response.data');
+              console.log(response.data);
+              const priceRecord = await db.priceInfo.update({
+                price: (Number(currentPrice.price) * Number(response.data)).toFixed(8).toString(),
+              }, {
+                where: {
+                  currency: currency.iso,
                 },
-              };
-              axios.request(options).then((response) => {
-                console.log('response.data');
-                console.log(response.data);
-                priceRecord.update({
-                  price: (Number(currentPrice.price) * Number(response.data)).toFixed(8).toString(),
-                });
-              }).catch((error) => {
-                console.error(error);
               });
-            }
-            const priceRecords = await db.priceInfo.findAll({});
-            io.emit('updatePrice', priceRecords);
-            t.afterCommit(() => {
-              console.log('commited');
-            });
-          });
+            }).catch((error) => {
+              console.error(error);
+            }),
+          );
         }
+      });
+
+      Promise.all(promises).then(async () => {
+        const priceRecords = await db.priceInfo.findAll({});
+        io.emit('updatePrice', priceRecords);
       });
     }
     console.log('updated price');
