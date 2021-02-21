@@ -114,6 +114,15 @@ socket.on('Activity', (data) => {
 });
 
 socket.on('updatePrice', (data) => {
+  console.log('updatePrice');
+  console.log('updatePrice');
+  console.log('updatePrice');
+  console.log('updatePrice');
+  console.log('updatePrice');
+  console.log('updatePrice');
+  console.log('updatePrice');
+  console.log('updatePrice');
+  console.log(data);
   store.dispatch(onUpdatePrice(data));
 });
 

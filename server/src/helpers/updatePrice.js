@@ -102,6 +102,7 @@ const updatePrice = async (io) => {
 
       Promise.all(promises).then(async () => {
         const priceRecords = await db.priceInfo.findAll({});
+        console.log(priceRecords);
         io.emit('updatePrice', priceRecords);
       });
     }

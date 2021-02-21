@@ -71,6 +71,18 @@ const Footer = (props) => {
     }
   }, [price, currencyState]);
   useEffect(() => {
+    console.log('price');
+    console.log('price');
+    console.log('price');
+    console.log('price');
+    console.log('price');
+    console.log('price');
+    console.log('price');
+    console.log('price');
+    console.log('price');
+    console.log('price');
+
+    console.log(price)
     if (price) {
       setCurrencyData(price.filter((object) => object.currency === currencyState));
     }

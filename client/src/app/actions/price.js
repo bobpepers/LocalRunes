@@ -13,7 +13,7 @@ export function getPrice() {
     axios.get(`${process.env.API_URL}/price`).then((response) => {
       dispatch({
         type: FETCH_PRICE_SUCCESS,
-        payload: response.data,
+        payload: response.data.price,
       });
     })
       .catch((error) => {

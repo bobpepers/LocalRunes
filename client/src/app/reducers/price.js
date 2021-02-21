@@ -18,9 +18,20 @@ export default (state = initialState, action) => {
         error: null,
       };
     case FETCH_PRICE_SUCCESS:
+      console.log('FETCH_PRICE_SUCCESS');
+      console.log('FETCH_PRICE_SUCCESS');
+      console.log('FETCH_PRICE_SUCCESS');
+      console.log('FETCH_PRICE_SUCCESS');
+      console.log('FETCH_PRICE_SUCCESS');
+      console.log('FETCH_PRICE_SUCCESS');
+      console.log('FETCH_PRICE_SUCCESS');
+      console.log('FETCH_PRICE_SUCCESS');
+      console.log('FETCH_PRICE_SUCCESS');
+
+      console.log(action.payload);
       return {
         ...state,
-        data: action.payload.price,
+        data: action.payload,
         isFetching: false,
       };
     case FETCH_PRICE_FAIL:
