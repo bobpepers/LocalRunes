@@ -163,25 +163,36 @@ const Trade = (props) => {
             /RUNES
           </p>
         </Grid>
-        <Grid container item xs={6}>
+        <Grid
+          container
+          item
+          xs={12}
+          sm={12}
+          md={6}
+          lg={6}
+          xl={6}
+        >
           <Grid container item xs={12}>
-            Trade Status:
+            <div className="container">
+              <div className="chat-container">
+                {currentTrade && currentTrade.messages ? currentTrade.messages.map((item, index) => (
+                  <div className="message">
+                    <img className="avatar" src="/uploads/avatars/avatar.png" />
+                    <div className="datetime">{item.createdAt}</div>
+                    <p>
+                      {item.user.username}
+                      :
+                    </p>
+                    <p>
+                      {item.message}
+                    </p>
+                  </div>
+                )) : ''}
+              </div>
+            </div>
           </Grid>
           <Grid container item xs={12}>
-            <Grid container item xs={12}>
-              {currentTrade && currentTrade.messages ? currentTrade.messages.map((item, index) => (
-                <p className="w-100">
-                  (
-                  {item.createdAt}
-                  )
-                  {' '}
-                  {item.user.username}
-                  :
-                  {' '}
-                  {item.message}
-                </p>
-              )) : ''}
-            </Grid>
+            <Grid container item xs={12} />
             <Grid item xs={12}>
               <h3>Send message to </h3>
             </Grid>
