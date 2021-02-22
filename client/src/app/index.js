@@ -252,8 +252,6 @@ function App() {
             </p>
             <Location location={location} error={error} /> */}
             <Routes />
-            <FooterMenu />
-            <Footer />
             <CookieConsent
               location="bottom"
               buttonText="Agree"
@@ -263,6 +261,8 @@ function App() {
             >
               By continuing to browse localrunes.com, you agree to our use of cookies.
             </CookieConsent>
+            <FooterMenu />
+            <Footer />
           </Suspense>
         </Router>
       </SnackbarProvider>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { Grid } from '@material-ui/core';
+import { Grid, Box } from '@material-ui/core';
 import { IoIosPeople, IoMdGitNetwork } from 'react-icons/io';
 import ScrollAnimation from 'react-animate-on-scroll';
 import PropTypes from 'prop-types';
@@ -15,17 +15,6 @@ const InfoContainer = (props) => {
   } = props;
   const dispatch = useDispatch();
   const [rerender, setRerender] = useState(1);
-  useEffect(() => {
-    setRerender(rerender + 1);
-    const s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.src = 'https://www.runesx.com/uploads/runesx.js';
-    document.body.appendChild(s);
-
-    return () => {
-      document.body.removeChild(s);
-    };
-  }, []);
 
   useEffect(() => dispatch(getRequestRegister()), [dispatch]);
 
@@ -38,10 +27,22 @@ const InfoContainer = (props) => {
       alignItems="center"
       justify="center"
     >
-      <Grid
+      <Box
+        component={Grid}
         item
-        xs={4}
         className="index600"
+        xs={4}
+        sm={4}
+        md={4}
+        lg={4}
+        xl={4}
+        display={{
+          xs: 'none',
+          sm: 'none',
+          md: 'block',
+          lg: 'block',
+          xl: 'block',
+        }}
       >
         <ScrollAnimation
           animateIn="slideInLeft"
@@ -54,10 +55,14 @@ const InfoContainer = (props) => {
           <span className="dashboardWalletItem">Registered</span>
           <span className="dashboardWalletItem">{registered || <CircularProgress disableShrink />}</span>
         </ScrollAnimation>
-      </Grid>
+      </Box>
       <Grid
         item
-        xs={4}
+        xs={12}
+        sm={12}
+        md={4}
+        lg={4}
+        xl={4}
         className="index600"
         align="center"
       >
@@ -71,10 +76,51 @@ const InfoContainer = (props) => {
           <img src={Logo} alt="logo" />
         </ScrollAnimation>
       </Grid>
-      <Grid
+      <Box
+        component={Grid}
         item
-        xs={4}
         className="index600"
+        xs={6}
+        sm={6}
+        md={4}
+        lg={4}
+        xl={4}
+        display={{
+          xs: 'block',
+          sm: 'block',
+          md: 'none',
+          lg: 'none',
+          xl: 'none',
+        }}
+      >
+        <ScrollAnimation
+          animateIn="slideInLeft"
+          animateOut="slideOutLeft"
+          duration={2}
+          delay={0}
+          offset={0}
+        >
+          <IoIosPeople style={{ width: '100%', fontSize: '60px' }} />
+          <span className="dashboardWalletItem">Registered</span>
+          <span className="dashboardWalletItem">{registered || <CircularProgress disableShrink />}</span>
+        </ScrollAnimation>
+      </Box>
+      <Box
+        component={Grid}
+        item
+        className="index600"
+        xs={6}
+        sm={6}
+        md={4}
+        lg={4}
+        xl={4}
+        display={{
+          xs: 'block',
+          sm: 'block',
+          md: 'none',
+          lg: 'none',
+          xl: 'none',
+        }}
       >
         <ScrollAnimation
           animateIn="slideInRight"
@@ -89,7 +135,38 @@ const InfoContainer = (props) => {
             {online || <CircularProgress disableShrink />}
           </span>
         </ScrollAnimation>
-      </Grid>
+      </Box>
+      <Box
+        component={Grid}
+        item
+        className="index600"
+        xs={6}
+        sm={6}
+        md={4}
+        lg={4}
+        xl={4}
+        display={{
+          xs: 'none',
+          sm: 'none',
+          md: 'block',
+          lg: 'block',
+          xl: 'block',
+        }}
+      >
+        <ScrollAnimation
+          animateIn="slideInRight"
+          animateOut="slideOutRight"
+          duration={2}
+          delay={0}
+          offset={0}
+        >
+          <IoMdGitNetwork style={{ width: '100%', fontSize: '60px' }} />
+          <span className="dashboardWalletItem">Online</span>
+          <span className="dashboardWalletItem">
+            {online || <CircularProgress disableShrink />}
+          </span>
+        </ScrollAnimation>
+      </Box>
       <Grid
         item
         xs={12}

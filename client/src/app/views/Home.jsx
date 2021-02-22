@@ -43,36 +43,14 @@ const Home = () => {
 
   return (
     <div className="height100 content">
-      <Grid container>
+      <Grid
+        container
+        spacing={0}
+      >
         <Info />
         {/* <Globe /> */}
         {/* <Domains /> */}
         {/* <Banner /> */}
-        <div
-          style={{
-            width: '100%',
-            textAlign: 'center',
-            paddingBottom: '40px',
-            zIndex: 50,
-          }}
-          className="spacing-top"
-        >
-          {/* <iframe
-            title="a-ads leaderboard 2"
-            data-aa="1500077"
-            src="//ad.a-ads.com/1500077?size=728x90"
-            scrolling="no"
-            style={{
-              width: '728px',
-              height: '90px',
-              border: '0px',
-              padding: 0,
-              overflow: 'hidden',
-            }}
-            allowtransparency="true"
-          />
-           <Exchanges /> */}
-        </div>
       </Grid>
     </div>
   )
