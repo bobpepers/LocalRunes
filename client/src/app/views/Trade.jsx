@@ -221,59 +221,146 @@ const Trade = (props) => {
             </Grid>
 
           </Grid>
-          <Grid container item xs={12}>
-            <Grid container item xs={12}>
-              <h3>Detailed info</h3>
-            </Grid>
-            <Grid container item xs={6}>
-              Advertiser
-            </Grid>
-            <Grid container item xs={6}>
-              Bago
-            </Grid>
-            <Grid container item xs={6}>
-              Deal Type
-            </Grid>
-            <Grid container item xs={6}>
-              Sell/buy
-            </Grid>
-            <Grid container item xs={6}>
-              Deal amount
-            </Grid>
-            <Grid container item xs={6}>
-              {currentTrade && currentTrade.amount / 1e8}
-            </Grid>
-            <Grid container item xs={6}>
-              price
-            </Grid>
-            <Grid container item xs={6}>
-              {currentTrade && currentTrade.postAd && currentTrade.postAd.price / 1e8}
-            </Grid>
-            <Grid container item xs={6}>
-              total
-            </Grid>
-            <Grid container item xs={6}>
-              {currentTrade && currentTrade.postAd && ((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
-            </Grid>
-            <Grid container item xs={6}>
-              Currency
-            </Grid>
-            <Grid container item xs={6}>
-              {currentTrade && currentTrade.postAd && currentTrade.postAd.currency.currency_name}
-            </Grid>
-            <Grid container item xs={6}>
-              Transaction status
-            </Grid>
-            <Grid container item xs={6}>
-              running
-            </Grid>
-          </Grid>
         </Grid>
-        <Grid container item xs={6}>
+        <Grid
+          container
+          item
+          xs={12}
+          sm={12}
+          md={6}
+          lg={6}
+          xl={6}
+        >
           <Grid item xs={12}>
             <Grid container>
               <Grid item xs={12}>
-                <p>{currentTrade && currentTrade.amount / 1e8}</p>
+                <p>
+                  {currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.user
+                  && currentTrade.postAd.user.username}
+                  :
+                  {' '}
+                  {currentTrade
+                  && currentTrade.userOneCancel === false
+                  && currentTrade.userOneComplete === false
+                  && (<span style={{ color: 'blue' }}>Waiting for Action</span>)}
+                  {currentTrade
+                  && currentTrade.userOneCancel === true
+                  && currentTrade.userOneComplete === false
+                  && (<span style={{ color: 'red' }}>Wants to cancel this trade</span>)}
+                  {currentTrade
+                  && currentTrade.userOneCancel === false
+                  && currentTrade.userOneComplete === true
+                  && (<span style={{ color: 'green' }}>Wants to complete this trade</span>)}
+                </p>
+                <p>
+                  {currentTrade && currentTrade.user && currentTrade.user.username}
+                  :
+                  {' '}
+                  {currentTrade
+                  && currentTrade.userTwoCancel === false
+                  && currentTrade.userTwoComplete === false
+                  && (<span style={{ color: 'blue' }}>Waiting for Action</span>)}
+                  {currentTrade
+                  && currentTrade.userTwoCancel === true
+                  && currentTrade.userTwoComplete === false
+                  && (<span style={{ color: 'red' }}>Wants to cancel this trade</span>)}
+                  {currentTrade
+                  && currentTrade.userTwoCancel === false
+                  && currentTrade.userTwoComplete === true
+                  && (<span style={{ color: 'green' }}>Wants to complete this trade</span>)}
+                </p>
+              </Grid>
+              <Grid item xs={12}>
+                {currentTrade
+          && currentTrade.postAd
+          && currentTrade.postAd.type === 'sell'
+          && currentTrade.postAd.user
+          && user
+          && user.username === currentTrade.user.username
+          && (
+          <p className="text-center">
+            You want to buy
+            {' '}
+            {currentTrade.amount / 1e8}
+            {' '}
+            RUNES from
+            {' '}
+            {currentTrade.postAd.user.username}
+            {' '}
+            for
+            {' '}
+            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {' '}
+            {currentTrade.postAd.currency.currency_name}
+          </p>
+          )}
+                {currentTrade
+          && currentTrade.postAd
+          && currentTrade.postAd.type === 'sell'
+          && currentTrade.postAd.user
+          && user
+          && user.username === currentTrade.postAd.user.username
+          && (
+          <p className="text-center">
+            {currentTrade.user.username}
+            {' '}
+            wants to buy
+            {' '}
+            {currentTrade.amount / 1e8}
+            {' '}
+            RUNES from you for
+            {' '}
+            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {' '}
+            {currentTrade.postAd.currency.currency_name}
+          </p>
+          )}
+                {currentTrade
+          && currentTrade.postAd
+          && currentTrade.postAd.type === 'buy'
+          && currentTrade.postAd.user
+          && user
+          && user.username === currentTrade.user.username
+          && (
+          <p className="text-center">
+            You want to sell
+            {' '}
+            {currentTrade.amount / 1e8}
+            {' '}
+            RUNES to
+            {' '}
+            {currentTrade.postAd.user.username}
+            {' '}
+            for
+            {' '}
+            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {' '}
+            {currentTrade.postAd.currency.currency_name}
+          </p>
+          )}
+                {currentTrade
+          && currentTrade.postAd
+          && currentTrade.postAd.type === 'buy'
+          && currentTrade.postAd.user
+          && user
+          && user.username === currentTrade.postAd.user.username
+          && (
+          <p className="text-center">
+            {currentTrade.user.username}
+            {' '}
+            wants to sell
+            {' '}
+            {currentTrade.amount / 1e8}
+            {' '}
+            RUNES to you for
+            {' '}
+            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {' '}
+            {currentTrade.postAd.currency.currency_name}
+          </p>
+          )}
               </Grid>
               <Grid item xs={12}>
 
@@ -281,12 +368,12 @@ const Trade = (props) => {
                   }
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   && currentTrade.postAd.type === 'sell'
                   && currentTrade.userOneComplete === false
                   && currentTrade.userOneCancel === false
-                  && currentTrade.postAd.user.username === user.data.username
+                  && currentTrade.postAd.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -303,12 +390,12 @@ const Trade = (props) => {
                   }
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   && currentTrade.postAd.type === 'sell'
                   && currentTrade.userOneComplete === true
                   && currentTrade.userOneCancel === false
-                  && currentTrade.postAd.user.username === user.data.username
+                  && currentTrade.postAd.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -325,12 +412,12 @@ const Trade = (props) => {
                   }
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   && currentTrade.postAd.type === 'sell'
                   && currentTrade.userTwoComplete === false
                   && currentTrade.userTwoCancel === false
-                  && currentTrade.user.username === user.data.username
+                  && currentTrade.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -347,12 +434,12 @@ const Trade = (props) => {
                   }
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   && currentTrade.postAd.type === 'sell'
                   && currentTrade.userTwoComplete === true
                   && currentTrade.userTwoCancel === false
-                  && currentTrade.user.username === user.data.username
+                  && currentTrade.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -371,12 +458,12 @@ const Trade = (props) => {
                   }
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   && currentTrade.postAd.type === 'buy'
                   && currentTrade.userOneComplete === false
                   && currentTrade.userOneCancel === false
-                  && currentTrade.postAd.user.username === user.data.username
+                  && currentTrade.postAd.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -393,12 +480,12 @@ const Trade = (props) => {
                   }
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   && currentTrade.postAd.type === 'buy'
                   && currentTrade.userOneComplete === true
                   && currentTrade.userOneCancel === false
-                  && currentTrade.postAd.user.username === user.data.username
+                  && currentTrade.postAd.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -415,12 +502,12 @@ const Trade = (props) => {
                   }
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   && currentTrade.postAd.type === 'buy'
                   && currentTrade.userTwoComplete === false
                   && currentTrade.userTwoCancel === false
-                  && currentTrade.user.username === user.data.username
+                  && currentTrade.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -437,12 +524,12 @@ const Trade = (props) => {
                   }
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   && currentTrade.postAd.type === 'buy'
                   && currentTrade.userTwoComplete === true
                   && currentTrade.userTwoCancel === false
-                  && currentTrade.user.username === user.data.username
+                  && currentTrade.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -462,12 +549,12 @@ const Trade = (props) => {
               <Grid item xs={12}>
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   // && currentTrade.postAd.type === 'buy'
                   && currentTrade.userTwoComplete === false
                   && currentTrade.userTwoCancel === false
-                  && currentTrade.user.username === user.data.username
+                  && currentTrade.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -484,12 +571,12 @@ const Trade = (props) => {
                   }
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   // && currentTrade.postAd.type === 'buy'
                   && currentTrade.userTwoComplete === false
                   && currentTrade.userTwoCancel === true
-                  && currentTrade.user.username === user.data.username
+                  && currentTrade.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -506,13 +593,13 @@ const Trade = (props) => {
                   }
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   && currentTrade.postAd.user
                   // && currentTrade.postAd.type === 'buy'
                   && currentTrade.userOneComplete === false
                   && currentTrade.userOneCancel === false
-                  && currentTrade.postAd.user.username === user.data.username
+                  && currentTrade.postAd.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -529,13 +616,13 @@ const Trade = (props) => {
                   }
                 {
                   currentTrade
-                  && user.data
+                  && user
                   && currentTrade.postAd
                   && currentTrade.postAd.user
                   // && currentTrade.postAd.type === 'buy'
                   && currentTrade.userOneComplete === false
                   && currentTrade.userOneCancel === true
-                  && currentTrade.postAd.user.username === user.data.username
+                  && currentTrade.postAd.user.username === user.username
                   && (
                   <Button
                     variant="contained"
@@ -550,7 +637,69 @@ const Trade = (props) => {
                   </Button>
                   )
                   }
+              </Grid>
+            </Grid>
+            {
+              currentTrade
+              && currentTrade.postAd
+              && currentTrade.postAd.paymentDetails
+              && (
+              <Grid container item xs={12}>
+                <Grid container item xs={12}>
+                  <h3>Payment Details</h3>
+                </Grid>
+                <Grid container item xs={12}>
+                  {currentTrade.postAd.paymentDetails}
+                </Grid>
+              </Grid>
+              )
+            }
 
+            <Grid container item xs={12}>
+              <Grid container item xs={12}>
+                <h3>Detailed info</h3>
+              </Grid>
+              <Grid container item xs={6}>
+                Advertiser
+              </Grid>
+              <Grid container item xs={6}>
+                Bago
+              </Grid>
+              <Grid container item xs={6}>
+                Deal Type
+              </Grid>
+              <Grid container item xs={6}>
+                Sell/buy
+              </Grid>
+              <Grid container item xs={6}>
+                Deal amount
+              </Grid>
+              <Grid container item xs={6}>
+                {currentTrade && currentTrade.amount / 1e8}
+              </Grid>
+              <Grid container item xs={6}>
+                price
+              </Grid>
+              <Grid container item xs={6}>
+                {currentTrade && currentTrade.postAd && currentTrade.postAd.price / 1e8}
+              </Grid>
+              <Grid container item xs={6}>
+                total
+              </Grid>
+              <Grid container item xs={6}>
+                {currentTrade && currentTrade.postAd && ((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+              </Grid>
+              <Grid container item xs={6}>
+                Currency
+              </Grid>
+              <Grid container item xs={6}>
+                {currentTrade && currentTrade.postAd && currentTrade.postAd.currency.currency_name}
+              </Grid>
+              <Grid container item xs={6}>
+                Transaction status
+              </Grid>
+              <Grid container item xs={6}>
+                running
               </Grid>
             </Grid>
           </Grid>
@@ -562,7 +711,7 @@ const Trade = (props) => {
 
 const mapStateToProps = (state) => ({
   errorMessage: state.auth.error,
-  user: state.user,
+  user: state.user.data,
   currentTrade: state.currentTrade.data,
 });
 

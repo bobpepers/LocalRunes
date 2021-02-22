@@ -36,8 +36,8 @@ export const addPostAd = async (req, res, next) => {
       return next();
     }
   }
-  if (req.body.minAmount < 100) {
-    res.locals.error = 'MIN_AMOUNT_100_RUNES';
+  if (req.body.minAmount < 5) {
+    res.locals.error = 'MIN_AMOUNT_5_RUNES';
     return next();
   }
 

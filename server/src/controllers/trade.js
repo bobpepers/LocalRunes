@@ -214,8 +214,8 @@ export const secondTrade = async (req, res, next) => {
     console.log(req.body.obj.amount);
     const amount = new BigNumber(req.body.obj.amount).times(1e8).toNumber();
 
-    if (amount < (100 * 1e8)) { // smaller then 5 RUNES
-      throw new Error('MINIMUM_AMOUNT_100_RUNES');
+    if (amount < (5 * 1e8)) { // smaller then 5 RUNES
+      throw new Error('MINIMUM_AMOUNT_5_RUNES');
     }
 
     if (amount % 1 !== 0) {

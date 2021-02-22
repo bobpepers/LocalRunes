@@ -198,6 +198,7 @@ const PostAd = (props) => {
           <Card>
             <h3 className="text-center">Advertisement rules and requirements</h3>
             <ul className="listPostAd">
+              <li>Minmum Trade is 5 RUNES</li>
               <li>Each completed trade costs advertisers 1% of the total trade amount. See all fees on our fees page.</li>
               <li>Once a trade is opened the price is final, except when there is a clear mistake in the pricing.</li>
               <li>You are not allowed to buy or sell RUNES on behalf of someone else (brokering).</li>
