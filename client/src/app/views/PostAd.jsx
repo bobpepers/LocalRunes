@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
+
 import {
   Grid,
   Button,
@@ -55,7 +56,7 @@ const renderTextField = ({
   <div className={`addWebsite-description-wrapper input-group ${touched && error ? 'has-error' : ''}`}>
     <TextField
       // id="outlined-multiline-static"
-      label="Bio"
+      label="Optional"
       multiline
       style={{ width: '100%' }}
       rows={6}
@@ -152,6 +153,7 @@ const PostAd = (props) => {
     selectedCurrency,
   } = props;
   const dispatch = useDispatch();
+  const [descriptionLength, setDescriptionLength] = useState(0);
   console.log('RunesX Home View');
   useEffect(() => dispatch(fetchPaymentMethodData()), [dispatch]);
   useEffect(() => dispatch(fetchCurrenciesData()), [dispatch]);
@@ -185,6 +187,9 @@ const PostAd = (props) => {
     console.log(obj);
     await dispatch(addPostAdAction(obj));
   }
+  const onBasicFieldChange = (event, newValue, previousValue, name) => {
+    setDescriptionLength(newValue.length);
+  };
 
   return (
     <div className="height100 content surfContainer">
@@ -290,6 +295,21 @@ const PostAd = (props) => {
                   type="text"
                   placeholder="Price/RUNES"
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <p>Payment Details:</p>
+                <Field
+                  name="paymentDetails"
+                  component={renderTextField}
+                  type="message"
+                  placeholder="Payment Details"
+                  onChange={onBasicFieldChange}
+                />
+                <div>
+                  {descriptionLength}
+                  {' '}
+                  / 400
+                </div>
               </Grid>
               <Grid
                 item

@@ -38,6 +38,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: true,
     },
+    paymentDetails: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
   };
 
   // 2: The model options.

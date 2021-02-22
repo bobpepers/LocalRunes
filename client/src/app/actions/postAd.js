@@ -1,4 +1,5 @@
 import axios from 'axios';
+import history from '../history';
 import {
   ENQUEUE_SNACKBAR,
   ADD_POSTAD_BEGIN,
@@ -40,6 +41,7 @@ export function addPostAdAction(obj) {
             },
           },
         });
+        history.push('/dashboard');
       }).catch((error) => {
         if (error.response) {
           // client received an error response (5xx, 4xx)

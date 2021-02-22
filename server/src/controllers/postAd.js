@@ -49,6 +49,28 @@ export const addPostAd = async (req, res, next) => {
     res.locals.error = 'MAX_AMOUNT_MUST_BE_LARGER_THEN_MIN';
     return next();
   }
+  // check paymentDetails
+  // paymentDetails
+  //
+  console.log('req.body');
+  console.log('req.body');
+  console.log('req.body');
+  console.log('req.body');
+  console.log('req.body');
+  console.log('req.body');
+  console.log('req.body');
+  console.log('req.body');
+  console.log('req.body');
+  console.log('req.body');
+  console.log(req.body);
+  if (req.body.paymentDetails) {
+    console.log(req.body.paymentDetails);
+    if (req.body.paymentDetails.toString().length > 400) {
+      res.locals.error = 'PAYMENT_DETAILS_LENGTH_TOO_LONG';
+      return next();
+    }
+  }
+
   const runesPrice = new BigNumber(req.body.runesPrice).multipliedBy(1e8).toFixed(0);
   const minAmount = new BigNumber(req.body.minAmount).multipliedBy(1e8).toFixed(0);
   const maxAmount = new BigNumber(req.body.maxAmount).multipliedBy(1e8).toFixed(0);
@@ -64,6 +86,7 @@ export const addPostAd = async (req, res, next) => {
     userId: req.user.id,
     location: req.body.location,
     countryId: req.body.country,
+    paymentDetails: (req.body.paymentDetails).toString(),
   });
   next();
 };
