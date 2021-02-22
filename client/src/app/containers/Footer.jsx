@@ -46,6 +46,7 @@ const Footer = (props) => {
     price,
     user,
     online,
+    location,
   } = props;
 
   const dispatch = useDispatch();
@@ -87,6 +88,26 @@ const Footer = (props) => {
       setCurrencyData(price.filter((object) => object.currency === currencyState));
     }
   }, [price]);
+  useEffect(() => {
+    console.log('location');
+    console.log('location');
+    console.log('location');
+    console.log('location');
+    console.log('price');
+    console.log('location');
+    console.log('location');
+    console.log('location');
+    console.log('prilocationce');
+    console.log('location');
+
+    console.log(location)
+    if (location && location.currency) {
+      console.log()
+      setCurrencyState(location.currency.currency_name);
+      setCurrencyData(price.filter((object) => object.currency === location.currency.currency_name));
+    }
+  }, [location]);
+
   useEffect(() => {
 
   }, [price, user, currencyState, currencyData]);
@@ -233,6 +254,7 @@ const Footer = (props) => {
 const mapStateToProps = (state) => ({
   price: state.price.data,
   online: state.online.people,
+  location: state.location.data,
   // wallet: state.user.data.user,
   user: state.user.data,
   errorMessage: state.auth.error,

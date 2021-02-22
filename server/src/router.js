@@ -65,6 +65,10 @@ import {
 } from './controllers/admin';
 
 import {
+  getLocation,
+} from './controllers/location';
+
+import {
   fetchWallet,
   withdraw,
 } from './controllers/wallet';
@@ -375,6 +379,24 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         console.log(res.locals.identity);
         res.json({
           identity: res.locals.identity,
+        });
+      }
+    });
+  app.post('/api/user/location',
+    getLocation,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.location) {
+        console.log(res.locals.location);
+        res.json({
+          location: res.locals.location,
         });
       }
     });

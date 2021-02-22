@@ -1,5 +1,7 @@
 import React, {
-  Suspense, useState,
+  Suspense,
+  useState,
+  useEffect,
 } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -9,9 +11,13 @@ import reduxThunk from 'redux-thunk';
 import socketIOClient from 'socket.io-client';
 import { SnackbarProvider } from 'notistack';
 import Button from '@material-ui/core/Button';
+import CookieConsent from 'react-cookie-consent';
+import useCurrentLocation from './hooks/useCurrentLocation';
+import useWatchLocation from './hooks/useWatchLocation';
+import { geolocationOptions } from './config';
+import Location from './components/Location';
 // import { AUTH_USER } from './actions/types/index';
 
-import CookieConsent from 'react-cookie-consent';
 import ParticlesRunebase from './components/ParticlesRunebase';
 import Snow from './components/Snow';
 import {
@@ -28,6 +34,7 @@ import {
   onUpdateTrade,
   onInsertMessage,
   onUpdateCurrentTrade,
+  setLocation,
 } from './actions'
 
 import reducers from './reducers';
@@ -35,6 +42,7 @@ import Routes from './routes';
 import history from './history';
 import Header from './components/Header';
 import FooterMenu from './components/FooterMenu';
+// import GeoLocation from './components/GeoLocation';
 
 // import Footer from './components/Footer';
 import Notifier from './containers/Alert';
@@ -183,6 +191,19 @@ function App() {
   // Set up a piece of state, so that we have
   // a way to trigger a re-render.
   // console.log('RunesX App Started');
+  const { location: currentLocation, error: currentError } = useCurrentLocation(geolocationOptions);
+  const { location, cancelLocationWatch, error } = useWatchLocation(geolocationOptions);
+  const [isWatchinForLocation, setIsWatchForLocation] = useState(true);
+
+  useEffect(() => {
+    if (!location) return;
+    store.dispatch(setLocation(location));
+    // Cancel location watch after 3sec
+    setTimeout(() => {
+      cancelLocationWatch();
+      setIsWatchForLocation(false);
+    }, 3000);
+  }, [location, cancelLocationWatch]);
 
   return (
     <Provider store={store}>
@@ -207,9 +228,20 @@ function App() {
         >
           <Suspense fallback={<Loader />}>
             <Notifier />
+
             <ParticlesRunebase />
             {/* <Snow /> */}
             <Header />
+            {/* <p>Current position:</p>
+            <Location location={currentLocation} error={currentError} />
+
+            <p>
+              Watch position: (Status:
+              {' '}
+              {isWatchinForLocation.toString()}
+              )
+            </p>
+            <Location location={location} error={error} /> */}
             <Routes />
             <FooterMenu />
             <Footer />

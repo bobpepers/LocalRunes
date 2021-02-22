@@ -24,3 +24,4 @@ export * from './report';
 export * from './trade';
 export * from './message';
 export * from './countries';
+export * from './location';

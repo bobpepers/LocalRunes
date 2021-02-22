@@ -41,6 +41,7 @@
     "sequelize-mig": "^2.4.1"
   },
   "dependencies": {
+    "@ideditor/country-coder": "^4.0.0",
     "bcrypt-nodejs": "0.0.3",
     "bignumber.js": "^9.0.1",
     "bitcoin-core": "^3.0.0",

@@ -51,7 +51,7 @@ import message from './message';
 import countries from './countries';
 import myAds from './myAds';
 import deleteAd from './deleteAd';
-
+import location from './location';
 
 const rootReducer = combineReducers({
   form,
@@ -102,6 +102,7 @@ const rootReducer = combineReducers({
   countries: countries,
   myAds: myAds,
   deleteAd: deleteAd, 
+  location: location,
   
 });
 

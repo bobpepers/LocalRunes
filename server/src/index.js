@@ -453,7 +453,7 @@ const schedulePriceUpdate = schedule.scheduleJob('*/10 * * * *', () => {
 // },
 // }).then((exist) => {
 // const scheduleJackpotDrawPatcher = schedule.scheduleJob(new Date(exist.expression), (fireDate) => {
-//    console.log(`This job was supposed to run at ${fireDate}, but actually ran at ${new Date()}`);
+//    console.log(`This job was supposed to run at ${fireDate}, but dactually ran at ${new Date()}`);
 //    drawJackpot(sub, pub, expired_subKey);
 //  });
 // }).catch((error) => {
