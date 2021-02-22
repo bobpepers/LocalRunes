@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ReactGlobe from 'react-globe';
 import {
   Grid,
+  Box,
 } from '@material-ui/core';
 import LanguageIcon from '@material-ui/icons/Language';
 import SearchIcon from '@material-ui/icons/Search';
@@ -27,17 +28,50 @@ const FooterMenu = (props) => {
       }}
     >
       <Grid container>
-        <Grid item xs={4}>
-          <p>Trade Cryptocurrencies Locally or Online using secure escrow service. With Low fees & many ways of payment methods for you to complete your Trade Digitally.</p>
-          <p>© All rights reserved localrunes.com</p>
-        </Grid>
-        <Grid item xs={4} className="text-center">
+        <Box
+          component={Grid}
+          item
+          xs={4}
+          sm={4}
+          md={4}
+          lg={4}
+          xl={4}
+          display={{
+            xs: 'none',
+            sm: 'none',
+            md: 'block',
+            lg: 'block',
+            xl: 'block',
+          }}
+        >
+          <div className="ml-5">
+            <p>Trade Cryptocurrencies Locally or Online using secure escrow service. With Low fees & many ways of payment methods for you to complete your Trade Digitally.</p>
+            <p>© All rights reserved localrunes.com</p>
+          </div>
+        </Box>
+        <Grid
+          item
+          xs={6}
+          sm={6}
+          md={4}
+          lg={4}
+          xl={4}
+          className="text-center"
+        >
           <h3>About</h3>
           <Link className="nav-link" to="/aboutus">About us</Link>
           <Link className="nav-link" to="/terms">Terms of service</Link>
           <Link className="nav-link" to="/policy">Privacy policy</Link>
         </Grid>
-        <Grid item xs={4} className="text-center">
+        <Grid
+          item
+          xs={6}
+          sm={6}
+          md={4}
+          lg={4}
+          xl={4}
+          className="text-center"
+        >
           <h3>Follow us</h3>
           <p>
             <a target="_blank" rel="noreferrer" href="https://www.facebook.com/localrunes">
@@ -55,6 +89,28 @@ const FooterMenu = (props) => {
           </p>
 
         </Grid>
+        <Box
+          component={Grid}
+          item
+          xs={12}
+          sm={12}
+          md={12}
+          lg={12}
+          xl={12}
+          display={{
+            xs: 'block',
+            sm: 'block',
+            md: 'none',
+            lg: 'none',
+            xl: 'none',
+          }}
+        >
+          <div className="text-center">
+            <p>Trade Cryptocurrencies Locally or Online using secure escrow service. With Low fees & many ways of payment methods for you to complete your Trade Digitally.</p>
+            <p>© All rights reserved localrunes.com</p>
+          </div>
+
+        </Box>
       </Grid>
     </div>
   )

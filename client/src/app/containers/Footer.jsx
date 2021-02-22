@@ -147,7 +147,7 @@ const Footer = (props) => {
           item
           container
           justify="center"
-          xs={4}
+          xs={6}
           sm={4}
           md={2}
         >
@@ -163,7 +163,7 @@ const Footer = (props) => {
           item
           container
           justify="center"
-          xs={4}
+          xs={6}
           sm={4}
           md={2}
         >
@@ -184,7 +184,7 @@ const Footer = (props) => {
         <Grid
           item
           container
-          xs={4}
+          xs={6}
           sm={4}
           md={2}
           justify="center"
@@ -208,7 +208,7 @@ const Footer = (props) => {
         <Grid
           item
           container
-          xs={4}
+          xs={6}
           sm={4}
           md={2}
           justify="center"
@@ -228,7 +228,7 @@ const Footer = (props) => {
           item
           container
           justify="center"
-          xs={4}
+          xs={6}
           sm={4}
           md={2}
         >
@@ -251,7 +251,7 @@ const Footer = (props) => {
         </Grid>
         <Grid
           item
-          xs={4}
+          xs={6}
           sm={4}
           md={2}
           align="center"
