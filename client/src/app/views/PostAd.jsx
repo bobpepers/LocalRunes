@@ -176,10 +176,10 @@ const PostAd = (props) => {
     if (location) {
       dispatch(change('postad', 'country', location.id));
     }
-    if (selectedCurrency && selectedCurrency.length) {
-      dispatch(change('postad', 'currency', selectedCurrency[0].id));
+    if (location.currency) {
+      dispatch(change('postad', 'currency', location.currency.id));
     }
-  }, [location, selectedCurrency]);
+  }, [location]);
 
   const handleFormSubmit = async (obj) => {
     console.log(obj);
