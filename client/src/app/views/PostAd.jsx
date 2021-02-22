@@ -15,6 +15,7 @@ import {
   Radio,
   InputLabel,
   Select,
+  MenuItem,
 } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import {
@@ -119,7 +120,11 @@ const renderSelectField = ({
   children,
   ...custom
 }) => (
-  <FormControl error={touched && error} style={{ width: '100%' }}>
+  <FormControl
+    variant="outlined"
+    error={touched && error}
+    style={{ width: '100%' }}
+  >
     <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
     <Select
       native
@@ -142,6 +147,9 @@ const PostAd = (props) => {
     paymentMethods,
     currencies,
     countries,
+    location,
+    price,
+    selectedCurrency,
   } = props;
   const dispatch = useDispatch();
   console.log('RunesX Home View');
@@ -150,6 +158,28 @@ const PostAd = (props) => {
   useEffect(() => dispatch(fetchCountriesData()), [dispatch]);
 
   useEffect(() => {}, [paymentMethods, currencies]);
+
+  useEffect(() => {
+    console.log('POST ADD LOCATION');
+    console.log('POST ADD LOCATION');
+    console.log('POST ADD LOCATION');
+    console.log('POST ADD LOCATION');
+    console.log('POST ADD LOCATION');
+    console.log('POST ADD LOCATION');
+    console.log('POST ADD LOCATION');
+    console.log('POST ADD LOCATION');
+    console.log('POST ADD LOCATION');
+    console.log('POST ADD LOCATION');
+    console.log('POST ADD LOCATION');
+    console.log('POST ADD LOCATION');
+    console.log(selectedCurrency);
+    if (location) {
+      dispatch(change('postad', 'country', location.id));
+    }
+    if (selectedCurrency && selectedCurrency.length) {
+      dispatch(change('postad', 'currency', selectedCurrency[0].id));
+    }
+  }, [location, selectedCurrency]);
 
   const handleFormSubmit = async (obj) => {
     console.log(obj);
@@ -163,15 +193,13 @@ const PostAd = (props) => {
           <Card>
             <h3 className="text-center">Advertisement rules and requirements</h3>
             <ul className="listPostAd">
-              <li>For your ads to display you need to have RUNES in your localrunes wallet. You need 100 RUNES or more for advertisements with online payment methods and 100 RUNES or more for local advertisements (Cash).</li>
-              <li>Certain payment methods require you to be ID verified before your ads are visible.</li>
               <li>Each completed trade costs advertisers 1% of the total trade amount. See all fees on our fees page.</li>
               <li>Once a trade is opened the price is final, except when there is a clear mistake in the pricing.</li>
               <li>You are not allowed to buy or sell RUNES on behalf of someone else (brokering).</li>
               <li>You may only use payment accounts that are registered in your own name (no third party payments!).</li>
-              <li>You must provide your payment details in the advertisement or in the trade chat.</li>
-              <li>All communication must happen on LocalRunes</li>
-              <li>Payment methods marked High Risk have a significant risk of fraud. Be careful and always ID verify your trading partners when using high risk payment methods.</li>
+              <li>You must provide your payment details in the advertisement payment details or in the trade chat.</li>
+              <li>All communication must happen on LocalRunes.com</li>
+              <li>Payment methods marked High Risk have a significant risk of fraud. Be careful and always verify your trading partners when using high risk payment methods.</li>
             </ul>
           </Card>
         </Grid>
@@ -187,6 +215,7 @@ const PostAd = (props) => {
                 </Field>
               </Grid>
               <Grid item xs={12}>
+                <p>Country</p>
                 <Field
                   name="country"
                   component={renderSelectField}
@@ -222,7 +251,7 @@ const PostAd = (props) => {
                 <h3>Additional Trade Information</h3>
               </Grid>
               <Grid item xs={12}>
-                <p>Min. amount</p>
+                <p>Min. Amount (RUNES)</p>
                 <Field
                   name="minAmount"
                   component={renderField}
@@ -231,7 +260,7 @@ const PostAd = (props) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <p>Max. amount</p>
+                <p>Max. Amount (RUNES)</p>
                 <Field
                   name="maxAmount"
                   component={renderField}
@@ -240,13 +269,16 @@ const PostAd = (props) => {
                 />
               </Grid>
               <Grid item xs={12}>
+                <p>Currency</p>
                 <Field
                   name="currency"
                   component={renderSelectField}
                   label="Currency"
                   style={{ width: '100%' }}
                 >
-                  <option value="" />
+                  <option value="">
+                    None
+                  </option>
                   {currencies && currencies.data && currencies.data.map((item) => <option value={item.id}>{item.currency_name}</option>)}
                 </Field>
               </Grid>
@@ -259,7 +291,11 @@ const PostAd = (props) => {
                   placeholder="Price/RUNES"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid
+                item
+                xs={12}
+                style={{ marginTop: '20px', marginBottom: '20px' }}
+              >
                 <Button
                   variant="contained"
                   color="primary"
@@ -317,6 +353,9 @@ const mapStateToProps = (state) => ({
   paymentMethods: state.paymentMethods,
   currencies: state.currencies,
   countries: state.countries,
+  location: state.location.data,
+  price: state.price.data,
+  selectedCurrency: state.selectedCurrency.data,
 })
 
 // export default withRouter(connect(mapStateToProps, actions)(PostAd));
