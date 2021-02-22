@@ -86,7 +86,7 @@ export const addPostAd = async (req, res, next) => {
     userId: req.user.id,
     location: req.body.location,
     countryId: req.body.country,
-    paymentDetails: (req.body.paymentDetails).toString(),
+    paymentDetails: req.body.paymentDetails ? (req.body.paymentDetails).toString() : null,
   });
   next();
 };
