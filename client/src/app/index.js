@@ -35,6 +35,7 @@ import {
   onInsertMessage,
   onUpdateCurrentTrade,
   setLocation,
+  getPrice,
 } from './actions'
 
 import reducers from './reducers';
@@ -195,6 +196,11 @@ function App() {
   const { location, cancelLocationWatch, error } = useWatchLocation(geolocationOptions);
   const [isWatchinForLocation, setIsWatchForLocation] = useState(true);
 
+  useEffect(() => {
+    if (!location) return;
+    store.dispatch(getPrice());
+  }, [
+  ]);
   useEffect(() => {
     if (!location) return;
     store.dispatch(setLocation(location));

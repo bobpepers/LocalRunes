@@ -162,7 +162,7 @@ class Header extends Component {
             </ul>
             <ul>
               {
-              this.props.authenticated && this.props.user.role === 4 && (
+              this.props.authenticated && this.props.user && this.props.user.role === 4 && (
                 <li>
                   <NavDropdown
                     className="langPadding toggleLangWrapper"

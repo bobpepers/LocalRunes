@@ -24,6 +24,9 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { useHistory, Link } from 'react-router-dom';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import TrendingDownIcon from '@material-ui/icons/TrendingDown';
+
 import Moment from 'react-moment';
 import {
   startTrade,
@@ -226,11 +229,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function getPercentageChange(oldNumber, newNumber) {
+  const decreaseValue = oldNumber - newNumber;
+
+  return (decreaseValue / oldNumber) * 100;
+}
+function relDiff(a, b) {
+  return 100 * Math.abs((a - b) / ((a + b) / 2));
+}
+
 function EnhancedTable(props) {
   const {
     headCells,
     postAd,
     currentTrade,
+    price,
   } = props;
   const rows = [];
   const dispatch = useDispatch();
@@ -262,6 +275,9 @@ function EnhancedTable(props) {
       history.push(`/trade/init/${currentTrade.id}`);
     }
   }, [currentTrade]);
+
+  useEffect(() => {
+  }, [price]);
 
   postAd.forEach((item) => {
     console.log('item');
@@ -375,6 +391,15 @@ function EnhancedTable(props) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
+                  const actualPrice = price && (price.filter((object) => object.currency === row.currency));
+                  const theActualPrice = actualPrice.length ? actualPrice[0].price : 0;
+                  // const priceChange = -((getPercentageChange(theActualPrice, row.price)).toFixed(0));
+                  // $result=(($recent-$previous)/$previous);
+                  const priceChange = (((row.price - theActualPrice) / theActualPrice) * 100).toFixed(2);
+                  // const priceChange = relDiff(Number(row.price), Number(theActualPrice));
+                  console.log('actualPrice');
+                  console.log(price);
+                  console.log(theActualPrice);
 
                   return (
                     <TableRow
@@ -417,6 +442,25 @@ function EnhancedTable(props) {
                       <TableCell align="right">{row.paymentMethod}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
                       <TableCell align="right">{row.currency}</TableCell>
+                      <TableCell align="right">
+                        {priceChange > 0 ? (
+                          <span style={{ color: 'red' }}>
+                            <TrendingUpIcon />
+                            {' '}
+                            {priceChange}
+                            {' '}
+                            %
+                          </span>
+                        ) : (
+                          <span style={{ color: 'green' }}>
+                            <TrendingDownIcon />
+                            {' '}
+                            {priceChange}
+                            {' '}
+                            %
+                          </span>
+                        )}
+                      </TableCell>
                       <TableCell align="right">{row.limit}</TableCell>
                       <TableCell align="right">
                         {row.type === 'buy' && (
@@ -471,6 +515,7 @@ function EnhancedTable(props) {
 function mapStateToProps(state) {
   return {
     currentTrade: state.currentTrade.data,
+    price: state.price.data,
   }
 }
 

@@ -21,6 +21,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import TrendingDownIcon from '@material-ui/icons/TrendingDown';
 import { useHistory } from 'react-router-dom';
 import {
   secondTradeIdleAction,
@@ -216,6 +218,7 @@ function EnhancedTable(props) {
     headCells,
     postAd,
     currentTrade,
+    price,
   } = props;
   const rows = [];
   const dispatch = useDispatch();
@@ -357,6 +360,15 @@ function EnhancedTable(props) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
+                  const actualPrice = price && (price.filter((object) => object.currency === row.currency));
+                  const theActualPrice = actualPrice.length ? actualPrice[0].price : 0;
+                  // const priceChange = -((getPercentageChange(theActualPrice, row.price)).toFixed(0));
+                  // $result=(($recent-$previous)/$previous);
+                  const priceChange = (((row.price - theActualPrice) / theActualPrice) * 100).toFixed(2);
+                  // const priceChange = relDiff(Number(row.price), Number(theActualPrice));
+                  console.log('actualPrice');
+                  console.log(price);
+                  console.log(theActualPrice);
 
                   return (
                     <TableRow
@@ -375,6 +387,25 @@ function EnhancedTable(props) {
                       <TableCell align="right">{row.paymentMethod}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
                       <TableCell align="right">{row.currency}</TableCell>
+                      <TableCell align="right">
+                        {priceChange > 0 ? (
+                          <span style={{ color: 'red' }}>
+                            <TrendingUpIcon />
+                            {' '}
+                            {priceChange}
+                            {' '}
+                            %
+                          </span>
+                        ) : (
+                          <span style={{ color: 'green' }}>
+                            <TrendingDownIcon />
+                            {' '}
+                            {priceChange}
+                            {' '}
+                            %
+                          </span>
+                        )}
+                      </TableCell>
                       <TableCell align="right">{row.limit}</TableCell>
                       <TableCell align="right">
                         <Button
@@ -417,6 +448,7 @@ function EnhancedTable(props) {
 function mapStateToProps(state) {
   return {
     currentTrade: state.currentTrade.data,
+    price: state.price.data,
   }
 }
 

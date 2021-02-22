@@ -52,6 +52,7 @@ import countries from './countries';
 import myAds from './myAds';
 import deleteAd from './deleteAd';
 import location from './location';
+import selectedCurrency from './selectedCurrency';
 
 const rootReducer = combineReducers({
   form,
@@ -103,6 +104,7 @@ const rootReducer = combineReducers({
   myAds: myAds,
   deleteAd: deleteAd, 
   location: location,
+  selectedCurrency: selectedCurrency,
   
 });
 

@@ -27,6 +27,7 @@ import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import ExposureIcon from '@material-ui/icons/Exposure';
 import { fetchUserData } from '../actions/user';
 import { getPrice } from '../actions';
+import { updateSelectedCurrency } from '../actions/selectCurrency';
 import ThemeToggle from '../components/ThemeToggle';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,18 +49,19 @@ const Footer = (props) => {
     user,
     online,
     location,
+    selectedCurrency,
   } = props;
 
   const dispatch = useDispatch();
   const [onlineCount, setOnlineCount] = useState('');
   const classes = useStyles();
   const [currencyState, setCurrencyState] = useState('USD');
-  const [currencyData, setCurrencyData] = useState([{ id: 1, currency: 'USD', price: 0 }]);
+  // const [currencyData, setCurrencyData] = useState([{ id: 1, currency: 'USD', price: 0 }]);
   const handleChange = (event) => {
     // console.log(event.currentTarget.value)
     const { value } = event.currentTarget;
     setCurrencyState(value);
-    setCurrencyData(price && price.filter((object) => object.currency === value));
+    dispatch(updateSelectedCurrency(price && price.filter((object) => object.currency === value)));
   };
 
   useEffect(() => dispatch(fetchUserData()), [dispatch]);
@@ -69,7 +71,10 @@ const Footer = (props) => {
     if (price) {
       console.log(currencyState);
 
-      console.log(currencyData);
+      console.log(selectedCurrency);
+    }
+    if (price) {
+      dispatch(updateSelectedCurrency(price.filter((object) => object.currency === currencyState)));
     }
   }, [price, currencyState]);
   useEffect(() => {
@@ -86,7 +91,7 @@ const Footer = (props) => {
 
     console.log(price)
     if (price) {
-      setCurrencyData(price.filter((object) => object.currency === currencyState));
+      dispatch(updateSelectedCurrency(price.filter((object) => object.currency === currencyState)));
     }
   }, [price]);
   useEffect(() => {
@@ -105,13 +110,25 @@ const Footer = (props) => {
     if (location && location.currency) {
       console.log()
       setCurrencyState(location.currency.currency_name);
-      setCurrencyData(price.filter((object) => object.currency === location.currency.currency_name));
+      dispatch(updateSelectedCurrency(price.filter((object) => object.currency === location.currency.currency_name)));
     }
   }, [location]);
 
   useEffect(() => {
-
-  }, [price, user, currencyState, currencyData]);
+    console.log('selectedCurrency');
+    console.log('selectedCurrency');
+    console.log('selectedCurrency');
+    console.log('selectedCurrency');
+    console.log('selectedCurrency');
+    console.log('selectedCurrency');
+    console.log('selectedCurrency');
+    console.log('selectedCurrency');
+    console.log('selectedCurrency');
+    console.log('selectedCurrency');
+    console.log('selectedCurrency');
+    console.log('selectedCurrency');
+    console.log(selectedCurrency);
+  }, [price, user, currencyState, selectedCurrency]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -179,8 +196,8 @@ const Footer = (props) => {
               {' '}
               ~
               {
-             user && user.wallet && currencyData.length
-               ? (((user.wallet.available + user.wallet.locked) / 1e8) * currencyData[0].price).toFixed(3)
+             user && user.wallet && selectedCurrency.length
+               ? (((user.wallet.available + user.wallet.locked) / 1e8) * selectedCurrency[0].price).toFixed(3)
                : 0
             }
               {' '}
@@ -201,7 +218,7 @@ const Footer = (props) => {
             <p className="noBottomMargin">
               <LocalOfferIcon />
               {' '}
-              {currencyData.length && currencyData[0].price}
+              {selectedCurrency.length && selectedCurrency[0].price}
               {' '}
               {currencyState}
             </p>
@@ -227,11 +244,7 @@ const Footer = (props) => {
                   id: 'age-native-simple',
                 }}
               >
-                {price && price.map((currency, index) =>
-                  // console.log(currency);
-                  (
-                    <option value={currency.currency}>{currency.currency}</option>
-                  ))}
+                {price && price.map((item) => <option value={item.currency}>{item.currency}</option>)}
               </Select>
             </FormControl>
           </Tooltip>
@@ -256,24 +269,10 @@ const mapStateToProps = (state) => ({
   price: state.price.data,
   online: state.online.people,
   location: state.location.data,
+  selectedCurrency: state.selectedCurrency.data,
   // wallet: state.user.data.user,
   user: state.user.data,
   errorMessage: state.auth.error,
 })
 
-const personsAreEqual = (prevProps, nextProps) => {
-  console.log('prexProps');
-  console.log('prexProps');
-  console.log('prexProps');
-  console.log('prexProps');
-  console.log('prexProps');
-  console.log('prexProps');
-  console.log(prevProps);
-  return (
-    prevProps.location
-    && prevProps.location.currency
-    && prevProps.location.currency.currency_name === nextProps.location.currency.currency_name
-  )
-}
-
-export default connect(mapStateToProps)(withTranslation()(memo(Footer, personsAreEqual)));
+export default connect(mapStateToProps)(withTranslation()(Footer));
