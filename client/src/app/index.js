@@ -199,11 +199,14 @@ function App() {
     if (!location) return;
     store.dispatch(setLocation(location));
     // Cancel location watch after 3sec
-    setTimeout(() => {
-      cancelLocationWatch();
-      setIsWatchForLocation(false);
-    }, 3000);
-  }, [location, cancelLocationWatch]);
+    // setTimeout(() => {
+    //  cancelLocationWatch();
+    //  setIsWatchForLocation(false);
+    // }, 3000);
+  }, [
+    location,
+    // cancelLocationWatch,
+  ]);
 
   return (
     <Provider store={store}>

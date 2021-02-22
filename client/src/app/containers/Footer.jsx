@@ -1,6 +1,7 @@
 import React, {
   useEffect,
   useState,
+  memo,
   useRef,
 } from 'react';
 import {
@@ -260,4 +261,19 @@ const mapStateToProps = (state) => ({
   errorMessage: state.auth.error,
 })
 
-export default connect(mapStateToProps)(withTranslation()(Footer));
+const personsAreEqual = (prevProps, nextProps) => {
+  console.log('prexProps');
+  console.log('prexProps');
+  console.log('prexProps');
+  console.log('prexProps');
+  console.log('prexProps');
+  console.log('prexProps');
+  console.log(prevProps);
+  return (
+    prevProps.location
+    && prevProps.location.currency
+    && prevProps.location.currency.currency_name === nextProps.location.currency.currency_name
+  )
+}
+
+export default connect(mapStateToProps)(withTranslation()(memo(Footer, personsAreEqual)));
