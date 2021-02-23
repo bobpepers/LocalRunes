@@ -35,7 +35,6 @@ import AdminDomains from './AdminDomains';
 import AdminFeeConfig from './AdminFeeConfig';
 import AdminCountryManagement from './AdminCountryManagement';
 import AdminCurrencyManagement from './AdminCurrencyManagement';
-import AdminOrderManagement from './AdminOrderManagement';
 import AdminAdManagement from './AdminAdManagement';
 import AdminPaymentMethodManagement from './AdminPaymentMethodManagement';
 import AdminDashboard from './AdminDashboard';
@@ -252,17 +251,6 @@ const Admin = (props) => {
           </ListItem>
           <ListItem
             button
-            key="orderManagment"
-            className={dashboardPath === 'orderManagment' && 'sideMenuActive'}
-            onClick={() => handleMenuClick('orderManagment')}
-          >
-            <ListItemIcon>
-              <LiveTvIcon />
-            </ListItemIcon>
-            <ListItemText primary="Order Managment" />
-          </ListItem>
-          <ListItem
-            button
             key="adManagement"
             className={dashboardPath === 'adManagement' && 'sideMenuActive'}
             onClick={() => handleMenuClick('adManagement')}
@@ -318,11 +306,6 @@ const Admin = (props) => {
         {
           dashboardPath === 'currencyManagment' && (
           <AdminCurrencyManagement />
-          )
-        }
-        {
-          dashboardPath === 'orderManagment' && (
-          <AdminOrderManagement />
           )
         }
         {

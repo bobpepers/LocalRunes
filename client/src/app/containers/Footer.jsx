@@ -233,7 +233,9 @@ const Footer = (props) => {
           md={2}
         >
           <Tooltip title="Currency Selection" aria-label="show">
-            <FormControl className={classes.formControl}>
+            <FormControl
+              className={classes.formControl}
+            >
               {/* <InputLabel htmlFor="age-native-simple">Currency</InputLabel> */}
               <Select
                 native
