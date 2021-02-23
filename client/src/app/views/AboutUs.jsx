@@ -19,7 +19,13 @@ const AboutUs = () => {
   return (
     <div className="height100 content surfContainer">
       <Grid container align="center" alignConent="center" alignItems="center">
-        <Grid item xs={8} align="center" alignItems="center">
+        <Grid
+          item
+          xs={8}
+          align="center"
+          alignItems="center"
+          style={{ margin: 'auto' }}
+        >
           <AboutUsImage />
         </Grid>
         <Grid item xs={12}>
