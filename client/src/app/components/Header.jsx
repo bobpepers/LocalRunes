@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -30,110 +30,87 @@ import MobileNav from '../assets/images/mobileNav.svg';
 import Notifications from './Notifications';
 // import 'bootstrap/dist/css/bootstrap.css';
 
-class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      menu: false,
-      height: 0,
-      prevHash: '',
-      currentHash: '',
-      chainInfo: false,
-      anchorEl: null,
-      open: false,
-    };
-    this.toggleMenu = this.toggleMenu.bind(this);
-    this.updateHeight = this.updateHeight.bind(this);
-    this.detectHashChange = this.detectHashChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-  }
+const Header = (props) => {
+  // const { t } = props;
+  const {
+    t,
+    i18n,
+    authenticated,
+    user,
+  } = props;
+  const heightRef = useRef(null);
+  const [menu, setMenu] = useState(false);
+  const [height, setHeight] = useState(0);
 
-  toggleMenu() {
-    this.setState({ menu: !this.state.menu });
-  }
-
-  componentDidMount() {
-    this.updateHeight();
-    window.addEventListener('resize', this.updateHeight);
-    window.addEventListener('scroll', this.detectHashChange);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateHeight);
-    window.removeEventListener('scroll', this.detectHashChange);
-  }
-
-  componentDidUpdate() {
-    this.updateHeight();
-    this.detectHashChange();
-  }
-
-  updateHeight() {
-    if (this.state.height != this.div.clientHeight) {
-      this.setState({ height: this.div.clientHeight });
+  const updateHeight = () => {
+    console.log('clientheight');
+    console.log(height);
+    console.log(heightRef.current.clientHeight);
+    if (height !== heightRef.current.clientHeight) {
+      // this.setState({ height: this.div.clientHeight });
+      setHeight(heightRef.current.clientHeight);
     }
   }
 
-  handleClick(event) {
-    this.setState({ anchorEl: event.currentTarget, open: Boolean(event.currentTarget) });
+  const handleClick = (event) => {
+    // this.setState({ anchorEl: event.currentTarget, open: Boolean(event.currentTarget) });
   }
 
-  handleClose(event) {
-    this.setState({ anchorEl: event.currentTarget, open: false });
+  const handleClose = (event) => {
+    // this.setState({ anchorEl: event.currentTarget, open: false });
   }
 
-  detectHashChange() {
-    this.state.currentHash = window.location.hash.substring(1);
+  useEffect(() => {
+    // document.title = `You clicked ${count} times`;
+    updateHeight();
+  });
 
-    if (this.state.currentHash == '') {
-      // console.log('sip');
+  const toggleMenu = () => {
+    setMenu(!menu);
+    // this.setState({ menu: !this.state.menu });
+  }
 
-    } else {
-      // console.log(this.state.currentHash);
-      if (this.state.currentHash !== '' && this.state.currentHash !== this.state.prevHash) {
-        this.setState({ currentHash: this.state.currentHash });
-        this.state.prevHash = this.state.currentHash;
-      }
+  const show = (menu) ? 'show' : '';
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+  const getCurrentLng = () => i18n.language || window.localStorage.i18nextLng || '';
+  const countryCode = (country) => {
+    if (country == 'pt') {
+      return 'br';
+    }
+    if (country == 'en') {
+      return 'us';
+    }
+    if (country == 'nl') {
+      return 'nl';
     }
   }
-
-  render() {
-    const show = (this.state.menu) ? 'show' : '';
-    const { t, i18n } = this.props;
-    const changeLanguage = (lng) => {
-      i18n.changeLanguage(lng);
-    };
-    const getCurrentLng = () => i18n.language || window.localStorage.i18nextLng || '';
-    const countryCode = (country) => {
-      if (country == 'pt') {
-        return 'br';
-      }
-      if (country == 'en') {
-        return 'us';
-      }
-      if (country == 'nl') {
-        return 'nl';
-      }
-    }
-    console.log(this.props.user);
-    return (
-      <header className="rootRow header" style={{ height: this.state.height }}>
-        <Navbar ref={(div) => { this.div = div; }} fixed="top" className="navbar navbar-default" expand="lg">
-          <Link to={this.props.authenticated ? '/' : '/'} className="nav-link">LocalRunes.com</Link>
-          <button className="navbar-toggler" type="button" onClick={this.toggleMenu}>
-            <MobileNav />
-          </button>
-          <Navbar.Collapse id="basic-navbar-nav" className={`collapse navbar-collapse ${show}`}>
-            <Nav className="mr-auto rNavbar">
-              <Link className="nav-link" to="/buy-runes">
-                Buy RUNES
-              </Link>
-              <Link className="nav-link" to="/sell-runes">
-                Sell RUNES
-              </Link>
-              {
-              this.props.authenticated
+  // console.log(this.props.user);
+  return (
+    <header className="rootRow header" style={{ height }}>
+      <Navbar
+      // ref={(div) => { this.div = div; }}
+        ref={heightRef}
+        fixed="top"
+        className="navbar navbar-default"
+        expand="lg"
+      >
+        <Link to={authenticated ? '/' : '/'} className="nav-link">LocalRunes.com</Link>
+        <button className="navbar-toggler" type="button" onClick={toggleMenu}>
+          <MobileNav />
+        </button>
+        <Navbar.Collapse id="basic-navbar-nav" className={`collapse navbar-collapse ${show}`}>
+          <Nav className="mr-auto rNavbar">
+            <Link className="nav-link" to="/buy-runes">
+              Buy RUNES
+            </Link>
+            <Link className="nav-link" to="/sell-runes">
+              Sell RUNES
+            </Link>
+            {
+              authenticated
                  && (
                  <>
                    <Link className="nav-link" to="/post-ad">
@@ -144,10 +121,10 @@ class Header extends Component {
                  )
             }
 
-            </Nav>
-            <ul>
-              {
-              this.props.authenticated
+          </Nav>
+          <ul>
+            {
+              authenticated
                 && (
                   <>
                     <li>
@@ -159,17 +136,17 @@ class Header extends Component {
 
             }
 
-            </ul>
-            <ul>
-              {
-              this.props.authenticated && this.props.user && this.props.user.role === 4 && (
+          </ul>
+          <ul>
+            {
+              authenticated && user && user.role === 4 && (
                 <li>
                   <NavDropdown
                     className="langPadding toggleLangWrapper"
                     title="Admin"
                     id="basic-nav-dropdown"
                   >
-                    <NavDropdown.Item onClick={this.handleClose}>
+                    <NavDropdown.Item onClick={handleClose}>
                       <div>
                         <Link style={{ color: '#000' }} className="nav-link" to="/admin">
                           <AccountBalanceWalletIcon />
@@ -178,7 +155,7 @@ class Header extends Component {
                         </Link>
                       </div>
                     </NavDropdown.Item>
-                    <NavDropdown.Item onClick={this.handleClose}>
+                    <NavDropdown.Item onClick={handleClose}>
                       <div>
                         <Link style={{ color: '#000' }} className="nav-link" to="/admin/users">
                           <AccountCircleIcon />
@@ -187,7 +164,7 @@ class Header extends Component {
                         </Link>
                       </div>
                     </NavDropdown.Item>
-                    <NavDropdown.Item onClick={this.handleClose}>
+                    <NavDropdown.Item onClick={handleClose}>
                       <div>
                         <Link style={{ color: '#000' }} className="nav-link" to="/admin/countries">
                           <FaceIcon />
@@ -196,7 +173,7 @@ class Header extends Component {
                         </Link>
                       </div>
                     </NavDropdown.Item>
-                    <NavDropdown.Item onClick={this.handleClose}>
+                    <NavDropdown.Item onClick={handleClose}>
                       <div>
                         <Link style={{ color: '#000' }} className="nav-link" to="/admin/currencies">
                           <DashboardIcon />
@@ -205,7 +182,7 @@ class Header extends Component {
                         </Link>
                       </div>
                     </NavDropdown.Item>
-                    <NavDropdown.Item onClick={this.handleClose}>
+                    <NavDropdown.Item onClick={handleClose}>
                       <div>
                         <Link style={{ color: '#000' }} className="nav-link" to="/admin/paymentmethods">
                           <SettingsIcon />
@@ -214,7 +191,7 @@ class Header extends Component {
                         </Link>
                       </div>
                     </NavDropdown.Item>
-                    <NavDropdown.Item onClick={this.handleClose}>
+                    <NavDropdown.Item onClick={handleClose}>
                       <div>
                         <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals">
                           <SettingsIcon />
@@ -227,18 +204,18 @@ class Header extends Component {
                 </li>
               )
   }
-              {
-              this.props.authenticated
+            {
+              authenticated
                 ? (
                   <>
 
                     <li>
                       <NavDropdown
                         className="langPadding toggleLangWrapper"
-                        title={(this.props.user && this.props.user.username)}
+                        title={(user && user.username)}
                         id="basic-nav-dropdown"
                       >
-                        <NavDropdown.Item onClick={this.handleClose}>
+                        <NavDropdown.Item onClick={handleClose}>
                           <div>
                             <Link style={{ color: '#000' }} className="nav-link" to="/wallet">
                               <AccountBalanceWalletIcon />
@@ -247,7 +224,7 @@ class Header extends Component {
                             </Link>
                           </div>
                         </NavDropdown.Item>
-                        <NavDropdown.Item onClick={this.handleClose}>
+                        <NavDropdown.Item onClick={handleClose}>
                           <div>
                             <Link style={{ color: '#000' }} className="nav-link" to="/profile">
                               <AccountCircleIcon />
@@ -256,16 +233,16 @@ class Header extends Component {
                             </Link>
                           </div>
                         </NavDropdown.Item>
-                        <NavDropdown.Item onClick={this.handleClose}>
+                        <NavDropdown.Item onClick={handleClose}>
                           <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to={`/public_profile/${this.props.user && this.props.user.username}`}>
+                            <Link style={{ color: '#000' }} className="nav-link" to={`/public_profile/${user && user.username}`}>
                               <FaceIcon />
                               {' '}
                               Public Profle
                             </Link>
                           </div>
                         </NavDropdown.Item>
-                        <NavDropdown.Item onClick={this.handleClose}>
+                        <NavDropdown.Item onClick={handleClose}>
                           <div>
                             <Link style={{ color: '#000' }} className="nav-link" to="/dashboard">
                               <DashboardIcon />
@@ -274,7 +251,7 @@ class Header extends Component {
                             </Link>
                           </div>
                         </NavDropdown.Item>
-                        <NavDropdown.Item onClick={this.handleClose}>
+                        <NavDropdown.Item onClick={handleClose}>
                           <div>
                             <Link style={{ color: '#000' }} className="nav-link" to="/settings">
                               <SettingsIcon />
@@ -283,7 +260,7 @@ class Header extends Component {
                             </Link>
                           </div>
                         </NavDropdown.Item>
-                        <NavDropdown.Item onClick={this.handleClose}>
+                        <NavDropdown.Item onClick={handleClose}>
                           <div>
                             <Link style={{ color: '#000' }} className="nav-link" to="/signout">
                               <ExitToAppIcon />
@@ -310,46 +287,60 @@ class Header extends Component {
                 )
             }
 
-            </ul>
-            <NavDropdown
-              className="langPadding toggleLangWrapper"
-              title={(
-                <span>
-                  <ReactCountryFlag countryCode={countryCode(`${getCurrentLng()}`)} svg />
-                  {' '}
-                  {t(`${getCurrentLng()}`)}
-                </span>
+          </ul>
+          <NavDropdown
+            className="langPadding toggleLangWrapper"
+            title={(
+              <span>
+                <ReactCountryFlag countryCode={countryCode(`${getCurrentLng()}`)} svg />
+                {' '}
+                {t(`${getCurrentLng()}`)}
+              </span>
               )}
-              id="basic-nav-dropdown"
+            id="basic-nav-dropdown"
+          >
+            <NavDropdown.Item
+              onClick={(event) => {
+                toggleMenu();
+                changeLanguage('en')
+              }}
             >
-              <NavDropdown.Item onClick={(event) => { this.toggleMenu; changeLanguage('en') }}>
-                <div>
-                  <ReactCountryFlag countryCode="us" svg />
-                  {' '}
-                  {t('en')}
-                </div>
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={(event) => { this.toggleMenu; changeLanguage('pt') }}>
-                <div>
-                  <ReactCountryFlag countryCode="br" svg />
-                  {' '}
-                  {t('pt')}
-                </div>
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={(event) => { this.toggleMenu; changeLanguage('nl') }}>
-                <div>
-                  <ReactCountryFlag countryCode="nl" svg />
-                  {' '}
-                  {t('nl')}
-                </div>
-              </NavDropdown.Item>
-            </NavDropdown>
+              <div>
+                <ReactCountryFlag countryCode="us" svg />
+                {' '}
+                {t('en')}
+              </div>
+            </NavDropdown.Item>
+            <NavDropdown.Item
+              onClick={(event) => {
+                toggleMenu();
+                changeLanguage('pt')
+              }}
+            >
+              <div>
+                <ReactCountryFlag countryCode="br" svg />
+                {' '}
+                {t('pt')}
+              </div>
+            </NavDropdown.Item>
+            <NavDropdown.Item
+              onClick={(event) => {
+                toggleMenu();
+                changeLanguage('nl')
+              }}
+            >
+              <div>
+                <ReactCountryFlag countryCode="nl" svg />
+                {' '}
+                {t('nl')}
+              </div>
+            </NavDropdown.Item>
+          </NavDropdown>
 
-          </Navbar.Collapse>
-        </Navbar>
-      </header>
-    )
-  }
+        </Navbar.Collapse>
+      </Navbar>
+    </header>
+  )
 }
 
 function mapStateToProps(state) {
