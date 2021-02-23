@@ -62,6 +62,10 @@ import {
   rejectAdminPendingIdentity,
   updateAdminCurrency,
   updateAdminCountry,
+  fetchAdminDeposits,
+  fetchAdminTrades,
+  fetchAdminPendingWithdrawals,
+  fetchAdminPendingWithdrawalsCount,
 } from './controllers/admin';
 
 import {
@@ -317,6 +321,50 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
+  app.get('/api/admin/count/withdrawals/pending',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    fetchAdminPendingWithdrawalsCount,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.count) {
+        console.log(res.locals.count);
+        res.json({
+          count: res.locals.count,
+        });
+      }
+    });
+
+  app.get('/api/admin/withdrawals/pending',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    fetchAdminPendingWithdrawals,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.withdrawals) {
+        console.log(res.locals.withdrawals);
+        res.json({
+          withdrawals: res.locals.withdrawals,
+        });
+      }
+    });
+
   app.get('/api/admin/countries/all',
     IsAuthenticated,
     isAdmin,
@@ -335,6 +383,50 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         console.log(res.locals.countries);
         res.json({
           countries: res.locals.countries,
+        });
+      }
+    });
+
+  app.get('/api/admin/deposits/all',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    fetchAdminDeposits,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.deposits) {
+        console.log(res.locals.deposits);
+        res.json({
+          deposits: res.locals.deposits,
+        });
+      }
+    });
+
+  app.get('/api/admin/trades/all',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    fetchAdminTrades,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.trades) {
+        console.log(res.locals.trades);
+        res.json({
+          trades: res.locals.trades,
         });
       }
     });

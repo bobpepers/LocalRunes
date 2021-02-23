@@ -19,6 +19,7 @@ import alert from "./alert";
 import activity from "./activity";
 import recentUserActivity from "./recentUserActivity";
 import uploadAvatar from "./uploadAvatar";
+
 import adminWithdrawals from "./admin/adminWithdrawals";
 import adminUserList from "./admin/adminUserList";
 import adminUser from "./admin/adminUser";
@@ -31,6 +32,11 @@ import adminCountries from "./admin/adminCountries";
 import adminCurrencies from "./admin/adminCurrencies";
 import adminPaymentMethods from "./admin/adminPaymentMethods";
 import adminPendingIdentity from "./admin/adminPendingIdentity";
+import adminDeposits from "./admin/adminDeposits";
+import adminTrades from "./admin/adminTrades";
+import adminPendingWithdrawals from "./admin/adminPendingWithdrawals";
+import adminPendingWithdrawalsCount from "./admin/adminPendingWithdrawalsCount";
+
 
 
 import createReport from './createReport';
@@ -86,6 +92,10 @@ const rootReducer = combineReducers({
   adminCurrencies: adminCurrencies,
   adminPaymentMethods: adminPaymentMethods,
   adminPendingIdentity: adminPendingIdentity,
+  adminDeposits: adminDeposits,
+  adminTrades: adminTrades,
+  adminPendingWithdrawals: adminPendingWithdrawals,
+  adminPendingWithdrawalsCount: adminPendingWithdrawalsCount,
 
   verifyPhoneCode: verifyPhoneCode,
   getPhoneCode: getPhoneCode,

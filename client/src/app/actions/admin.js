@@ -57,6 +57,15 @@ import {
   REMOVE_ADMINPENDINGIDENTITY,
   UPDATE_ADMINCURRENCY,
   UPDATE_ADMINCOUNTRY,
+  FETCH_ADMINDEPOSITS_BEGIN,
+  FETCH_ADMINDEPOSITS_SUCCESS,
+  FETCH_ADMINDEPOSITS_FAIL,
+  FETCH_ADMINTRADES_BEGIN,
+  FETCH_ADMINTRADES_SUCCESS,
+  FETCH_ADMINTRADES_FAIL,
+  FETCH_ADMINPENDINGWITHDRAWAL_BEGIN,
+  FETCH_ADMINPENDINGWITHDRAWAL_SUCCESS,
+  FETCH_ADMINPENDINGWITHDRAWAL_FAIL,
 } from './types/index';
 
 export function adminRejectIdentity(id) {
@@ -173,6 +182,30 @@ export function fetchAdminPendingIdentityData() {
       }).catch((error) => {
         dispatch({
           type: FETCH_ADMINPENDINGIDENTITY_FAIL,
+          payload: error,
+        });
+      });
+  }
+}
+
+/**
+ * Fetch Withdrawal Data
+ */
+export function fetchAdminPendingWithdrawalData() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINPENDINGWITHDRAWAL_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.get(`${process.env.API_URL}/admin/withdrawals/pending`)
+      .then((response) => {
+        dispatch({
+          type: FETCH_ADMINPENDINGWITHDRAWAL_SUCCESS,
+          payload: response.data,
+        })
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINPENDINGWITHDRAWAL_FAIL,
           payload: error,
         });
       });
@@ -1311,6 +1344,122 @@ export function addAdminCurrency(obj) {
   }
 }
 
+export function fetchAdminTradesData() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINTRADES_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.get(`${process.env.API_URL}/admin/trades/all`)
+      .then((response) => {
+        dispatch({
+          type: FETCH_ADMINTRADES_SUCCESS,
+          payload: response.data.trades,
+        });
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINTRADES_FAIL,
+          payload: error,
+        });
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function fetchAdminDepositsData() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINDEPOSITS_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.get(`${process.env.API_URL}/admin/deposits/all`)
+      .then((response) => {
+        dispatch({
+          type: FETCH_ADMINDEPOSITS_SUCCESS,
+          payload: response.data.deposits,
+        });
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINDEPOSITS_FAIL,
+          payload: error,
+        });
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
 export function fetchAdminPaymentMethodData() {
   return function (dispatch) {
     dispatch({
@@ -1319,16 +1468,6 @@ export function fetchAdminPaymentMethodData() {
     // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
     axios.get(`${process.env.API_URL}/admin/paymentmethod/all`)
       .then((response) => {
-        console.log('response.data.paymentMethod');
-        console.log('response.data.paymentMethod');
-        console.log('response.data.paymentMethod');
-        console.log('response.data.paymentMethod');
-        console.log('response.data.paymentMethod');
-        console.log('response.data.paymentMethod');
-        console.log('response.data.paymentMethod');
-        console.log('response.data.paymentMethod');
-        console.log('response.data.paymentMethod');
-        console.log(response.data.paymentMethod);
         dispatch({
           type: FETCH_ADMINPAYMENTMETHOD_SUCCESS,
           payload: response.data.paymentMethod,
@@ -1338,7 +1477,6 @@ export function fetchAdminPaymentMethodData() {
           type: FETCH_ADMINPAYMENTMETHOD_FAIL,
           payload: error,
         });
-
         if (error.response) {
           // client received an error response (5xx, 4xx)
           console.log(error.response);

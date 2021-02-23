@@ -45,6 +45,12 @@ box-shadow: 0 4px 10px -2px var(--menuBorderShadow);
   display: block;
   padding: 0.5rem 1rem;
 }
+.adminDropdownWrapper {
+  padding: 0 1rem;
+}
+#admin_nav_dropdown {
+  padding: 0;
+}
 .navbar-light .navbar-toggler {
   color: var(--menuMobileNavColor);
   border-color: var(--menuMobileNavColor);

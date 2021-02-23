@@ -55,6 +55,7 @@ const Notifications = (props) => {
           aria-label="show notifications"
           color="inherit"
           onClick={handleClick}
+          style={{ padding: 0 }}
         >
           <Badge badgeContent={trade && trade.length && trade.length} color="secondary">
             <NotificationsIcon />

@@ -25,9 +25,12 @@ import Admin from './views/admin/Admin';
 import AdminCountryManagement from './views/admin/AdminCountryManagement';
 import AdminCurrencyManagement from './views/admin/AdminCurrencyManagement';
 import AdminPaymentMethodManagement from './views/admin/AdminPaymentMethodManagement';
+import AdminTradeManagement from './views/admin/AdminTradeManagement';
+import AdminDepositMethodManagement from './views/admin/AdminDepositManagement';
 import AdminUserList from './views/admin/AdminUserList';
 import AdminUser from './views/admin/AdminUser';
 import AdminWithdrawals from './views/admin/AdminWithdrawals';
+import AdminPendingWithdrawals from './views/admin/AdminPendingWithdrawals';
 
 import withTracker from './hooks/withTracker';
 
@@ -221,6 +224,22 @@ const Routes = (props) => {
         exact
         component={requireAuth(withTracker(AdminWithdrawals))}
       />
+      <Route
+        path="/admin/withdrawals/pending"
+        exact
+        component={requireAuth(withTracker(AdminPendingWithdrawals))}
+      />
+      <Route
+        path="/admin/trades"
+        exact
+        component={requireAuth(withTracker(AdminTradeManagement))}
+      />
+      <Route
+        path="/admin/deposits"
+        exact
+        component={requireAuth(withTracker(AdminDepositMethodManagement))}
+      />
+
       <Route
         path="/admin/user/:id"
         exact

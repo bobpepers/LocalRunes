@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 import {
   Drawer,
   List,
@@ -26,7 +29,6 @@ import { fetchUserData } from '../../actions/user';
 import * as actions from '../../actions/auth';
 import AdminUserList from './AdminUserList';
 import AdminWithdrawals from './AdminWithdrawals';
-import AdminBanners from './AdminBanners';
 import AdminIdentity from './AdminIdentity';
 import AdminReviewBanners from './AdminReviewBanners';
 import AdminReviewPublishers from './AdminReviewPublishers';
@@ -342,11 +344,6 @@ const Admin = (props) => {
         {
           dashboardPath === 'identity' && (
           <AdminIdentity />
-          )
-        }
-        {
-          dashboardPath === 'banners' && (
-          <AdminBanners />
           )
         }
         {

@@ -19,7 +19,7 @@ import Location from './components/Location';
 // import { AUTH_USER } from './actions/types/index';
 
 import ParticlesRunebase from './components/ParticlesRunebase';
-import Snow from './components/Snow';
+// import Snow from './components/Snow';
 import {
   onVolume,
   authenticated,

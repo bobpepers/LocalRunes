@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect, useDispatch } from 'react-redux';
-// import { Link } from 'react-router-dom';
+
 import {
-  Grid,
   Button,
   Table,
   TableBody,
@@ -12,85 +11,66 @@ import {
   TableRow,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import history from '../../history';
 import {
-  fetchAdminPublishersData,
-  banAdminPublisher,
+  fetchAdminTradesData,
 } from '../../actions/admin';
-// import { rejectWithdrawal, acceptWithdrawal } from '../../actions/adminWithdraw';
 
-const AdminPublishers = (props) => {
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+});
+
+const adminUserList = (props) => {
   const {
-    adminPublishers,
+    adminTrades,
   } = props;
+  const classes = useStyles();
   const dispatch = useDispatch();
-  useEffect(() => dispatch(fetchAdminPublishersData()), [dispatch]);
+  useEffect(() => dispatch(fetchAdminTradesData()), [dispatch]);
   useEffect(() => {
-    console.log('adminPublishers');
-    console.log(adminPublishers);
-  }, [adminPublishers]);
-
-  const ban = (id) => {
-    dispatch(banAdminPublisher(id));
-  }
+  }, [adminTrades]);
 
   return (
     <div className="content index600 height100 w-100 transactions transaction">
       <TableContainer>
-        <Table
-          size="small"
-          aria-label="simple table"
-        >
+        <Table className={classes.table} size="small" aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>id</TableCell>
-              <TableCell align="right">domain</TableCell>
-              <TableCell align="right">impressions</TableCell>
-              <TableCell align="right">earned</TableCell>
-              <TableCell align="right">verified</TableCell>
-              <TableCell align="right">review</TableCell>
-              <TableCell align="right">banned</TableCell>
+              <TableCell align="right">stage</TableCell>
+              <TableCell align="right">Ad user</TableCell>
+              <TableCell align="right">Trade user</TableCell>
+              <TableCell align="right">postAd type</TableCell>
+              <TableCell align="right">amount</TableCell>
+              <TableCell align="right">action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {adminPublishers
-            && adminPublishers.data
-            && adminPublishers.data.map((publisher, i) => {
-              console.log(publisher);
+            {adminTrades
+            && adminTrades.map((trade, i) => {
+              console.log(trade);
               return (
                 <TableRow key={i}>
                   <TableCell component="th" scope="row">
-                    {publisher.id}
+                    {trade.id}
                   </TableCell>
+                  <TableCell align="right">{trade.type}</TableCell>
+                  <TableCell align="right">{trade.postAd.user.username}</TableCell>
+                  <TableCell align="right">{trade.user.username}</TableCell>
+                  <TableCell align="right">{trade.postAd.type}</TableCell>
+                  <TableCell align="right">{trade.amount / 1e8}</TableCell>
                   <TableCell align="right">
-                    {publisher.subdomain && publisher.subdomain !== 'www' ? `${publisher.subdomain}.` : ''}
-                    {publisher.domain.domain}
-                  </TableCell>
-                  <TableCell align="right">{publisher.impressions}</TableCell>
-                  <TableCell align="right">...</TableCell>
-                  <TableCell align="right">{publisher.verified ? 'verified' : 'unverified'}</TableCell>
-                  <TableCell align="right">{publisher.review}</TableCell>
-                  <TableCell align="right">
-                    {publisher.banned
-                      ? (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="large"
-                          onClick={() => ban(publisher.id)}
-                        >
-                          Unban
-                        </Button>
-                      )
-                      : (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="large"
-                          onClick={() => ban(publisher.id)}
-                        >
-                          Ban
-                        </Button>
-                      )}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      onClick={() => history.push(`/admin/trade/${trade.id}`)}
+                      // onClick={() => clickUserInfo(user.id)}
+                    >
+                      Info
+                    </Button>
                   </TableCell>
                 </TableRow>
               )
@@ -103,10 +83,12 @@ const AdminPublishers = (props) => {
 }
 
 function mapStateToProps(state) {
-  console.log(state.adminPublishers)
+  console.log(state.adminUserList)
   return {
-    adminPublishers: state.adminPublishers,
+    adminTrades: state.adminTrades.data,
+    user: state.user,
+    errorMessage: state.auth.error,
   };
 }
 
-export default connect(mapStateToProps, null)(AdminPublishers);
+export default connect(mapStateToProps, null)(adminUserList);

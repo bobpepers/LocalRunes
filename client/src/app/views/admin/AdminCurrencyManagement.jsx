@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+import {
+  connect,
+  useDispatch,
+} from 'react-redux';
 // import { Link } from 'react-router-dom';
 import {
   Grid,
@@ -22,39 +28,11 @@ import {
   change,
 } from 'redux-form';
 import {
-  fetchAdminPublishersData,
-  banAdminPublisher,
   fetchAdminCurrencyData,
   addAdminCurrency,
   updateCurrency,
   // dddCountryAdmin,
 } from '../../actions/admin';
-// import { rejectWithdrawal, acceptWithdrawal } from '../../actions/adminWithdraw';
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
-function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: 'absolute',
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-}));
 
 const renderField = ({
   input, type, placeholder, meta: { touched, error },
@@ -83,7 +61,6 @@ const AdminCurrencies = (props) => {
     handleSubmit,
   } = props;
   const dispatch = useDispatch();
-  const [data, setData] = useState([]);
   const [inEditMode, setInEditMode] = useState({
     status: false,
     rowKey: null,
@@ -100,10 +77,6 @@ const AdminCurrencies = (props) => {
   }
 
   const onSave = async ({ id }) => {
-    // await updateCurrency();
-    console.log(id);
-    console.log(unitName);
-    console.log(unitIso);
     await dispatch(updateCurrency(id, unitName, unitIso));
     setInEditMode({
       status: false,
@@ -126,22 +99,8 @@ const AdminCurrencies = (props) => {
   }
 
   useEffect(() => dispatch(fetchAdminCurrencyData()), [dispatch]);
-  useEffect(() => {
-    console.log('adminCurrencies');
-    console.log('adminCurrencies');
-    console.log('adminCurrencies');
-    console.log('adminCurrencies');
-    console.log('adminCurrencies');
-    console.log('adminCurrencies');
-    console.log('adminCurrencies');
-    console.log('adminCurrencies');
-    console.log('adminCurrencies');
-    console.log(adminCurrencies);
-  }, [adminCurrencies]);
+  useEffect(() => { }, [adminCurrencies]);
 
-  const update = (id) => {
-    dispatch(updateCurrency(id));
-  }
   const handleFormSubmit = async (obj) => {
     await dispatch(addAdminCurrency(obj));
   }

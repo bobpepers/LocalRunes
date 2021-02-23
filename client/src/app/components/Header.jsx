@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   Navbar,
@@ -28,6 +28,8 @@ import FaceIcon from '@material-ui/icons/Face';
 import SettingsIcon from '@material-ui/icons/Settings';
 import MobileNav from '../assets/images/mobileNav.svg';
 import Notifications from './Notifications';
+import { getPendingWithdrawalCount } from '../actions/adminCounts';
+
 // import 'bootstrap/dist/css/bootstrap.css';
 
 const Header = (props) => {
@@ -37,8 +39,10 @@ const Header = (props) => {
     i18n,
     authenticated,
     user,
+    adminPendingWithdrawalsCount,
   } = props;
   const heightRef = useRef(null);
+  const dispatch = useDispatch();
   const [menu, setMenu] = useState(false);
   const [height, setHeight] = useState(0);
 
@@ -64,6 +68,33 @@ const Header = (props) => {
     // document.title = `You clicked ${count} times`;
     updateHeight();
   });
+
+  useEffect(() => {
+    if (user && user.role === 4) {
+      dispatch(getPendingWithdrawalCount());
+      const interval = setInterval(() => {
+        dispatch(getPendingWithdrawalCount());
+      }, 1 * 60 * 1000);
+      return () => clearInterval(interval);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    console.log('adminPendingWithdrawalsCount');
+    console.log('adminPendingWithdrawalsCount');
+    console.log('adminPendingWithdrawalsCount');
+    console.log('adminPendingWithdrawalsCount');
+    console.log('adminPendingWithdrawalsCount');
+    console.log('adminPendingWithdrawalsCount');
+    console.log('adminPendingWithdrawalsCount');
+    console.log('adminPendingWithdrawalsCount');
+    console.log('adminPendingWithdrawalsCount');
+    console.log('adminPendingWithdrawalsCount');
+    console.log('adminPendingWithdrawalsCount');
+    console.log('adminPendingWithdrawalsCount');
+
+    console.log(adminPendingWithdrawalsCount);
+  }, [adminPendingWithdrawalsCount]);
 
   const toggleMenu = () => {
     setMenu(!menu);
@@ -135,117 +166,23 @@ const Header = (props) => {
                 )
 
             }
-
           </ul>
-          <ul>
-            {
-              authenticated && user && user.role === 4 && (
-                <li>
-                  <NavDropdown
-                    className="langPadding toggleLangWrapper"
-                    title="Admin"
-                    id="basic-nav-dropdown"
-                  >
-                    <NavDropdown.Item onClick={handleClose}>
-                      <div>
-                        <Link style={{ color: '#000' }} className="nav-link" to="/admin">
-                          <AccountBalanceWalletIcon />
-                          {' '}
-                          Dashboard
-                        </Link>
-                      </div>
-                    </NavDropdown.Item>
-                    <NavDropdown.Item onClick={handleClose}>
-                      <div>
-                        <Link style={{ color: '#000' }} className="nav-link" to="/admin/users">
-                          <AccountCircleIcon />
-                          {' '}
-                          User Managment
-                        </Link>
-                      </div>
-                    </NavDropdown.Item>
-                    <NavDropdown.Item onClick={handleClose}>
-                      <div>
-                        <Link style={{ color: '#000' }} className="nav-link" to="/admin/countries">
-                          <FaceIcon />
-                          {' '}
-                          Countries
-                        </Link>
-                      </div>
-                    </NavDropdown.Item>
-                    <NavDropdown.Item onClick={handleClose}>
-                      <div>
-                        <Link style={{ color: '#000' }} className="nav-link" to="/admin/currencies">
-                          <DashboardIcon />
-                          {' '}
-                          Currencies
-                        </Link>
-                      </div>
-                    </NavDropdown.Item>
-                    <NavDropdown.Item onClick={handleClose}>
-                      <div>
-                        <Link style={{ color: '#000' }} className="nav-link" to="/admin/paymentmethods">
-                          <SettingsIcon />
-                          {' '}
-                          Payment Methods
-                        </Link>
-                      </div>
-                    </NavDropdown.Item>
-                    <NavDropdown.Item onClick={handleClose}>
-                      <div>
-                        <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals">
-                          <SettingsIcon />
-                          {' '}
-                          Withdrawals
-                        </Link>
-                      </div>
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </li>
-              )
-  }
-            {
-              authenticated
-                ? (
-                  <>
 
-                    <li>
+          {
+              authenticated && user && user.role === 4 && (
+                <ul className="adminDropdownWrapper">
+                  <li>
+                    <Badge badgeContent={adminPendingWithdrawalsCount && adminPendingWithdrawalsCount} color="secondary">
+
                       <NavDropdown
                         className="langPadding toggleLangWrapper"
-                        title={(user && user.username)}
-                        id="basic-nav-dropdown"
+                        title="Admin"
+                        id="admin_nav_dropdown"
                       >
                         <NavDropdown.Item onClick={handleClose}>
                           <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/wallet">
+                            <Link style={{ color: '#000' }} className="nav-link" to="/admin">
                               <AccountBalanceWalletIcon />
-                              {' '}
-                              Wallet
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/profile">
-                              <AccountCircleIcon />
-                              {' '}
-                              My Account
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to={`/public_profile/${user && user.username}`}>
-                              <FaceIcon />
-                              {' '}
-                              Public Profle
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/dashboard">
-                              <DashboardIcon />
                               {' '}
                               Dashboard
                             </Link>
@@ -253,41 +190,170 @@ const Header = (props) => {
                         </NavDropdown.Item>
                         <NavDropdown.Item onClick={handleClose}>
                           <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/settings">
+                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals/pending">
                               <SettingsIcon />
                               {' '}
-                              Settings
+                              Pending Withdrawals (
+                              {adminPendingWithdrawalsCount || 0}
+                              )
                             </Link>
                           </div>
                         </NavDropdown.Item>
                         <NavDropdown.Item onClick={handleClose}>
                           <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/signout">
-                              <ExitToAppIcon />
+                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals">
+                              <SettingsIcon />
                               {' '}
-                              Logout
+                              Withdrawals
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/deposits">
+                              <SettingsIcon />
+                              {' '}
+                              Deposits
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/trades">
+                              <SettingsIcon />
+                              {' '}
+                              Trades
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/users">
+                              <AccountCircleIcon />
+                              {' '}
+                              User Managment
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/countries">
+                              <FaceIcon />
+                              {' '}
+                              Countries
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/currencies">
+                              <DashboardIcon />
+                              {' '}
+                              Currencies
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/paymentmethods">
+                              <SettingsIcon />
+                              {' '}
+                              Payment Methods
                             </Link>
                           </div>
                         </NavDropdown.Item>
                       </NavDropdown>
-                    </li>
+                    </Badge>
+                  </li>
+                </ul>
+              )
+  }
+          {
+              authenticated
+                ? (
+                  <>
+                    <ul>
+                      <li>
+                        <NavDropdown
+                          className="langPadding toggleLangWrapper"
+                          title={(user && user.username)}
+                          id="basic-nav-dropdown"
+                        >
+                          <NavDropdown.Item onClick={handleClose}>
+                            <div>
+                              <Link style={{ color: '#000' }} className="nav-link" to="/wallet">
+                                <AccountBalanceWalletIcon />
+                                {' '}
+                                Wallet
+                              </Link>
+                            </div>
+                          </NavDropdown.Item>
+                          <NavDropdown.Item onClick={handleClose}>
+                            <div>
+                              <Link style={{ color: '#000' }} className="nav-link" to="/profile">
+                                <AccountCircleIcon />
+                                {' '}
+                                My Account
+                              </Link>
+                            </div>
+                          </NavDropdown.Item>
+                          <NavDropdown.Item onClick={handleClose}>
+                            <div>
+                              <Link style={{ color: '#000' }} className="nav-link" to={`/public_profile/${user && user.username}`}>
+                                <FaceIcon />
+                                {' '}
+                                Public Profle
+                              </Link>
+                            </div>
+                          </NavDropdown.Item>
+                          <NavDropdown.Item onClick={handleClose}>
+                            <div>
+                              <Link style={{ color: '#000' }} className="nav-link" to="/dashboard">
+                                <DashboardIcon />
+                                {' '}
+                                Dashboard
+                              </Link>
+                            </div>
+                          </NavDropdown.Item>
+                          <NavDropdown.Item onClick={handleClose}>
+                            <div>
+                              <Link style={{ color: '#000' }} className="nav-link" to="/settings">
+                                <SettingsIcon />
+                                {' '}
+                                Settings
+                              </Link>
+                            </div>
+                          </NavDropdown.Item>
+                          <NavDropdown.Item onClick={handleClose}>
+                            <div>
+                              <Link style={{ color: '#000' }} className="nav-link" to="/signout">
+                                <ExitToAppIcon />
+                                {' '}
+                                Logout
+                              </Link>
+                            </div>
+                          </NavDropdown.Item>
+                        </NavDropdown>
+                      </li>
+                    </ul>
                   </>
 
                 )
                 : (
                   <>
-                    <li>
-                      <Link className="nav-link" to="/signup">Sign up free</Link>
-                    </li>
-                    <li>
-                      <Link className="nav-link" to="/signin">Sign in</Link>
-                    </li>
+                    <ul>
+                      <li>
+                        <Link className="nav-link" to="/signup">Sign up free</Link>
+                      </li>
+                      <li>
+                        <Link className="nav-link" to="/signin">Sign in</Link>
+                      </li>
+                    </ul>
                   </>
 
                 )
             }
 
-          </ul>
           <NavDropdown
             className="langPadding toggleLangWrapper"
             title={(
@@ -347,6 +413,7 @@ function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
     user: state.user.data,
+    adminPendingWithdrawalsCount: state.adminPendingWithdrawalsCount.data,
   };
 }
 

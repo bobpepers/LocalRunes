@@ -7,6 +7,7 @@ import {
   ACCEPT_WITHDRAW_SUCCESS,
   ACCEPT_WITHDRAW_FAIL,
   UPDATE_WITHDRAW,
+  UPDATE_PENDING_WITHDRAW,
 } from './types/index';
 
 export function rejectWithdrawal(obj) {
@@ -25,6 +26,10 @@ export function rejectWithdrawal(obj) {
         });
         dispatch({
           type: UPDATE_WITHDRAW,
+          payload: response.data.transaction,
+        });
+        dispatch({
+          type: UPDATE_PENDING_WITHDRAW,
           payload: response.data.transaction,
         });
       }).catch((error) => {
@@ -51,6 +56,10 @@ export function acceptWithdrawal(obj) {
         });
         dispatch({
           type: UPDATE_WITHDRAW,
+          payload: response.data.transaction,
+        });
+        dispatch({
+          type: UPDATE_PENDING_WITHDRAW,
           payload: response.data.transaction,
         });
       }).catch((error) => {

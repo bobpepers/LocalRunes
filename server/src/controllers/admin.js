@@ -49,6 +49,55 @@ export const fetchAdminWithdrawals = async (req, res, next) => {
   }
 };
 
+export const fetchAdminPendingWithdrawalsCount = async (req, res, next) => {
+  try {
+    res.locals.count = await db.transaction.count({
+      where: {
+        type: 'send',
+        phase: 'review',
+      },
+    });
+    console.log(res.locals.count);
+    next();
+  } catch (error) {
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const fetchAdminPendingWithdrawals = async (req, res, next) => {
+  console.log('fetchAdminWithdrawals');
+  try {
+    res.locals.withdrawals = await db.transaction.findAll({
+      order: [['id', 'DESC']],
+      where: {
+        type: 'send',
+        phase: 'review',
+      },
+      include: [{
+        model: db.address,
+        as: 'address',
+        include: [{
+          model: db.wallet,
+          as: 'wallet',
+          include: [{
+            model: db.user,
+            as: 'user',
+            attributes: [
+              'username',
+            ],
+          }],
+        }],
+      }],
+    });
+    console.log(res.locals.withdrawals);
+    next();
+  } catch (error) {
+    res.locals.error = error;
+    next();
+  }
+};
+
 export const fetchAdminPendingIdentity = async (req, res, next) => {
   try {
     res.locals.users = await db.user.findAll({
@@ -815,6 +864,84 @@ export const fetchAdminCountries = async (req, res, next) => {
         },
       ],
     });
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+export const fetchAdminDeposits = async (req, res, next) => {
+  try {
+    res.locals.deposits = await db.transaction.findAll({
+      where: {
+        type: 'receive',
+      },
+      order: [
+        ['id', 'DESC'],
+      ],
+      include: [
+        {
+          model: db.address,
+          as: 'address',
+          required: false,
+          include: [
+            {
+              model: db.wallet,
+              as: 'wallet',
+              required: false,
+              include: [
+                {
+                  model: db.user,
+                  as: 'user',
+                  required: false,
+                  attributes: ['username'],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const fetchAdminTrades = async (req, res, next) => {
+  try {
+    res.locals.trades = await db.trade.findAll({
+      order: [
+        ['id', 'DESC'],
+      ],
+      include: [
+        {
+          model: db.user,
+          as: 'user',
+          required: true,
+          attributes: ['username'],
+        },
+        {
+          model: db.postAd,
+          as: 'postAd',
+          required: true,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+      ],
+    });
+
     next();
   } catch (error) {
     console.log(error);
