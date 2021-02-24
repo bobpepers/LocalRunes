@@ -1,4 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -42,32 +47,35 @@ const Header = (props) => {
     adminPendingWithdrawalsCount,
   } = props;
   const heightRef = useRef(null);
+  const [ref, setRef] = useState(null);
   const dispatch = useDispatch();
   const [menu, setMenu] = useState(false);
   const [height, setHeight] = useState(0);
 
-  const updateHeight = () => {
-    console.log('clientheight');
-    console.log(height);
-    console.log(heightRef.current.clientHeight);
-    if (height !== heightRef.current.clientHeight) {
-      // this.setState({ height: this.div.clientHeight });
-      setHeight(heightRef.current.clientHeight);
-    }
-  }
-
   const handleClick = (event) => {
     // this.setState({ anchorEl: event.currentTarget, open: Boolean(event.currentTarget) });
+
   }
 
   const handleClose = (event) => {
     // this.setState({ anchorEl: event.currentTarget, open: false });
   }
 
+  const handleWindowResize = useCallback((event) => {
+    console.log('resize window');
+    if (height !== heightRef.current.clientHeight) {
+      // this.setState({ height: this.div.clientHeight });
+      setHeight(heightRef.current.clientHeight);
+    }
+  }, []);
+
   useEffect(() => {
-    // document.title = `You clicked ${count} times`;
-    updateHeight();
-  });
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, [handleWindowResize]);
 
   useEffect(() => {
     if (user && user.role === 4) {
@@ -79,26 +87,14 @@ const Header = (props) => {
     }
   }, [user]);
 
-  useEffect(() => {
-    console.log('adminPendingWithdrawalsCount');
-    console.log('adminPendingWithdrawalsCount');
-    console.log('adminPendingWithdrawalsCount');
-    console.log('adminPendingWithdrawalsCount');
-    console.log('adminPendingWithdrawalsCount');
-    console.log('adminPendingWithdrawalsCount');
-    console.log('adminPendingWithdrawalsCount');
-    console.log('adminPendingWithdrawalsCount');
-    console.log('adminPendingWithdrawalsCount');
-    console.log('adminPendingWithdrawalsCount');
-    console.log('adminPendingWithdrawalsCount');
-    console.log('adminPendingWithdrawalsCount');
+  useEffect(() => { }, [adminPendingWithdrawalsCount]);
 
-    console.log(adminPendingWithdrawalsCount);
-  }, [adminPendingWithdrawalsCount]);
+  useEffect(() => {
+    setHeight(heightRef.current.clientHeight);
+  }, [menu]);
 
   const toggleMenu = () => {
     setMenu(!menu);
-    // this.setState({ menu: !this.state.menu });
   }
 
   const show = (menu) ? 'show' : '';
@@ -129,7 +125,11 @@ const Header = (props) => {
         expand="lg"
       >
         <Link to={authenticated ? '/' : '/'} className="nav-link">LocalRunes.com</Link>
-        <button className="navbar-toggler" type="button" onClick={toggleMenu}>
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={toggleMenu}
+        >
           <MobileNav />
         </button>
         <Navbar.Collapse id="basic-navbar-nav" className={`collapse navbar-collapse ${show}`}>
