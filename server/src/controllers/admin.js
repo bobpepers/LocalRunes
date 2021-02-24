@@ -65,6 +65,21 @@ export const fetchAdminPendingWithdrawalsCount = async (req, res, next) => {
   }
 };
 
+export const fetchAdminPendingIdentityCount = async (req, res, next) => {
+  try {
+    res.locals.count = await db.user.count({
+      where: {
+        identityVerified: 'pending',
+      },
+    });
+    console.log(res.locals.count);
+    next();
+  } catch (error) {
+    res.locals.error = error;
+    next();
+  }
+};
+
 export const fetchAdminPendingWithdrawals = async (req, res, next) => {
   console.log('fetchAdminWithdrawals');
   try {

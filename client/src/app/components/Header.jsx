@@ -33,7 +33,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import SettingsIcon from '@material-ui/icons/Settings';
 import MobileNav from '../assets/images/mobileNav.svg';
 import Notifications from './Notifications';
-import { getPendingWithdrawalCount } from '../actions/adminCounts';
+import { getPendingWithdrawalCount, getPendingIdentityCount } from '../actions/adminCounts';
 
 // import 'bootstrap/dist/css/bootstrap.css';
 
@@ -45,6 +45,7 @@ const Header = (props) => {
     authenticated,
     user,
     adminPendingWithdrawalsCount,
+    adminPendingIdentityCount,
   } = props;
   const heightRef = useRef(null);
   const [ref, setRef] = useState(null);
@@ -80,8 +81,10 @@ const Header = (props) => {
   useEffect(() => {
     if (user && user.role === 4) {
       dispatch(getPendingWithdrawalCount());
+      dispatch(getPendingIdentityCount());
       const interval = setInterval(() => {
         dispatch(getPendingWithdrawalCount());
+        dispatch(getPendingIdentityCount());
       }, 1 * 60 * 1000);
       return () => clearInterval(interval);
     }
@@ -172,7 +175,7 @@ const Header = (props) => {
               authenticated && user && user.role === 4 && (
                 <ul className="adminDropdownWrapper">
                   <li>
-                    <Badge badgeContent={adminPendingWithdrawalsCount && adminPendingWithdrawalsCount} color="secondary">
+                    <Badge badgeContent={adminPendingWithdrawalsCount && adminPendingWithdrawalsCount + adminPendingIdentityCount} color="secondary">
 
                       <NavDropdown
                         className="langPadding toggleLangWrapper"
@@ -204,7 +207,9 @@ const Header = (props) => {
                             <Link style={{ color: '#000' }} className="nav-link" to="/admin/identity/pending">
                               <SettingsIcon />
                               {' '}
-                              Pending Identity
+                              Pending Identity (
+                              {adminPendingIdentityCount || 0}
+                              )
                             </Link>
                           </div>
                         </NavDropdown.Item>
@@ -423,6 +428,7 @@ function mapStateToProps(state) {
     authenticated: state.auth.authenticated,
     user: state.user.data,
     adminPendingWithdrawalsCount: state.adminPendingWithdrawalsCount.data,
+    adminPendingIdentityCount: state.adminPendingIdentityCount.data,
   };
 }
 

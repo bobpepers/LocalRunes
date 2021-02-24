@@ -5,7 +5,7 @@ import {
 } from '../../actions/types/index';
 
 const initialState = {
-  data: null,
+  data: 0,
   loading: false,
   error: null,
 };

@@ -66,6 +66,7 @@ import {
   fetchAdminTrades,
   fetchAdminPendingWithdrawals,
   fetchAdminPendingWithdrawalsCount,
+  fetchAdminPendingIdentityCount,
 } from './controllers/admin';
 
 import {
@@ -326,6 +327,28 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     isAdmin,
     ensuretfa,
     fetchAdminPendingWithdrawalsCount,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.count) {
+        console.log(res.locals.count);
+        res.json({
+          count: res.locals.count,
+        });
+      }
+    });
+
+  app.get('/api/admin/count/identity/pending',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    fetchAdminPendingIdentityCount,
     (req, res) => {
       if (res.locals.error) {
         res.status(401).send({
