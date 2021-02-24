@@ -31,6 +31,7 @@ import AdminUserList from './views/admin/AdminUserList';
 import AdminUser from './views/admin/AdminUser';
 import AdminWithdrawals from './views/admin/AdminWithdrawals';
 import AdminPendingWithdrawals from './views/admin/AdminPendingWithdrawals';
+import AdminIdentity from './views/admin/AdminIdentity';
 
 import withTracker from './hooks/withTracker';
 
@@ -228,6 +229,11 @@ const Routes = (props) => {
         path="/admin/withdrawals/pending"
         exact
         component={requireAuth(withTracker(AdminPendingWithdrawals))}
+      />
+      <Route
+        path="/admin/identity/pending"
+        exact
+        component={requireAuth(withTracker(AdminIdentity))}
       />
       <Route
         path="/admin/trades"

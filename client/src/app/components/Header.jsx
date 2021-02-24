@@ -201,6 +201,15 @@ const Header = (props) => {
                         </NavDropdown.Item>
                         <NavDropdown.Item onClick={handleClose}>
                           <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/identity/pending">
+                              <SettingsIcon />
+                              {' '}
+                              Pending Identity
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={handleClose}>
+                          <div>
                             <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals">
                               <SettingsIcon />
                               {' '}

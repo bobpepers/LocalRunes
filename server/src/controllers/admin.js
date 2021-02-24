@@ -932,6 +932,18 @@ export const fetchAdminTrades = async (req, res, next) => {
           // attributes: ['username'],
           include: [
             {
+              model: db.currency,
+              as: 'currency',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
+              model: db.paymentMethod,
+              as: 'paymentMethod',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
               model: db.user,
               as: 'user',
               required: true,

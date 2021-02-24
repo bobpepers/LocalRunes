@@ -59,9 +59,9 @@ const headCells = [
   {
     id: 'currency', numeric: true, disablePadding: false, label: 'Currency',
   },
-  {
-    id: 'actual', numeric: true, disablePadding: false, label: 'Over/Under Price %',
-  },
+  // {
+  //  id: 'actual', numeric: true, disablePadding: false, label: 'Over/Under Price %',
+  // },
   {
     id: 'limits', numeric: true, disablePadding: false, label: 'Limits',
   },

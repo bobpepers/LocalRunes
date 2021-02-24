@@ -440,9 +440,15 @@ function EnhancedTable(props) {
                       </TableCell>
                       <TableCell align="right">{row.country}</TableCell>
                       <TableCell align="right">{row.paymentMethod}</TableCell>
-                      <TableCell align="right">{row.price}</TableCell>
-                      <TableCell align="right">{row.currency}</TableCell>
                       <TableCell align="right">
+                        {priceChange > 0 ? (<span style={{ color: 'red' }}><TrendingUpIcon /></span>) : (<span style={{ color: 'green' }}><TrendingDownIcon /></span>)}
+                        {' '}
+                        {row.price}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.currency}
+                      </TableCell>
+                      {/* <TableCell align="right">
                         {priceChange > 0 ? (
                           <span style={{ color: 'red' }}>
                             <TrendingUpIcon />
@@ -460,7 +466,7 @@ function EnhancedTable(props) {
                             %
                           </span>
                         )}
-                      </TableCell>
+                        </TableCell> */}
                       <TableCell align="right">{row.limit}</TableCell>
                       <TableCell align="right">
                         {row.type === 'buy' && (
