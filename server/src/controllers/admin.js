@@ -51,12 +51,18 @@ export const fetchAdminWithdrawals = async (req, res, next) => {
 
 export const fetchAdminPendingWithdrawalsCount = async (req, res, next) => {
   try {
-    res.locals.count = await db.transaction.count({
+    const transactionCount = await db.transaction.count({
       where: {
         type: 'send',
         phase: 'review',
       },
     });
+    res.locals.count = transactionCount;
+    console.log('transactionCOunt');
+    console.log(transactionCount);
+    if (!transactionCount) {
+      res.locals.count = '0';
+    }
     console.log(res.locals.count);
     next();
   } catch (error) {
@@ -67,11 +73,17 @@ export const fetchAdminPendingWithdrawalsCount = async (req, res, next) => {
 
 export const fetchAdminPendingIdentityCount = async (req, res, next) => {
   try {
-    res.locals.count = await db.user.count({
+    const userCount = await db.user.count({
       where: {
         identityVerified: 'pending',
       },
     });
+    res.locals.count = userCount;
+    console.log('userCOunt');
+    console.log(userCount);
+    if (!userCount) {
+      res.locals.count = '0';
+    }
     console.log(res.locals.count);
     next();
   } catch (error) {

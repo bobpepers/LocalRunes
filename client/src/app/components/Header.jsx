@@ -175,8 +175,10 @@ const Header = (props) => {
               authenticated && user && user.role === 4 && (
                 <ul className="adminDropdownWrapper">
                   <li>
-                    <Badge badgeContent={adminPendingWithdrawalsCount && adminPendingWithdrawalsCount + adminPendingIdentityCount} color="secondary">
-
+                    <Badge
+                      badgeContent={adminPendingWithdrawalsCount && Number(adminPendingWithdrawalsCount) + Number(adminPendingIdentityCount)}
+                      color="secondary"
+                    >
                       <NavDropdown
                         className="langPadding toggleLangWrapper"
                         title="Admin"
@@ -184,7 +186,11 @@ const Header = (props) => {
                       >
                         <NavDropdown.Item onClick={handleClose}>
                           <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/admin">
+                            <Link
+                              style={{ color: '#000' }}
+                              className="nav-link"
+                              to="/admin"
+                            >
                               <AccountBalanceWalletIcon />
                               {' '}
                               Dashboard

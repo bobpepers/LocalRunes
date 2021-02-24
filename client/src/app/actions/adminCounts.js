@@ -46,7 +46,7 @@ export function getPendingWithdrawalCount() {
           dispatch({
             type: ENQUEUE_SNACKBAR,
             notification: {
-              message: `${error.response.status}: ${error.response.data.error}`,
+              message: `Count withdrawal ${error.response.status}: ${error.response.data.error}`,
               key: new Date().getTime() + Math.random(),
               options: {
                 variant: 'error',
@@ -103,7 +103,7 @@ export function getPendingIdentityCount() {
           dispatch({
             type: ENQUEUE_SNACKBAR,
             notification: {
-              message: `${error.response.status}: ${error.response.data.error}`,
+              message: `Count Identity ${error.response.status}: ${error.response.data.error}`,
               key: new Date().getTime() + Math.random(),
               options: {
                 variant: 'error',
