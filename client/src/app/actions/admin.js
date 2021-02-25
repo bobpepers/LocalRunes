@@ -1782,7 +1782,18 @@ export function adminCompleteDisputeAction(id, conclusion, side) {
     // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
     axios.post(`${process.env.API_URL}/admin/dispute/complete`, { id, conclusion, side })
       .then((response) => {
-        console.log('response.data.paymentMethod');
+        console.log('response.data.trade /admin/dispute/complete');
+        console.log('response.data.trade /admin/dispute/complete');
+        console.log('response.data.trade /admin/dispute/complete');
+        console.log('response.data.trade /admin/dispute/complete');
+        console.log('response.data.trade /admin/dispute/complete');
+        console.log('response.data.trade /admin/dispute/complete');
+        console.log('response.data.trade /admin/dispute/complete');
+        console.log('response.data.trade /admin/dispute/complete');
+        console.log('response.data.trade /admin/dispute/complete');
+        console.log('response.data.trade /admin/dispute/complete');
+        console.log('response.data.trade /admin/dispute/complete');
+
         console.log(response.data.trade);
         dispatch({
           type: COMPLETE_ADMINDISPUTE_COMPLETE,
@@ -1795,7 +1806,7 @@ export function adminCompleteDisputeAction(id, conclusion, side) {
         dispatch({
           type: ENQUEUE_SNACKBAR,
           notification: {
-            message: 'Success: added paymentMethod',
+            message: 'Success: Dispute Settled',
             key: new Date().getTime() + Math.random(),
             options: {
               variant: 'success',

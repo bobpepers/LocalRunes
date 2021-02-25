@@ -344,55 +344,70 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
           error: res.locals.error,
         });
       }
-      if (!res.locals.error) {
-        if (res.locals.walletUserOne) {
-          if (onlineUsers[res.locals.walletUserOne.userId.toString()]) {
-            onlineUsers[res.locals.walletUserOne.userId.toString()].emit('updateWallet', {
-              wallet: res.locals.walletUserOne,
-            });
-          }
-        }
+      console.log('adminCompleteDispute done');
+      console.log('adminCompleteDispute done');
+      console.log('adminCompleteDispute done');
+      console.log('adminCompleteDispute done');
+      console.log('adminCompleteDispute done');
+      console.log('adminCompleteDispute done');
+      console.log('adminCompleteDispute done');
+      console.log('adminCompleteDispute done');
+      console.log('adminCompleteDispute done');
+      console.log('adminCompleteDispute done');
+      console.log('adminCompleteDispute done');
+      console.log('adminCompleteDispute done');
+      console.log(res.locals.trade);
 
-        if (res.locals.walletUserTwo) {
-          if (onlineUsers[res.locals.walletUserTwo.userId.toString()]) {
-            onlineUsers[res.locals.walletUserTwo.userId.toString()].emit('updateWallet', {
-              wallet: res.locals.walletUserTwo,
-            });
-          }
-        }
-
-        io.to('admin').emit('updateTrade', {
-          trade: res.locals.trade,
-        });
-
-        if (onlineUsers[res.locals.trade.userId.toString()]) {
-          onlineUsers[res.locals.trade.userId.toString()].emit('updateTrade', {
-            trade: res.locals.trade,
-          });
-        }
-
-        if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
-          onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateTrade', {
-            trade: res.locals.trade,
-          });
-        }
-
-        io.to('admin').emit('updateCurrentTrade', {
-          trade: res.locals.trade,
-        });
-
-        if (onlineUsers[res.locals.trade.userId.toString()]) {
-          onlineUsers[res.locals.trade.userId.toString()].emit('updateCurrentTrade', {
-            trade: res.locals.trade,
-          });
-        }
-
-        if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
-          onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateCurrentTrade', {
-            trade: res.locals.trade,
+      if (res.locals.walletUserOne) {
+        if (onlineUsers[res.locals.walletUserOne.userId.toString()]) {
+          onlineUsers[res.locals.walletUserOne.userId.toString()].emit('updateWallet', {
+            wallet: res.locals.walletUserOne,
           });
         }
       }
+      console.log('voorbij 1');
+
+      if (res.locals.walletUserTwo) {
+        if (onlineUsers[res.locals.walletUserTwo.userId.toString()]) {
+          onlineUsers[res.locals.walletUserTwo.userId.toString()].emit('updateWallet', {
+            wallet: res.locals.walletUserTwo,
+          });
+        }
+      }
+      console.log('voorbij 2');
+
+      if (onlineUsers[res.locals.trade.userId.toString()]) {
+        onlineUsers[res.locals.trade.userId.toString()].emit('updateTrade', {
+          trade: res.locals.trade,
+        });
+      }
+      console.log('voorbij 3');
+
+      if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+        onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateTrade', {
+          trade: res.locals.trade,
+        });
+      }
+      console.log('voorbij 4');
+      if (onlineUsers[res.locals.trade.userId.toString()]) {
+        onlineUsers[res.locals.trade.userId.toString()].emit('updateCurrentTrade', {
+          trade: res.locals.trade,
+        });
+      }
+      console.log('voorbij 5');
+      if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+        onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateCurrentTrade', {
+          trade: res.locals.trade,
+        });
+      }
+
+      io.to('admin').emit('updateTrade', {
+        trade: res.locals.trade,
+      });
+
+      io.to('admin').emit('updateCurrentTrade', {
+        trade: res.locals.trade,
+      });
 
       // console.log(res.locals.trade);
       if (res.locals.trade) {

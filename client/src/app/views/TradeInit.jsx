@@ -71,7 +71,11 @@ const renderSelectField = ({
   children,
   ...custom
 }) => (
-  <FormControl error={touched && error} style={{ width: '100%' }}>
+  <FormControl
+    variant="outlined"
+    error={touched && error}
+    style={{ width: '100%' }}
+  >
     <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
     <Select
       native
@@ -222,7 +226,11 @@ const TradeInit = (props) => {
                   <option value="60">1 Hour</option>
                 </Field>
               </Grid>
-              <Grid item xs={12}>
+              <Grid
+                item
+                style={{ marginBottom: '20px', marginTop: '20px' }}
+                xs={12}
+              >
                 <Button
                   variant="contained"
                   color="primary"
@@ -234,7 +242,11 @@ const TradeInit = (props) => {
                   Start Trade
                 </Button>
               </Grid>
-              <Grid item xs={12}>
+              <Grid
+                item
+                style={{ marginBottom: '20px' }}
+                xs={12}
+              >
                 <Button
                   variant="contained"
                   color="primary"

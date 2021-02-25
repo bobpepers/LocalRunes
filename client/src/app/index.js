@@ -132,6 +132,9 @@ socket.on('updateCurrentTrade', (data) => {
   console.log('updateCurrentTrade');
   console.log('updateCurrentTrade');
   console.log('updateCurrentTrade');
+  console.log(data.trade);
+  console.log('data');
+  console.log(data);
   store.dispatch(onUpdateCurrentTrade(data.trade));
 });
 

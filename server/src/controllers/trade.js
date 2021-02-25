@@ -123,7 +123,7 @@ export const fetchTrade = async (req, res, next) => {
           type: [
             'done',
             'init',
-            'disputeDone',
+            'disputedDone',
             'canceled',
           ],
         },

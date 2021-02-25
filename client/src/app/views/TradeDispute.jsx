@@ -121,15 +121,9 @@ const TradeDispute = (props) => {
     await dispatch(sendMessageDisputeAction(message, currentTrade.id));
   }
   const releaseToAdvertiser = async () => {
-    // console.log('123');
-    console.log(id);
-    console.log(textFieldRef.current.value);
     await dispatch(adminCompleteDisputeAction(id, textFieldRef.current.value, 'advertiser'));
   }
   const releaseToTrader = async () => {
-    // console.log('123');
-    console.log(id);
-    console.log(textFieldRef.current.value);
     await dispatch(adminCompleteDisputeAction(id, textFieldRef.current.value, 'trader'));
   }
 
@@ -392,24 +386,35 @@ const TradeDispute = (props) => {
                 </Grid>
               </form>
             </Grid>
-            <Grid item xs={12}>
-              {user && user.role === 4 && (
-              <TextField
-                label="Conclusion"
-                multiline
-                style={{
-                  width: '100%',
-                }}
-                rows={20}
-                inputRef={textFieldRef}
-                defaultValue=""
-                inputProps={{
-                  maxLength: 400,
-                }}
-                variant="outlined"
-              />
-              )}
-              {user && user.role === 4 && (
+
+            {user && user.role === 4 && (
+              <Grid
+                item
+                xs={12}
+                style={{ marginTop: '20px' }}
+              >
+                <TextField
+                  label="Conclusion"
+                  multiline
+                  style={{
+                    width: '100%',
+                  }}
+                  rows={20}
+                  inputRef={textFieldRef}
+                  defaultValue=""
+                  inputProps={{
+                    maxLength: 400,
+                  }}
+                  variant="outlined"
+                />
+              </Grid>
+            )}
+            {user && user.role === 4 && (
+              <Grid
+                item
+                xs={12}
+                style={{ marginTop: '20px' }}
+              >
                 <Button
                   variant="contained"
                   color="primary"
@@ -423,10 +428,15 @@ const TradeDispute = (props) => {
                   {' '}
                   {currentTrade && currentTrade.user && currentTrade.user.username}
                 </Button>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              {user && user.role === 4 && (
+              </Grid>
+            )}
+
+            {user && user.role === 4 && (
+              <Grid
+                item
+                xs={12}
+                style={{ marginTop: '20px' }}
+              >
                 <Button
                   variant="contained"
                   c
@@ -444,8 +454,8 @@ const TradeDispute = (props) => {
                   && currentTrade.postAd.user
                   && currentTrade.postAd.user.username}
                 </Button>
-              )}
-            </Grid>
+              </Grid>
+            )}
 
           </Grid>
         </Grid>

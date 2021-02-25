@@ -1383,17 +1383,7 @@ export const adminCompleteDispute = async (req, res, next) => {
     if (!trade) {
       throw new Error('TRADE_NOT_EXIST');
     }
-    console.log('trade.dispute[0].id');
-    console.log('trade.dispute[0].id');
-    console.log('trade.dispute[0].id');
-    console.log('trade.dispute[0].id');
-    console.log('trade.dispute[0].id');
-    console.log('trade.dispute[0].id');
-    console.log('trade.dispute[0].id');
-    console.log('trade.dispute[0].id');
-    console.log('trade.dispute[0].id');
 
-    console.log(trade.dispute[0].id);
     const dispute = await db.dispute.findOne({
       where: {
         id: trade.dispute[0].id,
@@ -1460,19 +1450,38 @@ export const adminCompleteDispute = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
-        const walletTwo = await db.wallet.findOne({
+        res.locals.walletUserTwo = await db.wallet.findOne({
           where: {
             userId: trade.postAd.userId,
           },
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
-        console.log('TRADER _ BUY');
-        console.log(trade.amount);
-        console.log('trade user balance:');
-        console.log(walletOne);
-        console.log('postAd user wallet balance');
-        console.log(walletTwo);
+        if (walletOne.locked < (trade.amount)) {
+          throw new Error(`INSUFFICIENT_LOCKED_BALANCE_TRADER: ${walletOne.locked / 1e8}`);
+        }
+        res.locals.walletUserOne = await walletOne.update({
+          locked: walletOne.locked - trade.amount,
+          available: walletOne.available + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        await trade.update({
+          type: 'disputedDone',
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        await dispute.update({
+          done: true,
+          conclusion: req.body.conclusion,
+          releasedTo: trade.userId,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
       }
     }
     if (req.body.side === "advertiser") {
@@ -1518,9 +1527,54 @@ export const adminCompleteDispute = async (req, res, next) => {
         });
       }
       if (trade.postAd.type === 'buy') {
+        console.log(trade.postAd.user.username);
+        const walletOne = await db.wallet.findOne({
+          where: {
+            userId: trade.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        const walletTwo = await db.wallet.findOne({
+          where: {
+            userId: trade.postAd.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        if (walletOne.locked < (trade.amount)) {
+          throw new Error(`INSUFFICIENT_LOCKED_BALANCE_TRADER: ${walletOne.locked / 1e8}`);
+        }
+        res.locals.walletUserTwo = await walletTwo.update({
+          available: walletTwo.available + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        res.locals.walletUserOne = await walletOne.update({
+          locked: walletOne.locked - trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
 
+        await trade.update({
+          type: 'disputedDone',
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        await dispute.update({
+          done: true,
+          conclusion: req.body.conclusion,
+          releasedTo: trade.postAd.userId,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
       }
     }
+
     res.locals.trade = await db.trade.findOne({
       where: {
         id: req.body.id,
@@ -1601,7 +1655,12 @@ export const adminCompleteDispute = async (req, res, next) => {
           ],
         },
       ],
+      transaction: t,
+      lock: t.LOCK.UPDATE,
     });
+
+    console.log(res.locals.trade);
+    console.log('TRADE AFTER DISPUTE SETTLED');
 
     if (!res.locals.trade) {
       throw new Error('TRADE_NOT_EXIST');

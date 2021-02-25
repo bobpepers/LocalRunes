@@ -211,13 +211,18 @@ const TradeRequested = (props) => {
                   className="btn"
                   fullWidth
                   size="large"
+                  style={{ marginBottom: '20px' }}
                   onClick={() => acceptTrade()}
                 >
                   Accept Trade
                 </Button>
               </Grid>
             )}
-            <Grid item xs={12}>
+            <Grid
+              item
+              xs={12}
+              style={{ marginBottom: '20px' }}
+            >
               <Button
                 variant="contained"
                 color="primary"

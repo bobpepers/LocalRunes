@@ -12,6 +12,7 @@ export const createMessageDispute = async (req, res, next) => {
     const trade = await db.trade.findOne({
       where: {
         id: req.body.id,
+        type: 'disputed',
       },
       include: [
         {
@@ -135,6 +136,7 @@ export const createMessage = async (req, res, next) => {
     const trade = await db.trade.findOne({
       where: {
         id: req.body.id,
+        type: 'accepted',
       },
       include: [
         {
