@@ -5,6 +5,7 @@ import {
   FETCH_CURRENT_TRADE_IDLE,
   INSERT_MESSAGE,
   UPDATE_CURRENT_TRADE,
+  INSERT_MESSAGEDISPUTE,
 } from '../actions/types/index';
 
 const initialState = {
@@ -53,28 +54,65 @@ export default (state = initialState, action) => {
         error: action.payload.response.data.error,
         isFetching: false,
       };
-    case INSERT_MESSAGE:
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      console.log('INSERT_MESSAGE');
-      const existsInArray = state.data.id !== action.payload.message.tradeId;
-      if (existsInArray) {
+
+    case INSERT_MESSAGEDISPUTE:
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log('INSERT_MESSAGEDISPUTE');
+      console.log(action.payload);
+      console.log(action.payload);
+
+      const existsInArrayDISPUTE = state.data.dispute[0].id !== action.payload.message.disputeId;
+      if (existsInArrayDISPUTE) {
         return state;
       }
 
       console.log(action.payload);
 
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          dispute: state.data.dispute.map((dispute) => (dispute
+            // transform the one with a matching id
+            ? {
+              ...dispute,
+              messagesDispute: [
+                ...dispute.messagesDispute,
+                action.payload.message,
+              ],
+            }
+            :
+            // otherwise return original todo
+            {
+              ...dispute,
+              messagesDispute: [
+                ...dispute.messagesDispute,
+                action.payload.message,
+              ],
+            })),
+          // messages: [...state.data.messages, action.payload.message],
+        },
+        isFetching: false,
+
+      };
+
+    case INSERT_MESSAGE:
+      const existsInArray = state.data.id !== action.payload.message.tradeId;
+      if (existsInArray) {
+        return state;
+      }
+      console.log(action.payload);
       return {
         ...state,
         data: {

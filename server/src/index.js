@@ -394,8 +394,23 @@ const onlineUsers = {};
 io.on("connection", async (socket) => {
   const userId = socket.request.session.passport ? socket.request.session.passport.user : '';
   console.log('your user id');
+  console.log('your user id');
+  console.log('your user id');
+  console.log('your user id');
+  console.log('your user id');
+  console.log('your user id');
+  console.log('your user id');
+  console.log('your user id');
+  console.log('your user id');
+
+  console.log('your user id');
+  console.log('your user id');
   console.log(userId);
   console.log(onlineUsers);
+  console.log(socket.request.user);
+  if (socket.request.user.role === 4) {
+    socket.join('admin');
+  }
   if (userId !== '') {
     onlineUsers[userId] = socket;
     setUserOnline(userId);

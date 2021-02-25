@@ -81,6 +81,7 @@ import {
 } from './controllers/wallet';
 import {
   createMessage,
+  createMessageDispute,
 } from './controllers/messages';
 
 import {
@@ -1063,6 +1064,39 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
       if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
         onlineUsers[res.locals.trade.postAd.userId.toString()].emit('insertMessage', {
+          message: res.locals.message,
+        });
+      }
+      if (res.locals.message) {
+        res.json({ message: res.locals.message });
+      }
+    });
+
+  app.post('/api/message/dispute/send',
+    IsAuthenticated,
+    isUserBanned,
+    storeIp,
+    ensuretfa,
+    updateLastSeen,
+    createMessageDispute,
+    (req, res) => {
+      console.log('ADDED PUBLISHER');
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      io.to('admin').emit('insertMessageDispute', {
+        message: res.locals.message,
+      });
+      if (onlineUsers[res.locals.trade.userId.toString()]) {
+        onlineUsers[res.locals.trade.userId.toString()].emit('insertMessageDispute', {
+          message: res.locals.message,
+        });
+      }
+      if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+        onlineUsers[res.locals.trade.postAd.userId.toString()].emit('insertMessageDispute', {
           message: res.locals.message,
         });
       }

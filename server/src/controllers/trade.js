@@ -158,6 +158,20 @@ export const fetchCurrentTrade = async (req, res, next) => {
         required: false,
         include: [
           {
+            model: db.messagesDispute,
+            as: 'messagesDispute',
+            required: false,
+            // attributes: ['username'],
+            include: [
+              {
+                model: db.user,
+                as: 'user',
+                required: false,
+                attributes: ['username'],
+              },
+            ],
+          },
+          {
             model: db.user,
             as: 'initiator',
             required: true,

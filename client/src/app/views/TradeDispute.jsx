@@ -37,6 +37,7 @@ import {
 
 import {
   sendMessageAction,
+  sendMessageDisputeAction,
 } from '../actions/message';
 
 import {
@@ -75,7 +76,7 @@ const renderTextField = ({
   </div>
 );
 
-const Trade = (props) => {
+const TradeDispute = (props) => {
   const {
     currentTrade,
     handleSubmit,
@@ -105,7 +106,7 @@ const Trade = (props) => {
   };
 
   const handleFormSubmit = async (message) => {
-    await dispatch(sendMessageAction(message, currentTrade.id));
+    await dispatch(sendMessageDisputeAction(message, currentTrade.id));
   }
   const releaseToAdvertiser = async () => {
     // console.log('123');
@@ -331,19 +332,23 @@ const Trade = (props) => {
           <Grid container item xs={12}>
             <div className="container">
               <div className="chat-container">
-                {currentTrade && currentTrade.dispute && currentTrade.dispute.messagesDispute ? currentTrade.dispute.messagesDispute.map((item, index) => (
-                  <div className="message">
-                    <img className="avatar" src="/uploads/avatars/avatar.png" />
-                    <div className="datetime">{item.createdAt}</div>
-                    <p>
-                      {item.user.username}
-                      :
-                    </p>
-                    <p>
-                      {item.message}
-                    </p>
-                  </div>
-                )) : ''}
+                {currentTrade
+                && currentTrade.dispute
+                && currentTrade.dispute.length
+                && currentTrade.dispute[0].messagesDispute
+                  ? currentTrade.dispute[0].messagesDispute.map((item, index) => (
+                    <div className="message">
+                      <img className="avatar" src="/uploads/avatars/avatar.png" />
+                      <div className="datetime">{item.createdAt}</div>
+                      <p>
+                        {item.user.username}
+                        :
+                      </p>
+                      <p>
+                        {item.message}
+                      </p>
+                    </div>
+                  )) : ''}
               </div>
             </div>
           </Grid>
@@ -378,7 +383,7 @@ const Trade = (props) => {
             <Grid item xs={12}>
               {user && user.role === 4 && (
               <TextField
-                label="Reason"
+                label="Conclusion"
                 multiline
                 style={{
                   width: '100%',
@@ -451,4 +456,4 @@ const validate = (formProps) => {
 
 // export default withRouter(connect(mapStateToProps, actions)(PostAd));
 // export default connect(mapStateToProps, actions)(TradeRequested);
-export default connect(mapStateToProps, actions)(reduxForm({ form: 'message', validate })(Trade));
+export default connect(mapStateToProps, actions)(reduxForm({ form: 'messageDispute', validate })(TradeDispute));

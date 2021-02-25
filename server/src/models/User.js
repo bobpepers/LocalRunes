@@ -211,6 +211,9 @@ module.exports = (sequelize, DataTypes) => {
       as: 'releasedTo',
       foreignKey: 'releasedToId',
     });
+    UserModel.hasMany(model.messagesDispute, {
+      as: 'messagesDispute',
+    });
     UserModel.hasMany(model.messages, {
       as: 'messages',
     });

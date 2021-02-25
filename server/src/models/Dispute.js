@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
   const DisputeModel = sequelize.define('dispute', modelDefinition, modelOptions);
 
   DisputeModel.associate = (model) => {
+    DisputeModel.hasMany(model.messagesDispute, { as: 'messagesDispute' });
     DisputeModel.belongsTo(model.trade, {
       as: 'trade',
     });

@@ -33,6 +33,7 @@ import {
   onUpdateJackpot,
   onUpdateTrade,
   onInsertMessage,
+  onInsertMessageDispute,
   onUpdateCurrentTrade,
   setLocation,
   getPrice,
@@ -83,6 +84,22 @@ socket.on('Volume', (data) => {
 
 socket.on('insertMessage', (data) => {
   store.dispatch(onInsertMessage(data));
+});
+
+socket.on('insertMessageDispute', (data) => {
+  console.log('insertMessageDispute');
+  console.log('insertMessageDispute');
+  console.log('insertMessageDispute');
+  console.log('insertMessageDispute');
+  console.log('insertMessageDispute');
+  console.log('insertMessageDispute');
+  console.log('insertMessageDispute');
+  console.log('insertMessageDispute');
+  console.log('insertMessageDispute');
+  console.log('insertMessageDispute');
+  console.log('insertMessageDispute');
+
+  store.dispatch(onInsertMessageDispute(data));
 });
 
 socket.on('updateTransaction', (data) => {
