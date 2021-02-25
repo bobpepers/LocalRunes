@@ -33,6 +33,7 @@ import AdminWithdrawals from './views/admin/AdminWithdrawals';
 import AdminPendingWithdrawals from './views/admin/AdminPendingWithdrawals';
 import AdminIdentity from './views/admin/AdminIdentity';
 import AdminTradeView from './views/admin/AdminTradeView';
+import AdminPendingDisputes from './views/admin/AdminPendingDisputes';
 
 import withTracker from './hooks/withTracker';
 
@@ -48,6 +49,7 @@ import PublicProfile from './views/PublicProfile';
 import TradeInit from './views/TradeInit';
 import Trade from './views/Trade';
 import TradeDispute from './views/TradeDispute';
+import TradeDisputeComplete from './views/TradeDisputeComplete';
 
 import TradeRequested from './views/TradeRequested';
 import TradeComplete from './views/TradeComplete';
@@ -190,6 +192,11 @@ const Routes = (props) => {
       />
       <Route
         exact
+        path="/trade/dispute/complete/:id"
+        component={requireAuth(withTracker(TradeDisputeComplete))}
+      />
+      <Route
+        exact
         path="/trade/canceled/:id"
         component={requireAuth(withTracker(TradeCanceled))}
       />
@@ -242,6 +249,11 @@ const Routes = (props) => {
         path="/admin/identity/pending"
         exact
         component={requireAuth(withTracker(AdminIdentity))}
+      />
+      <Route
+        path="/admin/disputes/pending"
+        exact
+        component={requireAuth(withTracker(AdminPendingDisputes))}
       />
       <Route
         path="/admin/trades"

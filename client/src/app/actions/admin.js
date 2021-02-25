@@ -73,6 +73,10 @@ import {
   COMPLETE_ADMINDISPUTE_COMPLETE,
   COMPLETE_ADMINDISPUTE_FAIL,
   UPDATE_CURRENT_TRADE,
+  FETCH_ADMINPENDINGDISPUTE_BEGIN,
+  FETCH_ADMINPENDINGDISPUTE_SUCCESS,
+  FETCH_ADMINPENDINGDISPUTE_FAIL,
+  REMOVE_ADMINPENDINGDISPUTE,
 } from './types/index';
 
 export function adminRejectIdentity(id) {
@@ -233,6 +237,31 @@ export function fetchAdminPendingWithdrawalData() {
       }).catch((error) => {
         dispatch({
           type: FETCH_ADMINPENDINGWITHDRAWAL_FAIL,
+          payload: error,
+        });
+      });
+  }
+}
+
+/**
+ * Fetch Pending Disputes Data
+ */
+export function fetchAdminPendingDisputesData() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINPENDINGDISPUTE_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.get(`${process.env.API_URL}/admin/disputes/pending`)
+      .then((response) => {
+        console.log(response.data)
+        dispatch({
+          type: FETCH_ADMINPENDINGDISPUTE_SUCCESS,
+          payload: response.data.disputes,
+        })
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINPENDINGDISPUTE_FAIL,
           payload: error,
         });
       });

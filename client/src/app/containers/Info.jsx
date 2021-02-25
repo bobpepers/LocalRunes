@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getRequestRegister } from '../actions/registered';
 import Logo from '../assets/images/LG2.png';
+import LrLogo from '../assets/images/LR-logo.svg'
 
 const InfoContainer = (props) => {
   const {
@@ -60,7 +61,7 @@ const InfoContainer = (props) => {
         <Grid
           item
           xs={12}
-          sm={12}
+          sm={8}
           md={4}
           lg={4}
           xl={4}
@@ -74,7 +75,12 @@ const InfoContainer = (props) => {
             delay={0}
             offset={0}
           > */}
-          <img src={Logo} alt="logo" />
+          <span>
+            <LrLogo
+              style={{ width: '50%' }}
+            />
+          </span>
+
           {/* </ScrollAnimation> */}
         </Grid>
         <Box

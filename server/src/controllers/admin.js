@@ -71,6 +71,27 @@ export const fetchAdminPendingWithdrawalsCount = async (req, res, next) => {
   }
 };
 
+export const fetchAdminPendingDisputeCount = async (req, res, next) => {
+  try {
+    const disputeCount = await db.dispute.count({
+      where: {
+        done: 'false',
+      },
+    });
+    res.locals.count = disputeCount;
+    console.log('disputeCount');
+    console.log(disputeCount);
+    if (!disputeCount) {
+      res.locals.count = '0';
+    }
+    console.log(res.locals.count);
+    next();
+  } catch (error) {
+    res.locals.error = error;
+    next();
+  }
+};
+
 export const fetchAdminPendingIdentityCount = async (req, res, next) => {
   try {
     const userCount = await db.user.count({
@@ -152,6 +173,102 @@ export const fetchAdminCurrentTrade = async (req, res, next) => {
   }
   res.locals.error = "TRADE_NOT_FOUND";
   next();
+};
+
+export const fetchAdminPendingDisputes = async (req, res, next) => {
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+  console.log('fetchAdminDisputesPending');
+
+  try {
+    res.locals.disputes = await db.dispute.findAll({
+      order: [['id', 'DESC']],
+      where: {
+        done: false,
+      },
+      include: [
+        {
+          model: db.user,
+          as: 'initiator',
+          required: false,
+          attributes: [
+            'username',
+          ],
+        },
+        {
+          model: db.user,
+          as: 'releasedTo',
+          required: false,
+          attributes: [
+            'username',
+          ],
+        },
+        {
+          model: db.trade,
+          as: 'trade',
+          required: true,
+          include: [
+            {
+              model: db.user,
+              as: 'user',
+              attributes: [
+                'username',
+              ],
+            },
+            {
+              model: db.postAd,
+              as: 'postAd',
+              include: [{
+                model: db.user,
+                as: 'user',
+                attributes: [
+                  'username',
+                ],
+              }],
+            },
+          ],
+        }],
+    });
+    console.log(res.locals.disputes);
+    console.log("res.locals.disputes");
+    console.log("res.locals.disputes");
+    console.log("res.locals.disputes");
+    console.log("res.locals.disputes");
+    console.log("res.locals.disputes");
+    console.log("res.locals.disputes");
+    console.log("res.locals.disputes");
+    console.log("res.locals.disputes");
+    console.log("res.locals.disputes");
+    console.log("res.locals.disputes");
+    console.log("res.locals.disputes");
+
+    next();
+  } catch (error) {
+    res.locals.error = error;
+    next();
+  }
 };
 
 export const fetchAdminPendingWithdrawals = async (req, res, next) => {
@@ -1266,9 +1383,29 @@ export const adminCompleteDispute = async (req, res, next) => {
     if (!trade) {
       throw new Error('TRADE_NOT_EXIST');
     }
+    console.log('trade.dispute[0].id');
+    console.log('trade.dispute[0].id');
+    console.log('trade.dispute[0].id');
+    console.log('trade.dispute[0].id');
+    console.log('trade.dispute[0].id');
+    console.log('trade.dispute[0].id');
+    console.log('trade.dispute[0].id');
+    console.log('trade.dispute[0].id');
+    console.log('trade.dispute[0].id');
+
+    console.log(trade.dispute[0].id);
+    const dispute = await db.dispute.findOne({
+      where: {
+        id: trade.dispute[0].id,
+      },
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+    if (!dispute) {
+      throw new Error('DISPUTE_NOT_FOUND');
+    }
     if (req.body.side === "trader") {
       if (trade.postAd.type === 'sell') {
-        console.log(trade.postAd.user.username);
         const walletOne = await db.wallet.findOne({
           where: {
             userId: trade.userId,
@@ -1283,11 +1420,36 @@ export const adminCompleteDispute = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
-        console.log('TRADER _ SELL');
-        console.log('trade user balance:');
-        console.log(walletOne);
-        console.log('postAd user wallet balance');
-        console.log(walletTwo);
+        if (walletTwo.locked < (trade.amount)) {
+          throw new Error('INSUFFICIENT_LOCKED_BALANCE_ADVERTISER');
+        }
+        res.locals.walletUserTwo = await walletTwo.update({
+          locked: walletTwo.locked - trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        res.locals.walletUserOne = await walletOne.update({
+          available: walletOne.available + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        await trade.update({
+          type: 'disputedDone',
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        await dispute.update({
+          done: true,
+          conclusion: req.body.conclusion,
+          releasedTo: trade.userId,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
       }
       if (trade.postAd.type === 'buy') {
         console.log(trade.postAd.user.username);
@@ -1306,6 +1468,7 @@ export const adminCompleteDispute = async (req, res, next) => {
           lock: t.LOCK.UPDATE,
         });
         console.log('TRADER _ BUY');
+        console.log(trade.amount);
         console.log('trade user balance:');
         console.log(walletOne);
         console.log('postAd user wallet balance');
@@ -1314,7 +1477,7 @@ export const adminCompleteDispute = async (req, res, next) => {
     }
     if (req.body.side === "advertiser") {
       if (trade.postAd.type === 'sell') {
-        const walletOne = await db.wallet.findOne({
+        res.locals.walletUserOne = await db.wallet.findOne({
           where: {
             userId: trade.userId,
           },
@@ -1328,34 +1491,120 @@ export const adminCompleteDispute = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
-        console.log('ADVERTISER _ SELL');
-        console.log('trade user balance:');
-        console.log(walletOne);
-        console.log('postAd user wallet balance');
-        console.log(walletTwo);
+        if (walletTwo.locked < (trade.amount)) {
+          throw new Error('INSUFFICIENT_LOCKED_BALANCE_ADVERTISER');
+        }
+        res.locals.walletUserTwo = await walletTwo.update({
+          locked: walletTwo.locked - trade.amount,
+          available: walletTwo.available + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        await trade.update({
+          type: 'disputedDone',
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        await dispute.update({
+          done: true,
+          conclusion: req.body.conclusion,
+          releasedTo: trade.postAd.userId,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
       }
       if (trade.postAd.type === 'buy') {
-        console.log(trade.postAd.user.username);
-        const walletOne = await db.wallet.findOne({
-          where: {
-            userId: trade.userId,
-          },
-          transaction: t,
-          lock: t.LOCK.UPDATE,
-        });
-        const walletTwo = await db.wallet.findOne({
-          where: {
-            userId: trade.postAd.userId,
-          },
-          transaction: t,
-          lock: t.LOCK.UPDATE,
-        });
-        console.log('ADVERTISER _ BUY');
-        console.log('trade user balance:');
-        console.log(walletOne);
-        console.log('postAd user wallet balance');
-        console.log(walletTwo);
+
       }
+    }
+    res.locals.trade = await db.trade.findOne({
+      where: {
+        id: req.body.id,
+      },
+      include: [
+        {
+          model: db.dispute,
+          as: 'dispute',
+          required: false,
+          include: [
+            {
+              model: db.messagesDispute,
+              as: 'messagesDispute',
+              required: false,
+              // attributes: ['username'],
+              include: [
+                {
+                  model: db.user,
+                  as: 'user',
+                  required: false,
+                  attributes: ['username'],
+                },
+              ],
+            },
+            {
+              model: db.user,
+              as: 'initiator',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+          // attributes: ['username'],
+        },
+        {
+          model: db.messages,
+          as: 'messages',
+          required: false,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+        {
+          model: db.user,
+          as: 'user',
+          required: true,
+          attributes: ['username'],
+        },
+        {
+          model: db.postAd,
+          as: 'postAd',
+          required: true,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.paymentMethod,
+              as: 'paymentMethod',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
+              model: db.currency,
+              as: 'currency',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!res.locals.trade) {
+      throw new Error('TRADE_NOT_EXIST');
     }
 
     t.afterCommit(() => {

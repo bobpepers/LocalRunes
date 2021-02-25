@@ -95,6 +95,18 @@ const TradeDispute = (props) => {
   const textFieldRef = useRef();
 
   useEffect(() => {
+    console.log('currentTrade disputed Done');
+    console.log('currentTrade disputed Done');
+    console.log('currentTrade disputed Done');
+    console.log('currentTrade disputed Done');
+    console.log('currentTrade disputed Done');
+    console.log('currentTrade disputed Done');
+    console.log('currentTrade disputed Done');
+    console.log('currentTrade disputed Done');
+    console.log('currentTrade disputed Done');
+    console.log('currentTrade disputed Done');
+    console.log('currentTrade disputed Done');
+
     if (currentTrade.type === 'disputedDone') {
       console.log(currentTrade);
       history.push(`/trade/dispute/complete/${currentTrade.id}`);
@@ -409,7 +421,7 @@ const TradeDispute = (props) => {
                 >
                   Release funds to
                   {' '}
-                  {currentTrade && currentTrade.user.username}
+                  {currentTrade && currentTrade.user && currentTrade.user.username}
                 </Button>
               )}
             </Grid>
@@ -427,7 +439,10 @@ const TradeDispute = (props) => {
                 >
                   Release funds to
                   {' '}
-                  {currentTrade && currentTrade.postAd && currentTrade.postAd.user.username}
+                  {currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.user
+                  && currentTrade.postAd.user.username}
                 </Button>
               )}
             </Grid>

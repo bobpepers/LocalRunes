@@ -39,6 +39,8 @@ import adminPendingWithdrawalsCount from "./admin/adminPendingWithdrawalsCount";
 import adminPendingIdentityCount from "./admin/adminPendingIdentityCount";
 import adminSingleTrade from "./admin/adminSingleTrade";
 import adminCompleteDispute from "./admin/adminCompleteDispute";
+import adminPendingDisputeCount from "./admin/adminPendingDisputeCount";
+import adminPendingDisputes from "./admin/adminPendingDisputes";
 
 import createReport from './createReport';
 
@@ -99,8 +101,10 @@ const rootReducer = combineReducers({
   adminPendingWithdrawals: adminPendingWithdrawals,
   adminPendingWithdrawalsCount: adminPendingWithdrawalsCount,
   adminPendingIdentityCount: adminPendingIdentityCount,
+  adminPendingDisputeCount: adminPendingDisputeCount,
   adminSingleTrade: adminSingleTrade,
   adminCompleteDispute: adminCompleteDispute,
+  adminPendingDisputes: adminPendingDisputes,
 
   verifyPhoneCode: verifyPhoneCode,
   getPhoneCode: getPhoneCode,

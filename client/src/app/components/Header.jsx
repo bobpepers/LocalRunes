@@ -33,7 +33,12 @@ import FaceIcon from '@material-ui/icons/Face';
 import SettingsIcon from '@material-ui/icons/Settings';
 import MobileNav from '../assets/images/mobileNav.svg';
 import Notifications from './Notifications';
-import { getPendingWithdrawalCount, getPendingIdentityCount } from '../actions/adminCounts';
+import {
+  getPendingWithdrawalCount,
+  getPendingIdentityCount,
+  getPendingDisputeCount,
+
+} from '../actions/adminCounts';
 
 // import 'bootstrap/dist/css/bootstrap.css';
 
@@ -46,6 +51,7 @@ const Header = (props) => {
     user,
     adminPendingWithdrawalsCount,
     adminPendingIdentityCount,
+    adminPendingDisputeCount,
   } = props;
   const heightRef = useRef(null);
   const [ref, setRef] = useState(null);
@@ -82,15 +88,17 @@ const Header = (props) => {
     if (user && user.role === 4) {
       dispatch(getPendingWithdrawalCount());
       dispatch(getPendingIdentityCount());
+      dispatch(getPendingDisputeCount());
       const interval = setInterval(() => {
         dispatch(getPendingWithdrawalCount());
         dispatch(getPendingIdentityCount());
+        dispatch(getPendingDisputeCount());
       }, 1 * 60 * 1000);
       return () => clearInterval(interval);
     }
   }, [user]);
 
-  useEffect(() => { }, [adminPendingWithdrawalsCount]);
+  useEffect(() => { }, [adminPendingWithdrawalsCount, adminPendingDisputeCount]);
 
   useEffect(() => {
     setHeight(heightRef.current.clientHeight);
@@ -176,7 +184,10 @@ const Header = (props) => {
                 <ul className="adminDropdownWrapper">
                   <li>
                     <Badge
-                      badgeContent={adminPendingWithdrawalsCount && Number(adminPendingWithdrawalsCount) + Number(adminPendingIdentityCount)}
+                      badgeContent={adminPendingWithdrawalsCount
+                        && Number(adminPendingDisputeCount)
+                        + Number(adminPendingWithdrawalsCount)
+                        + Number(adminPendingIdentityCount)}
                       color="secondary"
                     >
                       <NavDropdown
@@ -215,6 +226,17 @@ const Header = (props) => {
                               {' '}
                               Pending Identity (
                               {adminPendingIdentityCount || 0}
+                              )
+                            </Link>
+                          </div>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={handleClose}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/disputes/pending">
+                              <SettingsIcon />
+                              {' '}
+                              Pending Disputes (
+                              {adminPendingDisputeCount || 0}
                               )
                             </Link>
                           </div>
@@ -435,6 +457,7 @@ function mapStateToProps(state) {
     user: state.user.data,
     adminPendingWithdrawalsCount: state.adminPendingWithdrawalsCount.data,
     adminPendingIdentityCount: state.adminPendingIdentityCount.data,
+    adminPendingDisputeCount: state.adminPendingDisputeCount.data,
   };
 }
 

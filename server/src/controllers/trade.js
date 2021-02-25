@@ -29,7 +29,7 @@ export const startTrade = async (req, res, next) => {
           {
             type: [
               'done',
-              'disputeDone',
+              'disputedDone',
               'canceled',
             ],
           },
@@ -87,7 +87,7 @@ export const fetchTrade = async (req, res, next) => {
         {
           type: [
             'done',
-            'disputeDone',
+            'disputedDone',
             'canceled',
           ],
         },
@@ -1007,37 +1007,6 @@ export const disputeTrade = async (req, res, next) => {
   await db.sequelize.transaction({
     isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   }, async (t) => {
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-    console.log('reqq.boddyyy');
-
-    console.log(req.body);
     if (!req.body.subject) {
       throw new Error('SUBJECT_REQUIRED');
     }
