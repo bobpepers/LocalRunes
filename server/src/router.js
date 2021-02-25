@@ -67,6 +67,8 @@ import {
   fetchAdminPendingWithdrawals,
   fetchAdminPendingWithdrawalsCount,
   fetchAdminPendingIdentityCount,
+  fetchAdminCurrentTrade,
+  adminCompleteDispute,
 } from './controllers/admin';
 
 import {
@@ -134,6 +136,7 @@ import {
   acceptCurrentTrade,
   acceptCurrentMainTrade,
   cancelCurrentMainTrade,
+  disputeTrade,
 } from './controllers/trade';
 
 const isbot = require('isbot');
@@ -296,6 +299,52 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       if (res.locals.transaction) {
         res.json({
           transaction: res.locals.transaction,
+        });
+      }
+    });
+
+  app.post('/api/admin/trade/current',
+    IsAuthenticated,
+    isAdmin,
+    insertIp,
+    ensuretfa,
+    updateLastSeen,
+    fetchAdminCurrentTrade,
+    (req, res) => {
+      console.log('API TRADE');
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      console.log(res.locals.trade);
+      if (res.locals.trade) {
+        res.json({
+          trade: res.locals.trade,
+        });
+      }
+    });
+
+  app.post('/api/admin/dispute/complete',
+    IsAuthenticated,
+    isAdmin,
+    insertIp,
+    ensuretfa,
+    updateLastSeen,
+    adminCompleteDispute,
+    (req, res) => {
+      console.log('API TRADE');
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      console.log(res.locals.trade);
+      if (res.locals.trade) {
+        res.json({
+          trade: res.locals.trade,
         });
       }
     });
@@ -1111,6 +1160,59 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         res.json({
           trade: res.locals.trade,
         });
+      }
+    });
+
+  app.post('/api/trade/dispute',
+    (req, res, next) => {
+      console.log("start TRADE");
+      next();
+    },
+    IsAuthenticated,
+    isUserBanned,
+    // storeIp,
+    ensuretfa,
+    updateLastSeen,
+    disputeTrade,
+    (req, res) => {
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      console.log(res.locals.trade);
+      console.log(res.locals.wallet);
+      if (!res.locals.error) {
+        if (onlineUsers[res.locals.wallet.userId.toString()]) {
+          onlineUsers[res.locals.wallet.userId.toString()].emit('updateWallet', {
+            wallet: res.locals.wallet,
+          });
+        }
+
+        if (onlineUsers[res.locals.trade.userId.toString()]) {
+          onlineUsers[res.locals.trade.userId.toString()].emit('updateTrade', {
+            trade: res.locals.trade,
+          });
+        }
+
+        if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+          onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateTrade', {
+            trade: res.locals.trade,
+          });
+        }
+
+        if (onlineUsers[res.locals.trade.userId.toString()]) {
+          onlineUsers[res.locals.trade.userId.toString()].emit('updateCurrentTrade', {
+            trade: res.locals.trade,
+          });
+        }
+
+        if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+          onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateCurrentTrade', {
+            trade: res.locals.trade,
+          });
+        }
       }
     });
 

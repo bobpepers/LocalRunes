@@ -66,6 +66,13 @@ import {
   FETCH_ADMINPENDINGWITHDRAWAL_BEGIN,
   FETCH_ADMINPENDINGWITHDRAWAL_SUCCESS,
   FETCH_ADMINPENDINGWITHDRAWAL_FAIL,
+  FETCH_ADMINSINGLETRADE_BEGIN,
+  FETCH_ADMINSINGLETRADE_SUCCESS,
+  FETCH_ADMINSINGLETRADE_FAIL,
+  COMPLETE_ADMINDISPUTE_BEGIN,
+  COMPLETE_ADMINDISPUTE_COMPLETE,
+  COMPLETE_ADMINDISPUTE_FAIL,
+  UPDATE_CURRENT_TRADE,
 } from './types/index';
 
 export function adminRejectIdentity(id) {
@@ -163,6 +170,26 @@ export function adminAcceptIdentity(id) {
             },
           });
         }
+      });
+  }
+}
+
+export function fetchAdminSingleTradeData(id) {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINSINGLETRADE_BEGIN,
+    });
+    axios.post(`${process.env.API_URL}/admin/trade/current`, { id })
+      .then((response) => {
+        dispatch({
+          type: FETCH_ADMINSINGLETRADE_SUCCESS,
+          payload: response.data.trade,
+        })
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINSINGLETRADE_FAIL,
+          payload: error,
+        })
       });
   }
 }
@@ -1677,6 +1704,80 @@ export function addAdminPaymentMethod(obj) {
           },
         });
       }).catch((error) => {
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function adminCompleteDisputeAction(id, conclusion, side) {
+  return function (dispatch) {
+    dispatch({
+      type: COMPLETE_ADMINDISPUTE_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.post(`${process.env.API_URL}/admin/dispute/complete`, { id, conclusion, side })
+      .then((response) => {
+        console.log('response.data.paymentMethod');
+        console.log(response.data.trade);
+        dispatch({
+          type: COMPLETE_ADMINDISPUTE_COMPLETE,
+          payload: response.data.trade,
+        });
+        dispatch({
+          type: UPDATE_CURRENT_TRADE,
+          payload: response.data.trade,
+        });
+        dispatch({
+          type: ENQUEUE_SNACKBAR,
+          notification: {
+            message: 'Success: added paymentMethod',
+            key: new Date().getTime() + Math.random(),
+            options: {
+              variant: 'success',
+            },
+          },
+        });
+      }).catch((error) => {
+        dispatch({
+          type: COMPLETE_ADMINDISPUTE_FAIL,
+          payload: error,
+        });
         if (error.response) {
           // client received an error response (5xx, 4xx)
           console.log(error.response);

@@ -33,6 +33,9 @@ import {
   ACCEPT_MAIN_TRADE_SUCCESS,
   ACCEPT_MAIN_TRADE_FAIL,
   UPDATE_CURRENT_TRADE,
+  CREATE_DISPUTE_BEGIN,
+  CREATE_DISPUTE_SUCCESS,
+  CREATE_DISPUTE_FAIL,
 } from './types/index';
 
 export function startTrade(id) {
@@ -502,6 +505,85 @@ export function acceptTradeAction(id) {
           });
         }
       });
+  }
+}
+
+export function createDisputeAction(id, subject, reason) {
+  return function (dispatch) {
+    return new Promise((resolve) => {
+      dispatch({
+        type: CREATE_DISPUTE_BEGIN,
+      });
+      axios.post(`${process.env.API_URL}/trade/dispute`, { id, subject, reason })
+        .then((response) => {
+          // if (response.data.trade) {
+          //  dispatch({
+          //    type: DELETE_TRADE,
+          //    payload: response.data.trade,
+          //  });
+          // }
+          dispatch({
+            type: CREATE_DISPUTE_SUCCESS,
+            payload: response.data.trade,
+          });
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Success: Trade Requested',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'success',
+              },
+            },
+          });
+          resolve();
+        })
+        .catch((error) => {
+          console.log(error);
+          dispatch({
+            type: CREATE_DISPUTE_FAIL,
+            payload: error,
+          });
+          if (error.response) {
+            // client received an error response (5xx, 4xx)
+            console.log(error.response);
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: `${error.response.status}: ${error.response.data.error}`,
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'error',
+                },
+              },
+            });
+          } else if (error.request) {
+            // client never received a response, or request never left
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: 'Connection Timeout',
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'error',
+                },
+              },
+            });
+          } else {
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: 'Unknown Error',
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'error',
+                },
+              },
+            });
+          }
+          resolve();
+        });
+    });
   }
 }
 

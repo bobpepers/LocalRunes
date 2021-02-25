@@ -203,6 +203,14 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   UserModel.associate = (model) => {
+    UserModel.hasMany(model.dispute, {
+      as: 'initiator',
+      foreignKey: 'initiatorId',
+    });
+    UserModel.hasMany(model.dispute, {
+      as: 'releasedTo',
+      foreignKey: 'releasedToId',
+    });
     UserModel.hasMany(model.messages, {
       as: 'messages',
     });

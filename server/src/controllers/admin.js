@@ -91,6 +91,68 @@ export const fetchAdminPendingIdentityCount = async (req, res, next) => {
     next();
   }
 };
+export const fetchAdminCurrentTrade = async (req, res, next) => {
+  console.log(req.body.id);
+  const trade = await db.trade.findOne({
+    where: {
+      id: req.body.id,
+    },
+    include: [
+      {
+        model: db.messages,
+        as: 'messages',
+        required: false,
+        // attributes: ['username'],
+        include: [
+          {
+            model: db.user,
+            as: 'user',
+            required: true,
+            attributes: ['username'],
+          },
+        ],
+      },
+      {
+        model: db.user,
+        as: 'user',
+        required: true,
+        attributes: ['username'],
+      },
+      {
+        model: db.postAd,
+        as: 'postAd',
+        required: true,
+        // attributes: ['username'],
+        include: [
+          {
+            model: db.paymentMethod,
+            as: 'paymentMethod',
+            required: true,
+            // attributes: ['username'],
+          },
+          {
+            model: db.currency,
+            as: 'currency',
+            required: true,
+            // attributes: ['username'],
+          },
+          {
+            model: db.user,
+            as: 'user',
+            required: true,
+            attributes: ['username'],
+          },
+        ],
+      },
+    ],
+  });
+  if (trade) {
+    res.locals.trade = trade;
+    return next();
+  }
+  res.locals.error = "TRADE_NOT_FOUND";
+  next();
+};
 
 export const fetchAdminPendingWithdrawals = async (req, res, next) => {
   console.log('fetchAdminWithdrawals');
@@ -1124,4 +1186,183 @@ export const updateAdminCurrency = async (req, res, next) => {
     res.locals.error = error;
     next();
   }
+};
+
+export const adminCompleteDispute = async (req, res, next) => {
+  await db.sequelize.transaction({
+    isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
+  }, async (t) => {
+    console.log('Finish the dispute here');
+    const trade = await db.trade.findOne({
+      where: {
+        id: req.body.id,
+        type: 'disputed',
+      },
+      include: [
+        {
+          model: db.dispute,
+          as: 'dispute',
+          required: false,
+          include: [
+            {
+              model: db.user,
+              as: 'initiator',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+          // attributes: ['username'],
+        },
+        {
+          model: db.messages,
+          as: 'messages',
+          required: false,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+        {
+          model: db.user,
+          as: 'user',
+          required: true,
+          attributes: ['username'],
+        },
+        {
+          model: db.postAd,
+          as: 'postAd',
+          required: true,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.paymentMethod,
+              as: 'paymentMethod',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
+              model: db.currency,
+              as: 'currency',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+      ],
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+    if (!trade) {
+      throw new Error('TRADE_NOT_EXIST');
+    }
+    if (req.body.side === "trader") {
+      if (trade.postAd.type === 'sell') {
+        console.log(trade.postAd.user.username);
+        const walletOne = await db.wallet.findOne({
+          where: {
+            userId: trade.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        const walletTwo = await db.wallet.findOne({
+          where: {
+            userId: trade.postAd.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        console.log('TRADER _ SELL');
+        console.log('trade user balance:');
+        console.log(walletOne);
+        console.log('postAd user wallet balance');
+        console.log(walletTwo);
+      }
+      if (trade.postAd.type === 'buy') {
+        console.log(trade.postAd.user.username);
+        const walletOne = await db.wallet.findOne({
+          where: {
+            userId: trade.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        const walletTwo = await db.wallet.findOne({
+          where: {
+            userId: trade.postAd.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        console.log('TRADER _ BUY');
+        console.log('trade user balance:');
+        console.log(walletOne);
+        console.log('postAd user wallet balance');
+        console.log(walletTwo);
+      }
+    }
+    if (req.body.side === "advertiser") {
+      if (trade.postAd.type === 'sell') {
+        const walletOne = await db.wallet.findOne({
+          where: {
+            userId: trade.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        const walletTwo = await db.wallet.findOne({
+          where: {
+            userId: trade.postAd.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        console.log('ADVERTISER _ SELL');
+        console.log('trade user balance:');
+        console.log(walletOne);
+        console.log('postAd user wallet balance');
+        console.log(walletTwo);
+      }
+      if (trade.postAd.type === 'buy') {
+        console.log(trade.postAd.user.username);
+        const walletOne = await db.wallet.findOne({
+          where: {
+            userId: trade.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        const walletTwo = await db.wallet.findOne({
+          where: {
+            userId: trade.postAd.userId,
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        console.log('ADVERTISER _ BUY');
+        console.log('trade user balance:');
+        console.log(walletOne);
+        console.log('postAd user wallet balance');
+        console.log(walletTwo);
+      }
+    }
+
+    t.afterCommit(() => {
+      next();
+    });
+  }).catch((err) => {
+    res.locals.error = err.message;
+    next();
+  });
 };

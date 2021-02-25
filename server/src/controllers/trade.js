@@ -153,6 +153,20 @@ export const fetchCurrentTrade = async (req, res, next) => {
     },
     include: [
       {
+        model: db.dispute,
+        as: 'dispute',
+        required: false,
+        include: [
+          {
+            model: db.user,
+            as: 'initiator',
+            required: true,
+            attributes: ['username'],
+          },
+        ],
+        // attributes: ['username'],
+      },
+      {
         model: db.messages,
         as: 'messages',
         required: false,
@@ -179,6 +193,12 @@ export const fetchCurrentTrade = async (req, res, next) => {
         // attributes: ['username'],
         include: [
           {
+            model: db.paymentMethod,
+            as: 'paymentMethod',
+            required: true,
+            // attributes: ['username'],
+          },
+          {
             model: db.currency,
             as: 'currency',
             required: true,
@@ -199,6 +219,10 @@ export const fetchCurrentTrade = async (req, res, next) => {
     return next();
   }
   if (trade.postAd.userId === req.user.id) {
+    res.locals.trade = trade;
+    return next();
+  }
+  if (req.user.role === 4) {
     res.locals.trade = trade;
     return next();
   }
@@ -954,6 +978,216 @@ export const cancelCurrentMainTrade = async (req, res, next) => {
         });
       }
     }
+
+    t.afterCommit(() => {
+      next();
+    });
+  }).catch((err) => {
+    console.log(err.message);
+    res.locals.error = err.message;
+    next();
+  });
+};
+
+export const disputeTrade = async (req, res, next) => {
+  await db.sequelize.transaction({
+    isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
+  }, async (t) => {
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+    console.log('reqq.boddyyy');
+
+    console.log(req.body);
+    if (!req.body.subject) {
+      throw new Error('SUBJECT_REQUIRED');
+    }
+    if (!req.body.reason) {
+      throw new Error('REASON_REQUIRED');
+    }
+    if (req.body.reason.toString().length > 1200) {
+      throw new Error('REASON_LENGTH_TOO_LONG');
+    }
+
+    const trade = await db.trade.findOne({
+      where: {
+        id: req.body.id,
+        type: 'accepted',
+      },
+      include: [
+        {
+          model: db.messages,
+          as: 'messages',
+          required: false,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+        {
+          model: db.user,
+          as: 'user',
+          required: true,
+          attributes: ['username'],
+        },
+        {
+          model: db.postAd,
+          as: 'postAd',
+          required: true,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.currency,
+              as: 'currency',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+      ],
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+
+    if (!trade) {
+      throw new Error('UNABLE_TO_FIND_TRADE');
+    }
+    console.log(trade.postAd.userId);
+    console.log(trade.userId);
+    console.log(req.user.id);
+
+    console.log('trade');
+
+    if (trade.postAd.userId !== req.user.id && trade.userId !== req.user.id) {
+      throw new Error('UNABLE_TO_DISPUTE_TRADE');
+    }
+
+    const UpdatedTrade = await trade.update({
+      type: 'disputed',
+    }, {
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+
+    const dispute = await db.dispute.create({
+      tradeId: trade.id,
+      initiatorId: req.user.id,
+      subject: req.body.subject,
+      reason: req.body.reason,
+    }, {
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+
+    res.locals.trade = await db.trade.findOne({
+      where: {
+        id: req.body.id,
+        type: 'disputed',
+      },
+      include: [
+        {
+          model: db.dispute,
+          as: 'dispute',
+          required: false,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.user,
+              as: 'initiator',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+        {
+          model: db.messages,
+          as: 'messages',
+          required: false,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+        {
+          model: db.user,
+          as: 'user',
+          required: true,
+          attributes: ['username'],
+        },
+        {
+          model: db.postAd,
+          as: 'postAd',
+          required: true,
+          // attributes: ['username'],
+          include: [
+            {
+              model: db.currency,
+              as: 'currency',
+              required: true,
+              // attributes: ['username'],
+            },
+            {
+              model: db.user,
+              as: 'user',
+              required: true,
+              attributes: ['username'],
+            },
+          ],
+        },
+      ],
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+
+    console.log(req.body.id);
+    console.log(req.body.subject);
+    console.log(req.body.reason);
+
+    console.log('begin check disputed trade');
+
+    console.log();
+    console.log('einde check disputed trade');
 
     t.afterCommit(() => {
       next();

@@ -32,6 +32,7 @@ import AdminUser from './views/admin/AdminUser';
 import AdminWithdrawals from './views/admin/AdminWithdrawals';
 import AdminPendingWithdrawals from './views/admin/AdminPendingWithdrawals';
 import AdminIdentity from './views/admin/AdminIdentity';
+import AdminTradeView from './views/admin/AdminTradeView';
 
 import withTracker from './hooks/withTracker';
 
@@ -46,6 +47,8 @@ import PostAd from './views/PostAd';
 import PublicProfile from './views/PublicProfile';
 import TradeInit from './views/TradeInit';
 import Trade from './views/Trade';
+import TradeDispute from './views/TradeDispute';
+
 import TradeRequested from './views/TradeRequested';
 import TradeComplete from './views/TradeComplete';
 import TradeCanceled from './views/TradeCanceled';
@@ -192,6 +195,11 @@ const Routes = (props) => {
       />
       <Route
         exact
+        path="/trade/dispute/:id"
+        component={requireAuth(withTracker(TradeDispute))}
+      />
+      <Route
+        exact
         path="/settings"
         component={requireAuth(withTracker(Settings))}
       />
@@ -239,6 +247,11 @@ const Routes = (props) => {
         path="/admin/trades"
         exact
         component={requireAuth(withTracker(AdminTradeManagement))}
+      />
+      <Route
+        path="/admin/trade/:id"
+        exact
+        component={requireAuth(withTracker(AdminTradeView))}
       />
       <Route
         path="/admin/deposits"

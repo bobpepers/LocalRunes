@@ -44,6 +44,8 @@ import {
   fetchSingleTradeData,
 } from '../actions/trade';
 
+import DisputeDialog from '../components/DisputeDialog'
+
 const renderTextField = ({
   input,
   type,
@@ -110,9 +112,9 @@ const Trade = (props) => {
   }, [currentTrade]);
 
   useEffect(() => {
-    if (currentTrade.type === 'accepted') {
+    if (currentTrade.type === 'disputed') {
       console.log(currentTrade);
-      history.push(`/trade/${currentTrade.id}`);
+      history.push(`/trade/dispute/${currentTrade.id}`);
     }
   }, [currentTrade]);
 
@@ -362,7 +364,11 @@ const Trade = (props) => {
           </p>
           )}
               </Grid>
-              <Grid item xs={12}>
+              <Grid
+                item
+                xs={12}
+                style={{ marginTop: '20px' }}
+              >
 
                 {// Buy
                   }
@@ -546,7 +552,11 @@ const Trade = (props) => {
                   }
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid
+                item
+                style={{ marginTop: '20px' }}
+                xs={12}
+              >
                 {
                   currentTrade
                   && user
@@ -637,6 +647,16 @@ const Trade = (props) => {
                   </Button>
                   )
                   }
+
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                style={{ marginTop: '20px' }}
+              >
+                <DisputeDialog
+                  tradeId={id}
+                />
               </Grid>
             </Grid>
             {
@@ -660,16 +680,22 @@ const Trade = (props) => {
                 <h3>Detailed info</h3>
               </Grid>
               <Grid container item xs={6}>
+                Trader
+              </Grid>
+              <Grid container item xs={6}>
+                {currentTrade && currentTrade.user && currentTrade.user.username }
+              </Grid>
+              <Grid container item xs={6}>
                 Advertiser
               </Grid>
               <Grid container item xs={6}>
-                Bago
+                {currentTrade && currentTrade.postAd && currentTrade.postAd.user && currentTrade.postAd.user.username }
               </Grid>
               <Grid container item xs={6}>
                 Deal Type
               </Grid>
               <Grid container item xs={6}>
-                Sell/buy
+                {currentTrade && currentTrade.postAd && currentTrade.postAd.type}
               </Grid>
               <Grid container item xs={6}>
                 Deal amount
@@ -694,6 +720,23 @@ const Trade = (props) => {
               </Grid>
               <Grid container item xs={6}>
                 {currentTrade && currentTrade.postAd && currentTrade.postAd.currency.currency_name}
+              </Grid>
+              <Grid container item xs={6}>
+                Payment Method
+              </Grid>
+              <Grid container item xs={6}>
+                {currentTrade
+                && currentTrade.postAd
+                && currentTrade.postAd.paymentMethod
+                && (
+                <span>
+                  {currentTrade.postAd.paymentMethod.description}
+                  {' '}
+                  (
+                  {currentTrade.postAd.paymentMethod.name}
+                  )
+                </span>
+                )}
               </Grid>
               <Grid container item xs={6}>
                 Transaction status

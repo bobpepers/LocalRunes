@@ -37,8 +37,8 @@ import adminTrades from "./admin/adminTrades";
 import adminPendingWithdrawals from "./admin/adminPendingWithdrawals";
 import adminPendingWithdrawalsCount from "./admin/adminPendingWithdrawalsCount";
 import adminPendingIdentityCount from "./admin/adminPendingIdentityCount";
-
-
+import adminSingleTrade from "./admin/adminSingleTrade";
+import adminCompleteDispute from "./admin/adminCompleteDispute";
 
 import createReport from './createReport';
 
@@ -60,6 +60,7 @@ import myAds from './myAds';
 import deleteAd from './deleteAd';
 import location from './location';
 import selectedCurrency from './selectedCurrency';
+import createDispute from './createDispute';
 
 const rootReducer = combineReducers({
   form,
@@ -98,6 +99,8 @@ const rootReducer = combineReducers({
   adminPendingWithdrawals: adminPendingWithdrawals,
   adminPendingWithdrawalsCount: adminPendingWithdrawalsCount,
   adminPendingIdentityCount: adminPendingIdentityCount,
+  adminSingleTrade: adminSingleTrade,
+  adminCompleteDispute: adminCompleteDispute,
 
   verifyPhoneCode: verifyPhoneCode,
   getPhoneCode: getPhoneCode,
@@ -117,6 +120,7 @@ const rootReducer = combineReducers({
   deleteAd: deleteAd, 
   location: location,
   selectedCurrency: selectedCurrency,
+  createDispute: createDispute,
   
 });
 

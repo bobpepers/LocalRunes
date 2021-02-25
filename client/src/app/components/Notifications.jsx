@@ -41,6 +41,9 @@ const Notifications = (props) => {
     if (type === 'accepted') {
       history.push(`/trade/${id}`);
     }
+    if (type === 'disputed') {
+      history.push(`/trade/dispute/${id}`);
+    }
     console.log(type);
     console.log(id);
     // this.setState({ anchorEl: event.currentTarget, open: false });

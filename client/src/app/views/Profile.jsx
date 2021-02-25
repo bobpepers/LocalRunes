@@ -141,6 +141,7 @@ const Profile = (props) => {
 
   const [open, setOpen] = React.useState(false);
   const [openIdentity, setOpenIdentity] = React.useState(false);
+
   const onBasicFieldChange = (event, newValue, previousValue, name) => {
     setDescriptionLength(newValue.length);
   };
