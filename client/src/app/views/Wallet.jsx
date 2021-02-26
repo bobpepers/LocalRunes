@@ -19,7 +19,11 @@ const WalletContainer = (props) => {
       <Grid container>
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
           className="walletMenuItem walletMenuItemActive"
         >
           <Link className="nav-link" to="/wallet">
@@ -31,7 +35,11 @@ const WalletContainer = (props) => {
         </Grid>
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
           className="walletMenuItem"
         >
           <Link className="nav-link" to="/wallet/receive">
@@ -42,7 +50,11 @@ const WalletContainer = (props) => {
         </Grid>
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
           className="walletMenuItem"
         >
           <Link className="nav-link" to="/wallet/send">
@@ -54,12 +66,13 @@ const WalletContainer = (props) => {
       </Grid>
       <Grid
         container
+        style={{ marginTop: '20px' }}
       >
         <Grid
           container
           item
           xs={12}
-          sm={4}
+          sm={12}
           md={4}
           className="glass"
           justify="center"
@@ -75,7 +88,7 @@ const WalletContainer = (props) => {
           item
           container
           xs={12}
-          sm={4}
+          sm={12}
           md={4}
           className="glass"
           justify="center"
@@ -91,7 +104,7 @@ const WalletContainer = (props) => {
           item
           container
           xs={12}
-          sm={4}
+          sm={12}
           md={4}
           className="glass"
           justify="center"
@@ -110,7 +123,11 @@ const WalletContainer = (props) => {
         >
           <Transactions
             addresses={wallet && wallet.addresses || []}
-            transactions={wallet && wallet.addresses && wallet.addresses[0] ? wallet.addresses[0].transactions : []}
+            transactions={wallet
+              && wallet.addresses
+              && wallet.addresses[0]
+              ? wallet.addresses[0].transactions
+              : []}
           />
         </Grid>
       </Grid>

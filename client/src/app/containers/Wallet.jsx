@@ -26,6 +26,11 @@ const WalletContainer = (props) => {
           className="walletMenuItem walletMenuItemActive"
         >
           <Link className="nav-link" to="/wallet">
+            <div className="walletLinkWrapper">
+              <span className="bg" />
+              <span className="base" />
+              <span className="text">Overview</span>
+            </div>
             <p className="text-center">
               Overview
             </p>

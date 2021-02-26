@@ -135,7 +135,11 @@ const Withdraw = (props) => {
       <Grid container>
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
           className="walletMenuItem"
         >
           <Link className="nav-link" to="/wallet">
@@ -147,7 +151,11 @@ const Withdraw = (props) => {
         </Grid>
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
           className="walletMenuItem"
         >
           <Link className="nav-link" to="/wallet/receive">
@@ -158,7 +166,11 @@ const Withdraw = (props) => {
         </Grid>
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
           className="walletMenuItem walletMenuItemActive"
         >
           <Link className="nav-link" to="/wallet/send">
@@ -169,7 +181,12 @@ const Withdraw = (props) => {
         </Grid>
       </Grid>
       <form onSubmit={handleSubmit(myHandleSubmit)}>
-        <Grid container direction="column" spacing={3}>
+        <Grid
+          container
+          direction="column"
+          spacing={3}
+          style={{ marginTop: '20px' }}
+        >
           <Grid item>
             <Field
               name="amount"

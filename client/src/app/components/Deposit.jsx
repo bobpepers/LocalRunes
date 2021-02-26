@@ -109,7 +109,11 @@ const Deposit = (props) => {
       <Grid container>
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
           className="walletMenuItem"
         >
           <Link className="nav-link" to="/wallet">
@@ -121,7 +125,11 @@ const Deposit = (props) => {
         </Grid>
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
           className="walletMenuItem walletMenuItemActive"
         >
           <Link className="nav-link" to="/wallet/receive">
@@ -132,7 +140,11 @@ const Deposit = (props) => {
         </Grid>
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
           className="walletMenuItem"
         >
           <Link className="nav-link" to="/wallet/send">
@@ -149,6 +161,7 @@ const Deposit = (props) => {
         justify="center"
         item
         xs={12}
+        style={{ marginTop: '20px' }}
         className="height100"
       >
         <div>
