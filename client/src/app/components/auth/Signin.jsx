@@ -17,6 +17,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import Captcha from '../Captcha';
 import * as actions from '../../actions/auth';
 
@@ -107,29 +108,62 @@ const Signin = (props) => {
   }
 
   return (
-    <div className="form-container index600 shadow-w signinContainer content">
-      <Grid container alignItems="center" justify="center">
-        <Grid item xs={4}>
+    <div
+      className="form-container index600 shadow-w signinContainer content"
+    >
+      <Grid
+        container
+        alignItems="center"
+        justify="center"
+      >
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={8}
+          lg={4}
+          xl={4}
+        >
           <h2 className="textCenter">Sign in</h2>
           <form onSubmit={handleSubmit(handleFormSubmit)}>
-            <Grid container direction="column" spacing={3}>
-              <Grid item>
+            <Box
+              component={Grid}
+              container
+              item
+              justify="center"
+              direction="column"
+              py={3}
+              xs={12}
+            >
+              <Box
+                item
+                component={Grid}
+                p={1}
+              >
                 <Field
                   name="email"
                   component={renderField}
                   type="text"
                   placeholder="Email"
                 />
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                item
+                component={Grid}
+                p={1}
+              >
                 <Field
                   name="password"
                   component={renderPasswordField}
                   type="password"
                   placeholder="Password"
                 />
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                item
+                component={Grid}
+                p={1}
+              >
                 <div className="password-forgot">
                   <Link className="shadow-w" to="/reset-password">I forgot my password</Link>
                 </div>
@@ -138,22 +172,34 @@ const Signin = (props) => {
                     { props.errorMessage.signin }
                   </div>
                 )}
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Field component={Captcha} change={change} name="captchaResponse" />
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Button variant="contained" color="primary" type="submit" className="btn" fullWidth size="large">
                   Sign in
                 </Button>
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <div className="form-bottom">
                   <p>Don't have an account?</p>
                   <Link className="shadow-w" to="/signup">Click here to sign up</Link>
                 </div>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </form>
         </Grid>
       </Grid>

@@ -22,6 +22,7 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import * as qs from 'query-string';
+import Box from '@material-ui/core/Box';
 import * as actions from '../../actions/auth';
 import Captcha from '../Captcha';
 
@@ -241,59 +242,102 @@ const Signup = (props) => {
   return (
     <div className="form-container index600 shadow-w signinContainer content">
       <Grid container alignItems="center" justify="center">
-        <Grid item xs={4}>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={8}
+          lg={4}
+          xl={4}
+        >
           <h2 className="textCenter">Sign up</h2>
           <form onSubmit={handleSubmit(handleFormSubmit)}>
-            <Grid container direction="column" spacing={3}>
-              <Grid item>
+            <Box
+              component={Grid}
+              container
+              item
+              justify="center"
+              direction="column"
+              py={3}
+              xs={12}
+            >
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Field
                   name="username"
                   component={renderField}
                   type="text"
                   placeholder="Username"
                 />
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Field
                   name="firstname"
                   component={renderField}
                   type="text"
                   placeholder="First name"
                 />
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Field
                   name="lastname"
                   component={renderField}
                   type="text"
                   placeholder="Last name"
                 />
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Field
                   name="email"
                   component={renderField}
                   type="text"
                   placeholder="Email"
                 />
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Field
                   name="password"
                   component={renderPasswordField}
                   type="password"
                   placeholder="Password"
                 />
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Field
                   name="repassword"
                   component={renderRePasswordField}
                   type="password"
                   placeholder="Repeat Password"
                 />
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Field
                   name="referredby"
                   component={renderField}
@@ -304,14 +348,22 @@ const Signup = (props) => {
                     className: 'Mui-disabled',
                   }}
                 />
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Field
                   name="termsAndConditions"
                   component={Checkbox}
                 />
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Field
                   component={Captcha}
                   change={change}
@@ -325,8 +377,12 @@ const Signup = (props) => {
                 </div>
                 ) }
                 </div>
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Button
                   variant="contained"
                   color="primary"
@@ -337,14 +393,18 @@ const Signup = (props) => {
                 >
                   Sign up
                 </Button>
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <div className="form-bottom">
                   <p>Already signed up?</p>
                   <Link className="shadow-w" to="/signin">Click here to sign in</Link>
                 </div>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </form>
         </Grid>
       </Grid>

@@ -129,7 +129,6 @@ const Header = (props) => {
   return (
     <header className="rootRow header" style={{ height }}>
       <Navbar
-      // ref={(div) => { this.div = div; }}
         ref={heightRef}
         fixed="top"
         className="navbar navbar-default"
@@ -143,19 +142,31 @@ const Header = (props) => {
         >
           <MobileNav />
         </button>
-        <Navbar.Collapse id="basic-navbar-nav" className={`collapse navbar-collapse ${show}`}>
+        <Navbar.Collapse
+          id="basic-navbar-nav"
+          className={`collapse navbar-collapse ${show}`}
+        >
           <Nav className="mr-auto rNavbar">
-            <Link className="nav-link" to="/buy-runes">
+            <Link
+              className="nav-link"
+              to="/buy-runes"
+            >
               Buy RUNES
             </Link>
-            <Link className="nav-link" to="/sell-runes">
+            <Link
+              className="nav-link"
+              to="/sell-runes"
+            >
               Sell RUNES
             </Link>
             {
               authenticated
                  && (
                  <>
-                   <Link className="nav-link" to="/post-ad">
+                   <Link
+                     className="nav-link"
+                     to="/post-ad"
+                   >
                      Post a Trade
                    </Link>
 
@@ -208,7 +219,9 @@ const Header = (props) => {
                             </Link>
                           </div>
                         </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
+                        <NavDropdown.Item
+                          onClick={handleClose}
+                        >
                           <div>
                             <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals/pending">
                               <SettingsIcon />
@@ -319,11 +332,15 @@ const Header = (props) => {
                         <NavDropdown
                           className="langPadding toggleLangWrapper"
                           title={(user && user.username)}
-                          id="basic-nav-dropdown"
+                          id="user-nav-dropdown"
                         >
                           <NavDropdown.Item onClick={handleClose}>
                             <div>
-                              <Link style={{ color: '#000' }} className="nav-link" to="/wallet">
+                              <Link
+                                style={{ color: '#000' }}
+                                className="nav-link"
+                                to="/wallet"
+                              >
                                 <AccountBalanceWalletIcon />
                                 {' '}
                                 Wallet
@@ -332,7 +349,11 @@ const Header = (props) => {
                           </NavDropdown.Item>
                           <NavDropdown.Item onClick={handleClose}>
                             <div>
-                              <Link style={{ color: '#000' }} className="nav-link" to="/profile">
+                              <Link
+                                style={{ color: '#000' }}
+                                className="nav-link"
+                                to="/profile"
+                              >
                                 <AccountCircleIcon />
                                 {' '}
                                 My Account
@@ -341,7 +362,11 @@ const Header = (props) => {
                           </NavDropdown.Item>
                           <NavDropdown.Item onClick={handleClose}>
                             <div>
-                              <Link style={{ color: '#000' }} className="nav-link" to={`/public_profile/${user && user.username}`}>
+                              <Link
+                                style={{ color: '#000' }}
+                                className="nav-link"
+                                to={`/public_profile/${user && user.username}`}
+                              >
                                 <FaceIcon />
                                 {' '}
                                 Public Profle
@@ -350,7 +375,11 @@ const Header = (props) => {
                           </NavDropdown.Item>
                           <NavDropdown.Item onClick={handleClose}>
                             <div>
-                              <Link style={{ color: '#000' }} className="nav-link" to="/dashboard">
+                              <Link
+                                style={{ color: '#000' }}
+                                className="nav-link"
+                                to="/dashboard"
+                              >
                                 <DashboardIcon />
                                 {' '}
                                 Dashboard
