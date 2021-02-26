@@ -463,7 +463,7 @@ export const acceptWithdraw = async (req, res, next) => {
     if (!transaction) {
       throw new Error('TRANSACTION_NOT_EXIST');
     }
-    const amount = (((transaction.amount / 100) * 95) / 1e8);
+    const amount = (((transaction.amount / 100) * 99) / 1e8);
     console.log((amount.toFixed(8)).toString());
     console.log('before reps');
     const response = await getInstance().sendToAddress(transaction.to_from, (amount.toFixed(8)).toString());

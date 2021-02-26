@@ -116,8 +116,8 @@ const Withdraw = (props) => {
   }, []);
 
   const calculateFee = (e) => {
-    setFee((((e.target.value * 1e8) / 100) * 5) / 1e8);
-    setTotal(e.target.value - (((e.target.value * 1e8) / 100) * 5) / 1e8)
+    setFee((((e.target.value * 1e8) / 100) * 1) / 1e8);
+    setTotal(e.target.value - (((e.target.value * 1e8) / 100) * 1) / 1e8)
   };
 
   const handleClose = () => {
@@ -197,7 +197,7 @@ const Withdraw = (props) => {
               RUNES
             </p>
             <p>
-              Fee 5%:
+              Fee 1%:
               {' '}
               {fee}
               {' '}
@@ -211,10 +211,22 @@ const Withdraw = (props) => {
               RUNES
             </p>
           </Grid>
-
-          {createWithdrawPost.isFetching
-            ? <CircularProgress disableShrink />
-            : <Button variant="contained" fullWidth color="primary" disabled={pristine || submitting} type="submit">Withdraw</Button>}
+          <Grid item style={{ marginBottom: '20px' }}>
+            {createWithdrawPost.isFetching
+              ? <CircularProgress disableShrink />
+              : (
+                <Button
+                  variant="contained"
+                  fullWidth
+                  color="primary"
+                  disabled={pristine || submitting}
+                  type="submit"
+                  size="large"
+                >
+                  Withdraw
+                </Button>
+              )}
+          </Grid>
         </Grid>
       </form>
     </div>

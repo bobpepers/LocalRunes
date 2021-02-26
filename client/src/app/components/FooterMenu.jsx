@@ -12,6 +12,8 @@ import * as d3 from 'd3';
 import { Link } from 'react-router-dom';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import FacebookIcon from '@material-ui/icons/Facebook';
+import TelegramIcon from '@material-ui/icons/Telegram';
+import MailIcon from '@material-ui/icons/Mail';
 import { getRequestRegister } from '../actions/registered';
 import runebaseloop from '../assets/images/runebaseloop.gif';
 import theme from '../theme';
@@ -85,6 +87,20 @@ const FooterMenu = (props) => {
               <TwitterIcon />
               {' '}
               Twitter
+            </a>
+          </p>
+          <p>
+            <a target="_blank" rel="noreferrer" href="https://t.me/localrunes">
+              <TelegramIcon />
+              {' '}
+              Telegram
+            </a>
+          </p>
+          <p>
+            <a target="_blank" rel="noreferrer" href="mailto:support@localrunes.com">
+              <MailIcon />
+              {' '}
+              support@localrunes.com
             </a>
           </p>
 

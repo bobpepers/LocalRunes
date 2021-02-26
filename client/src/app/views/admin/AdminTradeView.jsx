@@ -636,16 +636,19 @@ const Trade = (props) => {
                 <h3>Detailed info</h3>
               </Grid>
               <Grid container item xs={6}>
+                Trader
+              </Grid>
+              <Grid container item xs={6}>
+                {adminSingleTrade && adminSingleTrade.user && adminSingleTrade.user.username }
+              </Grid>
+              <Grid container item xs={6}>
                 Advertiser
               </Grid>
               <Grid container item xs={6}>
-                Bago
+                {adminSingleTrade && adminSingleTrade.postAd && adminSingleTrade.postAd.user && adminSingleTrade.postAd.user.username }
               </Grid>
               <Grid container item xs={6}>
-                Deal Type
-              </Grid>
-              <Grid container item xs={6}>
-                Sell/buy
+                {adminSingleTrade && adminSingleTrade.postAd && adminSingleTrade.postAd.type}
               </Grid>
               <Grid container item xs={6}>
                 Deal amount
