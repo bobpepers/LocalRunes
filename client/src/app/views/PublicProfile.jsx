@@ -51,7 +51,16 @@ const PublicProfile = (props) => {
   return (
     <div className="height100 content surfContainer">
       <Grid container align="center" alignConent="center" alignItems="center">
-        <Grid item xs={8} align="center" alignItems="center">
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={8}
+          lg={8}
+          xl={8}
+          align="center"
+          alignItems="center"
+        >
           <h3>{specificUser && specificUser.username }</h3>
           <h4>
             Information on
@@ -125,7 +134,17 @@ const PublicProfile = (props) => {
             people
           </p>
         </Grid>
-        <Grid container item xs={4} align="center" alignItems="center">
+        <Grid
+          container
+          item
+          xs={12}
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
+          align="center"
+          alignItems="center"
+        >
           <Grid container item xs={12}>
             {specificUser && specificUser.username === user.username ? (
               <p>

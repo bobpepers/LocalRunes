@@ -16,6 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CloseIcon from '@material-ui/icons/Close';
+import Box from '@material-ui/core/Box';
 
 import { disabletfa, idleDisabletfa } from '../../actions';
 
@@ -95,21 +96,58 @@ const DisableTfa = (props) => {
   console.log(errorMessage);
 
   return (
-    <>
-      <Grid container>
-        <Grid item xs={12}>
-          <h2>Disable</h2>
+
+    <div className="form-container index600 shadow-w signinContainer content">
+      <Grid
+        container
+        alignItems="center"
+        justify="center"
+      >
+        <Grid
+          item
+          xs={12}
+        >
+          <h2
+            className="text-center"
+          >
+            Disable 2FA
+          </h2>
         </Grid>
-        <div className="w-100 signinContainer">
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={8}
+          lg={4}
+          xl={4}
+        >
+
           <form
             style={{ width: '100%' }}
             onSubmit={handleSubmit(myHandleSubmit)}
           >
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
+            <Box
+              component={Grid}
+              container
+              item
+              justify="center"
+              direction="column"
+              py={3}
+              xs={12}
+            >
+
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 <Field name="tfa" component={renderNumberField} label="2FA" />
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box
+                component={Grid}
+                p={1}
+                item
+              >
                 { errorMessage && errorMessage.tfa
                     && (
                       <div className="error-container signin-error">
@@ -131,12 +169,13 @@ const DisableTfa = (props) => {
                       Disable
                     </Button>
                   )}
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </form>
-        </div>
+
+        </Grid>
       </Grid>
-    </>
+    </div>
   );
 }
 

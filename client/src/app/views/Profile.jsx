@@ -266,7 +266,14 @@ const Profile = (props) => {
 
   return (
     <Grid container className="surfContainer">
-      <Grid item xs={4}>
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={4}
+        lg={4}
+        xl={4}
+      >
         <div className="avatar-image-wrapper">
           <div className="avatar-image" onClick={onAvatarClick}>
             <img src={`/uploads/avatars/${user && user.avatar_path}`} alt="Avatar" />
@@ -340,7 +347,14 @@ const Profile = (props) => {
           </p>
         </div>
       </Grid>
-      <Grid item xs={8}>
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={8}
+        lg={8}
+        xl={8}
+      >
         <h3>Update Bio</h3>
         <div className="form-container index600 shadow-w signinContainer content">
           <Grid container alignItems="center" justify="center">
