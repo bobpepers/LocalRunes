@@ -75,8 +75,8 @@ const Global = (props) => {
     setEvent({
       type: 'CLICK',
       marker,
-      markerObjectID: markerObject.uuid,
-      pointerEventPosition: { x: event.clientX, y: event.clientY },
+      // markerObjectID: markerObject.uuid,
+      // pointerEventPosition: { x: event.clientX, y: event.clientY },
     });
     setDetails(markerTooltipRenderer(marker));
   }
@@ -98,7 +98,7 @@ const Global = (props) => {
         markers={randomMarkers}
         options={options}
         width="50vw"
-        onClickMarker={onClickMarker}
+        // onClickMarker={onClickMarker}
         onDefocus={onDefocus}
         backgroundColor="transparent"
       />

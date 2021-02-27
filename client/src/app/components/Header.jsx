@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import {
   Navbar,
   Nav,
@@ -18,10 +19,10 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import LiveTvIcon from '@material-ui/icons/LiveTv';
 // import MouseIcon from '@material-ui/icons/Mouse';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFaucet } from '@fortawesome/free-solid-svg-icons';
-import Badge from '@material-ui/core/Badge';
+import {
+  Badge,
+  Button,
+} from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -125,6 +126,36 @@ const Header = (props) => {
       return 'nl';
     }
   }
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClickAdminMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseAdminMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleClickUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const [anchorElLang, setAnchorElLang] = React.useState(null);
+
+  const handleClickLangMenu = (event) => {
+    setAnchorElLang(event.currentTarget);
+  };
+
+  const handleCloseLangMenu = () => {
+    setAnchorElLang(null);
+  };
+
   // console.log(this.props.user);
   return (
     <header className="rootRow header" style={{ height }}>
@@ -193,132 +224,153 @@ const Header = (props) => {
           {
               authenticated && user && user.role === 4 && (
                 <ul className="adminDropdownWrapper">
+                  <li />
                   <li>
-                    <Badge
-                      badgeContent={adminPendingWithdrawalsCount
+
+                    <Button
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      onClick={handleClickAdminMenu}
+                      className="langPadding toggleLangWrapper"
+                      id="user-nav-dropdown"
+                      style={{ color: '#bdbdbd' }}
+                    >
+                      <Badge
+                        badgeContent={adminPendingWithdrawalsCount
                         && Number(adminPendingDisputeCount)
                         + Number(adminPendingWithdrawalsCount)
                         + Number(adminPendingIdentityCount)}
-                      color="secondary"
-                    >
-                      <NavDropdown
-                        className="langPadding toggleLangWrapper"
-                        title="Admin"
-                        id="admin_nav_dropdown"
+                        color="secondary"
                       >
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link
-                              style={{ color: '#000' }}
-                              className="nav-link"
-                              to="/admin"
-                            >
-                              <AccountBalanceWalletIcon />
-                              {' '}
-                              Dashboard
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item
-                          onClick={handleClose}
-                        >
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals/pending">
-                              <SettingsIcon />
-                              {' '}
-                              Pending Withdrawals (
-                              {adminPendingWithdrawalsCount || 0}
-                              )
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/identity/pending">
-                              <SettingsIcon />
-                              {' '}
-                              Pending Identity (
-                              {adminPendingIdentityCount || 0}
-                              )
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/disputes/pending">
-                              <SettingsIcon />
-                              {' '}
-                              Pending Disputes (
-                              {adminPendingDisputeCount || 0}
-                              )
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals">
-                              <SettingsIcon />
-                              {' '}
-                              Withdrawals
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/deposits">
-                              <SettingsIcon />
-                              {' '}
-                              Deposits
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/trades">
-                              <SettingsIcon />
-                              {' '}
-                              Trades
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/users">
-                              <AccountCircleIcon />
-                              {' '}
-                              User Managment
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/countries">
-                              <FaceIcon />
-                              {' '}
-                              Countries
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/currencies">
-                              <DashboardIcon />
-                              {' '}
-                              Currencies
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={handleClose}>
-                          <div>
-                            <Link style={{ color: '#000' }} className="nav-link" to="/admin/paymentmethods">
-                              <SettingsIcon />
-                              {' '}
-                              Payment Methods
-                            </Link>
-                          </div>
-                        </NavDropdown.Item>
-                      </NavDropdown>
-                    </Badge>
+                        Admin
+
+                      </Badge>
+
+                      {' '}
+                      <ArrowDropDownIcon />
+                    </Button>
+                    <Menu
+                      id="simple-menu"
+                      anchorEl={anchorEl}
+                      keepMounted
+                      open={Boolean(anchorEl)}
+                      onClose={handleCloseAdminMenu}
+                      className="langPadding toggleLangWrapper"
+                    >
+                      <MenuItem
+                        onClick={handleCloseAdminMenu}
+                      >
+                        <div>
+                          <Link
+                            style={{ color: '#000' }}
+                            className="nav-link"
+                            to="/admin"
+                          >
+                            <AccountBalanceWalletIcon />
+                            {' '}
+                            Dashboard
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem
+                        onClick={handleCloseAdminMenu}
+                      >
+                        <div>
+                          <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals/pending">
+                            <SettingsIcon />
+                            {' '}
+                            Pending Withdrawals (
+                            {adminPendingWithdrawalsCount || 0}
+                            )
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem onClick={handleCloseAdminMenu}>
+                        <div>
+                          <Link style={{ color: '#000' }} className="nav-link" to="/admin/identity/pending">
+                            <SettingsIcon />
+                            {' '}
+                            Pending Identity (
+                            {adminPendingIdentityCount || 0}
+                            )
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem onClick={handleCloseAdminMenu}>
+                        <div>
+                          <Link style={{ color: '#000' }} className="nav-link" to="/admin/disputes/pending">
+                            <SettingsIcon />
+                            {' '}
+                            Pending Disputes (
+                            {adminPendingDisputeCount || 0}
+                            )
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem onClick={handleCloseAdminMenu}>
+                        <div>
+                          <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals">
+                            <SettingsIcon />
+                            {' '}
+                            Withdrawals
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem onClick={handleCloseAdminMenu}>
+                        <div>
+                          <Link style={{ color: '#000' }} className="nav-link" to="/admin/deposits">
+                            <SettingsIcon />
+                            {' '}
+                            Deposits
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem onClick={handleCloseAdminMenu}>
+                        <div>
+                          <Link style={{ color: '#000' }} className="nav-link" to="/admin/trades">
+                            <SettingsIcon />
+                            {' '}
+                            Trades
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem onClick={handleCloseAdminMenu}>
+                        <div>
+                          <Link style={{ color: '#000' }} className="nav-link" to="/admin/users">
+                            <AccountCircleIcon />
+                            {' '}
+                            User Managment
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem onClick={handleCloseAdminMenu}>
+                        <div>
+                          <Link style={{ color: '#000' }} className="nav-link" to="/admin/countries">
+                            <FaceIcon />
+                            {' '}
+                            Countries
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem onClick={handleCloseAdminMenu}>
+                        <div>
+                          <Link style={{ color: '#000' }} className="nav-link" to="/admin/currencies">
+                            <DashboardIcon />
+                            {' '}
+                            Currencies
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem onClick={handleCloseAdminMenu}>
+                        <div>
+                          <Link style={{ color: '#000' }} className="nav-link" to="/admin/paymentmethods">
+                            <SettingsIcon />
+                            {' '}
+                            Payment Methods
+                          </Link>
+                        </div>
+                      </MenuItem>
+                    </Menu>
                   </li>
                 </ul>
               )
@@ -326,95 +378,114 @@ const Header = (props) => {
           {
               authenticated
                 ? (
-                  <>
-                    <ul>
-                      <li>
-                        <NavDropdown
-                          className="langPadding toggleLangWrapper"
-                          title={(user && user.username)}
-                          id="user-nav-dropdown"
+                  <ul>
+                    <li>
+                      <Button
+                          // aria-controls="simple-menu"
+                          // aria-haspopup="true"
+                        onClick={handleClickUserMenu}
+                        className="langPadding toggleLangWrapper"
+                        id="user-nav-dropdown"
+                        style={{ color: '#bdbdbd' }}
+                      >
+                        <Badge
+                          color="secondary"
                         >
-                          <NavDropdown.Item onClick={handleClose}>
-                            <div>
-                              <Link
-                                style={{ color: '#000' }}
-                                className="nav-link"
-                                to="/wallet"
-                              >
-                                <AccountBalanceWalletIcon />
-                                {' '}
-                                Wallet
-                              </Link>
-                            </div>
-                          </NavDropdown.Item>
-                          <NavDropdown.Item onClick={handleClose}>
-                            <div>
-                              <Link
-                                style={{ color: '#000' }}
-                                className="nav-link"
-                                to="/profile"
-                              >
-                                <AccountCircleIcon />
-                                {' '}
-                                My Account
-                              </Link>
-                            </div>
-                          </NavDropdown.Item>
-                          <NavDropdown.Item onClick={handleClose}>
-                            <div>
-                              <Link
-                                style={{ color: '#000' }}
-                                className="nav-link"
-                                to={`/public_profile/${user && user.username}`}
-                              >
-                                <FaceIcon />
-                                {' '}
-                                Public Profle
-                              </Link>
-                            </div>
-                          </NavDropdown.Item>
-                          <NavDropdown.Item onClick={handleClose}>
-                            <div>
-                              <Link
-                                style={{ color: '#000' }}
-                                className="nav-link"
-                                to="/dashboard"
-                              >
-                                <DashboardIcon />
-                                {' '}
-                                Dashboard
-                              </Link>
-                            </div>
-                          </NavDropdown.Item>
-                          <NavDropdown.Item onClick={handleClose}>
-                            <div>
-                              <Link style={{ color: '#000' }} className="nav-link" to="/settings">
-                                <SettingsIcon />
-                                {' '}
-                                Settings
-                              </Link>
-                            </div>
-                          </NavDropdown.Item>
-                          <NavDropdown.Item onClick={handleClose}>
-                            <div>
-                              <Link style={{ color: '#000' }} className="nav-link" to="/signout">
-                                <ExitToAppIcon />
-                                {' '}
-                                Logout
-                              </Link>
-                            </div>
-                          </NavDropdown.Item>
-                        </NavDropdown>
-                      </li>
-                    </ul>
-                  </>
+                          {user && user.username}
+
+                        </Badge>
+
+                        {' '}
+                        <ArrowDropDownIcon />
+                      </Button>
+                      <Menu
+                        id="simple-menu"
+                        anchorEl={anchorElUser}
+                        keepMounted
+                        open={Boolean(anchorElUser)}
+                        onClose={handleCloseUserMenu}
+                        className="langPadding toggleLangWrapper"
+                      >
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          <div>
+                            <Link
+                              style={{ color: '#000' }}
+                              className="nav-link"
+                              to="/wallet"
+                            >
+                              <AccountBalanceWalletIcon />
+                              {' '}
+                              Wallet
+                            </Link>
+                          </div>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          <div>
+                            <Link
+                              style={{ color: '#000' }}
+                              className="nav-link"
+                              to="/profile"
+                            >
+                              <AccountCircleIcon />
+                              {' '}
+                              My Account
+                            </Link>
+                          </div>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          <div>
+                            <Link
+                              style={{ color: '#000' }}
+                              className="nav-link"
+                              to={`/public_profile/${user && user.username}`}
+                            >
+                              <FaceIcon />
+                              {' '}
+                              Public Profle
+                            </Link>
+                          </div>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          <div>
+                            <Link
+                              style={{ color: '#000' }}
+                              className="nav-link"
+                              to="/dashboard"
+                            >
+                              <DashboardIcon />
+                              {' '}
+                              Dashboard
+                            </Link>
+                          </div>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/settings">
+                              <SettingsIcon />
+                              {' '}
+                              Settings
+                            </Link>
+                          </div>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          <div>
+                            <Link style={{ color: '#000' }} className="nav-link" to="/signout">
+                              <ExitToAppIcon />
+                              {' '}
+                              Logout
+                            </Link>
+                          </div>
+                        </MenuItem>
+                      </Menu>
+                    </li>
+                  </ul>
 
                 )
                 : (
                   <>
                     <ul>
                       <li>
-                        <Link className="nav-link" to="/signup">Sign up free</Link>
+                        <Link className="nav-link" to="/signup">Sign up</Link>
                       </li>
                       <li>
                         <Link className="nav-link" to="/signin">Sign in</Link>
@@ -425,21 +496,39 @@ const Header = (props) => {
                 )
             }
 
-          <NavDropdown
+          <Button
+                          // aria-controls="simple-menu"
+                          // aria-haspopup="true"
+            onClick={handleClickLangMenu}
             className="langPadding toggleLangWrapper"
-            title={(
+            id="user-nav-dropdown"
+            style={{ color: '#bdbdbd' }}
+          >
+            <Badge
+              color="secondary"
+            >
               <span>
                 <ReactCountryFlag countryCode={countryCode(`${getCurrentLng()}`)} svg />
                 {' '}
                 {t(`${getCurrentLng()}`)}
               </span>
-              )}
-            id="basic-nav-dropdown"
+            </Badge>
+
+            {' '}
+            <ArrowDropDownIcon />
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorElLang}
+            keepMounted
+            open={Boolean(anchorElLang)}
+            onClose={handleCloseLangMenu}
+            className="langPadding toggleLangWrapper"
           >
-            <NavDropdown.Item
+            <MenuItem
               onClick={(event) => {
-                toggleMenu();
-                changeLanguage('en')
+                handleCloseLangMenu();
+                changeLanguage('en');
               }}
             >
               <div>
@@ -447,10 +536,10 @@ const Header = (props) => {
                 {' '}
                 {t('en')}
               </div>
-            </NavDropdown.Item>
-            <NavDropdown.Item
+            </MenuItem>
+            <MenuItem
               onClick={(event) => {
-                toggleMenu();
+                handleCloseLangMenu();
                 changeLanguage('pt')
               }}
             >
@@ -459,10 +548,10 @@ const Header = (props) => {
                 {' '}
                 {t('pt')}
               </div>
-            </NavDropdown.Item>
-            <NavDropdown.Item
+            </MenuItem>
+            <MenuItem
               onClick={(event) => {
-                toggleMenu();
+                handleCloseLangMenu();
                 changeLanguage('nl')
               }}
             >
@@ -471,8 +560,8 @@ const Header = (props) => {
                 {' '}
                 {t('nl')}
               </div>
-            </NavDropdown.Item>
-          </NavDropdown>
+            </MenuItem>
+          </Menu>
 
         </Navbar.Collapse>
       </Navbar>

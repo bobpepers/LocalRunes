@@ -31,10 +31,12 @@ const Settings = (props) => {
     >
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <h3 className="text-center">Two Factor Authentication</h3>
+          <h3 className="text-center">
+            Two Factor Authentication
+          </h3>
         </Grid>
         <Grid container justify="center">
-          { props.user.data && data.tfa === false
+          { data && data.tfa === false
             ? <EnableTFA />
             : <DisableTFA />}
         </Grid>

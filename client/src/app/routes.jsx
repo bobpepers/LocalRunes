@@ -1,25 +1,9 @@
 import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
 import { connect } from 'react-redux';
 
-import UserList from './components/users/UserList';
-import Signin from './components/auth/Signin';
-import LoginTFA from './components/auth/Login2FA';
-import Signout from './components/auth/Signout';
-import Signup from './components/auth/Signup';
-import VerifyEmail from './components/auth/VerifyEmail';
-import SignupVerify from './components/auth/SignupVerify';
-import ResetPassword from './components/resetPassword/ResetPassword';
-import ResetPasswordVerify from './components/resetPassword/ResetPasswordVerify';
-import ResetPasswordNew from './components/resetPassword/ResetPasswordNew';
-
-import Deposit from './components/Deposit';
-import Withdraw from './components/Withdraw';
-
-import Dashboard from './views/Dashboard';
-import Home from './views/Home';
+import withTracker from './hooks/withTracker';
 
 import Admin from './views/admin/Admin';
 import AdminCountryManagement from './views/admin/AdminCountryManagement';
@@ -35,8 +19,25 @@ import AdminIdentity from './views/admin/AdminIdentity';
 import AdminTradeView from './views/admin/AdminTradeView';
 import AdminPendingDisputes from './views/admin/AdminPendingDisputes';
 
-import withTracker from './hooks/withTracker';
+import UserList from './components/users/UserList';
+import Signin from './components/auth/Signin';
+import LoginTFA from './components/auth/Login2FA';
+import Signout from './components/auth/Signout';
+import Signup from './components/auth/Signup';
+import VerifyEmail from './components/auth/VerifyEmail';
+import SignupVerify from './components/auth/SignupVerify';
+import ResetPassword from './components/resetPassword/ResetPassword';
+import ResetPasswordVerify from './components/resetPassword/ResetPasswordVerify';
+import ResetPasswordNew from './components/resetPassword/ResetPasswordNew';
+import requireAuth from './components/hoc/RequireAuth';
+import requireNotAuth from './components/hoc/RequireNotAuth';
 
+import toggleTheme from './helpers/toggleTheme';
+
+import Deposit from './components/Deposit';
+import Withdraw from './components/Withdraw';
+import Dashboard from './views/Dashboard';
+import Home from './views/Home';
 import BuyRunes from './views/BuyRunes';
 import SellRunes from './views/SellRunes';
 import Terms from './views/Terms';
@@ -50,16 +51,10 @@ import TradeInit from './views/TradeInit';
 import Trade from './views/Trade';
 import TradeDispute from './views/TradeDispute';
 import TradeDisputeComplete from './views/TradeDisputeComplete';
-
 import TradeRequested from './views/TradeRequested';
 import TradeComplete from './views/TradeComplete';
 import TradeCanceled from './views/TradeCanceled';
 import Settings from './views/Settings';
-
-import requireAuth from './components/hoc/RequireAuth';
-import requireNotAuth from './components/hoc/RequireNotAuth';
-
-import toggleTheme from './helpers/toggleTheme';
 
 const Routes = (props) => {
   const {
