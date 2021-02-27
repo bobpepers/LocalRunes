@@ -128,7 +128,7 @@ const Footer = (props) => {
     console.log('selectedCurrency');
     console.log('selectedCurrency');
     console.log(selectedCurrency);
-  }, [price, user, currencyState, selectedCurrency]);
+  }, [price, user, currencyState, selectedCurrency, online]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -155,7 +155,7 @@ const Footer = (props) => {
             <p className="noBottomMargin floatLeft">
               <FiberManualRecordIcon />
               {' '}
-              {onlineCount !== '' ? onlineCount : online}
+              {online || 0}
             </p>
           </Tooltip>
         </Grid>
