@@ -71,45 +71,19 @@ const Footer = (props) => {
   useEffect(() => dispatch(fetchOnlineDataCount()), [dispatch]);
 
   useEffect(() => {
+    console.log('update price and currencyState useffect')
     if (price) {
       console.log(currencyState);
-
       console.log(selectedCurrency);
     }
     if (price) {
       dispatch(updateSelectedCurrency(price.filter((object) => object.currency === currencyState)));
     }
   }, [price, currencyState]);
-  useEffect(() => {
-    console.log('price');
-    console.log('price');
-    console.log('price');
-    console.log('price');
-    console.log('price');
-    console.log('price');
-    console.log('price');
-    console.log('price');
-    console.log('price');
-    console.log('price');
 
-    console.log(price)
-    if (price) {
-      dispatch(updateSelectedCurrency(price.filter((object) => object.currency === currencyState)));
-    }
-  }, [price]);
   useEffect(() => {
     console.log('location');
-    console.log('location');
-    console.log('location');
-    console.log('location');
-    console.log('price');
-    console.log('location');
-    console.log('location');
-    console.log('location');
-    console.log('prilocationce');
-    console.log('location');
-
-    console.log(location)
+    console.log(location);
     if (location && location.currency) {
       console.log()
       setCurrencyState(location.currency.currency_name);
@@ -118,17 +92,6 @@ const Footer = (props) => {
   }, [location]);
 
   useEffect(() => {
-    console.log('selectedCurrency');
-    console.log('selectedCurrency');
-    console.log('selectedCurrency');
-    console.log('selectedCurrency');
-    console.log('selectedCurrency');
-    console.log('selectedCurrency');
-    console.log('selectedCurrency');
-    console.log('selectedCurrency');
-    console.log('selectedCurrency');
-    console.log('selectedCurrency');
-    console.log('selectedCurrency');
     console.log('selectedCurrency');
     console.log(selectedCurrency);
   }, [price, user, currencyState, selectedCurrency, online]);

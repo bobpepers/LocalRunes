@@ -213,14 +213,14 @@ function App() {
   // a way to trigger a re-render.
   // console.log('RunesX App Started');
   const { location: currentLocation, error: currentError } = useCurrentLocation(geolocationOptions);
-  const { location, cancelLocationWatch, error } = useWatchLocation(geolocationOptions);
-  const [isWatchinForLocation, setIsWatchForLocation] = useState(true);
+  // const { location, cancelLocationWatch, error } = useWatchLocation(geolocationOptions);
+  // const [isWatchinForLocation, setIsWatchForLocation] = useState(true);
 
   useEffect(() => {
     if (!location) return;
     store.dispatch(getPrice());
-  }, [
-  ]);
+  }, []);
+
   useEffect(() => {
     if (!location) return;
     store.dispatch(setLocation(location));
