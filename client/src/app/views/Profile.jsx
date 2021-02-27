@@ -276,7 +276,10 @@ const Profile = (props) => {
         lg={4}
         xl={4}
       >
-        <div className="avatar-image-wrapper">
+        <div
+          style={{ marginTop: '1em' }}
+          className="avatar-image-wrapper"
+        >
           <div className="avatar-image" onClick={onAvatarClick}>
             <img src={`/uploads/avatars/${user && user.avatar_path}`} alt="Avatar" />
             <span className="avatarEditHoverText">Edit</span>

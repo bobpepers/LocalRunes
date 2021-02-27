@@ -24,10 +24,14 @@ const Settings = (props) => {
   console.log('Views/Settings props.user.data.username');
   console.log(props.user.data ? data.tfa : '');
   return (
-    <Grid container className="surfContainer" style={{ marginBottom: '20px' }}>
+    <Grid
+      container
+      className="surfContainer"
+      style={{ marginBottom: '20px' }}
+    >
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <h3>Two Factor Authentication</h3>
+          <h3 className="text-center">Two Factor Authentication</h3>
         </Grid>
         <Grid container justify="center">
           { props.user.data && data.tfa === false
