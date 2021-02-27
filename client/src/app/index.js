@@ -212,8 +212,8 @@ function App() {
   // Set up a piece of state, so that we have
   // a way to trigger a re-render.
   // console.log('RunesX App Started');
-  const { location: currentLocation, error: currentError } = useCurrentLocation(geolocationOptions);
-  // const { location, cancelLocationWatch, error } = useWatchLocation(geolocationOptions);
+  // const { location: currentLocation, error: currentError } = useCurrentLocation(geolocationOptions);
+  const { location, cancelLocationWatch, error } = useWatchLocation(geolocationOptions);
   // const [isWatchinForLocation, setIsWatchForLocation] = useState(true);
 
   useEffect(() => {
@@ -224,6 +224,7 @@ function App() {
   useEffect(() => {
     if (!location) return;
     store.dispatch(setLocation(location));
+    cancelLocationWatch();
     // Cancel location watch after 3sec
     // setTimeout(() => {
     //  cancelLocationWatch();
