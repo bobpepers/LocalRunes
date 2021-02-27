@@ -25,7 +25,9 @@ import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import ExposureIcon from '@material-ui/icons/Exposure';
+import { fetchOnlineDataCount } from '../actions/online';
 import { fetchUserData } from '../actions/user';
+
 import { getPrice } from '../actions';
 import { updateSelectedCurrency } from '../actions/selectCurrency';
 import ThemeToggle from '../components/ThemeToggle';
@@ -66,6 +68,7 @@ const Footer = (props) => {
 
   useEffect(() => dispatch(fetchUserData()), [dispatch]);
   useEffect(() => dispatch(getPrice()), [dispatch]);
+  useEffect(() => dispatch(fetchOnlineDataCount()), [dispatch]);
 
   useEffect(() => {
     if (price) {

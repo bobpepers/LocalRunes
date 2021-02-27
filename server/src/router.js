@@ -1708,6 +1708,11 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
+  app.get('/api/online/count',
+    (req, res) => {
+      res.json({ people: Object.keys(onlineUsers).length });
+    });
+
   app.get('/api/currencies',
     IsAuthenticated,
     isUserBanned,

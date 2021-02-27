@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   FETCH_ONLINE_BEGIN,
   FETCH_ONLINE_SUCCESS,
@@ -7,6 +8,7 @@ import {
 export const getRequestPeople = () => ({
   type: FETCH_ONLINE_BEGIN,
 });
+
 export const getSuccessPeople = (data) => {
   console.log('getsee');
   console.log(data);
@@ -36,3 +38,22 @@ export const getPeople = (options) => async (dispatch) => {
     dispatch(getFailurePeople(err));
   }
 };
+export function fetchOnlineDataCount() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ONLINE_BEGIN,
+    });
+    axios.get(`${process.env.API_URL}/online/count`)
+      .then((response) => {
+        dispatch({
+          type: FETCH_ONLINE_SUCCESS,
+          payload: response.data.people,
+        })
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ONLINE_FAILURE,
+          payload: error,
+        })
+      });
+  }
+}
