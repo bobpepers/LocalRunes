@@ -158,208 +158,228 @@ const TradeInit = (props) => {
     await dispatch(cancelTradeAction(id));
   }
 
-  const actualPrice = price && currentTrade && currentTrade.postAd && (price.filter((object) => object.currency === currentTrade.postAd.currency.iso)) || 0;
-  const marginPrice = actualPrice.length && currentTrade && currentTrade.postAd && ((actualPrice[0].price / 100) * (currentTrade.postAd.margin / 1e2)).toFixed(8) || 0;
+  const actualPrice = price
+  && currentTrade
+  && currentTrade.postAd
+    ? (price.filter((object) => object.currency === currentTrade.postAd.currency.iso))
+    : 0;
+  const marginPrice = actualPrice
+  && actualPrice.length
+  && currentTrade
+  && currentTrade.postAd
+    ? ((actualPrice[0].price / 100) * (currentTrade.postAd.margin / 1e2)).toFixed(8)
+    : 0;
 
+  if (currentTrade.type === 'init') {
+    return (
+      <div className="height100 content surfContainer">
+        <Grid container>
+          <Grid item xs={12}>
+            <form onSubmit={handleSubmit(handleFormSubmit)}>
+              <Grid container>
+                <Grid item xs={12}>
+                  <p>
+                    Advertiser:
+                    {' '}
+                    {currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.user.username}
+                  </p>
+                  <p>
+                    Trader:
+                    {' '}
+                    {currentTrade
+                    && currentTrade
+                    && currentTrade.user
+                    && currentTrade.user.username}
+                  </p>
+                  <p>
+                    Ad type:
+                    {' '}
+                    {currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.type}
+
+                  </p>
+                  <p>
+                    Price Type:
+                    {' '}
+                    {currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.priceType}
+                    {' '}
+                    {currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.priceType === 'margin'
+                    && '(Price sticks after this step. Verify price after trade start)'}
+                  </p>
+                  <p>
+                    Price/RUNES:
+                    {' '}
+                    {currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.priceType === 'static'
+                    && (currentTrade.postAd.price / 1e8)}
+                    {currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.priceType === 'margin'
+                    && actualPrice.length
+                    && marginPrice}
+                    {' '}
+                    {currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.currency.currency_name}
+                  </p>
+                  <p>
+                    {user
+                    && currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.type === 'buy'
+                    && user.username === currentTrade.user.username
+                    && `You want to sell to ${currentTrade.postAd.user.username}`}
+                    {user
+                    && currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.type === 'buy'
+                    && user.username === currentTrade.postAd.user.username
+                    && `${currentTrade.user.username} wants to sell to you`}
+                    {user
+                    && currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.type === 'sell'
+                    && user.username === currentTrade.user.username
+                    && `You want to buy from ${currentTrade.postAd.user.username}`}
+                    {user
+                    && currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.type === 'sell'
+                    && user.username === currentTrade.postAd.user.username
+                    && `${currentTrade.user.username} wants to buy from you`}
+                  </p>
+                  <p>
+                    Min:
+                    {' '}
+                    {currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.min / 1e8}
+                    {' '}
+                    RUNES
+                  </p>
+                  <p>
+                    Max:
+                    {' '}
+                    {currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.max / 1e8}
+                    {' '}
+                    RUNES
+                  </p>
+                </Grid>
+                <Grid item xs={12}>
+                  <p>Amount</p>
+                  <Field
+                    name="amount"
+                    component={renderField}
+                    type="number"
+                    placeholder="Amount"
+                    onChange={(event, index, value) => {
+                      console.log('nummer');
+                      console.log(event.currentTarget.valueAsNumber);
+                      console.log((event.currentTarget.valueAsNumber * (currentTrade.price / 1e8)));
+                      // if (currentTrade.postAd) {
+                      if (currentTrade.postAd && currentTrade.postAd.priceType === 'static') {
+                        dispatch(change('postad', 'total', (event.currentTarget.valueAsNumber * (currentTrade.price / 1e8)).toFixed(8)));
+                      }
+                      if (currentTrade.postAd && currentTrade.postAd.priceType === 'margin') {
+                        dispatch(change('postad', 'total', (event.currentTarget.valueAsNumber * (marginPrice)).toFixed(8)));
+                      }
+
+                      // }
+                    }}
+                  />
+                  <p>Total</p>
+                  <Field
+                    name="total"
+                    component={renderField}
+                    type="number"
+                    placeholder="Total"
+                    onChange={(event, index, value) => {
+                      if (currentTrade.postAd && currentTrade.postAd.priceType === 'static') {
+                        dispatch(change('postad', 'amount', (event.currentTarget.valueAsNumber / (currentTrade.price / 1e8)).toFixed(8)));
+                      }
+                      if (currentTrade.postAd && currentTrade.postAd.priceType === 'margin') {
+                        dispatch(change('postad', 'amount', (event.currentTarget.valueAsNumber / (marginPrice)).toFixed(8)));
+                      }
+                      console.log('values');
+                      console.log(values);
+                      console.log(event.currentTarget.valueAsNumber);
+                      console.log(value);
+                      console.log(((event.currentTarget.valueAsNumber * 1e8) / (currentTrade.price)));
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <p>Respond Time</p>
+                  <Field
+                    name="repondTime"
+                    component={renderSelectField}
+                    label="Respond Time"
+                    style={{ width: '100%' }}
+                  >
+                    <option value="" />
+                    <option value="15">15 Min</option>
+                    <option value="30">30 Min</option>
+                    <option value="45">45 Min</option>
+                    <option value="60">1 Hour</option>
+                    <option value="120">2 Hour</option>
+                    <option value="180">3 Hour</option>
+                  </Field>
+                </Grid>
+                <Grid
+                  item
+                  style={{ marginBottom: '20px', marginTop: '20px' }}
+                  xs={12}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    className="btn"
+                    fullWidth
+                    size="large"
+                  >
+                    Start Trade
+                  </Button>
+                </Grid>
+                <Grid
+                  item
+                  style={{ marginBottom: '20px' }}
+                  xs={12}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    // type="submit"
+                    className="btn"
+                    fullWidth
+                    size="large"
+                    onClick={() => cancelTradeFunc()}
+                  >
+                    Cancel Trade
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </Grid>
+        </Grid>
+      </div>
+    )
+  }
   return (
     <div className="height100 content surfContainer">
       <Grid container>
         <Grid item xs={12}>
-          <form onSubmit={handleSubmit(handleFormSubmit)}>
-            <Grid container>
-              <Grid item xs={12}>
-                <p>
-                  Advertiser:
-                  {' '}
-                  {currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.user.username}
-                </p>
-                <p>
-                  Trader:
-                  {' '}
-                  {currentTrade
-                  && currentTrade
-                  && currentTrade.user
-                  && currentTrade.user.username}
-                </p>
-                <p>
-                  Ad type:
-                  {' '}
-                  {currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.type}
-
-                </p>
-                <p>
-                  Price Type:
-                  {' '}
-                  {currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.priceType}
-                  {' '}
-                  {currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.priceType === 'margin'
-                  && '(Price sticks after this step. Verify price after trade start)'}
-                </p>
-                <p>
-                  Price/RUNES:
-                  {' '}
-                  {currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.priceType === 'static'
-                  && (currentTrade.postAd.price / 1e8)}
-                  {currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.priceType === 'margin'
-                  && actualPrice.length
-                  && marginPrice}
-                  {' '}
-                  {currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.currency.currency_name}
-                </p>
-                <p>
-                  {user
-                  && currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.type === 'buy'
-                  && user.username === currentTrade.user.username
-                  && `You want to sell to ${currentTrade.postAd.user.username}`}
-                  {user
-                  && currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.type === 'buy'
-                  && user.username === currentTrade.postAd.user.username
-                  && `${currentTrade.user.username} wants to sell to you`}
-                  {user
-                  && currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.type === 'sell'
-                  && user.username === currentTrade.user.username
-                  && `You want to buy from ${currentTrade.postAd.user.username}`}
-                  {user
-                  && currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.type === 'sell'
-                  && user.username === currentTrade.postAd.user.username
-                  && `${currentTrade.user.username} wants to buy from you`}
-                </p>
-                <p>
-                  Min:
-                  {' '}
-                  {currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.min / 1e8}
-                  {' '}
-                  RUNES
-                </p>
-                <p>
-                  Max:
-                  {' '}
-                  {currentTrade
-                  && currentTrade.postAd
-                  && currentTrade.postAd.max / 1e8}
-                  {' '}
-                  RUNES
-                </p>
-              </Grid>
-              <Grid item xs={12}>
-                <p>Amount</p>
-                <Field
-                  name="amount"
-                  component={renderField}
-                  type="number"
-                  placeholder="Amount"
-                  onChange={(event, index, value) => {
-                    console.log('nummer');
-                    console.log(event.currentTarget.valueAsNumber);
-                    console.log((event.currentTarget.valueAsNumber * (currentTrade.price / 1e8)));
-                    // if (currentTrade.postAd) {
-                    if (currentTrade.postAd && currentTrade.postAd.priceType === 'static') {
-                      dispatch(change('postad', 'total', (event.currentTarget.valueAsNumber * (currentTrade.price / 1e8)).toFixed(8)));
-                    }
-                    if (currentTrade.postAd && currentTrade.postAd.priceType === 'margin') {
-                      dispatch(change('postad', 'total', (event.currentTarget.valueAsNumber * (marginPrice)).toFixed(8)));
-                    }
-
-                    // }
-                  }}
-                />
-                <p>Total</p>
-                <Field
-                  name="total"
-                  component={renderField}
-                  type="number"
-                  placeholder="Total"
-                  onChange={(event, index, value) => {
-                    if (currentTrade.postAd && currentTrade.postAd.priceType === 'static') {
-                      dispatch(change('postad', 'amount', (event.currentTarget.valueAsNumber / (currentTrade.price / 1e8)).toFixed(8)));
-                    }
-                    if (currentTrade.postAd && currentTrade.postAd.priceType === 'margin') {
-                      dispatch(change('postad', 'amount', (event.currentTarget.valueAsNumber / (marginPrice)).toFixed(8)));
-                    }
-                    console.log('values');
-                    console.log(values);
-                    console.log(event.currentTarget.valueAsNumber);
-                    console.log(value);
-                    console.log(((event.currentTarget.valueAsNumber * 1e8) / (currentTrade.price)));
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <p>Respond Time</p>
-                <Field
-                  name="repondTime"
-                  component={renderSelectField}
-                  label="Respond Time"
-                  style={{ width: '100%' }}
-                >
-                  <option value="" />
-                  <option value="15">15 Min</option>
-                  <option value="30">30 Min</option>
-                  <option value="45">45 Min</option>
-                  <option value="60">1 Hour</option>
-                  <option value="120">2 Hour</option>
-                  <option value="180">3 Hour</option>
-                </Field>
-              </Grid>
-              <Grid
-                item
-                style={{ marginBottom: '20px', marginTop: '20px' }}
-                xs={12}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  className="btn"
-                  fullWidth
-                  size="large"
-                >
-                  Start Trade
-                </Button>
-              </Grid>
-              <Grid
-                item
-                style={{ marginBottom: '20px' }}
-                xs={12}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  // type="submit"
-                  className="btn"
-                  fullWidth
-                  size="large"
-                  onClick={() => cancelTradeFunc()}
-                >
-                  Cancel Trade
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
+          <h3>Trade Canceled</h3>
         </Grid>
       </Grid>
     </div>

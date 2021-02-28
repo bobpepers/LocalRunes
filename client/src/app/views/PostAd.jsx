@@ -231,7 +231,8 @@ const PostAd = (props) => {
     const selectedFieldCurrency = currencies
     && currencies.filter((object) => object.id === Number(currencyFieldValue));
     if (selectedFieldCurrency && selectedFieldCurrency.length) {
-      const selectedFieldPrice = price && price.filter((object) => object.currency === selectedFieldCurrency[0].iso);
+      const selectedFieldPrice = price
+      && price.filter((object) => object.currency === selectedFieldCurrency[0].iso);
       if (selectedFieldPrice && selectedFieldPrice.length && selectedFieldPrice[0].price) {
         const actualPrice = Number(selectedFieldPrice[0].price);
         const margin = ((((event - actualPrice) / actualPrice) * 100) + 100).toFixed(2);

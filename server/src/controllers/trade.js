@@ -264,6 +264,7 @@ export const secondTrade = async (req, res, next) => {
       where: {
         userId: req.user.id,
         id: req.body.id,
+        type: 'init',
       },
       include: [
         {
