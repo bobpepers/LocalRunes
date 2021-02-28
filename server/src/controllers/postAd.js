@@ -50,6 +50,8 @@ export const addPostAd = async (req, res, next) => {
     return next();
   }
 
+  console.log(req.body.priceType);
+  console.log(req.body.priceType);
   if (req.body.priceType !== 'static' && req.body.priceType !== 'margin') {
     res.locals.error = 'WRONG_PRICE_TYPE';
     return next();

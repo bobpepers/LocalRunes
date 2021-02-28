@@ -104,7 +104,7 @@ const radioButtonPriceType = ({
     <FormControl>
       <RadioGroup {...input} {...rest}>
         <FormControlLabel
-          value="regular"
+          value="static"
           control={<Radio />}
           label="Static Price (keep static price)"
           // checked
@@ -308,7 +308,9 @@ const PostAd = (props) => {
                   style={{ width: '100%' }}
                 >
                   <option value="" />
-                  {paymentMethods && paymentMethods.data && paymentMethods.data.map((item) => <option value={item.id}>{item.name}</option>)}
+                  {paymentMethods
+                  && paymentMethods.data
+                  && paymentMethods.data.map((item) => <option value={item.id}>{item.name}</option>)}
                 </Field>
               </Grid>
               <Grid item xs={12}>
@@ -343,7 +345,9 @@ const PostAd = (props) => {
                   <option value="">
                     None
                   </option>
-                  {currencies && currencies.data && currencies.data.map((item) => <option value={item.id}>{item.currency_name}</option>)}
+                  {currencies
+                && currencies.data
+                && currencies.data.map((item) => <option value={item.id}>{item.currency_name}</option>)}
                 </Field>
               </Grid>
               <Grid item xs={12}>

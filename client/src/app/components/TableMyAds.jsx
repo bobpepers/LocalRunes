@@ -416,8 +416,10 @@ function EnhancedTable(props) {
                       <TableCell align="right">{row.country}</TableCell>
                       <TableCell align="right">{row.paymentMethod}</TableCell>
                       <TableCell align="right">
-                        {row.priceType === 'static' && row.price}
-                        {row.priceType === 'margin' && (((theActualPrice / 100) * (row.margin / 1e2)).toFixed(8))}
+                        {row.priceType === 'static'
+                        && row.price}
+                        {row.priceType === 'margin'
+                        && (((theActualPrice / 100) * (row.margin / 1e2)).toFixed(8))}
 
                         {' '}
                         (
@@ -430,7 +432,8 @@ function EnhancedTable(props) {
                           <span style={{ color: 'red' }}>
                             <TrendingUpIcon />
                             {' '}
-                            {(Number(priceChange) + 100).toFixed(2)}
+                            {row.priceType === 'static' && (Number(priceChange) + 100).toFixed(2)}
+                            {row.priceType === 'margin' && (row.margin / 1e2).toFixed(2)}
                             {' '}
                             %
                           </span>
@@ -438,7 +441,8 @@ function EnhancedTable(props) {
                           <span style={{ color: 'green' }}>
                             <TrendingDownIcon />
                             {' '}
-                            {(Number(priceChange) + 100).toFixed(2)}
+                            {row.priceType === 'static' && (Number(priceChange) + 100).toFixed(2)}
+                            {row.priceType === 'margin' && (row.margin / 1e2).toFixed(2)}
                             {' '}
                             %
                           </span>

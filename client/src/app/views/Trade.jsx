@@ -216,7 +216,14 @@ const Trade = (props) => {
                   </div>
                 </Grid>
                 <Grid item>
-                  <Button variant="contained" color="primary" type="submit" className="btn" fullWidth size="large">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    className="btn"
+                    fullWidth
+                    size="large"
+                  >
                     Send
                   </Button>
                 </Grid>
@@ -684,43 +691,56 @@ const Trade = (props) => {
                 Trader
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && currentTrade.user && currentTrade.user.username }
+                {currentTrade
+                && currentTrade.user
+                && currentTrade.user.username }
               </Grid>
               <Grid container item xs={6}>
                 Advertiser
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && currentTrade.postAd && currentTrade.postAd.user && currentTrade.postAd.user.username }
+                {currentTrade
+                && currentTrade.postAd
+                && currentTrade.postAd.user
+                && currentTrade.postAd.user.username }
               </Grid>
               <Grid container item xs={6}>
                 Deal Type
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && currentTrade.postAd && currentTrade.postAd.type}
+                {currentTrade
+                && currentTrade.postAd
+                && currentTrade.postAd.type}
               </Grid>
               <Grid container item xs={6}>
                 Deal amount
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && new BigNumber(currentTrade.amount).dividedBy(1e8).toString()}
+                {currentTrade
+                && new BigNumber(currentTrade.amount).dividedBy(1e8).toString()}
               </Grid>
               <Grid container item xs={6}>
                 price
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && new BigNumber(currentTrade.price).dividedBy(1e8).toString()}
+                {currentTrade
+                && new BigNumber(currentTrade.price).dividedBy(1e8).toString()}
               </Grid>
               <Grid container item xs={6}>
                 total
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && currentTrade.postAd && ((new BigNumber(currentTrade.amount).dividedBy(1e8)).times(new BigNumber(currentTrade.price).dividedBy(1e8))).toString()}
+                {currentTrade
+                && currentTrade.postAd
+                && ((new BigNumber(currentTrade.amount).dividedBy(1e8)).times(new BigNumber(currentTrade.price).dividedBy(1e8))).toString()}
               </Grid>
               <Grid container item xs={6}>
                 Currency
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && currentTrade.postAd && currentTrade.postAd.currency.currency_name}
+                {currentTrade
+                && currentTrade.postAd
+                && currentTrade.postAd.currency.currency_name}
               </Grid>
               <Grid container item xs={6}>
                 Payment Method
