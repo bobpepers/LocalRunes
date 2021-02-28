@@ -1,6 +1,7 @@
 import React, {
   useEffect,
   useState,
+  useRef,
   // Fragment,
 } from 'react';
 import { withRouter, useHistory } from 'react-router-dom';
@@ -24,6 +25,7 @@ import {
   Field,
   formValueSelector,
   change,
+  reset,
 } from 'redux-form';
 import * as actions from '../actions/auth';
 
@@ -121,6 +123,12 @@ const Trade = (props) => {
     }
   }, [currentTrade]);
 
+  useEffect(() => {
+    if (currentTrade) {
+      dispatch(reset('message'));
+    }
+  }, [currentTrade]);
+
   const onBasicFieldChange = (event, newValue, previousValue, name) => {
     setDescriptionLength(newValue.length);
   };
@@ -138,6 +146,19 @@ const Trade = (props) => {
     // console.log(obj);
     await dispatch(acceptMainTradeAction(id));
   }
+
+  /// Messages
+  const messageEl = useRef(null);
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    if (messageEl) {
+      messageEl.current.addEventListener('DOMNodeInserted', (event) => {
+        const { currentTarget: target } = event;
+        target.scroll({ top: target.scrollHeight, behavior: 'smooth' });
+      });
+    }
+  }, [])
 
   return (
     <div className="height100 content surfContainer">
@@ -180,11 +201,11 @@ const Trade = (props) => {
 
           <Grid container item xs={12}>
             <div className="container">
-              <div className="chat-container">
+              <div className="chat-container" ref={messageEl}>
                 {currentTrade
                 && currentTrade.messages
                   ? currentTrade.messages.map((item, index) => (
-                    <div className="message">
+                    <div className="message chat-message__text">
                       <img className="avatar" src="/uploads/avatars/avatar.png" />
                       <div className="datetime">{item.createdAt}</div>
                       <p>
@@ -796,4 +817,4 @@ const validate = (formProps) => {
 
 // export default withRouter(connect(mapStateToProps, actions)(PostAd));
 // export default connect(mapStateToProps, actions)(TradeRequested);
-export default connect(mapStateToProps, actions)(reduxForm({ form: 'message', validate })(Trade));
+export default connect(mapStateToProps, actions)(reduxForm({ form: 'message', validate, enableReinitialize: true })(Trade));
