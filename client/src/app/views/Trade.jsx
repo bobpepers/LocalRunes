@@ -26,6 +26,7 @@ import {
   formValueSelector,
   change,
   reset,
+  submit,
 } from 'redux-form';
 import * as actions from '../actions/auth';
 
@@ -147,8 +148,20 @@ const Trade = (props) => {
     await dispatch(acceptMainTradeAction(id));
   }
 
+  const writeMessageElement = useRef(null);
+  const handleKeyDown = async (e) => {
+    console.log(writeMessageElement);
+    if (e.key === 'Enter' && e.shiftKey === false) {
+      e.preventDefault();
+      await dispatch(handleSubmit(handleFormSubmit));
+      // writeMessageElement.current.onSubmit();
+      // await dispatch(submit('message'));
+    }
+  };
+
   /// Messages
   const messageEl = useRef(null);
+
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -227,7 +240,11 @@ const Trade = (props) => {
               <h3>Send message to </h3>
             </Grid>
             <Grid item xs={12}>
-              <form onSubmit={handleSubmit(handleFormSubmit)}>
+              <form
+                onKeyDown={(e) => { handleKeyDown(e); }}
+                ref={writeMessageElement}
+                onSubmit={handleSubmit(handleFormSubmit)}
+              >
                 <Grid item>
                   <Field
                     name="message"
@@ -817,4 +834,9 @@ const validate = (formProps) => {
 
 // export default withRouter(connect(mapStateToProps, actions)(PostAd));
 // export default connect(mapStateToProps, actions)(TradeRequested);
-export default connect(mapStateToProps, actions)(reduxForm({ form: 'message', validate, enableReinitialize: true })(Trade));
+export default connect(mapStateToProps, actions)(reduxForm({
+  form: 'message',
+  validate,
+  enableReinitialize: true,
+  // onSubmit: submit,
+})(Trade));
