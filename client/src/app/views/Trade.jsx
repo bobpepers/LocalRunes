@@ -47,6 +47,8 @@ import {
 
 import DisputeDialog from '../components/DisputeDialog'
 
+// import { ChatLog } from '../components/ChatLog';
+
 const renderTextField = ({
   input,
   type,
@@ -175,22 +177,26 @@ const Trade = (props) => {
           lg={6}
           xl={6}
         >
+
           <Grid container item xs={12}>
             <div className="container">
               <div className="chat-container">
-                {currentTrade && currentTrade.messages ? currentTrade.messages.map((item, index) => (
-                  <div className="message">
-                    <img className="avatar" src="/uploads/avatars/avatar.png" />
-                    <div className="datetime">{item.createdAt}</div>
-                    <p>
-                      {item.user.username}
-                      :
-                    </p>
-                    <p>
-                      {item.message}
-                    </p>
-                  </div>
-                )) : ''}
+                {currentTrade
+                && currentTrade.messages
+                  ? currentTrade.messages.map((item, index) => (
+                    <div className="message">
+                      <img className="avatar" src="/uploads/avatars/avatar.png" />
+                      <div className="datetime">{item.createdAt}</div>
+                      <p>
+                        {item.user.username}
+                        :
+                      </p>
+                      <p>
+                        {item.message}
+                      </p>
+                    </div>
+                  ))
+                  : ''}
               </div>
             </div>
           </Grid>

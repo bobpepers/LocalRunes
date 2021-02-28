@@ -285,10 +285,12 @@ const TradeInit = (props) => {
                     onChange={(event, index, value) => {
                       console.log('nummer');
                       console.log(event.currentTarget.valueAsNumber);
+                      console.log(currentTrade.price);
+                      console.log('currentTrade');
                       console.log((event.currentTarget.valueAsNumber * (currentTrade.price / 1e8)));
                       // if (currentTrade.postAd) {
                       if (currentTrade.postAd && currentTrade.postAd.priceType === 'static') {
-                        dispatch(change('postad', 'total', (event.currentTarget.valueAsNumber * (currentTrade.price / 1e8)).toFixed(8)));
+                        dispatch(change('postad', 'total', (event.currentTarget.valueAsNumber * (currentTrade.postAd.price / 1e8)).toFixed(8)));
                       }
                       if (currentTrade.postAd && currentTrade.postAd.priceType === 'margin') {
                         dispatch(change('postad', 'total', (event.currentTarget.valueAsNumber * (marginPrice)).toFixed(8)));
@@ -305,7 +307,9 @@ const TradeInit = (props) => {
                     placeholder="Total"
                     onChange={(event, index, value) => {
                       if (currentTrade.postAd && currentTrade.postAd.priceType === 'static') {
-                        dispatch(change('postad', 'amount', (event.currentTarget.valueAsNumber / (currentTrade.price / 1e8)).toFixed(8)));
+                        console.log('(event.currentTarget.valueAsNumber / (currentTrade.price / 1e8)).toFixed(8)');
+                        console.log((event.currentTarget.valueAsNumber / (currentTrade.price / 1e8)).toFixed(8));
+                        dispatch(change('postad', 'amount', (event.currentTarget.valueAsNumber / (currentTrade.postAd.price / 1e8)).toFixed(8)));
                       }
                       if (currentTrade.postAd && currentTrade.postAd.priceType === 'margin') {
                         dispatch(change('postad', 'amount', (event.currentTarget.valueAsNumber / (marginPrice)).toFixed(8)));
