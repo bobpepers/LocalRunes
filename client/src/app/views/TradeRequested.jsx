@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import { withRouter, useHistory } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
+import { BigNumber } from 'bignumber.js';
 import {
   Grid,
   Button,
@@ -125,24 +126,83 @@ const TradeRequested = (props) => {
           <p>
             Amount:
             {' '}
-            {currentTrade && (currentTrade.amount / 1e8)}
+            {currentTrade
+            && (new BigNumber(currentTrade.amount).dividedBy(1e8).toString())}
           </p>
           <p>
             Price:
             {' '}
-            {currentTrade && currentTrade.postAd && (currentTrade.postAd.price / 1e8)}
+            {currentTrade
+            && currentTrade.postAd
+            && (new BigNumber(currentTrade.price).dividedBy(1e8).toString())}
             {' '}
-            {currentTrade && currentTrade.postAd && currentTrade.postAd.currency && currentTrade.postAd.currency.currency_name}
+            {currentTrade
+            && currentTrade.postAd
+            && currentTrade.postAd.currency
+            && currentTrade.postAd.currency.currency_name}
           </p>
           <p>
             Total:
             {' '}
-            {currentTrade && currentTrade.postAd && ((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {currentTrade
+            && currentTrade.postAd
+            && (new BigNumber(currentTrade.amount).dividedBy(1e8).times(new BigNumber(currentTrade.price).dividedBy(1e8)).toString())}
             {' '}
-            {currentTrade && currentTrade.postAd && currentTrade.postAd.currency && currentTrade.postAd.currency.currency_name}
+            {currentTrade
+            && currentTrade.postAd
+            && currentTrade.postAd.currency
+            && currentTrade.postAd.currency.currency_name}
           </p>
         </Grid>
         <Grid item xs={12}>
+          {currentTrade
+          && currentTrade.postAd
+          && currentTrade.postAd.type === 'buy'
+          && currentTrade.postAd.user
+          && user
+          && user.username === currentTrade.user.username
+          && (
+          <p className="text-center">
+            You want to sell
+            {' '}
+            {new BigNumber(currentTrade.amount).dividedBy(1e8).toString()}
+            {' '}
+            RUNES from
+            {' '}
+            {currentTrade.postAd.user.username}
+            {' '}
+            to
+            {' '}
+            {((new BigNumber(currentTrade.amount).dividedBy(1e8)).times(new BigNumber(currentTrade.price).dividedBy(1e8))).toString()}
+            {' '}
+            {currentTrade.postAd.currency.currency_name}
+          </p>
+          )}
+          {currentTrade
+          && currentTrade.postAd
+          && currentTrade.postAd.type === 'buy'
+          && currentTrade.postAd.user
+          && user
+          && user.username === currentTrade.postAd.user.username
+          && (
+          <p className="text-center">
+            {currentTrade.user.username}
+            {' '}
+            wants to sell
+            {' '}
+            {new BigNumber(currentTrade.amount).dividedBy(1e8).toString()}
+            {' '}
+            RUNES to
+            {' '}
+            you
+            {' '}
+            for
+            {' '}
+            {((new BigNumber(currentTrade.amount).dividedBy(1e8)).times(new BigNumber(currentTrade.price).dividedBy(1e8))).toString()}
+            {' '}
+            {currentTrade.postAd.currency.currency_name}
+          </p>
+          )}
           {currentTrade
           && currentTrade.postAd
           && currentTrade.postAd.type === 'sell'
@@ -153,7 +213,7 @@ const TradeRequested = (props) => {
           <p className="text-center">
             You want to buy
             {' '}
-            {currentTrade.amount / 1e8}
+            {new BigNumber(currentTrade.amount).dividedBy(1e8).toString()}
             {' '}
             RUNES from
             {' '}
@@ -161,7 +221,7 @@ const TradeRequested = (props) => {
             {' '}
             for
             {' '}
-            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {((new BigNumber(currentTrade.amount).dividedBy(1e8)).times(new BigNumber(currentTrade.price).dividedBy(1e8))).toString()}
             {' '}
             {currentTrade.postAd.currency.currency_name}
           </p>
@@ -178,11 +238,11 @@ const TradeRequested = (props) => {
             {' '}
             wants to buy
             {' '}
-            {currentTrade.amount / 1e8}
+            {new BigNumber(currentTrade.amount).dividedBy(1e8).toString()}
             {' '}
             RUNES from you for
             {' '}
-            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {((new BigNumber(currentTrade.amount).dividedBy(1e8)).times(new BigNumber(currentTrade.price).dividedBy(1e8))).toString()}
             {' '}
             {currentTrade.postAd.currency.currency_name}
           </p>

@@ -184,7 +184,7 @@ const TradeDispute = (props) => {
             {' '}
             at the exchange rate
             {' '}
-            {currentTrade && currentTrade.postAd && currentTrade.postAd.price / 1e8}
+            {currentTrade && currentTrade.price / 1e8}
             {' '}
             {currentTrade && currentTrade.postAd && currentTrade.postAd.currency.currency_name}
             /RUNES
@@ -283,13 +283,13 @@ const TradeDispute = (props) => {
                 price
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && currentTrade.postAd && currentTrade.postAd.price / 1e8}
+                {currentTrade && currentTrade.price / 1e8}
               </Grid>
               <Grid container item xs={6}>
                 total
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && currentTrade.postAd && ((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+                {currentTrade && currentTrade.postAd && ((currentTrade.amount / 1e8) * (currentTrade.price / 1e8))}
               </Grid>
               <Grid container item xs={6}>
                 Currency

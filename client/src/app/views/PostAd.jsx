@@ -91,6 +91,35 @@ const radioButton = ({
   </div>
 );
 
+const radioButtonPriceType = ({
+  input,
+  meta: {
+    touched,
+    error,
+  },
+  // checked,
+  ...rest
+}) => (
+  <div className={`addWebsite-description-wrapper input-group ${touched && error ? 'has-error' : ''}`}>
+    <FormControl>
+      <RadioGroup {...input} {...rest}>
+        <FormControlLabel
+          value="regular"
+          control={<Radio />}
+          label="Static Price (keep static price)"
+          // checked
+        />
+        <FormControlLabel
+          value="margin"
+          control={<Radio />}
+          label="Margin Price (move price with coinpaprika.com index value)"
+        />
+      </RadioGroup>
+    </FormControl>
+    { touched && error && <div className="form-error">{error}</div> }
+  </div>
+);
+
 const renderField = ({
   input, type, placeholder, meta: { touched, error },
 }) => (
@@ -151,6 +180,9 @@ const PostAd = (props) => {
     location,
     price,
     selectedCurrency,
+    marginFieldValue,
+    priceFieldValue,
+
   } = props;
   const dispatch = useDispatch();
   const [descriptionLength, setDescriptionLength] = useState(0);
@@ -159,6 +191,9 @@ const PostAd = (props) => {
   useEffect(() => dispatch(fetchCurrenciesData()), [dispatch]);
   useEffect(() => dispatch(fetchCountriesData()), [dispatch]);
 
+  useEffect(() => {
+    dispatch(change('postad', 'priceType', 'static'));
+  }, [paymentMethods, currencies]);
   useEffect(() => {}, [paymentMethods, currencies]);
 
   useEffect(() => {
@@ -190,6 +225,27 @@ const PostAd = (props) => {
   const onBasicFieldChange = (event, newValue, previousValue, name) => {
     setDescriptionLength(newValue.length);
   };
+
+  const onChangeRunesPrice = (event) => {
+    if (selectedCurrency.length && selectedCurrency[0].price) {
+      const actualPrice = Number(selectedCurrency[0].price);
+      const margin = ((((event - actualPrice) / actualPrice) * 100) + 100).toFixed(2);
+      // const margin = priceFieldValue / selectedCurrency[0].price;
+      console.log('margin');
+      console.log(margin);
+
+      dispatch(change('postad', 'margin', margin));
+    }
+  };
+
+  const onChangeMargin = (event) => {
+    console.log('event');
+    console.log(event);
+    const actualPrice = Number(selectedCurrency[0].price);
+    const result = (actualPrice / 100) * Number(event);
+    console.log(result);
+    dispatch(change('postad', 'runesPrice', result.toFixed(8)));
+  }
 
   return (
     <div className="height100 content surfContainer">
@@ -229,7 +285,9 @@ const PostAd = (props) => {
                   style={{ width: '100%' }}
                 >
                   <option value="" />
-                  {countries && countries.data && countries.data.map((item) => <option value={item.id}>{item.name}</option>)}
+                  {countries
+                  && countries.data
+                  && countries.data.map((item) => <option value={item.id}>{item.name}</option>)}
                 </Field>
               </Grid>
               <Grid item xs={12}>
@@ -289,12 +347,38 @@ const PostAd = (props) => {
                 </Field>
               </Grid>
               <Grid item xs={12}>
+                <h3>Price type</h3>
+                <Field name="priceType" component={radioButtonPriceType}>
+                  <Radio value="static" label="Static Price (keep static price)" />
+                  <Radio value="margin" label="Margin Price (move price with coinpaprika.com index value)" />
+                </Field>
+              </Grid>
+              <Grid item xs={12}>
                 <p>Price/RUNES</p>
                 <Field
                   name="runesPrice"
                   component={renderField}
-                  type="text"
+                  type="number"
                   placeholder="Price/RUNES"
+                  onChange={(e) => {
+                    const val = e.target.value
+                    // whatever stuff you want to do
+                    onChangeRunesPrice(val)
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <p>Margin %</p>
+                <Field
+                  name="margin"
+                  component={renderField}
+                  type="number"
+                  placeholder="Margin %"
+                  onChange={(e) => {
+                    const val = e.target.value
+                    // whatever stuff you want to do
+                    onChangeMargin(val)
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -363,6 +447,12 @@ const validate = (formProps) => {
   if (!formProps.runesPrice) {
     errors.runesPrice = 'Price is required'
   }
+  if (!formProps.margin) {
+    errors.margin = 'Margin is required'
+  }
+  if (!formProps.priceType) {
+    errors.priceType = 'priceType is required'
+  }
 
   return errors;
 }
@@ -377,6 +467,8 @@ const mapStateToProps = (state) => ({
   location: state.location.data,
   price: state.price.data,
   selectedCurrency: state.selectedCurrency.data,
+  marginFieldValue: selector(state, 'margin'),
+  priceFieldValue: selector(state, 'price'),
 })
 
 // export default withRouter(connect(mapStateToProps, actions)(PostAd));

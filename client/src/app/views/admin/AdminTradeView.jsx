@@ -133,7 +133,7 @@ const Trade = (props) => {
             {' '}
             at the exchange rate
             {' '}
-            {adminSingleTrade && adminSingleTrade.postAd && adminSingleTrade.postAd.price / 1e8}
+            {adminSingleTrade && adminSingleTrade.postAd && adminSingleTrade.price / 1e8}
             {' '}
             {adminSingleTrade && adminSingleTrade.postAd && adminSingleTrade.postAd.currency.currency_name}
             /RUNES
@@ -267,7 +267,7 @@ const Trade = (props) => {
               {' '}
               for
               {' '}
-              {((adminSingleTrade.amount / 1e8) * (adminSingleTrade.postAd.price / 1e8))}
+              {((adminSingleTrade.amount / 1e8) * (adminSingleTrade.price / 1e8))}
               {' '}
               {adminSingleTrade.postAd.currency.currency_name}
             </p>
@@ -288,7 +288,7 @@ const Trade = (props) => {
               {' '}
               RUNES from you for
               {' '}
-              {((adminSingleTrade.amount / 1e8) * (adminSingleTrade.postAd.price / 1e8))}
+              {((adminSingleTrade.amount / 1e8) * (adminSingleTrade.price / 1e8))}
               {' '}
               {adminSingleTrade.postAd.currency.currency_name}
             </p>
@@ -311,7 +311,7 @@ const Trade = (props) => {
               {' '}
               for
               {' '}
-              {((adminSingleTrade.amount / 1e8) * (adminSingleTrade.postAd.price / 1e8))}
+              {((adminSingleTrade.amount / 1e8) * (adminSingleTrade.price / 1e8))}
               {' '}
               {adminSingleTrade.postAd.currency.currency_name}
             </p>
@@ -332,7 +332,7 @@ const Trade = (props) => {
               {' '}
               RUNES to you for
               {' '}
-              {((adminSingleTrade.amount / 1e8) * (adminSingleTrade.postAd.price / 1e8))}
+              {((adminSingleTrade.amount / 1e8) * (adminSingleTrade.price / 1e8))}
               {' '}
               {adminSingleTrade.postAd.currency.currency_name}
             </p>
@@ -660,13 +660,13 @@ const Trade = (props) => {
                 price
               </Grid>
               <Grid container item xs={6}>
-                {adminSingleTrade && adminSingleTrade.postAd && adminSingleTrade.postAd.price / 1e8}
+                {adminSingleTrade && adminSingleTrade.postAd && adminSingleTrade.price / 1e8}
               </Grid>
               <Grid container item xs={6}>
                 total
               </Grid>
               <Grid container item xs={6}>
-                {adminSingleTrade && adminSingleTrade.postAd && ((adminSingleTrade.amount / 1e8) * (adminSingleTrade.postAd.price / 1e8))}
+                {adminSingleTrade && adminSingleTrade.postAd && ((adminSingleTrade.amount / 1e8) * (adminSingleTrade.price / 1e8))}
               </Grid>
               <Grid container item xs={6}>
                 Currency

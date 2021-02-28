@@ -13,6 +13,18 @@ module.exports = (sequelize, DataTypes) => {
         'sell',
       ],
     },
+    priceType: {
+      type: DataTypes.ENUM,
+      defaultValue: 'static',
+      values: [
+        'static',
+        'margin',
+      ],
+    },
+    margin: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+    },
     amount: {
       type: DataTypes.BIGINT,
       allowNull: false,

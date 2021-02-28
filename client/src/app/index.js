@@ -215,16 +215,35 @@ function App() {
   // const { location: currentLocation, error: currentError } = useCurrentLocation(geolocationOptions);
   const { location, cancelLocationWatch, error } = useWatchLocation(geolocationOptions);
   // const [isWatchinForLocation, setIsWatchForLocation] = useState(true);
+  const [rerender, setRerender] = useState(1);
 
   useEffect(() => {
-    if (!location) return;
+    // if (!location) return;
     store.dispatch(getPrice());
   }, []);
 
   useEffect(() => {
     if (!location) return;
-    store.dispatch(setLocation(location));
-    cancelLocationWatch();
+    if (rerender === 1) {
+      store.dispatch(setLocation(location));
+      cancelLocationWatch();
+    }
+    setRerender(rerender + 1);
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+    console.log('WATCH LOCATION');
+
     // Cancel location watch after 3sec
     // setTimeout(() => {
     //  cancelLocationWatch();

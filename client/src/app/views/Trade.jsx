@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import { withRouter, useHistory } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
+import { BigNumber } from 'bignumber.js';
 import {
   Grid,
   Button,
@@ -159,7 +160,7 @@ const Trade = (props) => {
             {' '}
             at the exchange rate
             {' '}
-            {currentTrade && currentTrade.postAd && currentTrade.postAd.price / 1e8}
+            {currentTrade && new BigNumber(currentTrade.price).dividedBy(1e8).toString()}
             {' '}
             {currentTrade && currentTrade.postAd && currentTrade.postAd.currency.currency_name}
             /RUNES
@@ -285,7 +286,7 @@ const Trade = (props) => {
           <p className="text-center">
             You want to buy
             {' '}
-            {currentTrade.amount / 1e8}
+            {new BigNumber(currentTrade.amount).dividedBy(1e8).toString()}
             {' '}
             RUNES from
             {' '}
@@ -293,7 +294,7 @@ const Trade = (props) => {
             {' '}
             for
             {' '}
-            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {((new BigNumber(currentTrade.amount).dividedBy(1e8)).times(new BigNumber(currentTrade.price).dividedBy(1e8))).toString()}
             {' '}
             {currentTrade.postAd.currency.currency_name}
           </p>
@@ -310,11 +311,11 @@ const Trade = (props) => {
             {' '}
             wants to buy
             {' '}
-            {currentTrade.amount / 1e8}
+            {new BigNumber(currentTrade.amount).dividedBy(1e8).toString()}
             {' '}
             RUNES from you for
             {' '}
-            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {((new BigNumber(currentTrade.amount).dividedBy(1e8)).times(new BigNumber(currentTrade.price).dividedBy(1e8))).toString()}
             {' '}
             {currentTrade.postAd.currency.currency_name}
           </p>
@@ -329,7 +330,7 @@ const Trade = (props) => {
           <p className="text-center">
             You want to sell
             {' '}
-            {currentTrade.amount / 1e8}
+            {new BigNumber(currentTrade.amount).dividedBy(1e8).toString()}
             {' '}
             RUNES to
             {' '}
@@ -337,7 +338,7 @@ const Trade = (props) => {
             {' '}
             for
             {' '}
-            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {((new BigNumber(currentTrade.amount).dividedBy(1e8)).times(new BigNumber(currentTrade.price).dividedBy(1e8))).toString()}
             {' '}
             {currentTrade.postAd.currency.currency_name}
           </p>
@@ -354,11 +355,11 @@ const Trade = (props) => {
             {' '}
             wants to sell
             {' '}
-            {currentTrade.amount / 1e8}
+            {new BigNumber(currentTrade.amount).dividedBy(1e8).toString()}
             {' '}
             RUNES to you for
             {' '}
-            {((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+            {((new BigNumber(currentTrade.amount).dividedBy(1e8)).times(new BigNumber(currentTrade.price).dividedBy(1e8))).toString()}
             {' '}
             {currentTrade.postAd.currency.currency_name}
           </p>
@@ -701,19 +702,19 @@ const Trade = (props) => {
                 Deal amount
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && currentTrade.amount / 1e8}
+                {currentTrade && new BigNumber(currentTrade.amount).dividedBy(1e8).toString()}
               </Grid>
               <Grid container item xs={6}>
                 price
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && currentTrade.postAd && currentTrade.postAd.price / 1e8}
+                {currentTrade && new BigNumber(currentTrade.price).dividedBy(1e8).toString()}
               </Grid>
               <Grid container item xs={6}>
                 total
               </Grid>
               <Grid container item xs={6}>
-                {currentTrade && currentTrade.postAd && ((currentTrade.amount / 1e8) * (currentTrade.postAd.price / 1e8))}
+                {currentTrade && currentTrade.postAd && ((new BigNumber(currentTrade.amount).dividedBy(1e8)).times(new BigNumber(currentTrade.price).dividedBy(1e8))).toString()}
               </Grid>
               <Grid container item xs={6}>
                 Currency

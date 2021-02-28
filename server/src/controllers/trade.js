@@ -313,14 +313,48 @@ export const secondTrade = async (req, res, next) => {
     const endDate = new Date(new Date().valueOf() + (Number(req.body.obj.repondTime) * 60 * 1000)); // (7 * 24 * 60 * 60 * 1000)
     console.log(endDate);
     console.log(trade);
-    await trade.update({
-      type: 'requested',
-      reponseTime: endDate,
-      amount,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
+    if (trade.postAd.priceType === 'static') {
+      await trade.update({
+        type: 'requested',
+        reponseTime: endDate,
+        amount,
+        price: trade.postAd.price,
+      }, {
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      });
+    }
+    if (trade.postAd.priceType === 'margin') {
+      const margin = (trade.postAd.margin / 1e2);
+
+      const tradePriceIndex = await db.priceInfo.findOne({
+        where: {
+          currency: trade.postAd.currency.iso,
+        },
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      });
+
+      if (!tradePriceIndex) {
+        throw new Error('PRICE_RECORD_NOT_FOUND');
+      }
+
+      const tradePrice = (((tradePriceIndex.price / 100) * margin) * 1e8).toFixed(0);
+      console.log('tradePrice');
+      console.log(tradePriceIndex);
+      console.log(margin);
+      console.log(tradePrice);
+
+      await trade.update({
+        type: 'requested',
+        reponseTime: endDate,
+        amount,
+        price: tradePrice,
+      }, {
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      });
+    }
 
     console.log(endDate);
     console.log(trade);

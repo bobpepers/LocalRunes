@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT,
       allowNull: true,
     },
+    price: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+    },
     reponseTime: {
       allowNull: true,
       type: DataTypes.DATE,

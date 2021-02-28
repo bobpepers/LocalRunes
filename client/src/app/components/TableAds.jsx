@@ -41,11 +41,14 @@ function createData(
   limit,
   type,
   id,
-  currency,
+  currencyName,
   country,
   online,
   openStore,
   lastSeen,
+  priceType,
+  margin,
+  currencyIso,
 ) {
   return {
     username,
@@ -54,11 +57,14 @@ function createData(
     limit,
     type,
     id,
-    currency,
+    currencyName,
     country,
     online,
     openStore,
     lastSeen,
+    priceType,
+    margin,
+    currencyIso,
   };
 }
 
@@ -295,6 +301,9 @@ function EnhancedTable(props) {
         item.user.online,
         item.user.open_store,
         item.user.lastSeen,
+        item.priceType,
+        item.margin,
+        item.currency.iso,
       ),
     );
   });
@@ -391,15 +400,15 @@ function EnhancedTable(props) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  const actualPrice = price && (price.filter((object) => object.currency === row.currency));
+                  const actualPrice = price && (price.filter((object) => object.currency === row.currencyIso));
                   const theActualPrice = actualPrice.length ? actualPrice[0].price : 0;
                   // const priceChange = -((getPercentageChange(theActualPrice, row.price)).toFixed(0));
                   // $result=(($recent-$previous)/$previous);
                   const priceChange = (((row.price - theActualPrice) / theActualPrice) * 100).toFixed(2);
                   // const priceChange = relDiff(Number(row.price), Number(theActualPrice));
-                  console.log('actualPrice');
-                  console.log(price);
                   console.log(theActualPrice);
+                  console.log(row.margin);
+                  console.log('3333333333333333333333333')
 
                   return (
                     <TableRow
@@ -443,10 +452,16 @@ function EnhancedTable(props) {
                       <TableCell align="right">
                         {priceChange > 0 ? (<span style={{ color: 'red' }}><TrendingUpIcon /></span>) : (<span style={{ color: 'green' }}><TrendingDownIcon /></span>)}
                         {' '}
-                        {row.price}
+                        {row.priceType === 'static' && row.price}
+                        {row.priceType === 'margin' && (((theActualPrice / 100) * (row.margin / 1e2)).toFixed(8))}
+
+                        {' '}
+                        (
+                        {row.priceType}
+                        )
                       </TableCell>
                       <TableCell align="right">
-                        {row.currency}
+                        {row.currencyName}
                       </TableCell>
                       {/* <TableCell align="right">
                         {priceChange > 0 ? (

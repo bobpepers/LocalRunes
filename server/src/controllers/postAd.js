@@ -49,6 +49,19 @@ export const addPostAd = async (req, res, next) => {
     res.locals.error = 'MAX_AMOUNT_MUST_BE_LARGER_THEN_MIN';
     return next();
   }
+
+  if (req.body.priceType !== 'static' && req.body.priceType !== 'margin') {
+    res.locals.error = 'WRONG_PRICE_TYPE';
+    return next();
+  }
+
+  if (countDecimals(req.body.margin) > 2) {
+    res.locals.error = 'MARGIN_MAX_2_DECIMALS';
+    return next();
+  }
+
+  console.log(req.body.margin);
+  console.log(req.body.priceType);
   // check paymentDetails
   // paymentDetails
   //
@@ -76,6 +89,8 @@ export const addPostAd = async (req, res, next) => {
   const maxAmount = new BigNumber(req.body.maxAmount).multipliedBy(1e8).toFixed(0);
 
   res.locals.postAd = await db.postAd.create({
+    margin: (req.body.margin * 1e2),
+    priceType: req.body.priceType,
     type: req.body.type,
     amount: 0,
     min: minAmount,

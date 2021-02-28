@@ -86,8 +86,8 @@ const Footer = (props) => {
     console.log(location);
     if (location && location.currency) {
       console.log()
-      setCurrencyState(location.currency.currency_name);
-      dispatch(updateSelectedCurrency(price.filter((object) => object.currency === location.currency.currency_name)));
+      setCurrencyState(location.currency.iso);
+      dispatch(updateSelectedCurrency(price.filter((object) => object.currency === location.currency.iso)));
     }
   }, [location]);
 

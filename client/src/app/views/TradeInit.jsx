@@ -100,6 +100,8 @@ const TradeInit = (props) => {
     currentTrade,
     cancelTrade,
     values,
+    user,
+    price,
     match: {
       params: {
         id,
@@ -123,18 +125,10 @@ const TradeInit = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    console.log('cancelTrade');
-    console.log('cancelTrade');
-    console.log('cancelTrade');
-    console.log('cancelTrade');
-    console.log('cancelTrade');
-    console.log('cancelTrade');
-    console.log('cancelTrade');
-    console.log('cancelTrade');
-    console.log('cancelTrade');
-    console.log('cancelTrade');
-    console.log('cancelTrade');
-    console.log(cancelTrade);
+    console.log(currentTrade);
+  }, [currentTrade, price]);
+
+  useEffect(() => {
     if (cancelTrade.type === 'canceled') {
       history.push('/');
     }
@@ -164,6 +158,9 @@ const TradeInit = (props) => {
     await dispatch(cancelTradeAction(id));
   }
 
+  const actualPrice = price && currentTrade && currentTrade.postAd && (price.filter((object) => object.currency === currentTrade.postAd.currency.iso)) || 0;
+  const marginPrice = actualPrice.length && currentTrade && currentTrade.postAd && ((actualPrice[0].price / 100) * (currentTrade.postAd.margin / 1e2)).toFixed(8) || 0;
+
   return (
     <div className="height100 content surfContainer">
       <Grid container>
@@ -172,11 +169,100 @@ const TradeInit = (props) => {
             <Grid container>
               <Grid item xs={12}>
                 <p>
-                  Price:
+                  Advertiser:
                   {' '}
-                  {currentTrade && currentTrade.postAd && (currentTrade.postAd.price / 1e8)}
+                  {currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.user.username}
+                </p>
+                <p>
+                  Trader:
                   {' '}
-                  {currentTrade && currentTrade.postAd && currentTrade.postAd.currency.currency_name}
+                  {currentTrade
+                  && currentTrade
+                  && currentTrade.user
+                  && currentTrade.user.username}
+                </p>
+                <p>
+                  Ad type:
+                  {' '}
+                  {currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type}
+
+                </p>
+                <p>
+                  Price Type:
+                  {' '}
+                  {currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.priceType}
+                  {' '}
+                  {currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.priceType === 'margin'
+                  && '(Price sticks after this step. Verify price after trade start)'}
+                </p>
+                <p>
+                  Price/RUNES:
+                  {' '}
+                  {currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.priceType === 'static'
+                  && (currentTrade.postAd.price / 1e8)}
+                  {currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.priceType === 'margin'
+                  && actualPrice.length
+                  && marginPrice}
+                  {' '}
+                  {currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.currency.currency_name}
+                </p>
+                <p>
+                  {user
+                  && currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'buy'
+                  && user.username === currentTrade.user.username
+                  && `You want to sell to ${currentTrade.postAd.user.username}`}
+                  {user
+                  && currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'buy'
+                  && user.username === currentTrade.postAd.user.username
+                  && `${currentTrade.user.username} wants to sell to you`}
+                  {user
+                  && currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'sell'
+                  && user.username === currentTrade.user.username
+                  && `You want to buy from ${currentTrade.postAd.user.username}`}
+                  {user
+                  && currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.type === 'sell'
+                  && user.username === currentTrade.postAd.user.username
+                  && `${currentTrade.user.username} wants to buy from you`}
+                </p>
+                <p>
+                  Min:
+                  {' '}
+                  {currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.min / 1e8}
+                  {' '}
+                  RUNES
+                </p>
+                <p>
+                  Max:
+                  {' '}
+                  {currentTrade
+                  && currentTrade.postAd
+                  && currentTrade.postAd.max / 1e8}
+                  {' '}
+                  RUNES
                 </p>
               </Grid>
               <Grid item xs={12}>
@@ -189,9 +275,15 @@ const TradeInit = (props) => {
                   onChange={(event, index, value) => {
                     console.log('nummer');
                     console.log(event.currentTarget.valueAsNumber);
-                    console.log((event.currentTarget.valueAsNumber * (currentTrade.postAd.price / 1e8)));
+                    console.log((event.currentTarget.valueAsNumber * (currentTrade.price / 1e8)));
                     // if (currentTrade.postAd) {
-                    dispatch(change('postad', 'total', (event.currentTarget.valueAsNumber * (currentTrade.postAd.price / 1e8))))
+                    if (currentTrade.postAd && currentTrade.postAd.priceType === 'static') {
+                      dispatch(change('postad', 'total', (event.currentTarget.valueAsNumber * (currentTrade.price / 1e8)).toFixed(8)));
+                    }
+                    if (currentTrade.postAd && currentTrade.postAd.priceType === 'margin') {
+                      dispatch(change('postad', 'total', (event.currentTarget.valueAsNumber * (marginPrice)).toFixed(8)));
+                    }
+
                     // }
                   }}
                 />
@@ -202,12 +294,17 @@ const TradeInit = (props) => {
                   type="number"
                   placeholder="Total"
                   onChange={(event, index, value) => {
+                    if (currentTrade.postAd && currentTrade.postAd.priceType === 'static') {
+                      dispatch(change('postad', 'amount', (event.currentTarget.valueAsNumber / (currentTrade.price / 1e8)).toFixed(8)));
+                    }
+                    if (currentTrade.postAd && currentTrade.postAd.priceType === 'margin') {
+                      dispatch(change('postad', 'amount', (event.currentTarget.valueAsNumber / (marginPrice)).toFixed(8)));
+                    }
                     console.log('values');
                     console.log(values);
                     console.log(event.currentTarget.valueAsNumber);
                     console.log(value);
-                    console.log(((event.currentTarget.valueAsNumber * 1e8) / (currentTrade.postAd.price)));
-                    dispatch(change('postad', 'amount', (event.currentTarget.valueAsNumber / (currentTrade.postAd.price / 1e8))))
+                    console.log(((event.currentTarget.valueAsNumber * 1e8) / (currentTrade.price)));
                   }}
                 />
               </Grid>
@@ -224,6 +321,8 @@ const TradeInit = (props) => {
                   <option value="30">30 Min</option>
                   <option value="45">45 Min</option>
                   <option value="60">1 Hour</option>
+                  <option value="120">2 Hour</option>
+                  <option value="180">3 Hour</option>
                 </Field>
               </Grid>
               <Grid
@@ -281,6 +380,8 @@ const validate = (formProps) => {
 const selector = formValueSelector('postad');
 
 const mapStateToProps = (state) => ({
+  price: state.price.data,
+  user: state.user.data,
   errorMessage: state.auth.error,
   paymentMethods: state.paymentMethods,
   currencies: state.currencies,
