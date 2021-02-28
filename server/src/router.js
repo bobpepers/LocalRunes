@@ -1376,6 +1376,29 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         });
       }
       console.log(res.locals.trade);
+      if (onlineUsers[res.locals.trade.userId.toString()]) {
+        onlineUsers[res.locals.trade.userId.toString()].emit('updateTrade', {
+          trade: res.locals.trade,
+        });
+      }
+
+      if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+        onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateTrade', {
+          trade: res.locals.trade,
+        });
+      }
+
+      if (onlineUsers[res.locals.trade.userId.toString()]) {
+        onlineUsers[res.locals.trade.userId.toString()].emit('updateCurrentTrade', {
+          trade: res.locals.trade,
+        });
+      }
+
+      if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+        onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateCurrentTrade', {
+          trade: res.locals.trade,
+        });
+      }
       if (res.locals.trade) {
         res.json({
           trade: res.locals.trade,
