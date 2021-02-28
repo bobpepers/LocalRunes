@@ -152,11 +152,12 @@ export const createMessage = async (req, res, next) => {
     if (!trade) {
       throw new Error('TRADE_NOT_FOUND');
     }
+    const preserveLinebreaksMessage = (req.body.message.message).replace(/\n/g, "<br />");
     if (trade.userId === req.user.id) {
       const messageOne = await db.messages.create({
         tradeId: trade.id,
         userId: req.user.id,
-        message: req.body.message.message,
+        message: preserveLinebreaksMessage,
       }, {
         transaction: t,
         lock: t.LOCK.UPDATE,
@@ -180,7 +181,7 @@ export const createMessage = async (req, res, next) => {
       const messageTwo = await db.messages.create({
         tradeId: trade.id,
         userId: req.user.id,
-        message: req.body.message.message,
+        message: preserveLinebreaksMessage,
       }, {
         transaction: t,
         lock: t.LOCK.UPDATE,

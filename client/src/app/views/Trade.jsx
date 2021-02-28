@@ -226,7 +226,9 @@ const Trade = (props) => {
                         :
                       </p>
                       <p>
-                        {item.message}
+                        <pre>
+                          {item.message.split('<br />').join('\n')}
+                        </pre>
                       </p>
                     </div>
                   ))
