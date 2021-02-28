@@ -32,7 +32,19 @@ import {
   deleteAd,
 } from '../actions/postAd';
 
-function createData(username, paymentMethod, price, limit, type, id, currency, country) {
+function createData(
+  username,
+  paymentMethod,
+  price,
+  limit,
+  type,
+  id,
+  currency,
+  country,
+  priceType,
+  margin,
+  currencyIso,
+) {
   return {
     username,
     paymentMethod,
@@ -42,6 +54,9 @@ function createData(username, paymentMethod, price, limit, type, id, currency, c
     id,
     currency,
     country,
+    priceType,
+    margin,
+    currencyIso,
   };
 }
 
@@ -264,6 +279,9 @@ function EnhancedTable(props) {
         item.id,
         item.currency.currency_name,
         item.country.name,
+        item.priceType,
+        item.margin,
+        item.currency.iso,
       ),
     );
   });
@@ -360,15 +378,27 @@ function EnhancedTable(props) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  const actualPrice = price && (price.filter((object) => object.currency === row.currency));
+                  const actualPrice = price && (price.filter((object) => object.currency === row.currencyIso));
                   const theActualPrice = actualPrice.length ? actualPrice[0].price : 0;
                   // const priceChange = -((getPercentageChange(theActualPrice, row.price)).toFixed(0));
                   // $result=(($recent-$previous)/$previous);
                   const priceChange = (((row.price - theActualPrice) / theActualPrice) * 100).toFixed(2);
                   // const priceChange = relDiff(Number(row.price), Number(theActualPrice));
                   console.log('actualPrice');
+                  console.log('actualPrice');
+                  console.log('actualPrice');
+                  console.log('actualPrice');
+                  console.log('actualPrice');
+
+                  console.log('actualPrice');
+                  console.log('actualPrice');
+                  console.log('actualPrice');
+                  console.log('actualPrice');
+
                   console.log(price);
                   console.log(theActualPrice);
+                  console.log(actualPrice);
+                  console.log(priceChange);
 
                   return (
                     <TableRow
@@ -385,14 +415,22 @@ function EnhancedTable(props) {
                       </TableCell>
                       <TableCell align="right">{row.country}</TableCell>
                       <TableCell align="right">{row.paymentMethod}</TableCell>
-                      <TableCell align="right">{row.price}</TableCell>
+                      <TableCell align="right">
+                        {row.priceType === 'static' && row.price}
+                        {row.priceType === 'margin' && (((theActualPrice / 100) * (row.margin / 1e2)).toFixed(8))}
+
+                        {' '}
+                        (
+                        {row.priceType}
+                        )
+                      </TableCell>
                       <TableCell align="right">{row.currency}</TableCell>
                       <TableCell align="right">
                         {priceChange > 0 ? (
                           <span style={{ color: 'red' }}>
                             <TrendingUpIcon />
                             {' '}
-                            {priceChange}
+                            {(Number(priceChange) + 100).toFixed(2)}
                             {' '}
                             %
                           </span>
@@ -400,7 +438,7 @@ function EnhancedTable(props) {
                           <span style={{ color: 'green' }}>
                             <TrendingDownIcon />
                             {' '}
-                            {priceChange}
+                            {(Number(priceChange) + 100).toFixed(2)}
                             {' '}
                             %
                           </span>
