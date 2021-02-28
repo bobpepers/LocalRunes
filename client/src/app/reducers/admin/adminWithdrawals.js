@@ -6,7 +6,7 @@ import {
 } from '../../actions/types/index';
 
 const initialState = {
-  data: null,
+  data: [],
   loading: false,
   error: null,
 };
