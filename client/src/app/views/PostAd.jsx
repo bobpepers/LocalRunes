@@ -182,6 +182,7 @@ const PostAd = (props) => {
     selectedCurrency,
     marginFieldValue,
     priceFieldValue,
+    currencyFieldValue,
 
   } = props;
   const dispatch = useDispatch();
@@ -227,24 +228,57 @@ const PostAd = (props) => {
   };
 
   const onChangeRunesPrice = (event) => {
-    if (selectedCurrency.length && selectedCurrency[0].price) {
-      const actualPrice = Number(selectedCurrency[0].price);
-      const margin = ((((event - actualPrice) / actualPrice) * 100) + 100).toFixed(2);
-      // const margin = priceFieldValue / selectedCurrency[0].price;
-      console.log('margin');
-      console.log(margin);
+    const selectedFieldCurrency = currencies
+    && currencies.filter((object) => object.id === Number(currencyFieldValue));
+    if (selectedFieldCurrency && selectedFieldCurrency.length) {
+      const selectedFieldPrice = price && price.filter((object) => object.currency === selectedFieldCurrency[0].iso);
+      if (selectedFieldPrice && selectedFieldPrice.length && selectedFieldPrice[0].price) {
+        const actualPrice = Number(selectedFieldPrice[0].price);
+        const margin = ((((event - actualPrice) / actualPrice) * 100) + 100).toFixed(2);
+        // const margin = priceFieldValue / selectedCurrency[0].price;
+        console.log('margin');
+        console.log(margin);
 
-      dispatch(change('postad', 'margin', margin));
+        dispatch(change('postad', 'margin', margin));
+      }
     }
   };
 
   const onChangeMargin = (event) => {
     console.log('event');
     console.log(event);
-    const actualPrice = Number(selectedCurrency[0].price);
-    const result = (actualPrice / 100) * Number(event);
-    console.log(result);
-    dispatch(change('postad', 'runesPrice', result.toFixed(8)));
+    const selectedFieldCurrency = currencies
+    && currencies.filter((object) => object.id === Number(currencyFieldValue));
+    if (selectedFieldCurrency && selectedFieldCurrency.length) {
+      const selectedFieldPrice = price
+      && price.filter((object) => object.currency === selectedFieldCurrency[0].iso);
+      if (selectedFieldPrice && selectedFieldPrice.length && selectedFieldPrice[0].price) {
+        const actualPrice = Number(selectedFieldPrice[0].price);
+        const result = (actualPrice / 100) * Number(event);
+        console.log(result);
+        dispatch(change('postad', 'runesPrice', result.toFixed(8)));
+      }
+    }
+  }
+
+  const onChangeCurrency = (e) => {
+    const selectedFieldCurrency = currencies
+    && currencies.filter((object) => object.id === Number(e));
+    if (selectedFieldCurrency && selectedFieldCurrency.length) {
+      const selectedFieldPrice = price
+      && price.filter((object) => object.currency === selectedFieldCurrency[0].iso);
+      if (
+        marginFieldValue
+        && selectedFieldPrice
+        && selectedFieldPrice.length
+        && selectedFieldPrice[0].price
+      ) {
+        const actualPrice = Number(selectedFieldPrice[0].price);
+        const result = (actualPrice / 100) * Number(marginFieldValue);
+        console.log(result);
+        dispatch(change('postad', 'runesPrice', result.toFixed(8)));
+      }
+    }
   }
 
   return (
@@ -341,13 +375,19 @@ const PostAd = (props) => {
                   component={renderSelectField}
                   label="Currency"
                   style={{ width: '100%' }}
+                  onChange={(e) => {
+                    console.log(e);
+                    console.log('eeeeeeeeeeeeeeeeeee');
+                    const val = e.currentTarget.value
+                    // whatever stuff you want to do
+                    onChangeCurrency(val)
+                  }}
                 >
                   <option value="">
                     None
                   </option>
                   {currencies
-                && currencies.data
-                && currencies.data.map((item) => <option value={item.id}>{item.currency_name}</option>)}
+                && currencies.map((item) => <option value={item.id}>{item.currency_name}</option>)}
                 </Field>
               </Grid>
               <Grid item xs={12}>
@@ -466,13 +506,14 @@ const selector = formValueSelector('postad');
 const mapStateToProps = (state) => ({
   errorMessage: state.auth.error,
   paymentMethods: state.paymentMethods,
-  currencies: state.currencies,
+  currencies: state.currencies.data,
   countries: state.countries,
   location: state.location.data,
   price: state.price.data,
   selectedCurrency: state.selectedCurrency.data,
   marginFieldValue: selector(state, 'margin'),
   priceFieldValue: selector(state, 'price'),
+  currencyFieldValue: selector(state, 'currency'),
 })
 
 // export default withRouter(connect(mapStateToProps, actions)(PostAd));
