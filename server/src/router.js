@@ -859,13 +859,8 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
-  app.post('/api/upload/identity',
-    IsAuthenticated,
-    isUserBanned,
-    storeIp,
-    ensuretfa,
-    updateLastSeen,
-    upload.fields([{
+  function uploadFile(req, res, next) {
+    const uploads = upload.fields([{
       name: 'front',
       maxCount: 1,
     }, {
@@ -874,7 +869,40 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     }, {
       name: 'selfie',
       maxCount: 1,
-    }]),
+    }]);
+
+    uploads(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        // A Multer error occurred when uploading.
+        console.log(err);
+        res.locals.error = err.code;
+      } else if (err) {
+        // An unknown error occurred when uploading.
+        console.log(err);
+        res.locals.error = err.code;
+      }
+      // Everything went fine.
+      next();
+    });
+  }
+
+  app.post('/api/upload/identity',
+    IsAuthenticated,
+    isUserBanned,
+    storeIp,
+    ensuretfa,
+    updateLastSeen,
+    uploadFile,
+    (req, res, next) => {
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      } else {
+        next();
+      }
+    },
     uploadIdentity,
     (req, res) => {
       if (res.locals.error) {

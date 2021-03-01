@@ -14,7 +14,7 @@ import * as actions from '../actions/auth';
 import Activity from '../containers/Activity';
 import Info from '../containers/Info';
 import Volume from '../containers/Volume';
-import Globe from '../containers/Globe';
+// import Globe from '../containers/Globe';
 import {
   fetchCurrentTradeIdle,
   secondTradeIdleAction,
