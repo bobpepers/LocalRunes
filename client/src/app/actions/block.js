@@ -21,26 +21,36 @@ export function blockAction(username) {
               type: DELETE_BLOCK,
               payload: response.data.removed,
             });
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: 'Success: Unblock',
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'success',
+                },
+              },
+            });
           }
           if (response.data.blocked) {
             dispatch({
               type: ADD_BLOCK,
               payload: response.data.blocked,
             });
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: 'Success: Block',
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'success',
+                },
+              },
+            });
           }
           dispatch({
             type: POST_BLOCK_SUCCESS,
             payload: response.data,
-          });
-          dispatch({
-            type: ENQUEUE_SNACKBAR,
-            notification: {
-              message: 'Success: Surf Started',
-              key: new Date().getTime() + Math.random(),
-              options: {
-                variant: 'success',
-              },
-            },
           });
           resolve();
         })

@@ -21,6 +21,55 @@ export const startTrade = async (req, res, next) => {
     if (req.user.id === postAd.userId) {
       throw new Error('CANT_TRADE_WITH_SELF');
     }
+    // did Users Block eachother?
+    const userOne = await db.blocked.findAll({
+      where: {
+        userId: req.user.id,
+      },
+      include: [
+        {
+          model: db.user,
+          as: 'userBlock',
+          required: true,
+          attributes: ['username'],
+        },
+        {
+          model: db.user,
+          as: 'userBlocked',
+          required: true,
+          attributes: ['username'],
+        },
+      ],
+    });
+    const hasUserOneBlocked = userOne.filter((object) => object.blockedId === postAd.userId);
+    if (hasUserOneBlocked && hasUserOneBlocked.length) {
+      throw new Error('YOU_BLOCKED_USER');
+    }
+    const userTwo = await db.blocked.findAll({
+      where: {
+        userId: postAd.userId,
+      },
+      include: [
+        {
+          model: db.user,
+          as: 'userBlock',
+          required: true,
+          attributes: ['username'],
+        },
+        {
+          model: db.user,
+          as: 'userBlocked',
+          required: true,
+          attributes: ['username'],
+        },
+      ],
+    });
+    // console.log(userTwo);
+    const hasUserTwoBlocked = userTwo.filter((object) => object.blockedId === req.user.id);
+    if (hasUserTwoBlocked && hasUserTwoBlocked.length) {
+      throw new Error('USER_BLOCKED_YOU');
+    }
+    //
     const tradeExits = await db.trade.findOne({
       where: {
         userId: req.user.id,
