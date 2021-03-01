@@ -5,7 +5,7 @@ import auth from './auth';
 import resetPassword from './resetPassword';
 import user from './user';
 import contact from './contact';
-import chainInfo from "./chainInfo";
+//import chainInfo from "./chainInfo";
 import online from "./online";
 import registered from "./registered";
 import volume from "./volume";
@@ -42,7 +42,7 @@ import adminCompleteDispute from "./admin/adminCompleteDispute";
 import adminPendingDisputeCount from "./admin/adminPendingDisputeCount";
 import adminPendingDisputes from "./admin/adminPendingDisputes";
 
-import createReport from './createReport';
+//import createReport from './createReport';
 
 import verifyPhoneCode from './verifyPhoneCode';
 import getPhoneCode from './getPhoneCode';
@@ -70,7 +70,7 @@ const rootReducer = combineReducers({
   resetPass: resetPassword,
   user: user,
   contact: contact,
-  chaininfo: chainInfo,
+  //chaininfo: chainInfo,
   online: online,
   registered: registered,
   volume: volume,
@@ -82,7 +82,7 @@ const rootReducer = combineReducers({
   activity: activity,
   recentUserActivity: recentUserActivity,
   uploadAvatar: uploadAvatar,
-  createReport: createReport,
+  //createReport: createReport,
 
   adminWithdrawals: adminWithdrawals,
   adminUserList: adminUserList,
