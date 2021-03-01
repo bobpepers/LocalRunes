@@ -1,4 +1,6 @@
-import React, { useLayoutEffect, useEffect } from 'react';
+import React, {
+  useEffect,
+} from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -10,7 +12,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Paper from '@material-ui/core/Paper';
 
 function createData(date, type, txid, phase, confirmations, amount, address, toFrom) {
   console.log(toFrom);

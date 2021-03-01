@@ -64,7 +64,7 @@ const adminUserList = (props) => {
                   <TableCell align="right">{trade.user.username}</TableCell>
                   <TableCell align="right">{trade.postAd.type}</TableCell>
                   <TableCell align="right">{trade.amount / 1e8}</TableCell>
-                  <TableCell align="right">{trade.postAd.price}</TableCell>
+                  <TableCell align="right">{trade.postAd.price / 1e8}</TableCell>
                   <TableCell align="right">{trade.postAd.currency.currency_name}</TableCell>
                   <TableCell align="right">{trade.postAd.paymentMethod.name}</TableCell>
                   <TableCell align="right">
