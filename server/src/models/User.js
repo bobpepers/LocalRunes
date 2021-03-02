@@ -218,46 +218,6 @@ module.exports = (sequelize, DataTypes) => {
       as: 'messages',
     });
 
-    UserModel.hasMany(model.jackpot, {
-      as: 'winner_one',
-    });
-
-    UserModel.hasMany(model.jackpot, {
-      as: 'winner_two',
-    });
-
-    UserModel.hasMany(model.jackpot, {
-      as: 'winner_three',
-    });
-
-    UserModel.hasMany(model.jackpot, {
-      as: 'winner_four',
-    });
-
-    UserModel.hasMany(model.jackpot, {
-      as: 'winner_five',
-    });
-
-    UserModel.hasMany(model.jackpot, {
-      as: 'winner_six',
-    });
-
-    UserModel.hasMany(model.jackpot, {
-      as: 'winner_seven',
-    });
-
-    UserModel.hasMany(model.jackpot, {
-      as: 'winner_eigth',
-    });
-
-    UserModel.hasMany(model.jackpot, {
-      as: 'winner_nine',
-    });
-
-    UserModel.hasMany(model.jackpot, {
-      as: 'winner_ten',
-    });
-
     // UserModel.hasMany(model.bannerslot);
 
     UserModel.hasMany(model.activity, {
@@ -268,10 +228,6 @@ module.exports = (sequelize, DataTypes) => {
     UserModel.hasMany(model.activity, {
       as: 'earner',
       foreignKey: 'earnerId',
-    });
-
-    UserModel.hasMany(model.publisher, {
-      as: 'publisher',
     });
 
     UserModel.hasMany(model.postAd, {
@@ -288,12 +244,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'earnerId',
     });
 
-    UserModel.hasMany(model.faucet);
+    // UserModel.hasMany(model.faucet);
 
-    UserModel.hasMany(model.report);
+    // UserModel.hasMany(model.report);
 
-    UserModel.hasMany(model.webslot);
-    UserModel.hasMany(model.SurfTicket);
+    // UserModel.hasMany(model.webslot);
+    // UserModel.hasMany(model.SurfTicket);
 
     UserModel.hasOne(model.wallet);
 
@@ -304,12 +260,6 @@ module.exports = (sequelize, DataTypes) => {
       otherKey: 'ipId',
     });
 
-    UserModel.belongsToMany(model.domain, {
-      through: 'DomainUser',
-      as: 'domains',
-      foreignKey: 'userId',
-      otherKey: 'domainId',
-    });
     UserModel.hasMany(model.Referrals, {
       foreignKey: 'referredById',
       as: 'referredBy',
