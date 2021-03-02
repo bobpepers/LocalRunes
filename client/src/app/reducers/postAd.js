@@ -19,12 +19,23 @@ export default (state = initialState, action) => {
         error: null,
       };
     case FETCH_POSTAD_SUCCESS:
-      return {
-        ...state,
-        buy: action.payload.buy && action.payload.buy,
-        sell: action.payload.sell && action.payload.sell,
-        isFetching: false,
-      };
+      if (action.payload.buy) {
+        return {
+          ...state,
+          buy: action.payload.buy,
+          sell: state.sell,
+          isFetching: false,
+        };
+      }
+      if (action.payload.sell) {
+        return {
+          ...state,
+          buy: state.buy,
+          sell: action.payload.sell,
+          isFetching: false,
+        };
+      }
+      break;
     case FETCH_POSTAD_FAIL:
       return {
         ...state,

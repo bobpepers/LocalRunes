@@ -112,6 +112,10 @@ export const fetchPostAd = async (req, res, next) => {
   console.log('(req.body.type)');
   console.log(req.body.type);
   const userOptions = {};
+  const mainOptions = {
+    type: req.body.type,
+    active: true,
+  };
 
   if (req.body.userStatus !== 'all') {
     if (req.body.userStatus === 'online') {
@@ -131,11 +135,12 @@ export const fetchPostAd = async (req, res, next) => {
     }
   }
 
+  if (req.body.username !== 'all') {
+    userOptions.username = req.body.username;
+  }
+
   const options = {
-    where: {
-      type: req.body.type,
-      active: true,
-    },
+    where: mainOptions,
     include: [
       {
         model: db.user,

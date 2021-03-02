@@ -15,6 +15,64 @@ import { fetchSpecificUserData } from '../actions/user';
 import { trustAction } from '../actions/trust';
 import { blockAction } from '../actions/block';
 // import Globe from '../containers/Globe';
+import {
+  fetchPostAdData,
+} from '../actions/postAd';
+import TableAds from '../components/TableAds';
+
+const headCellsBuy = [
+  {
+    id: 'seller', numeric: false, disablePadding: true, label: 'Seller',
+  },
+  {
+    id: 'country', numeric: true, disablePadding: false, label: 'Country',
+  },
+  {
+    id: 'paymentMethod', numeric: true, disablePadding: false, label: 'Payment Method',
+  },
+  {
+    id: 'price', numeric: true, disablePadding: false, label: 'Price / RUNES',
+  },
+  {
+    id: 'currency', numeric: true, disablePadding: false, label: 'Currency',
+  },
+  // {
+  //  id: 'actual', numeric: true, disablePadding: false, label: 'Over/Under Price %',
+  // },
+  {
+    id: 'limits', numeric: true, disablePadding: false, label: 'Limits',
+  },
+  {
+    id: 'actions', numeric: true, disablePadding: false, label: 'Actions',
+  },
+];
+
+const headCellsSell = [
+  {
+    id: 'buyer', numeric: false, disablePadding: true, label: 'Buyer',
+  },
+  {
+    id: 'country', numeric: true, disablePadding: false, label: 'Country',
+  },
+  {
+    id: 'paymentMethod', numeric: true, disablePadding: false, label: 'Payment Method',
+  },
+  {
+    id: 'price', numeric: true, disablePadding: false, label: 'Price / RUNES',
+  },
+  {
+    id: 'currency', numeric: true, disablePadding: false, label: 'Currency',
+  },
+  // {
+  //  id: 'actual', numeric: true, disablePadding: false, label: 'Over/Under Price %',
+  // },
+  {
+    id: 'limits', numeric: true, disablePadding: false, label: 'Limits',
+  },
+  {
+    id: 'actions', numeric: true, disablePadding: false, label: 'Actions',
+  },
+];
 
 const PublicProfile = (props) => {
   const {
@@ -23,18 +81,59 @@ const PublicProfile = (props) => {
     },
     specificUser,
     user,
+    postAd,
   } = props;
   console.log('RunesX Home View');
   const userName = params[0];
   const dispatch = useDispatch();
   useEffect(() => dispatch(fetchSpecificUserData(userName)), [dispatch]);
-  useEffect(() => {}, [specificUser, user]);
+
   const clickTrust = (specificuserName) => {
     dispatch(trustAction(specificuserName));
   }
   const clickBlock = (specificuserName) => {
     dispatch(blockAction(specificuserName));
   }
+
+  // const userToFetch = specificUser && specificUser.username ? specificUser.username : 'all';
+
+  useEffect(() => {
+  }, [specificUser, user, postAd]);
+
+  useEffect(() => {
+    if (specificUser) {
+      console.log('specificUser.username');
+      console.log('specificUser.username');
+      console.log('specificUser.username');
+      console.log('specificUser.username');
+      console.log('specificUser.username');
+      console.log('specificUser.username');
+      console.log('specificUser.username');
+      console.log('specificUser.username');
+      console.log('specificUser.username');
+      console.log('specificUser.username');
+      console.log('specificUser.username');
+      console.log(specificUser.username);
+      dispatch(fetchPostAdData(
+        'sell',
+        'all',
+        'all',
+        'all',
+        'all',
+        'all',
+        specificUser.username,
+      ));
+      dispatch(fetchPostAdData(
+        'buy',
+        'all',
+        'all',
+        'all',
+        'all',
+        'all',
+        specificUser.username,
+      ));
+    }
+  }, [specificUser]);
 
   const userTrusted = (username) => {
     if (specificUser && specificUser.trustedUsers) {
@@ -205,6 +304,27 @@ const PublicProfile = (props) => {
             {specificUser && specificUser.username}
           </h3>
         </Grid>
+        <Grid item xs={12}>
+          <TableAds
+            defaultPageSize={3}
+            headCells={headCellsBuy || []}
+            postAd={postAd && postAd.sell ? postAd.sell : []}
+          />
+        </Grid>
+        <Grid container item xs={12}>
+          <h3>
+            Sell RUNES to
+            {' '}
+            {specificUser && specificUser.username}
+          </h3>
+        </Grid>
+        <Grid item xs={12}>
+          <TableAds
+            defaultPageSize={3}
+            headCells={headCellsSell || []}
+            postAd={postAd && postAd.buy ? postAd.buy : []}
+          />
+        </Grid>
       </Grid>
     </div>
   )
@@ -214,6 +334,7 @@ const mapStateToProps = (state) => ({
   errorMessage: state.auth.error,
   specificUser: state.specificUser.data,
   user: state.user.data,
+  postAd: state.postAd,
 })
 
 export default withRouter(connect(mapStateToProps, actions)(PublicProfile));

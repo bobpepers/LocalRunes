@@ -845,6 +845,7 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           });
         }
       }
+
       if (trade.postAd.type === "sell") {
         const walletUserOne = await db.wallet.findOne({
           where: {
@@ -865,24 +866,28 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           console.log('not enough locked funds');
           throw new Error('NOT_ENOUGH_LOCKED_FUNDS');
         }
+
         res.locals.walletUserTwo = await walletUserTwo.update({
           locked: walletUserTwo.locked - trade.amount,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+
         res.locals.walletUserOne = await walletUserOne.update({
           available: walletUserOne.available + trade.amount,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+
         res.locals.trade = await trade.update({
           type: 'done',
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+
         const userBuyVolumeOne = await db.user.findOne({
           where: {
             id: trade.postAd.userId,
@@ -890,6 +895,7 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+
         const userBuyVolumeTwo = await db.user.findOne({
           where: {
             id: trade.userId,

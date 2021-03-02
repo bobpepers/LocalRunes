@@ -100,7 +100,7 @@ const BuyRunes = (props) => {
   useEffect(() => dispatch(fetchPaymentMethodData()), [dispatch]);
   useEffect(() => dispatch(fetchCurrenciesData()), [dispatch]);
   useEffect(() => dispatch(fetchCountriesData()), [dispatch]);
-  useEffect(() => dispatch(fetchPostAdData('buy', country, paymentMethod, currency, userStatus, storeStatus)), [dispatch]);
+  useEffect(() => dispatch(fetchPostAdData('buy', country, paymentMethod, currency, userStatus, storeStatus, 'all')), [dispatch]);
 
   const handleChangeCountry = (event) => {
     setCountry(event.target.value);
@@ -123,7 +123,7 @@ const BuyRunes = (props) => {
   };
 
   useEffect(() => {
-    dispatch(fetchPostAdData('buy', country, paymentMethod, currency, userStatus, storeStatus));
+    dispatch(fetchPostAdData('buy', country, paymentMethod, currency, userStatus, storeStatus, 'all'));
   }, [country, paymentMethod, currency, userStatus, storeStatus]);
 
   useEffect(() => {}, [postAd]);
@@ -237,6 +237,7 @@ const BuyRunes = (props) => {
         </Grid>
         <Grid item xs={12}>
           <TableAds
+            defaultPageSize={10}
             headCells={headCells || []}
             postAd={postAd && postAd.buy ? postAd.buy : []}
           />

@@ -250,6 +250,7 @@ function EnhancedTable(props) {
     postAd,
     currentTrade,
     price,
+    defaultPageSize,
   } = props;
   const rows = [];
   const dispatch = useDispatch();
@@ -314,7 +315,7 @@ function EnhancedTable(props) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(defaultPageSize);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

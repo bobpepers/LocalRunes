@@ -84,13 +84,27 @@ export function addPostAdAction(obj) {
   }
 }
 
-export function fetchPostAdData(type, country, paymentMethod, currency, userStatus, storeStatus) {
+export function fetchPostAdData(
+  type,
+  country,
+  paymentMethod,
+  currency,
+  userStatus,
+  storeStatus,
+  username,
+) {
   return function (dispatch) {
     dispatch({
       type: FETCH_POSTAD_BEGIN,
     });
     axios.post(`${process.env.API_URL}/postad`, {
-      type, country, paymentMethod, currency, userStatus, storeStatus,
+      type,
+      country,
+      paymentMethod,
+      currency,
+      userStatus,
+      storeStatus,
+      username,
     })
       .then((response) => {
         console.log('FETCH_POSTAD_SUCCESS');
