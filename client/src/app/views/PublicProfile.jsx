@@ -87,7 +87,7 @@ const PublicProfile = (props) => {
             {specificUser && specificUser.tradeCount ? specificUser.tradeCount.toString() : '0' }
           </p>
           <p>
-            First purchase: 0
+            First trade: 0
           </p>
           <p>
             Account created:

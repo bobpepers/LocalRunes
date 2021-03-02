@@ -24,6 +24,7 @@ import {
   formValueSelector,
   change,
 } from 'redux-form';
+import CloseIcon from '@material-ui/icons/Close';
 import * as actions from '../actions/auth';
 
 import {
@@ -90,14 +91,6 @@ const TradeCanceled = (props) => {
   const [descriptionLength, setDescriptionLength] = useState(0);
 
   useEffect(() => {
-    console.log('currenTrade');
-    console.log('currenTrade');
-    console.log('currenTrade');
-    console.log('currenTrade');
-    console.log('currenTrade');
-    console.log('currenTrade');
-    console.log('currenTrade');
-    console.log('currenTrade');
     console.log(currentTrade);
     if (currentTrade.userOneComplete === true && currentTrade.userTwoComplete === true) {
       console.log(currentTrade);
@@ -112,29 +105,56 @@ const TradeCanceled = (props) => {
     }
   }, [currentTrade]);
 
-  const onBasicFieldChange = (event, newValue, previousValue, name) => {
-    setDescriptionLength(newValue.length);
-  };
-
-  const handleFormSubmit = async (message) => {
-    await dispatch(sendMessageAction(message, currentTrade.id));
-  }
-
-  const cancelTrade = async () => {
-    // console.log(obj);
-    await dispatch(cancelMainTradeAction(id));
-  }
-
-  const acceptTrade = async () => {
-    // console.log(obj);
-    await dispatch(acceptMainTradeAction(id));
-  }
-
   return (
     <div className="height100 content surfContainer">
-      <Grid container>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+      >
+        <Grid item xs={12}>
+          <h3 className="text-center">
+            Trade #
+            {currentTrade.id}
+            {' '}
+            Canceled
+          </h3>
+        </Grid>
+        <Grid item xs={4}>
+          <CloseIcon
+            style={{
+              width: '100%',
+              height: '100%',
+              color: 'red',
+            }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <p className="text-center">
+            {currentTrade
+            && currentTrade.user
+            && currentTrade.user.username === user.username
+            && `Trade with ${currentTrade.postAd.user.username} for ${currentTrade.amount / 1e8} RUNES was canceled`}
+            {currentTrade
+            && currentTrade.postAd
+            && currentTrade.postAd.user
+            && currentTrade.postAd.user.username === user.username
+            && `Trade with ${currentTrade.user.username} for ${currentTrade.amount / 1e8} RUNES was canceled`}
+          </p>
+          <p className="text-center">
+            Price:
+            {' '}
+            {currentTrade
+            && currentTrade.price / 1e8}
+            {' '}
+            {currentTrade
+            && currentTrade.postAd
+            && currentTrade.postAd.currency.currency_name}
+          </p>
+        </Grid>
 
-        <p>Trade Canceled</p>
       </Grid>
     </div>
   )
@@ -142,7 +162,7 @@ const TradeCanceled = (props) => {
 
 const mapStateToProps = (state) => ({
   errorMessage: state.auth.error,
-  user: state.user,
+  user: state.user.data,
   currentTrade: state.currentTrade.data,
 });
 
