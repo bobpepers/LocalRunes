@@ -87,7 +87,9 @@ const PublicProfile = (props) => {
             {specificUser && specificUser.tradeCount ? specificUser.tradeCount.toString() : '0' }
           </p>
           <p>
-            First trade: 0
+            First trade:
+            {' '}
+            {specificUser && specificUser.firstTrade ? specificUser.firstTrade : 'never'}
           </p>
           <p>
             Account created:

@@ -766,10 +766,7 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
-        console.log('walletUserOne');
-        console.log(walletUserOneSell);
-        console.log('walletUserTwo');
-        console.log(walletUserTwoSell);
+
         if (trade.amount > walletUserTwoSell.locked) {
           console.log('not enough locked funds');
           throw new Error('NOT_ENOUGH_LOCKED_FUNDS');
@@ -786,12 +783,14 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+
         res.locals.trade = await trade.update({
           type: 'done',
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+
         const userVolumeOne = await db.user.findOne({
           where: {
             id: trade.postAd.userId,
@@ -799,6 +798,7 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+
         const userVolumeTwo = await db.user.findOne({
           where: {
             id: trade.userId,
@@ -806,20 +806,44 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
-        await userVolumeOne.update({
-          volume: userVolumeOne.volume + trade.amount,
-          tradeCount: userVolumeOne.tradeCount + 1,
-        }, {
-          transaction: t,
-          lock: t.LOCK.UPDATE,
-        });
-        await userVolumeTwo.update({
-          volume: userVolumeTwo.volume + trade.amount,
-          tradeCount: userVolumeTwo.tradeCount + 1,
-        }, {
-          transaction: t,
-          lock: t.LOCK.UPDATE,
-        });
+
+        if (userVolumeOne.firstTrade === null) {
+          await userVolumeOne.update({
+            volume: userVolumeOne.volume + trade.amount,
+            tradeCount: userVolumeOne.tradeCount + 1,
+            firstTrade: new Date(Date.now()),
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        } else {
+          await userVolumeOne.update({
+            volume: userVolumeOne.volume + trade.amount,
+            tradeCount: userVolumeOne.tradeCount + 1,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
+
+        if (userVolumeTwo.firstTrade === null) {
+          await userVolumeTwo.update({
+            volume: userVolumeTwo.volume + trade.amount,
+            tradeCount: userVolumeTwo.tradeCount + 1,
+            firstTrade: new Date(Date.now()),
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        } else {
+          await userVolumeTwo.update({
+            volume: userVolumeTwo.volume + trade.amount,
+            tradeCount: userVolumeTwo.tradeCount + 1,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
       }
       if (trade.postAd.type === "sell") {
         const walletUserOne = await db.wallet.findOne({
@@ -836,10 +860,7 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
-        console.log('walletUserOne');
-        console.log(walletUserOne);
-        console.log('walletUserTwo');
-        console.log(walletUserTwo);
+
         if (trade.amount > walletUserTwo.locked) {
           console.log('not enough locked funds');
           throw new Error('NOT_ENOUGH_LOCKED_FUNDS');
@@ -876,20 +897,44 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
-        await userBuyVolumeOne.update({
-          volume: userBuyVolumeOne.volume + trade.amount,
-          tradeCount: userBuyVolumeOne.tradeCount + 1,
-        }, {
-          transaction: t,
-          lock: t.LOCK.UPDATE,
-        });
-        await userBuyVolumeTwo.update({
-          volume: userBuyVolumeTwo.volume + trade.amount,
-          tradeCount: userBuyVolumeTwo.tradeCount + 1,
-        }, {
-          transaction: t,
-          lock: t.LOCK.UPDATE,
-        });
+
+        if (userBuyVolumeOne.firstTrade === null) {
+          await userBuyVolumeOne.update({
+            volume: userBuyVolumeOne.volume + trade.amount,
+            tradeCount: userBuyVolumeOne.tradeCount + 1,
+            firstTrade: new Date(Date.now()),
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        } else {
+          await userBuyVolumeOne.update({
+            volume: userBuyVolumeOne.volume + trade.amount,
+            tradeCount: userBuyVolumeOne.tradeCount + 1,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
+
+        if (userBuyVolumeTwo.firstTrade === null) {
+          await userBuyVolumeTwo.update({
+            volume: userBuyVolumeTwo.volume + trade.amount,
+            tradeCount: userBuyVolumeTwo.tradeCount + 1,
+            firstTrade: new Date(Date.now()),
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        } else {
+          await userBuyVolumeTwo.update({
+            volume: userBuyVolumeTwo.volume + trade.amount,
+            tradeCount: userBuyVolumeTwo.tradeCount + 1,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
       }
     }
 

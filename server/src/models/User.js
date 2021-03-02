@@ -179,6 +179,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
+    firstTrade: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     volume: {
       type: DataTypes.BIGINT,
       defaultValue: 0,
