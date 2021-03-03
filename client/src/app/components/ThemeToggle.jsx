@@ -1,4 +1,6 @@
-import React, { Fragment } from 'react';
+import React, {
+  Fragment,
+} from 'react';
 import {
   connect,
 } from 'react-redux';
@@ -29,10 +31,11 @@ const ThemeToggle = (props) => {
     theme: {
       theme,
     },
+    changeTheme,
   } = props;
 
   const handleChangeCurrentStyleMode = (value) => {
-    props.changeTheme(value);
+    changeTheme(value);
   };
 
   return (

@@ -4,13 +4,13 @@ import React, {
 import {
   Grid,
   Button,
-  Tooltip,
+  // Tooltip,
   Modal,
   CircularProgress,
 } from '@material-ui/core';
 import { connect, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
-import { lighten, makeStyles } from '@material-ui/core/styles';
+// import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import ReactCrop from 'react-image-crop';
 import Referrals from './Referrals';
 import 'react-image-crop/dist/ReactCrop.css';

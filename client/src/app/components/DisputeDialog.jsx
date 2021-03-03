@@ -1,5 +1,8 @@
 import React, {
-  useState, useRef, forwardRef, useEffect,
+  useState,
+  useRef,
+  forwardRef,
+  useEffect,
 } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { connect, useDispatch } from 'react-redux';
@@ -12,7 +15,7 @@ import {
   Divider,
   List,
   ListItem,
-  ListItemText,
+  // ListItemText,
   Dialog,
   Grid,
   Button,

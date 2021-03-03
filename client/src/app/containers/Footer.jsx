@@ -1,8 +1,6 @@
 import React, {
   useEffect,
   useState,
-  memo,
-  useRef,
 } from 'react';
 import {
   connect,
@@ -13,15 +11,11 @@ import {
   Grid,
   Tooltip,
   Select,
-  InputLabel,
-  MenuItem,
-  FormHelperText,
   FormControl,
 } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 // import actions from 'redux-form/lib/actions';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import ExposureIcon from '@material-ui/icons/Exposure';

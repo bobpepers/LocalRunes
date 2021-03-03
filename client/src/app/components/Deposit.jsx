@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import {
   Button,
-  Modal,
-  Backdrop,
-  Fade,
-  TextField,
+  // Modal,
+  // Backdrop,
+  // Fade,
+  // TextField,
   Grid,
-  Fab,
+  // Fab,
   Tooltip,
 } from '@material-ui/core';
 import { connect, useDispatch } from 'react-redux';
 import AddIcon from '@material-ui/icons/Add';
 import {
   reduxForm,
-  Field,
+  // Field,
   formValueSelector,
-  change,
-  reset,
+  // change,
+  // reset,
 } from 'redux-form';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
+// import CloseIcon from '@material-ui/icons/Close';
 import { Link } from 'react-router-dom';
 import QRCode from 'qrcode';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import Captcha from './Captcha';
+// import Captcha from './Captcha';
 import * as actions from '../actions';
 import { fetchUserData } from '../actions/user';
 

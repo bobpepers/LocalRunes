@@ -1,21 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+// useEffect,
+// useRef,
+// useState,
+} from 'react';
 import { connect } from 'react-redux';
-import ReactGlobe from 'react-globe';
+// import ReactGlobe from 'react-globe';
 import {
   Grid,
   Box,
 } from '@material-ui/core';
-import LanguageIcon from '@material-ui/icons/Language';
-import SearchIcon from '@material-ui/icons/Search';
-import Globe from 'react-globe.gl';
-import * as d3 from 'd3';
+// import LanguageIcon from '@material-ui/icons/Language';
+// import SearchIcon from '@material-ui/icons/Search';
+// import Globe from 'react-globe.gl';
+// import * as d3 from 'd3';
 import { Link } from 'react-router-dom';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import MailIcon from '@material-ui/icons/Mail';
-import { getRequestRegister } from '../actions/registered';
-import runebaseloop from '../assets/images/runebaseloop.gif';
+// import { getRequestRegister } from '../actions/registered';
+// import runebaseloop from '../assets/images/runebaseloop.gif';
 import theme from '../theme';
 
 const FooterMenu = (props) => {

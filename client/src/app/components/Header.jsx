@@ -10,13 +10,13 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import {
   Navbar,
   Nav,
-  NavDropdown,
+  // NavDropdown,
 } from 'react-bootstrap';
 
 import { withTranslation } from 'react-i18next';
 import ReactCountryFlag from 'react-country-flag';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import LiveTvIcon from '@material-ui/icons/LiveTv';
+// import LiveTvIcon from '@material-ui/icons/LiveTv';
 // import MouseIcon from '@material-ui/icons/Mouse';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import {
@@ -25,9 +25,9 @@ import {
 } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
-import IconButton from '@material-ui/core/IconButton';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+// import MenuIcon from '@material-ui/icons/Menu';
+// import IconButton from '@material-ui/core/IconButton';
+// import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import FaceIcon from '@material-ui/icons/Face';

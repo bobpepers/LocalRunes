@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import {
-  Navbar,
-  Nav,
-  NavDropdown,
-} from 'react-bootstrap';
 
 import { withTranslation } from 'react-i18next';
 import Badge from '@material-ui/core/Badge';
