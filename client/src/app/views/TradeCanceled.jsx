@@ -151,6 +151,7 @@ const TradeCanceled = (props) => {
             {' '}
             {currentTrade
             && currentTrade.postAd
+            && currentTrade.postAd.currency
             && currentTrade.postAd.currency.currency_name}
           </p>
         </Grid>

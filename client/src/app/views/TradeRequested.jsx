@@ -97,6 +97,10 @@ const TradeRequested = (props) => {
       console.log(currentTrade);
       history.push(`/trade/${currentTrade.id}`);
     }
+    if (currentTrade.type === 'canceled') {
+      console.log(currentTrade);
+      history.push(`/trade/canceled/${currentTrade.id}`);
+    }
   }, [currentTrade]);
 
   const cancelTrade = async () => {
