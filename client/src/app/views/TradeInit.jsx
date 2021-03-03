@@ -161,6 +161,7 @@ const TradeInit = (props) => {
   const actualPrice = price
   && currentTrade
   && currentTrade.postAd
+  && currentTrade.postAd.currency
     ? (price.filter((object) => object.currency === currentTrade.postAd.currency.iso))
     : 0;
   const marginPrice = actualPrice
