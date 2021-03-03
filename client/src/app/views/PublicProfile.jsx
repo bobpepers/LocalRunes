@@ -9,6 +9,7 @@ import {
   Grid,
   Button,
 } from '@material-ui/core';
+import Rating from 'react-rating';
 import * as actions from '../actions/auth';
 import PolicyImage from '../assets/images/policy.svg';
 import { fetchSpecificUserData } from '../actions/user';
@@ -19,6 +20,8 @@ import {
   fetchPostAdData,
 } from '../actions/postAd';
 import TableAds from '../components/TableAds';
+import EmptyStar from '../assets/images/Empty_Star.svg';
+import FullStar from '../assets/images/Full_Star_Yellow.svg';
 
 const headCellsBuy = [
   {
@@ -161,6 +164,11 @@ const PublicProfile = (props) => {
           alignItems="center"
         >
           <h3>{specificUser && specificUser.username }</h3>
+          <Rating
+            readonly
+            emptySymbol={<EmptyStar />}
+            fullSymbol={<FullStar />}
+          />
           <h4>
             Information on
             {' '}

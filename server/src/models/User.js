@@ -187,6 +187,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT,
       defaultValue: 0,
     },
+    tradeCount: {
+      type: DataTypes.BIGINT,
+      defaultValue: 0,
+    },
   };
 
   // 2: The model options.

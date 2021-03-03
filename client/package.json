@@ -126,6 +126,7 @@
     "react-moment": "^1.1.1",
     "react-particles-js": "^3.4.1",
     "react-platform-js": "0.0.1",
+    "react-rating": "^2.0.5",
     "react-redux": "^7.2.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
