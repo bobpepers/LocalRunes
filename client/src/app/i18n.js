@@ -4,8 +4,8 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
 const options = {
-  loadPath: 'static/locales/{{lng}}/{{ns}}.json',
-  addPath: 'static/locales/add/{{lng}}/{{ns}}',
+  loadPath: '/static/locales/{{lng}}/{{ns}}.json',
+  addPath: '/static/locales/add/{{lng}}/{{ns}}',
 };
 
 i18n

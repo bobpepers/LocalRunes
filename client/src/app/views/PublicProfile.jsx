@@ -8,6 +8,7 @@ import { connect, useDispatch } from 'react-redux';
 import {
   Grid,
   Button,
+  TextField,
 } from '@material-ui/core';
 import Rating from 'react-rating';
 import * as actions from '../actions/auth';
@@ -90,6 +91,18 @@ const PublicProfile = (props) => {
   const userName = params[0];
   const dispatch = useDispatch();
   useEffect(() => dispatch(fetchSpecificUserData(userName)), [dispatch]);
+  const [value, setValue] = React.useState('Controlled');
+  const [valueStars, setValueStars] = React.useState(2);
+
+  const handleChange = (event) => {
+    console.log(event.target.value);
+    setValue(event.target.value);
+  };
+  const handleChangeStars = (event) => {
+    console.log('event');
+    console.log(event);
+    setValueStars(event);
+  };
 
   const clickTrust = (specificuserName) => {
     dispatch(trustAction(specificuserName));
@@ -152,20 +165,26 @@ const PublicProfile = (props) => {
 
   return (
     <div className="height100 content surfContainer">
-      <Grid container align="center" alignConent="center" alignItems="center">
+      <Grid
+        container
+        // align="center"
+        // alignConent="center"
+        // alignItems="center"
+      >
         <Grid
           item
           xs={12}
           sm={12}
-          md={8}
-          lg={8}
-          xl={8}
+          md={6}
+          lg={6}
+          xl={6}
           align="center"
           alignItems="center"
         >
           <h3>{specificUser && specificUser.username }</h3>
           <Rating
             readonly
+            initialRating={2.5}
             emptySymbol={<EmptyStar />}
             fullSymbol={<FullStar />}
           />
@@ -242,18 +261,6 @@ const PublicProfile = (props) => {
             {' '}
             people
           </p>
-        </Grid>
-        <Grid
-          container
-          item
-          xs={12}
-          sm={12}
-          md={4}
-          lg={4}
-          xl={4}
-          align="center"
-          alignItems="center"
-        >
           <Grid container item xs={12}>
             {specificUser && specificUser.username === user.username ? (
               <p>
@@ -287,6 +294,57 @@ const PublicProfile = (props) => {
             ) }
 
           </Grid>
+        </Grid>
+        <Grid
+          container
+          item
+          xs={12}
+          sm={12}
+          md={6}
+          lg={6}
+          xl={6}
+          // align="center"
+          // alignItems="center"
+        >
+          <Grid item xs={12}>
+            <h3>
+              Give feedback to
+              {' '}
+              {specificUser && specificUser.username }
+            </h3>
+            <Rating
+            // readonly
+              initialRating={valueStars}
+              emptySymbol={<EmptyStar />}
+              fullSymbol={<FullStar />}
+              onChange={handleChangeStars}
+            />
+            <TextField
+              label="Message"
+              multiline
+              style={{ width: '100%' }}
+              rows={6}
+              value={value}
+              onChange={handleChange}
+              // defaultValue=""
+              inputProps={{
+                maxLength: 400,
+                // className: 'outlined-adornment-field',
+              }}
+              variant="outlined"
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              className="btn"
+              fullWidth
+              size="large"
+            >
+              Add Feedback
+            </Button>
+          </Grid>
+
           {/* <Grid container item xs={12}>
             <Grid container item xs={12}>
               <h3>
