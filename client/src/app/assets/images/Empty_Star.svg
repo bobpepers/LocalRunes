@@ -8,12 +8,11 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="64"
-   height="64"
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.44"
    version="1.0"
+   viewBox="0 0 100 100"
    sodipodi:docbase="C:\Documents and Settings\Kris\My Documents\My Pictures\Wikipedia"
    sodipodi:docname="Empty Star.svg">
   <defs
@@ -33,8 +32,6 @@
      inkscape:cy="21.5"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     width="64px"
-     height="64px"
      showgrid="true"
      gridspacingx="2px"
      gridspacingy="2px"

@@ -268,6 +268,15 @@ module.exports = (sequelize, DataTypes) => {
       otherKey: 'ipId',
     });
 
+    UserModel.hasMany(model.rating, {
+      foreignKey: 'userRatingId',
+      as: 'userRating',
+    });
+    UserModel.hasMany(model.rating, {
+      foreignKey: 'userRatedId',
+      as: 'userRated',
+    });
+
     UserModel.hasMany(model.Referrals, {
       foreignKey: 'referredById',
       as: 'referredBy',

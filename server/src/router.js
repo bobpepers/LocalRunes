@@ -117,6 +117,12 @@ import {
   deactivatePostAd,
 } from './controllers/postAd';
 
+import {
+  updateFeedback,
+  fetchAverageRating,
+  removeFeedback,
+} from './controllers/feedback';
+
 import { endUnacceptedTrade } from './helpers/trade';
 
 import storeIp from './helpers/storeIp';
@@ -1157,6 +1163,78 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
       if (res.locals.store === 'false') {
         res.json({ store: false });
+      }
+    });
+
+  app.post('/api/user/feedback/update',
+    IsAuthenticated,
+    isUserBanned,
+    storeIp,
+    ensuretfa,
+    updateLastSeen,
+    updateFeedback,
+    (req, res) => {
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      console.log('res.locals.rating');
+      console.log(res.locals.rating);
+      if (res.locals.rating) {
+        console.log('res sendddd');
+        res.json({
+          rating: res.locals.rating,
+        });
+      }
+    });
+
+  app.post('/api/user/feedback/remove',
+    IsAuthenticated,
+    isUserBanned,
+    storeIp,
+    ensuretfa,
+    updateLastSeen,
+    removeFeedback,
+    (req, res) => {
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      console.log('res.locals.rating');
+      console.log(res.locals.removed);
+      if (res.locals.removed) {
+        console.log('res sendddd');
+        res.json({
+          removed: res.locals.removed,
+        });
+      }
+    });
+
+  app.post('/api/user/rating/average',
+    IsAuthenticated,
+    isUserBanned,
+    storeIp,
+    ensuretfa,
+    updateLastSeen,
+    fetchAverageRating,
+    (req, res) => {
+      if (res.locals.error) {
+        console.log(res.locals.error);
+        res.status(401).send({
+          error: res.locals.error,
+        });
+      }
+      console.log('res.locals.rating');
+      console.log(res.locals.rating);
+      if (res.locals.rating) {
+        console.log('res sendddd');
+        res.json({
+          rating: res.locals.rating,
+        });
       }
     });
 

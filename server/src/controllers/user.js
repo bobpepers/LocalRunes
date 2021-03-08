@@ -105,32 +105,74 @@ export const fetchSpecificUser = async (req, res, next) => {
     where: {
       username: req.body.user,
     },
-    attributes: {
-      exclude: [
-        'click_count',
-        'identityBack',
-        'identityFront',
-        'jackpot_tickets',
-        'lastClicked',
-        'reputation',
-        'firstname',
-        'lastname',
-        'phoneNumber',
-        'role',
-        'tfa',
-        'tfa_secret',
-        'webslot_amount',
-        'password',
-        'id',
-        'authtoken',
-        'authexpires',
-        'resetpasstoken',
-        'resetpassused',
-        'resetpassexpires',
-        'updatedAt',
-      ],
-    },
+    attributes: [
+      'username',
+      'volume',
+      'authused',
+      'banned',
+      'avatar_path',
+      'phoneNumberVerified',
+      'identityVerified',
+      'bio',
+      'open_store',
+      'tradeCount',
+      'online',
+      'lastSeen',
+      'firstTrade',
+      'createdAt',
+      // [Sequelize.fn('AVG', Sequelize.col('userRated.rating')), 'avgRating'],
+    ],
+    order: [
+      [{ model: db.rating, as: 'userRating' }, 'id', 'DESC'],
+      [{ model: db.rating, as: 'userRated' }, 'id', 'DESC'],
+    ],
+    // group: ['userRated.id'],
     include: [
+      {
+        model: db.rating,
+        as: 'userRating',
+        attributes: [
+          'updatedAt',
+          'createdAt',
+          'id',
+          'feedback',
+          'rating',
+        ],
+        required: false,
+        include: [
+          {
+            model: db.user,
+            as: 'userRating',
+            attributes: [
+              'username',
+              'avatar_path',
+            ],
+          },
+        ],
+      },
+      {
+        model: db.rating,
+        as: 'userRated',
+        attributes: [
+          'updatedAt',
+          'createdAt',
+          'id',
+          'feedback',
+          'rating',
+        ],
+        include: [
+          {
+            model: db.user,
+            as: 'userRating',
+            attributes: [
+              'username',
+              'avatar_path',
+            ],
+          },
+        ],
+        // attributes: [],
+        required: false,
+      },
       {
         model: db.Referrals,
         required: false,
@@ -177,6 +219,13 @@ export const fetchSpecificUser = async (req, res, next) => {
     ],
   });
   console.log(res.locals.user);
+  console.log('end user controller fetchSpecificUser');
+  console.log('end user controller fetchSpecificUser');
+  console.log('end user controller fetchSpecificUser');
+  console.log('end user controller fetchSpecificUser');
+  console.log('end user controller fetchSpecificUser');
+  console.log('end user controller fetchSpecificUser');
+  console.log('end user controller fetchSpecificUser');
   console.log('end user controller fetchSpecificUser');
   next();
 };

@@ -9,9 +9,17 @@ export const uploadAvatar = async (req, res, next) => {
     isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   }, async (t) => {
     let data;
+    console.log(req.file.filename);
+    console.log('req.file.filename');
     try {
       data = await fs.readFile(`${process.cwd()}/uploads/temp/${req.file.filename}`);
     } catch (err) {
+      console.log('AVATAR_NOT_FOUND');
+      console.log('AVATAR_NOT_FOUND');
+      console.log('AVATAR_NOT_FOUND');
+      console.log('AVATAR_NOT_FOUND');
+      console.log('AVATAR_NOT_FOUND');
+      console.log('AVATAR_NOT_FOUND');
       throw new Error('AVATAR_NOT_FOUND');
     }
     try {
@@ -24,6 +32,13 @@ export const uploadAvatar = async (req, res, next) => {
     } catch (err) {
       throw new Error('UNABLE_TO_REMOVE_TEMP');
     }
+    console.log('USER FIND ONE ');
+    console.log('USER FIND ONE ');
+    console.log('USER FIND ONE ');
+    console.log('USER FIND ONE ');
+    console.log('USER FIND ONE ');
+    console.log('USER FIND ONE ');
+
     const user = await db.user.findOne({
       where: {
         id: req.user.id,
@@ -38,7 +53,13 @@ export const uploadAvatar = async (req, res, next) => {
       try {
         await fs.unlink(`${process.cwd()}/uploads/avatars/${user.avatar_path}`);
       } catch (err) {
-        // throw new Error('FAILED_REMOVING_OLD_AVATAR');
+        console.log('FAILED_REMOVING_OLD_AVATAR');
+        console.log('FAILED_REMOVING_OLD_AVATAR');
+        console.log('FAILED_REMOVING_OLD_AVATAR');
+        console.log('FAILED_REMOVING_OLD_AVATAR');
+        console.log('FAILED_REMOVING_OLD_AVATAR');
+
+        throw new Error('FAILED_REMOVING_OLD_AVATAR');
       }
     }
     const updatedUser = await user.update({

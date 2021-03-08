@@ -21,6 +21,7 @@ import {
   UPDATE_USER_PHONE,
   UPDATE_USER_IDENTITY,
   UPDATE_STORESTATUS,
+  UPDATE_FEEDBACK_USER,
 } from '../actions/types/index';
 
 const initialState = {

@@ -63,6 +63,9 @@ import deleteAd from './deleteAd';
 import location from './location';
 import selectedCurrency from './selectedCurrency';
 import createDispute from './createDispute';
+import createUserFeedback from './createUserFeedback';
+import removeUserFeedback from './removeUserFeedback';
+
 
 const rootReducer = combineReducers({
   form,
@@ -125,7 +128,8 @@ const rootReducer = combineReducers({
   location: location,
   selectedCurrency: selectedCurrency,
   createDispute: createDispute,
-  
+  createUserFeedback: createUserFeedback,
+  removeUserFeedback: removeUserFeedback,
 });
 
 export default rootReducer;

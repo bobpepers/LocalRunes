@@ -20,12 +20,12 @@ import {
   FormControl,
 } from '@material-ui/core';
 
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import {
   reduxForm,
   Field,
-  formValueSelector,
-  change,
+  // formValueSelector,
+  // change,
 } from 'redux-form';
 import {
   fetchAdminCurrencyData,
@@ -126,7 +126,14 @@ const AdminCurrencies = (props) => {
             />
           </Grid>
           <Grid item xs={2}>
-            <Button variant="contained" color="primary" type="submit" className="btn" fullWidth size="large">
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              className="btn"
+              fullWidth
+              size="large"
+            >
               Add
             </Button>
           </Grid>
@@ -189,7 +196,11 @@ const AdminCurrencies = (props) => {
                                           variant="contained"
                                           color="primary"
                                           size="large"
-                                          onClick={() => onSave({ id: currency.id, iso: unitIso, name: unitName })}
+                                          onClick={() => onSave({
+                                            id: currency.id,
+                                            iso: unitIso,
+                                            name: unitName,
+                                          })}
                                         >
                                           Save
                                         </Button>
@@ -209,7 +220,11 @@ const AdminCurrencies = (props) => {
                                         variant="contained"
                                         color="primary"
                                         size="large"
-                                        onClick={() => onEdit({ id: currency.id, currentUnitIso: currency.iso, currentUnitName: currency.currency_name })}
+                                        onClick={() => onEdit({
+                                          id: currency.id,
+                                          currentUnitIso: currency.iso,
+                                          currentUnitName: currency.currency_name,
+                                        })}
                                       >
                                         Edit
                                       </Button>
