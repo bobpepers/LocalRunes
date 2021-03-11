@@ -1,7 +1,7 @@
 import { createBrowserHistory } from 'history'
 import ReactGA from 'react-ga'
 
-ReactGA.initialize('UA-152643981-1')
+ReactGA.initialize('UA-191719099-1')
 
 const history = createBrowserHistory();
 

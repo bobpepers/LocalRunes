@@ -93,6 +93,29 @@ export const signin = async (req, res, next) => {
 
     console.log(req.user.id);
 
+    const activity = await db.activity.create({
+      earnerId: req.user.id,
+      type: 'login',
+      ipId: res.locals.ip[0].id,
+    });
+    res.locals.activity = await db.activity.findOne({
+      where: {
+        id: activity.id,
+      },
+      attributes: [
+        'createdAt',
+        'type',
+      ],
+      include: [
+        {
+          model: db.user,
+          as: 'earner',
+          required: false,
+          attributes: ['username'],
+        },
+      ],
+    });
+
     console.log('Login Successful');
 
     next();
@@ -100,6 +123,30 @@ export const signin = async (req, res, next) => {
 };
 
 export const destroySession = async (req, res, next) => {
+  const activity = await db.activity.create(
+    {
+      earnerId: req.user.id,
+      type: 'logout',
+      ipId: res.locals.ip[0].id,
+    },
+  );
+  res.locals.activity = await db.activity.findOne({
+    where: {
+      id: activity.id,
+    },
+    attributes: [
+      'createdAt',
+      'type',
+    ],
+    include: [
+      {
+        model: db.user,
+        as: 'earner',
+        required: false,
+        attributes: ['username'],
+      },
+    ],
+  });
   req.logOut();
   req.session.destroy();
   next();
@@ -195,6 +242,15 @@ export const signup = async (req, res, next) => {
       lock: t.LOCK.UPDATE,
     });
 
+    const activity = await db.activity.create({
+      earnerId: newUser.id,
+      type: 'register',
+      ipId: res.locals.ip[0].id,
+    }, {
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
+
     t.afterCommit(() => {
       sendVerificationEmail(email.toLowerCase(), firstname, newUser.authtoken);
       console.log('commited');
@@ -223,6 +279,7 @@ export const resendVerification = (req, res, next) => {
       ],
     },
   }).then(async (user) => {
+    console.log('wut');
     const verificationToken = await generateVerificationToken(24);
     if (user.authused === true) {
       res.json({ success: false });
@@ -234,6 +291,11 @@ export const resendVerification = (req, res, next) => {
     }).then((updatedUser) => {
       const { firstname, email, authtoken } = updatedUser;
       sendVerificationEmail(email.toLowerCase(), firstname, authtoken);
+      console.log('RESEND THE FRKN EMAIL');
+      console.log('RESEND THE FRKN EMAIL');
+      console.log('RESEND THE FRKN EMAIL');
+      console.log('RESEND THE FRKN EMAIL');
+      console.log('RESEND THE FRKN EMAIL');
       res.json({ success: true });
     }).catch((err) => {
       next(err);
@@ -275,6 +337,12 @@ export const verifyEmail = (req, res, next) => {
       role: 1,
     }).then(async (updatedUser) => {
       res.locals.user = updatedUser;
+      const activity = await db.activity.create({
+        earnerId: updatedUser.id,
+        type: 'registerVerified',
+        ipId: res.locals.ip[0].id,
+      });
+
       next();
     }).catch((err) => {
       res.locals.error = err.message;

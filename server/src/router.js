@@ -835,11 +835,11 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     });
 
   app.post('/api/resend-verify-code',
-    IsAuthenticated,
+    // IsAuthenticated,
     insertIp,
-    rateLimiterMiddlewarePhone,
-    ensuretfa,
-    updateLastSeen,
+    // rateLimiterMiddlewarePhone,
+    // ensuretfa,
+    // updateLastSeen,
     resendVerification);
 
   app.post('/api/verifyphonecode',
