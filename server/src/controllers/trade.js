@@ -101,6 +101,8 @@ export const startTrade = async (req, res, next) => {
       lock: t.LOCK.UPDATE,
     });
 
+    // ADD INIT ACTIVITY
+
     res.locals.trade = trade;
     t.afterCommit(() => {
       next();

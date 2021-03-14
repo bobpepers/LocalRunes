@@ -1384,6 +1384,8 @@ export const adminCompleteDispute = async (req, res, next) => {
       throw new Error('TRADE_NOT_EXIST');
     }
 
+    console.log('1');
+
     const dispute = await db.dispute.findOne({
       where: {
         id: trade.dispute[0].id,
@@ -1394,6 +1396,7 @@ export const adminCompleteDispute = async (req, res, next) => {
     if (!dispute) {
       throw new Error('DISPUTE_NOT_FOUND');
     }
+    console.log('2');
     if (req.body.side === "trader") {
       if (trade.postAd.type === 'sell') {
         const walletOne = await db.wallet.findOne({
