@@ -111,7 +111,11 @@ export const addPostAd = async (req, res, next) => {
 export const fetchPostAd = async (req, res, next) => {
   console.log('(req.body.type)');
   console.log(req.body.type);
-  const userOptions = {};
+  const userOptions = {
+    lastSeen: {
+      [Op.gte]: new Date(Date.now() - (3 * 24 * 60 * 60 * 1000)),
+    },
+  };
   const mainOptions = {
     type: req.body.type,
     active: true,
@@ -186,6 +190,17 @@ export const fetchPostAd = async (req, res, next) => {
 
   console.log(options);
   console.log(options.include[0]);
+  console.log('voooor');
+  console.log('voooor');
+  console.log('voooor');
+  console.log('voooor');
+  console.log('voooor');
+  console.log('voooor');
+  console.log('voooor');
+  console.log('voooor');
+  console.log('voooor');
+  console.log('voooor');
+  console.log('voooor');
 
   if (req.body.type === 'buy') {
     res.locals.buy = await db.postAd.findAll(options);
