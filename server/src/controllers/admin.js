@@ -489,36 +489,36 @@ export const acceptWithdraw = async (req, res, next) => {
         lock: t.LOCK.UPDATE,
       },
     );
-    // const activity = await db.activity.create(
-    //   {
-    //     spenderId: transaction.address.wallet.userId,
-    //     type: 'withdrawAccepted',
-    //     txId: transaction.id,
-    //   },
-    //   {
-    //     transaction: t,
-    //     lock: t.LOCK.UPDATE,
-    //   },
-    // );
-    // res.locals.activity = await db.activity.findOne({
-    //   where: {
-    //     id: activity.id,
-    //   },
-    //   attributes: [
-    //     'createdAt',
-    //     'type',
-    //   ],
-    //   include: [
-    //     {
-    //       model: db.user,
-    //       as: 'spender',
-    //       required: false,
-    //       attributes: ['username'],
-    //     },
-    //   ],
-    //   transaction: t,
-    //   lock: t.LOCK.UPDATE,
-    // });
+    const activity = await db.activity.create(
+      {
+        spenderId: transaction.address.wallet.userId,
+        type: 'withdrawAccepted',
+        txId: transaction.id,
+      },
+      {
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      },
+    );
+    res.locals.activity = await db.activity.findOne({
+      where: {
+        id: activity.id,
+      },
+      attributes: [
+        'createdAt',
+        'type',
+      ],
+      include: [
+        {
+          model: db.user,
+          as: 'spender',
+          required: false,
+          attributes: ['username'],
+        },
+      ],
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
     t.afterCommit(() => {
       console.log('complete');
       next();
@@ -591,36 +591,36 @@ export const rejectWithdraw = async (req, res, next) => {
       },
     );
 
-    // const activity = await db.activity.create(
-    //   {
-    //     spenderId: transaction.address.wallet.userId,
-    //     type: 'withdrawRejected',
-    //     txId: res.locals.transaction.id,
-    //   },
-    //   {
-    //     transaction: t,
-    //     lock: t.LOCK.UPDATE,
-    //   },
-    // );
-    // res.locals.activity = await db.activity.findOne({
-    //   where: {
-    //     id: activity.id,
-    //   },
-    //   attributes: [
-    //     'createdAt',
-    //     'type',
-    //   ],
-    //   include: [
-    //     {
-    //       model: db.user,
-    //       as: 'spender',
-    //       required: false,
-    //       attributes: ['username'],
-    //     },
-    //   ],
-    //   transaction: t,
-    //   lock: t.LOCK.UPDATE,
-    // });
+    const activity = await db.activity.create(
+      {
+        spenderId: transaction.address.wallet.userId,
+        type: 'withdrawRejected',
+        txId: res.locals.transaction.id,
+      },
+      {
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      },
+    );
+    res.locals.activity = await db.activity.findOne({
+      where: {
+        id: activity.id,
+      },
+      attributes: [
+        'createdAt',
+        'type',
+      ],
+      include: [
+        {
+          model: db.user,
+          as: 'spender',
+          required: false,
+          attributes: ['username'],
+        },
+      ],
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
 
     t.afterCommit(() => {
       console.log('Withdrawal Rejected');
@@ -726,141 +726,6 @@ export const fetchAdminReviewBanners = async (req, res, next) => {
           as: 'user',
         },
       ],
-    });
-    next();
-  } catch (error) {
-    console.log(error);
-    res.locals.error = error;
-    next();
-  }
-};
-
-export const acceptAdminReviewPublisher = async (req, res, next) => {
-  await db.sequelize.transaction({
-    isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
-  }, async (t) => {
-    const publisher = await db.publisher.findOne({
-      where: {
-        id: req.body.id,
-      },
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    res.locals.publishers = await publisher.update({
-      review: 'accepted',
-      adzones_amount: 11,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    const adzone1 = await db.adzone.create({
-      size: '120x60',
-      publisherId: publisher.id,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    const adzone2 = await db.adzone.create({
-      size: '120x600',
-      publisherId: publisher.id,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    const adzone3 = await db.adzone.create({
-      size: '125x125',
-      publisherId: publisher.id,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    const adzone4 = await db.adzone.create({
-      size: '160x600',
-      publisherId: publisher.id,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    const adzone5 = await db.adzone.create({
-      size: '250x250',
-      publisherId: publisher.id,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    const adzone6 = await db.adzone.create({
-      size: '300x250',
-      publisherId: publisher.id,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    const adzone7 = await db.adzone.create({
-      size: '300x600',
-      publisherId: publisher.id,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    const adzone8 = await db.adzone.create({
-      size: '320x50',
-      publisherId: publisher.id,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    const adzone9 = await db.adzone.create({
-      size: '728x90',
-      publisherId: publisher.id,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    const adzone10 = await db.adzone.create({
-      size: '970x90',
-      publisherId: publisher.id,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    const adzone11 = await db.adzone.create({
-      size: '970x250',
-      publisherId: publisher.id,
-    }, {
-      transaction: t,
-      lock: t.LOCK.UPDATE,
-    });
-
-    t.afterCommit(() => {
-      next();
-    });
-  }).catch((err) => {
-    res.locals.error = err.message;
-    next();
-  });
-};
-
-export const rejectAdminReviewPublisher = async (req, res, next) => {
-  try {
-    const publisher = await db.publisher.findOne({
-      where: {
-        id: req.body.id,
-      },
-    });
-    res.locals.publishers = await publisher.update({
-      review: 'rejected',
     });
     next();
   } catch (error) {

@@ -70,35 +70,66 @@ const updatePrice = async (io) => {
 
       const promises = [];
 
-      currencies.forEach(async (currency) => {
-        console.log('loop 2');
-        if (currency.iso !== null || currency.iso !== "USD") {
-          const options = {
-            method: 'GET',
-            url: 'https://currency-exchange.p.rapidapi.com/exchange',
-            params: { from: 'USD', to: currency.iso, q: '1.0' },
-            headers: {
-              'x-rapidapi-key': '8528ecd0edmsh41097fa10b02dfep1924ddjsn50d8487ba8c9',
-              'x-rapidapi-host': 'currency-exchange.p.rapidapi.com',
+      const openExchangeOptions = {
+        method: 'GET',
+        url: 'https://openexchangerates.org/api/latest.json?app_id=7fe614bf9a0f4d8cb7dd72a468a9ef59',
+      };
+
+      axios.request(openExchangeOptions).then(async (response) => {
+        console.log('response.data.openExchangeRates');
+        console.log(response.data.rates);
+        Object.keys(response.data.rates).forEach(async (currency) => {
+          console.log('loop 2');
+          const currenciesExist = await db.currency.findOne({
+            where: {
+              iso: currency,
             },
-          };
-          promises.push(
-            axios.request(options).then(async (response) => {
-              console.log('response.data');
-              console.log(response.data);
-              const priceRecord = await db.priceInfo.update({
-                price: (Number(currentPrice.price) * Number(response.data)).toFixed(8).toString(),
-              }, {
-                where: {
-                  currency: currency.iso,
-                },
-              });
-            }).catch((error) => {
-              console.error(error);
-            }),
-          );
-        }
+          });
+          if (currenciesExist) {
+            console.log(currency);
+            console.log(currency, response.data.rates[currency]);
+            const priceRecord = await db.priceInfo.update({
+              price: (Number(currentPrice.price) * Number(response.data.rates[currency])).toFixed(8).toString(),
+            }, {
+              where: {
+                currency,
+              },
+            });
+          }
+        });
+      }).catch((error) => {
+        console.error(error);
       });
+
+      // currencies.forEach(async (currency) => {
+      //  console.log('loop 2');
+      //  if (currency.iso !== null || currency.iso !== "USD") {
+      //    const options = {
+      //      method: 'GET',
+      //      url: 'https://currency-exchange.p.rapidapi.com/exchange',
+      //      params: { from: 'USD', to: currency.iso, q: '1.0' },
+      //      headers: {
+      //        'x-rapidapi-key': '8528ecd0edmsh41097fa10b02dfep1924ddjsn50d8487ba8c9',
+      //        'x-rapidapi-host': 'currency-exchange.p.rapidapi.com',
+      //      },
+      //    };
+      //    promises.push(
+      //      axios.request(options).then(async (response) => {
+      //        console.log('response.data');
+      //        console.log(response.data);
+      //       const priceRecord = await db.priceInfo.update({
+      //          price: (Number(currentPrice.price) * Number(response.data)).toFixed(8).toString(),
+      //        }, {
+      //          where: {
+      //            currency: currency.iso,
+      //          },
+      //        });
+      //      }).catch((error) => {
+      //        console.error(error);
+      //      }),
+      //    );
+      //  }
+      // });
 
       Promise.all(promises).then(async () => {
         const priceRecords = await db.priceInfo.findAll({});

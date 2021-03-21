@@ -78,39 +78,39 @@ export const withdraw = async (req, res, next) => {
       lock: t.LOCK.UPDATE,
     });
     console.log('created transaction');
-    // const activity = await db.activity.create(
-    //   {
-    //     spenderId: wallet.userId,
-    //     type: 'withdrawRequested',
-    //     amount: transaction.amount,
-    //     spender_balance: wallet.available + wallet.locked,
-    //     ipId: res.locals.ipId,
-    //   },
-    //   {
-    //     transaction: t,
-    //     lock: t.LOCK.UPDATE,
-    //   },
-    // );
-    // console.log('created activity');
-    // res.locals.activity = await db.activity.findOne({
-    //   where: {
-    //     id: activity.id,
-    //   },
-    //   attributes: [
-    //     'createdAt',
-    //     'type',
-    //   ],
-    //   include: [
-    //     {
-    //       model: db.user,
-    //       as: 'spender',
-    //       required: false,
-    //       attributes: ['username'],
-    //     },
-    //   ],
-    //   transaction: t,
-    //   lock: t.LOCK.UPDATE,
-    // });
+    const activity = await db.activity.create(
+      {
+        spenderId: wallet.userId,
+        type: 'withdrawRequested',
+        amount: transaction.amount,
+        spender_balance: wallet.available + wallet.locked,
+        ipId: res.locals.ipId,
+      },
+      {
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      },
+    );
+    console.log('created activity');
+    res.locals.activity = await db.activity.findOne({
+      where: {
+        id: activity.id,
+      },
+      attributes: [
+        'createdAt',
+        'type',
+      ],
+      include: [
+        {
+          model: db.user,
+          as: 'spender',
+          required: false,
+          attributes: ['username'],
+        },
+      ],
+      transaction: t,
+      lock: t.LOCK.UPDATE,
+    });
     console.log('end withdrawal request');
     t.afterCommit(() => {
       res.locals.wallet = wallet;
