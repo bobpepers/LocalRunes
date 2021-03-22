@@ -72,7 +72,7 @@ const updatePrice = async (io) => {
 
       const openExchangeOptions = {
         method: 'GET',
-        url: 'https://openexchangerates.org/api/latest.json?app_id=7fe614bf9a0f4d8cb7dd72a468a9ef59',
+        url: 'https://openexchangerates.org/api/latest.json?app_id=7fe614bf9a0f4d8cb7dd72a468a9ef59&show_alternative=1',
       };
 
       axios.request(openExchangeOptions).then(async (response) => {
