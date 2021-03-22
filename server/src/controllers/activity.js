@@ -138,20 +138,6 @@ export const fetchRecentUserActivity = async (req, res, next) => {
           required: false,
         },
         {
-          model: db.publisher,
-          as: 'publisher',
-          required: false,
-          attributes: ['id', 'subdomain'],
-          include: [
-            {
-              model: db.domain,
-              as: 'domain',
-              required: false,
-              attributes: ['domain'],
-            },
-          ],
-        },
-        {
           model: db.user,
           as: 'spender',
           required: false,
@@ -170,38 +156,10 @@ export const fetchRecentUserActivity = async (req, res, next) => {
           attributes: ['address'],
         },
         {
-          model: db.domain,
-          as: 'domainActivity',
-          required: false,
-          attributes: ['domain'],
-        },
-        {
           model: db.transaction,
           as: 'txActivity',
           required: false,
           attributes: ['txid'],
-        },
-        {
-          model: db.order,
-          as: 'order',
-          required: false,
-          attributes: ['price', 'amount', 'filled'],
-          include: [
-            {
-              model: db.webslot,
-              as: 'webslot',
-              required: false,
-              attributes: ['protocol', 'subdomain', 'path', 'search'],
-              include: [
-                {
-                  model: db.domain,
-                  as: 'domain',
-                  required: false,
-                  attributes: ['domain', 'views'],
-                },
-              ],
-            },
-          ],
         },
       ],
     });

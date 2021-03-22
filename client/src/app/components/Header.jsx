@@ -32,6 +32,7 @@ import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import FaceIcon from '@material-ui/icons/Face';
 import SettingsIcon from '@material-ui/icons/Settings';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import MobileNav from '../assets/images/mobileNav.svg';
 import Notifications from './Notifications';
 import {
@@ -450,11 +451,24 @@ const Header = (props) => {
                             <Link
                               style={{ color: '#000' }}
                               className="nav-link"
-                              to="/dashboard"
+                              to="/advertisements"
                             >
                               <DashboardIcon />
                               {' '}
-                              Dashboard
+                              Advertisements
+                            </Link>
+                          </div>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          <div>
+                            <Link
+                              style={{ color: '#000' }}
+                              className="nav-link"
+                              to="/activity"
+                            >
+                              <AccessTimeIcon />
+                              {' '}
+                              Activity
                             </Link>
                           </div>
                         </MenuItem>

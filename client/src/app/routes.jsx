@@ -36,7 +36,7 @@ import toggleTheme from './helpers/toggleTheme';
 
 import Deposit from './components/Deposit';
 import Withdraw from './components/Withdraw';
-import Dashboard from './views/Dashboard';
+import Advertisements from './views/Advertisements';
 import Home from './views/Home';
 import BuyRunes from './views/BuyRunes';
 import SellRunes from './views/SellRunes';
@@ -55,6 +55,7 @@ import TradeRequested from './views/TradeRequested';
 import TradeComplete from './views/TradeComplete';
 import TradeCanceled from './views/TradeCanceled';
 import Settings from './views/Settings';
+import Activity from './views/Activity';
 
 const Routes = (props) => {
   const {
@@ -80,8 +81,12 @@ const Routes = (props) => {
         component={requireAuth(withTracker(SellRunes))}
       />
       <Route
-        path="/dashboard"
-        component={requireAuth(withTracker(Dashboard))}
+        path="/advertisements"
+        component={requireAuth(withTracker(Advertisements))}
+      />
+      <Route
+        path="/activity"
+        component={requireAuth(withTracker(Activity))}
       />
       <Route
         path="/signin"
