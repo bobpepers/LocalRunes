@@ -93,7 +93,7 @@ export function signinUser(props) {
           type: AUTH_USER,
           payload: response,
         });
-        window.location.href = '/dashboard';
+        window.location.href = '/advertisements';
         // history.push('/dashboard');
       })
       .catch((error) => {

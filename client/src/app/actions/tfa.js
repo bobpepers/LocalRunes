@@ -119,7 +119,7 @@ export function unlocktfa(props) {
           payload: response,
         });
         // history.push('/dashboard');
-        window.location.href = '/dashboard';
+        window.location.href = '/advertisements';
       })
       .catch((error) => {
         console.log(error);

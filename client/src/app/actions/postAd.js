@@ -41,7 +41,7 @@ export function addPostAdAction(obj) {
             },
           },
         });
-        history.push('/dashboard');
+        history.push('/advertisements');
       }).catch((error) => {
         if (error.response) {
           // client received an error response (5xx, 4xx)
