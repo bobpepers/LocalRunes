@@ -963,8 +963,8 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
 
         const activity = await db.activity.create({
           tradeId: trade.id,
-          spenderId: trade.postAd.userId,
-          earnerId: trade.userId,
+          spenderId: trade.userId,
+          earnerId: trade.postAd.userId,
           spender_balance: res.locals.walletUserTwo.available + res.locals.walletUserTwo.locked,
           earner_balance: res.locals.walletUserOne.available + res.locals.walletUserOne.locked,
           type: 'buyTradeComplete',

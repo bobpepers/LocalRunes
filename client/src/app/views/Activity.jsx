@@ -241,6 +241,126 @@ const MyActivity = (props) => {
           amount: -Math.abs(new BigNumber(userActivity.amount).dividedBy(1e8).toString()) || '',
         };
       }
+      if (userActivity.type === 'buyTradeInit') {
+        return {
+          date: userActivity.createdAt,
+          type: 'Buy Trade Initialized',
+          // ip: userActivity.ip ? userActivity.ip.address : '',
+          ip: '',
+          balance: new BigNumber(userActivity.spender_balance).dividedBy(1e8).toString() || '',
+          amount: -Math.abs(new BigNumber(userActivity.amount).dividedBy(1e8).toString()) || '',
+        };
+      }
+      if (userActivity.type === 'sellTradeInit') {
+        return {
+          date: userActivity.createdAt,
+          type: 'Sell Trade Initialized',
+          // ip: userActivity.ip ? userActivity.ip.address : '',
+          ip: '',
+          balance: new BigNumber(userActivity.spender_balance).dividedBy(1e8).toString() || '',
+          amount: -Math.abs(new BigNumber(userActivity.amount).dividedBy(1e8).toString()) || '',
+        };
+      }
+      if (userActivity.type === 'sellTradeRequested') {
+        return {
+          date: userActivity.createdAt,
+          type: 'Sell Trade Requested',
+          // ip: userActivity.ip ? userActivity.ip.address : '',
+          ip: '',
+          balance: new BigNumber(userActivity.spender_balance).dividedBy(1e8).toString() || '',
+          amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+        };
+      }
+      if (userActivity.type === 'buyTradeRequested') {
+        return {
+          date: userActivity.createdAt,
+          type: 'Buy Trade Requested',
+          // ip: userActivity.ip ? userActivity.ip.address : '',
+          ip: '',
+          balance: new BigNumber(userActivity.spender_balance).dividedBy(1e8).toString() || '',
+          amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+        };
+      }
+      if (userActivity.type === 'buyTradeStart') {
+        if (user.data.username === userActivity.spender.username) {
+          return {
+            date: userActivity.createdAt,
+            type: 'Buy Trade Started',
+            // ip: userActivity.ip ? userActivity.ip.address : '',
+            ip: '',
+            balance: new BigNumber(userActivity.spender_balance).dividedBy(1e8).toString() || '',
+            amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+          };
+        }
+        return {
+          date: userActivity.createdAt,
+          type: 'Buy Trade Started',
+          // ip: userActivity.ip ? userActivity.ip.address : '',
+          ip: '',
+          balance: new BigNumber(userActivity.earner_balance).dividedBy(1e8).toString() || '',
+          amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+        };
+      }
+      if (userActivity.type === 'sellTradeStart') {
+        if (user.data.username === userActivity.spender.username) {
+          return {
+            date: userActivity.createdAt,
+            type: 'Sell Trade Started',
+            // ip: userActivity.ip ? userActivity.ip.address : '',
+            ip: '',
+            balance: new BigNumber(userActivity.spender_balance).dividedBy(1e8).toString() || '',
+            amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+          };
+        }
+        return {
+          date: userActivity.createdAt,
+          type: 'Sell Trade Started',
+          // ip: userActivity.ip ? userActivity.ip.address : '',
+          ip: '',
+          balance: new BigNumber(userActivity.earner_balance).dividedBy(1e8).toString() || '',
+          amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+        };
+      }
+      if (userActivity.type === 'sellTradeComplete') {
+        if (user.data.username === userActivity.spender.username) {
+          return {
+            date: userActivity.createdAt,
+            type: 'Sell Trade Completed',
+            // ip: userActivity.ip ? userActivity.ip.address : '',
+            ip: '',
+            balance: new BigNumber(userActivity.spender_balance).dividedBy(1e8).toString() || '',
+            amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+          };
+        }
+        return {
+          date: userActivity.createdAt,
+          type: 'Sell Trade Completed',
+          // ip: userActivity.ip ? userActivity.ip.address : '',
+          ip: '',
+          balance: new BigNumber(userActivity.earner_balance).dividedBy(1e8).toString() || '',
+          amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+        };
+      }
+      if (userActivity.type === 'buyTradeComplete') {
+        if (user.data.username === userActivity.spender.username) {
+          return {
+            date: userActivity.createdAt,
+            type: 'Buy Trade Completed',
+            // ip: userActivity.ip ? userActivity.ip.address : '',
+            ip: '',
+            balance: new BigNumber(userActivity.spender_balance).dividedBy(1e8).toString() || '',
+            amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+          };
+        }
+        return {
+          date: userActivity.createdAt,
+          type: 'Buy Trade Completed',
+          // ip: userActivity.ip ? userActivity.ip.address : '',
+          ip: '',
+          balance: new BigNumber(userActivity.earner_balance).dividedBy(1e8).toString() || '',
+          amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+        };
+      }
 
       /// Check under here for changes
       if (userActivity.spender) {
