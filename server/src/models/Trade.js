@@ -65,6 +65,7 @@ module.exports = (sequelize, DataTypes) => {
     TradeModel.belongsTo(model.postAd, { as: 'postAd' });
     TradeModel.hasMany(model.messages, { as: 'messages' });
     TradeModel.hasMany(model.dispute, { as: 'dispute' });
+    TradeModel.hasMany(model.activity, { as: 'activity' });
   };
 
   // 5: Wallet has many addresses

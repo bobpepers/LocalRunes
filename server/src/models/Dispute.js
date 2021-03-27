@@ -43,6 +43,9 @@ module.exports = (sequelize, DataTypes) => {
     DisputeModel.belongsTo(model.user, {
       as: 'releasedTo',
     });
+    DisputeModel.hasMany(model.activity, {
+      as: 'activity',
+    });
   };
 
   return DisputeModel;

@@ -103,6 +103,31 @@ export const startTrade = async (req, res, next) => {
 
     // ADD INIT ACTIVITY
 
+    if (postAd.type === 'buy') {
+      const activity = await db.activity.create({
+        tradeId: trade.id,
+        spenderId: postAd.userId,
+        earnerId: trade.userId,
+        type: 'buyTradeInit',
+        ipId: res.locals.ip[0].id,
+      }, {
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      });
+    }
+    if (postAd.type === 'sell') {
+      const activity = await db.activity.create({
+        tradeId: trade.id,
+        spenderId: trade.userId,
+        earnerId: postAd.userId,
+        type: 'sellTradeInit',
+        ipId: res.locals.ip[0].id,
+      }, {
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      });
+    }
+
     res.locals.trade = trade;
     t.afterCommit(() => {
       next();
@@ -397,6 +422,34 @@ export const secondTrade = async (req, res, next) => {
       console.log(margin);
       console.log(tradePrice);
 
+      if (trade.postAd.type === 'buy') {
+        const activity = await db.activity.create({
+          tradeId: trade.id,
+          spenderId: trade.postAd.userId,
+          earnerId: trade.userId,
+          amounnt: trade.amount,
+          type: 'buyTradeRequested',
+          ipId: res.locals.ip[0].id,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      }
+
+      if (trade.postAd.type === 'sell') {
+        const activity = await db.activity.create({
+          tradeId: trade.id,
+          spenderId: trade.userId,
+          earnerId: trade.postAd.userId,
+          amounnt: trade.amount,
+          type: 'sellTradeRequested',
+          ipId: res.locals.ip[0].id,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+      }
+
       await trade.update({
         type: 'requested',
         reponseTime: endDate,
@@ -452,6 +505,30 @@ export const cancelCurrentTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+        if (trade.postAd.type === 'buy') {
+          const activity = await db.activity.create({
+            tradeId: trade.id,
+            spenderId: trade.postAd.userId,
+            earnerId: trade.userId,
+            type: 'buyTradeCanceled',
+            ipId: res.locals.ip[0].id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
+        if (trade.postAd.type === 'sell') {
+          const activity = await db.activity.create({
+            tradeId: trade.id,
+            spenderId: trade.userId,
+            earnerId: trade.postAd.userId,
+            type: 'sellTradeCanceled',
+            ipId: res.locals.ip[0].id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
         res.locals.trade = trade;
         return next();
       }
@@ -462,6 +539,30 @@ export const cancelCurrentTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+        if (trade.postAd.type === 'buy') {
+          const activity = await db.activity.create({
+            tradeId: trade.id,
+            spenderId: trade.postAd.userId,
+            earnerId: trade.userId,
+            type: 'buyTradeCanceled',
+            ipId: res.locals.ip[0].id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
+        if (trade.postAd.type === 'sell') {
+          const activity = await db.activity.create({
+            tradeId: trade.id,
+            spenderId: trade.userId,
+            earnerId: trade.postAd.userId,
+            type: 'sellTradeCanceled',
+            ipId: res.locals.ip[0].id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
         res.locals.trade = trade;
         return next();
       }
@@ -474,6 +575,30 @@ export const cancelCurrentTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+        if (trade.postAd.type === 'buy') {
+          const activity = await db.activity.create({
+            tradeId: trade.id,
+            spenderId: trade.postAd.userId,
+            earnerId: trade.userId,
+            type: 'buyTradeCanceled',
+            ipId: res.locals.ip[0].id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
+        if (trade.postAd.type === 'sell') {
+          const activity = await db.activity.create({
+            tradeId: trade.id,
+            spenderId: trade.userId,
+            earnerId: trade.postAd.userId,
+            type: 'sellTradeCanceled',
+            ipId: res.locals.ip[0].id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
         res.locals.trade = trade;
         return next();
       }
@@ -484,6 +609,30 @@ export const cancelCurrentTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+        if (trade.postAd.type === 'buy') {
+          const activity = await db.activity.create({
+            tradeId: trade.id,
+            spenderId: trade.postAd.userId,
+            earnerId: trade.userId,
+            type: 'buyTradeCanceled',
+            ipId: res.locals.ip[0].id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
+        if (trade.postAd.type === 'sell') {
+          const activity = await db.activity.create({
+            tradeId: trade.id,
+            spenderId: trade.userId,
+            earnerId: trade.postAd.userId,
+            type: 'sellTradeCanceled',
+            ipId: res.locals.ip[0].id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
         res.locals.trade = trade;
         return next();
       }
@@ -597,6 +746,18 @@ export const acceptCurrentTrade = async (req, res, next) => {
         transaction: t,
         lock: t.LOCK.UPDATE,
       });
+      const activity = await db.activity.create({
+        tradeId: trade.id,
+        spenderId: trade.postAd.userId,
+        earnerId: trade.userId,
+        amount: trade.amount,
+        spender_balance: walletBuy.available + walletBuy.locked,
+        type: 'sellTradeStart',
+        ipId: res.locals.ip[0].id,
+      }, {
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      });
 
       return next();
     }
@@ -618,6 +779,19 @@ export const acceptCurrentTrade = async (req, res, next) => {
       res.locals.wallet = await walletSell.update({
         available: walletSell.available - trade.amount,
         locked: walletSell.locked + trade.amount,
+      }, {
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      });
+
+      const activity = await db.activity.create({
+        tradeId: trade.id,
+        spenderId: trade.userId,
+        earnerId: trade.postAd.userId,
+        amount: trade.amount,
+        spender_balance: walletSell.available + walletSell.locked,
+        type: 'buyTradeStart',
+        ipId: res.locals.ip[0].id,
       }, {
         transaction: t,
         lock: t.LOCK.UPDATE,
@@ -773,6 +947,7 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           console.log('not enough locked funds');
           throw new Error('NOT_ENOUGH_LOCKED_FUNDS');
         }
+
         res.locals.walletUserTwo = await walletUserTwoSell.update({
           locked: walletUserTwoSell.locked - trade.amount,
         }, {
@@ -781,6 +956,20 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
         });
         res.locals.walletUserOne = await walletUserOneSell.update({
           available: walletUserOneSell.available + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        const activity = await db.activity.create({
+          tradeId: trade.id,
+          spenderId: trade.postAd.userId,
+          earnerId: trade.userId,
+          spender_balance: res.locals.walletUserTwo.available + res.locals.walletUserTwo.locked,
+          earner_balance: res.locals.walletUserOne.available + res.locals.walletUserOne.locked,
+          type: 'buyTradeComplete',
+          amount: trade.amount,
+          // ipId: res.locals.ip[0].id,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
@@ -878,6 +1067,20 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
 
         res.locals.walletUserOne = await walletUserOne.update({
           available: walletUserOne.available + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        const activity = await db.activity.create({
+          tradeId: trade.id,
+          spenderId: trade.postAd.userId,
+          earnerId: trade.userId,
+          spender_balance: res.locals.walletUserTwo.available + res.locals.walletUserTwo.locked,
+          earner_balance: res.locals.walletUserOne.available + res.locals.walletUserOne.locked,
+          type: 'sellTradeComplete',
+          amount: trade.amount,
+          // ipId: res.locals.ip[0].id,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
@@ -1094,6 +1297,17 @@ export const cancelCurrentMainTrade = async (req, res, next) => {
           lock: t.LOCK.UPDATE,
         });
 
+        const activity = await db.activity.create({
+          tradeId: trade.id,
+          spenderId: trade.postAd.userId,
+          earnerId: trade.userId,
+          type: 'buyTradeCanceled',
+          ipId: res.locals.ip[0].id,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
         res.locals.trade = await trade.update({
           type: 'canceled',
         }, {
@@ -1116,6 +1330,17 @@ export const cancelCurrentMainTrade = async (req, res, next) => {
         res.locals.walletUserTwo = await walletUserTwo.update({
           locked: walletUserTwo.locked - trade.amount,
           available: walletUserTwo.available + trade.amount,
+        }, {
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        const activity = await db.activity.create({
+          tradeId: trade.id,
+          spenderId: trade.userId,
+          earnerId: trade.postAd.userId,
+          type: 'sellTradeCanceled',
+          ipId: res.locals.ip[0].id,
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
@@ -1308,6 +1533,7 @@ export const disputeTrade = async (req, res, next) => {
 
     console.log();
     console.log('einde check disputed trade');
+    // if ()
 
     t.afterCommit(() => {
       next();
