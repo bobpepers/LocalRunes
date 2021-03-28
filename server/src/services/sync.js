@@ -94,16 +94,6 @@ const syncTransactions = async (startBlock, endBlock, io, onlineUsers) => {
       const transaction = await getInstance().getTransaction(trans.txid);
       let updatedTransaction;
       let updatedWallet;
-      console.log('66666666666666666666');
-      console.log('66666666666666666666');
-      console.log('66666666666666666666');
-      console.log('66666666666666666666');
-      console.log('66666666666666666666');
-      console.log('66666666666666666666');
-      console.log('66666666666666666666');
-      console.log('66666666666666666666');
-      console.log('66666666666666666666');
-      console.log('66666666666666666666');
       console.log(transaction.confirmations);
       if (transaction.confirmations < 10) {
         updatedTransaction = await trans.update({
@@ -116,8 +106,8 @@ const syncTransactions = async (startBlock, endBlock, io, onlineUsers) => {
       if (transaction.confirmations >= 10) {
         if (transaction.details[0].category === 'send') {
           console.log(transaction.amount);
-          console.log(((transaction.amount * 1e8) / 0.95));
-          const removeLockedAmount = Math.abs(((transaction.amount * 1e8) / 0.95));
+          console.log(((transaction.amount * 1e8) / 0.99));
+          const removeLockedAmount = Math.abs(((transaction.amount * 1e8) / 0.99));
           console.log('removeLockedAmount');
           console.log(removeLockedAmount);
           updatedWallet = await wallet.update({
