@@ -42,6 +42,7 @@ import trustUser from './controllers/trust';
 import blockUser from './controllers/blocked';
 
 import walletNotify from './controllers/walletNotify';
+import updatePrice from './helpers/updatePrice';
 
 import {
   isAdmin,
@@ -71,6 +72,8 @@ import {
   fetchAdminPendingDisputeCount,
   fetchAdminCurrentTrade,
   adminCompleteDispute,
+  fetchAdminMargin,
+  updateAdminMargin,
 } from './controllers/admin';
 
 import {
@@ -532,6 +535,28 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
+  app.get('/api/admin/margin',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    fetchAdminMargin,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.margin) {
+        console.log(res.locals.margin);
+        res.json({
+          margin: res.locals.margin,
+        });
+      }
+    });
+
   app.get('/api/admin/countries/all',
     IsAuthenticated,
     isAdmin,
@@ -791,6 +816,30 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         });
       }
     });
+
+  app.post('/api/admin/margin/update',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    updateAdminMargin,
+    (req, res) => {
+      updatePrice(io);
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.margin) {
+        // console.log(res.locals.currency);
+        res.json({
+          margin: res.locals.margin,
+        });
+      }
+    });
+
   app.post('/api/admin/country/update',
     IsAuthenticated,
     isAdmin,

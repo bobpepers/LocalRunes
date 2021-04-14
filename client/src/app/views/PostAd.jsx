@@ -25,6 +25,7 @@ import {
   formValueSelector,
   change,
 } from 'redux-form';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import * as actions from '../actions/auth';
 
 import {
@@ -183,6 +184,7 @@ const PostAd = (props) => {
     marginFieldValue,
     priceFieldValue,
     currencyFieldValue,
+    postAd,
 
   } = props;
   const dispatch = useDispatch();
@@ -198,18 +200,6 @@ const PostAd = (props) => {
   useEffect(() => {}, [paymentMethods, currencies]);
 
   useEffect(() => {
-    console.log('POST ADD LOCATION');
-    console.log('POST ADD LOCATION');
-    console.log('POST ADD LOCATION');
-    console.log('POST ADD LOCATION');
-    console.log('POST ADD LOCATION');
-    console.log('POST ADD LOCATION');
-    console.log('POST ADD LOCATION');
-    console.log('POST ADD LOCATION');
-    console.log('POST ADD LOCATION');
-    console.log('POST ADD LOCATION');
-    console.log('POST ADD LOCATION');
-    console.log('POST ADD LOCATION');
     console.log(selectedCurrency);
     if (location) {
       dispatch(change('postad', 'country', location.id));
@@ -447,16 +437,23 @@ const PostAd = (props) => {
                 xs={12}
                 style={{ marginTop: '20px', marginBottom: '20px' }}
               >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  className="btn"
-                  fullWidth
-                  size="large"
-                >
-                  Post Advertisement
-                </Button>
+                {
+                  postAd && postAd.isFetching
+                    ? (<CircularProgress />)
+                    : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        className="btn"
+                        fullWidth
+                        size="large"
+                      >
+                        Post Advertisement
+                      </Button>
+                    )
+                }
+
               </Grid>
             </Grid>
 
@@ -516,6 +513,7 @@ const mapStateToProps = (state) => ({
   marginFieldValue: selector(state, 'margin'),
   priceFieldValue: selector(state, 'price'),
   currencyFieldValue: selector(state, 'currency'),
+  postAd: state.postAd.data,
 })
 
 // export default withRouter(connect(mapStateToProps, actions)(PostAd));

@@ -18,6 +18,7 @@ import AdminPendingWithdrawals from './views/admin/AdminPendingWithdrawals';
 import AdminIdentity from './views/admin/AdminIdentity';
 import AdminTradeView from './views/admin/AdminTradeView';
 import AdminPendingDisputes from './views/admin/AdminPendingDisputes';
+import AdminPriceMargin from './views/admin/AdminPriceMargin';
 
 import UserList from './components/users/UserList';
 import Signin from './components/auth/Signin';
@@ -224,6 +225,11 @@ const Routes = (props) => {
         path="/admin/currencies"
         exact
         component={requireAuth(withTracker(AdminCurrencyManagement))}
+      />
+      <Route
+        path="/admin/margin"
+        exact
+        component={requireAuth(withTracker(AdminPriceMargin))}
       />
       <Route
         path="/admin/paymentmethods"

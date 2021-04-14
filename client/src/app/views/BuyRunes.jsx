@@ -16,6 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {
   fetchPostAdData,
@@ -236,11 +237,18 @@ const BuyRunes = (props) => {
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <TableAds
-            defaultPageSize={10}
-            headCells={headCells || []}
-            postAd={postAd && postAd.sell ? postAd.sell : []}
-          />
+          {
+                  postAd && postAd.isFetching
+                    ? (<CircularProgress />)
+                    : (
+                      <TableAds
+                        defaultPageSize={10}
+                        headCells={headCells || []}
+                        postAd={postAd && postAd.sell ? postAd.sell : []}
+                      />
+                    )
+                }
+
         </Grid>
       </Grid>
     </div>

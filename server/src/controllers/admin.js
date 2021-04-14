@@ -1096,6 +1096,40 @@ export const fetchAdminPaymentMethod = async (req, res, next) => {
   }
 };
 
+export const fetchAdminMargin = async (req, res, next) => {
+  try {
+    const margin = await db.priceMargin.findAll({
+      limit: 1,
+      order: [['createdAt', 'DESC']],
+    });
+    console.log('margin');
+    console.log('margin');
+    console.log('margin');
+    console.log('margin');
+    console.log('margin');
+    console.log('margin');
+    console.log('margin');
+    console.log('margin');
+    console.log('margin');
+
+    console.log(margin);
+
+    if (!margin || !margin.length) {
+      res.locals.margin = await db.priceMargin.create({
+        margin: 0,
+      });
+      return next();
+    }
+
+    res.locals.margin = margin;
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
 export const addAdminPaymentMethod = async (req, res, next) => {
   try {
     res.locals.paymentMethod = await db.paymentMethod.create({
@@ -1161,6 +1195,54 @@ export const updateAdminCurrency = async (req, res, next) => {
       currency_name: req.body.name,
       iso: req.body.iso,
     });
+    console.log(req.body);
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const updateAdminMargin = async (req, res, next) => {
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log('req.body.margin');
+  console.log(req.body.margin);
+
+  if (req.body.margin < 0) {
+    throw new Error('MARGIN_MUST_BE_GREATER_THEN_ZERO');
+  }
+  if (req.body.margin > 100) {
+    throw new Error('MARGIN_MUST_BE_LESS_THEN_HUNDERD');
+  }
+
+  try {
+    const margin = await db.priceMargin.create({
+      value: req.body.margin,
+    });
+    if (!margin) {
+      throw new Error('CURRENCY_NOT_EXIST');
+    }
+
+    res.locals.margin = margin;
     console.log(req.body);
     next();
   } catch (error) {

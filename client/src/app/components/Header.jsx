@@ -277,6 +277,21 @@ const Header = (props) => {
                         onClick={handleCloseAdminMenu}
                       >
                         <div>
+                          <Link
+                            style={{ color: '#000' }}
+                            className="nav-link"
+                            to="/admin/margin"
+                          >
+                            <AccountBalanceWalletIcon />
+                            {' '}
+                            Artificial Price Margin
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem
+                        onClick={handleCloseAdminMenu}
+                      >
+                        <div>
                           <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals/pending">
                             <SettingsIcon />
                             {' '}

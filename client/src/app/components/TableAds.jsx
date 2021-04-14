@@ -26,10 +26,11 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import TrendingDownIcon from '@material-ui/icons/TrendingDown';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Moment from 'react-moment';
 import {
-  startTrade,
+  startTradeAction,
   secondTradeIdleAction,
   fetchCurrentTradeIdle,
 } from '../actions/trade';
@@ -251,6 +252,7 @@ function EnhancedTable(props) {
     currentTrade,
     price,
     defaultPageSize,
+    startTrade,
   } = props;
   const rows = [];
   const dispatch = useDispatch();
@@ -266,15 +268,6 @@ function EnhancedTable(props) {
   }, []);
 
   useEffect(() => {
-    console.log('currentTrade');
-    console.log('currentTrade');
-
-    console.log('currentTrade');
-    console.log('currentTrade');
-    console.log('currentTrade');
-    console.log('currentTrade');
-    console.log('currentTrade');
-    console.log('currentTrade');
     console.log('currentTrade');
     console.log(currentTrade);
     if (currentTrade.type === 'init') {
@@ -367,7 +360,7 @@ function EnhancedTable(props) {
 
   const handleClickTrade = (id) => {
     console.log(id);
-    dispatch(startTrade(id));
+    dispatch(startTradeAction(id));
     // setDense(event.target.checked);
   };
 
@@ -450,7 +443,9 @@ function EnhancedTable(props) {
                       </TableCell>
                       <TableCell align="right">{row.country}</TableCell>
                       <TableCell align="right">{row.paymentMethod}</TableCell>
-                      <TableCell align="right">
+                      <TableCell
+                        align="right"
+                      >
                         {priceChange > 0 ? (<span style={{ color: 'red' }}><TrendingUpIcon /></span>) : (<span style={{ color: 'green' }}><TrendingDownIcon /></span>)}
                         {' '}
                         {row.priceType === 'static' && row.price}
@@ -485,7 +480,12 @@ function EnhancedTable(props) {
                         </TableCell> */}
                       <TableCell align="right">{row.limit}</TableCell>
                       <TableCell align="right">
-                        {row.type === 'buy' && (
+                        {
+                          startTrade.isFetching && (
+                            <CircularProgress />
+                          )
+                        }
+                        {row.type === 'buy' && !startTrade.isFetching && (
                         <Button
                           onClick={() => handleClickTrade(row.id)}
                           variant="contained"
@@ -495,7 +495,7 @@ function EnhancedTable(props) {
                         </Button>
                         )}
 
-                        {row.type === 'sell' && (
+                        {row.type === 'sell' && !startTrade.isFetching && (
                         <Button
                           onClick={() => handleClickTrade(row.id)}
                           variant="contained"
@@ -538,6 +538,7 @@ function mapStateToProps(state) {
   return {
     currentTrade: state.currentTrade.data,
     price: state.price.data,
+    startTrade: state.startTrade,
   }
 }
 

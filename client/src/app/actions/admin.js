@@ -77,6 +77,10 @@ import {
   FETCH_ADMINPENDINGDISPUTE_SUCCESS,
   FETCH_ADMINPENDINGDISPUTE_FAIL,
   REMOVE_ADMINPENDINGDISPUTE,
+  FETCH_ADMINMARGIN_BEGIN,
+  FETCH_ADMINMARGIN_SUCCESS,
+  FETCH_ADMINMARGIN_FAIL,
+  UPDATE_ADMINMARGIN,
 } from './types/index';
 
 export function adminRejectIdentity(id) {
@@ -1642,6 +1646,79 @@ export function updateCountry(id, name, iso, currency) {
   }
 }
 
+export function updateMargin(id, margin) {
+  return function (dispatch) {
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    console.log(id);
+    console.log(margin);
+    axios.post(`${process.env.API_URL}/admin/margin/update`, { id, margin })
+      .then((response) => {
+        console.log('response.data.margin');
+        console.log(response.data.margin);
+        console.log('response.data.margin');
+        console.log(response.data.margin);
+        console.log('response.data.margin');
+        console.log(response.data.margin);
+        console.log('response.data.margin');
+        console.log(response.data.margin);
+        console.log('response.data.margin');
+        console.log(response.data.margin);
+        dispatch({
+          type: UPDATE_ADMINMARGIN,
+          payload: response.data.margin,
+        });
+        dispatch({
+          type: ENQUEUE_SNACKBAR,
+          notification: {
+            message: 'Success: update margin',
+            key: new Date().getTime() + Math.random(),
+            options: {
+              variant: 'success',
+            },
+          },
+        });
+      }).catch((error) => {
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
 export function updateCurrency(id, name, iso) {
   return function (dispatch) {
     // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
@@ -1818,6 +1895,76 @@ export function adminCompleteDisputeAction(id, conclusion, side) {
           type: COMPLETE_ADMINDISPUTE_FAIL,
           payload: error,
         });
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function fetchAdminMarginData() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINMARGIN_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.get(`${process.env.API_URL}/admin/margin`)
+      .then((response) => {
+        console.log(response.data.margin);
+        console.log(response.data.margin);
+        console.log(response.data.margin);
+        console.log(response.data.margin);
+        console.log(response.data.margin);
+        console.log(response.data.margin);
+        console.log(response.data.margin);
+        console.log(response.data.margin);
+        console.log(response.data.margin);
+        console.log(response.data.margin);
+
+        dispatch({
+          type: FETCH_ADMINMARGIN_SUCCESS,
+          payload: response.data.margin,
+        });
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINMARGIN_FAIL,
+          payload: error,
+        });
+
         if (error.response) {
           // client received an error response (5xx, 4xx)
           console.log(error.response);

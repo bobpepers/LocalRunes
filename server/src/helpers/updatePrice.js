@@ -23,7 +23,76 @@ const updatePrice = async (io) => {
     }
 
     // Get data from coinpaprika
-    const data = await axios.get("https://api.coinpaprika.com/v1/ticker/runes-runebase");
+    const data = await axios.get("https://api.coinpaprika.com/v1/tickers/runes-runebase");
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log('data');
+    console.log(data);
+    console.log(data.data.quotes);
+    console.log(data.data.quotes.USD);
+    console.log(data.data.quotes.USD.price);
     if (data.data) {
       const priceInfo = await db.priceInfo.findOne({
         where: {
@@ -35,8 +104,41 @@ const updatePrice = async (io) => {
         throw new Error('PRICE_INFO_NOT_FOUND');
       }
 
+      const margin = await db.priceMargin.findAll({
+        limit: 1,
+        order: [['createdAt', 'DESC']],
+      });
+
+      const newPrice = Number(data.data.quotes.USD.price) + ((Number(data.data.quotes.USD.price) / 100) * Number(margin[0].value));
+
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+      console.log('newPrice');
+
+      console.log('newPrice');
+      console.log(margin);
+      console.log(margin[0].value);
+      console.log(data.data.quotes.USD.price);
+
+      console.log(newPrice);
+
       const price = await priceInfo.update({
-        price: data.data.price_usd,
+        price: newPrice.toFixed(8).toString(),
       });
 
       const currencies = await db.currency.findAll({ });
@@ -101,41 +203,13 @@ const updatePrice = async (io) => {
         console.error(error);
       });
 
-      // currencies.forEach(async (currency) => {
-      //  console.log('loop 2');
-      //  if (currency.iso !== null || currency.iso !== "USD") {
-      //    const options = {
-      //      method: 'GET',
-      //      url: 'https://currency-exchange.p.rapidapi.com/exchange',
-      //      params: { from: 'USD', to: currency.iso, q: '1.0' },
-      //      headers: {
-      //        'x-rapidapi-key': '8528ecd0edmsh41097fa10b02dfep1924ddjsn50d8487ba8c9',
-      //        'x-rapidapi-host': 'currency-exchange.p.rapidapi.com',
-      //      },
-      //    };
-      //    promises.push(
-      //      axios.request(options).then(async (response) => {
-      //        console.log('response.data');
-      //        console.log(response.data);
-      //       const priceRecord = await db.priceInfo.update({
-      //          price: (Number(currentPrice.price) * Number(response.data)).toFixed(8).toString(),
-      //        }, {
-      //          where: {
-      //            currency: currency.iso,
-      //          },
-      //        });
-      //      }).catch((error) => {
-      //        console.error(error);
-      //      }),
-      //    );
-      //  }
-      // });
-
-      Promise.all(promises).then(async () => {
-        const priceRecords = await db.priceInfo.findAll({});
-        console.log(priceRecords);
-        io.emit('updatePrice', priceRecords);
-      });
+      setTimeout(() => {
+        Promise.all(promises).then(async () => {
+          const priceRecords = await db.priceInfo.findAll({});
+          console.log(priceRecords);
+          io.emit('updatePrice', priceRecords);
+        });
+      }, 5000);
     }
     console.log('updated price');
     return;

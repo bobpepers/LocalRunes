@@ -38,7 +38,7 @@ import {
   CREATE_DISPUTE_FAIL,
 } from './types/index';
 
-export function startTrade(id) {
+export function startTradeAction(id) {
   return function (dispatch) {
     return new Promise((resolve) => {
       dispatch({

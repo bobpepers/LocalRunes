@@ -41,6 +41,7 @@ import adminSingleTrade from "./admin/adminSingleTrade";
 import adminCompleteDispute from "./admin/adminCompleteDispute";
 import adminPendingDisputeCount from "./admin/adminPendingDisputeCount";
 import adminPendingDisputes from "./admin/adminPendingDisputes";
+import adminMargin from "./admin/adminMargin";
 
 //import createReport from './createReport';
 
@@ -65,6 +66,7 @@ import selectedCurrency from './selectedCurrency';
 import createDispute from './createDispute';
 import createUserFeedback from './createUserFeedback';
 import removeUserFeedback from './removeUserFeedback';
+import startTrade from './startTrade';
 
 
 const rootReducer = combineReducers({
@@ -108,6 +110,7 @@ const rootReducer = combineReducers({
   adminSingleTrade: adminSingleTrade,
   adminCompleteDispute: adminCompleteDispute,
   adminPendingDisputes: adminPendingDisputes,
+  adminMargin: adminMargin,
 
   verifyPhoneCode: verifyPhoneCode,
   getPhoneCode: getPhoneCode,
@@ -130,6 +133,7 @@ const rootReducer = combineReducers({
   createDispute: createDispute,
   createUserFeedback: createUserFeedback,
   removeUserFeedback: removeUserFeedback,
+  startTrade: startTrade,
 });
 
 export default rootReducer;

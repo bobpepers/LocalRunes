@@ -12,6 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { fetchUserRecentActivity } from '../actions/activity';
 
 function descendingComparator(a, b, orderBy) {
@@ -456,78 +457,82 @@ const MyActivity = (props) => {
       <Grid item xs={12}>
         <h2>Recent</h2>
       </Grid>
-      <div className={`${classes.root} transactions activity`}>
-        <TableContainer>
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size="small"
-            aria-label="enhanced table"
-          >
-            <EnhancedTableHead
-              classes={classes}
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+      { recenUserActivity
+      && recenUserActivity.data
+      && recenUserActivity.data.loading
+        ? (<CircularProgress />)
+        : (
+          <div className={`${classes.root} transactions activity`}>
+            <TableContainer>
+              <Table
+                className={classes.table}
+                aria-labelledby="tableTitle"
+                size="small"
+                aria-label="enhanced table"
+              >
+                <EnhancedTableHead
+                  classes={classes}
+                  numSelected={selected.length}
+                  order={order}
+                  orderBy={orderBy}
+                  onSelectAllClick={handleSelectAllClick}
+                  onRequestSort={handleRequestSort}
+                  rowCount={rows.length}
+                />
+                <TableBody>
+                  {stableSort(rows, getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      const isItemSelected = isSelected(row.name);
+                      const labelId = `enhanced-table-checkbox-${index}`;
+                      return (
+                        <TableRow
+                          hover
+                          onClick={(event) => handleClick(event, row.date)}
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={row.date}
+                          selected={isItemSelected}
+                          className="blue-border-table"
+                        >
+                          <TableCell component="th" id={labelId} scope="row" padding="none" className="border-none">
+                            {row.date}
+                          </TableCell>
+                          <TableCell align="right" className="border-none">
+                            {row.ip}
+                          </TableCell>
+                          <TableCell align="right" className="border-none">
+                            {row.type}
+                          </TableCell>
+                          <TableCell align="right" className="border-none">
+                            {row.amount}
+                          </TableCell>
+                          <TableCell align="right" className="border-none">
+                            {row.balance}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                  <TableRow style={{ height: 33 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 50, 100, 250]}
+              component="div"
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
             />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-                  console.log('roooooooowt');
-                  console.log(row);
+          </div>
+        )}
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.date)}
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.date}
-                      selected={isItemSelected}
-                      className="blue-border-table"
-                    >
-                      <TableCell component="th" id={labelId} scope="row" padding="none" className="border-none">
-                        {row.date}
-                      </TableCell>
-                      <TableCell align="right" className="border-none">
-                        {row.ip}
-                      </TableCell>
-                      <TableCell align="right" className="border-none">
-                        {row.type}
-                      </TableCell>
-                      <TableCell align="right" className="border-none">
-                        {row.amount}
-                      </TableCell>
-                      <TableCell align="right" className="border-none">
-                        {row.balance}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-              <TableRow style={{ height: 33 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 50, 100, 250]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </div>
     </Grid>
   )
 }
