@@ -277,6 +277,13 @@ npx sequelize-cli migration:generate --name Order-add-associations
 
 ````
 
+
+undo single migration
+````
+npx sequelize-cli db:migrate:undo --name 20210416015813-add-countryid-to-user.js
+
+````
+
 undo migration
 ````
 npx sequelize-cli db:migrate:undo

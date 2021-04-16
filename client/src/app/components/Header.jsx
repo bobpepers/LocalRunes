@@ -292,6 +292,21 @@ const Header = (props) => {
                         onClick={handleCloseAdminMenu}
                       >
                         <div>
+                          <Link
+                            style={{ color: '#000' }}
+                            className="nav-link"
+                            to="/admin/mail"
+                          >
+                            <AccountBalanceWalletIcon />
+                            {' '}
+                            Mass Mail
+                          </Link>
+                        </div>
+                      </MenuItem>
+                      <MenuItem
+                        onClick={handleCloseAdminMenu}
+                      >
+                        <div>
                           <Link style={{ color: '#000' }} className="nav-link" to="/admin/withdrawals/pending">
                             <SettingsIcon />
                             {' '}

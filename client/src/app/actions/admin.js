@@ -81,6 +81,10 @@ import {
   FETCH_ADMINMARGIN_SUCCESS,
   FETCH_ADMINMARGIN_FAIL,
   UPDATE_ADMINMARGIN,
+  SEND_MASS_MAIL_BEGIN,
+  SEND_MASS_MAIL_SUCCESS,
+  SEND_MASS_MAIL_FAIL,
+  SEND_MASS_MAIL_IDLE,
 } from './types/index';
 
 export function adminRejectIdentity(id) {
@@ -2002,6 +2006,102 @@ export function fetchAdminMarginData() {
             },
           });
         }
+      });
+  }
+}
+
+export function idleSendMassMailAction() {
+  return function (dispatch) {
+    dispatch({
+      type: SEND_MASS_MAIL_IDLE,
+      payload: {
+        data: 0,
+        isFetching: false,
+        phase: 0,
+        error: null,
+      },
+    });
+  }
+}
+
+export function sendMassMailAction(obj) {
+  return function (dispatch) {
+    dispatch({
+      type: SEND_MASS_MAIL_BEGIN,
+    });
+    axios.post(`${process.env.API_URL}/admin/massmail/send`, obj)
+      .then((response) => {
+        dispatch({
+          type: SEND_MASS_MAIL_SUCCESS,
+          payload: response,
+        })
+        console.log('webslot/order/create');
+        console.log(response);
+        dispatch({
+          type: ENQUEUE_SNACKBAR,
+          notification: {
+            message: `Success: order created #${response.data.order.id}`,
+            key: new Date().getTime() + Math.random(),
+            options: {
+              variant: 'success',
+            },
+          },
+        });
+      }).catch((error) => {
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          if (error.response.status === 429) {
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: `${error.response.status}: ${error.response.data}`,
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'error',
+                },
+              },
+            });
+          } else {
+            dispatch({
+              type: ENQUEUE_SNACKBAR,
+              notification: {
+                message: `${error.response.status}: ${error.response.data.error}`,
+                key: new Date().getTime() + Math.random(),
+                options: {
+                  variant: 'error',
+                },
+              },
+            });
+          }
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+        dispatch({
+          type: SEND_MASS_MAIL_FAIL,
+          payload: error,
+        });
       });
   }
 }

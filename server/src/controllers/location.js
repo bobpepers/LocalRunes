@@ -29,6 +29,21 @@ export const getLocation = async (req, res, next) => {
   });
   if (dbLocation) {
     res.locals.location = dbLocation;
+    if (req.user) {
+      console.log('req.user');
+      console.log('req.user');
+      console.log('req.user');
+      console.log('req.user');
+      console.log('req.user');
+      console.log('req.user');
+      console.log('req.user');
+      console.log('req.user');
+      console.log('req.user');
+      console.log('req.user');
+      console.log('req.user');
+
+      console.log(req.user);
+    }
   } else {
     res.locals.location = {
       id: 1,

@@ -42,6 +42,8 @@ import adminCompleteDispute from "./admin/adminCompleteDispute";
 import adminPendingDisputeCount from "./admin/adminPendingDisputeCount";
 import adminPendingDisputes from "./admin/adminPendingDisputes";
 import adminMargin from "./admin/adminMargin";
+import adminMassMail from "./admin/adminMassMail";
+
 
 //import createReport from './createReport';
 
@@ -111,6 +113,7 @@ const rootReducer = combineReducers({
   adminCompleteDispute: adminCompleteDispute,
   adminPendingDisputes: adminPendingDisputes,
   adminMargin: adminMargin,
+  adminMassMail: adminMassMail,
 
   verifyPhoneCode: verifyPhoneCode,
   getPhoneCode: getPhoneCode,

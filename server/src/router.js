@@ -74,6 +74,7 @@ import {
   adminCompleteDispute,
   fetchAdminMargin,
   updateAdminMargin,
+  sendAdminMassMail,
 } from './controllers/admin';
 
 import {
@@ -129,6 +130,9 @@ import {
 import { endUnacceptedTrade } from './helpers/trade';
 
 import storeIp from './helpers/storeIp';
+
+import updateUserCountry from './helpers/updateUserCountry';
+
 import {
   rateLimiterMiddlewareUser,
   rateLimiterMiddlewareIp,
@@ -817,6 +821,29 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
+  app.post('/api/admin/massmail/send',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    sendAdminMassMail,
+    (req, res) => {
+      // updatePrice(io);
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.mail) {
+        // console.log(res.locals.currency);
+        res.json({
+          mail: res.locals.mail,
+        });
+      }
+    });
+
   app.post('/api/admin/margin/update',
     IsAuthenticated,
     isAdmin,
@@ -1197,6 +1224,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     // storeIp,
     ensuretfa,
     updateLastSeen,
+    updateUserCountry,
     updateStoreStatus,
     (req, res) => {
       if (res.locals.error) {
@@ -1833,6 +1861,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     // storeIp,
     ensuretfa,
     updateLastSeen,
+    updateUserCountry,
     fetchPostAd,
     (req, res) => {
       if (res.locals.error) {
@@ -1859,6 +1888,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     // storeIp,
     ensuretfa,
     updateLastSeen,
+    updateUserCountry,
     fetchMyPostAd,
     (req, res) => {
       if (res.locals.error) {
@@ -2021,6 +2051,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     storeIp,
     ensuretfa,
     updateLastSeen,
+    updateUserCountry,
     fetchRecentUserActivity,
     (req, res) => {
       if (res.locals.error) {
@@ -2055,6 +2086,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     storeIp,
     ensuretfa,
     updateLastSeen,
+    updateUserCountry,
     fetchUser,
     (req, res, next) => {
       if (res.locals.error) {
@@ -2087,6 +2119,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
     // storeIp,
     ensuretfa,
     updateLastSeen,
+    updateUserCountry,
     fetchSpecificUser,
     (req, res, next) => {
       console.log('before send specificuser');

@@ -19,6 +19,7 @@ import AdminIdentity from './views/admin/AdminIdentity';
 import AdminTradeView from './views/admin/AdminTradeView';
 import AdminPendingDisputes from './views/admin/AdminPendingDisputes';
 import AdminPriceMargin from './views/admin/AdminPriceMargin';
+import AdminMail from './views/admin/AdminMail';
 
 import UserList from './components/users/UserList';
 import Signin from './components/auth/Signin';
@@ -270,6 +271,12 @@ const Routes = (props) => {
         path="/admin/trade/:id"
         exact
         component={requireAuth(withTracker(AdminTradeView))}
+      />
+
+      <Route
+        path="/admin/mail"
+        exact
+        component={requireAuth(withTracker(AdminMail))}
       />
       <Route
         path="/admin/deposits"

@@ -260,6 +260,9 @@ module.exports = (sequelize, DataTypes) => {
     // UserModel.hasMany(model.SurfTicket);
 
     UserModel.hasOne(model.wallet);
+    UserModel.belongsTo(model.country, {
+      as: 'country',
+    });
 
     UserModel.belongsToMany(model.ip, {
       through: 'IpUser',
