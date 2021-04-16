@@ -1642,8 +1642,10 @@ export const adminCompleteDispute = async (req, res, next) => {
   });
 };
 
-function replaceAll(string, search, replace) {
-  return string.split(search).join(replace);
+function getPercentageChange(oldNumber, newNumber) {
+  const decreaseValue = oldNumber - newNumber;
+
+  return (decreaseValue / oldNumber) * 100;
 }
 
 export const sendAdminMassMail = async (req, res, next) => {
@@ -1674,15 +1676,38 @@ export const sendAdminMassMail = async (req, res, next) => {
     const dataTwo = await axios.get("https://api.coinpaprika.com/v1/coins/runes-runebase/ohlcv/today");
     const markets = await axios.get("https://api.coinpaprika.com/v1/coins/runes-runebase/markets");
 
+    const bololexRunesUsdtCh = await axios.get("https://api.bololex.com/api/prices/RUNES-USDT");
+    const bololexRunesUsdtChangePercentColor = Number(bololexRunesUsdtCh.data.result[0].priceChange) > 0 ? 'green' : 'red';
+    const bololexRunesUsdtChangePercentUniCode = Number(bololexRunesUsdtCh.data.result[0].priceChange) > 0 ? '&#9650;' : '&#9660;';
+
+    const bololexRunesBtcCh = await axios.get("https://api.bololex.com/api/prices/RUNES-BTC");
+    const bololexRunesBtcChangePercentColor = Number(bololexRunesBtcCh.data.result[0].priceChange) > 0 ? 'green' : 'red';
+    const bololexRunesBtcChangePercentUniCode = Number(bololexRunesBtcCh.data.result[0].priceChange) > 0 ? '&#9650;' : '&#9660;';
+
+    const altmarketsRunesDogeCh = await axios.get("https://v2.altmarkets.io/api/v2/peatio/public/markets/runesdoge/tickers");
+    // console.log(altmarketsRunesDogeCh);
+    let altmarketsruneDogePriceChange;
+    altmarketsruneDogePriceChange = altmarketsRunesDogeCh.data.ticker.price_change_percent.replace(/%/gi, '');
+    altmarketsruneDogePriceChange = altmarketsRunesDogeCh.data.ticker.price_change_percent.replace(/\+/gi, '');
+    const altmarketsRunesDogeChangePercentColor = Number(altmarketsruneDogePriceChange) > 0 ? 'green' : 'red';
+    const altmarketsRunesDogeChangePercentUniCode = Number(altmarketsruneDogePriceChange) > 0 ? '&#9650;' : '&#9660;';
+
+    const txbitRunesBtcCh = await axios.get("https://api.txbit.io/api/public/getmarketsummary?market=RUNES/BTC");
+    const isIncreaseOrDecreaceTxBitBTC = ((getPercentageChange(txbitRunesBtcCh.data.result.PrevDay, txbitRunesBtcCh.data.result.Last) * -1)).toFixed(2);
+    const txbitRunesBtcChangePercentColor = Number(isIncreaseOrDecreaceTxBitBTC) > 0 ? 'green' : 'red';
+    const txbitRunesBtcChangePercentUniCode = Number(isIncreaseOrDecreaceTxBitBTC) > 0 ? '&#9650;' : '&#9660;';
+
+    const txbitRunesEthCh = await axios.get("https://api.txbit.io/api/public/getmarketsummary?market=RUNES/ETH");
+    const isIncreaseOrDecreaceTxBitETH = ((getPercentageChange(txbitRunesEthCh.data.result.PrevDay, txbitRunesEthCh.data.result.Last) * -1)).toFixed(2);
+    const txbitRunesEthChangePercentColor = Number(isIncreaseOrDecreaceTxBitETH) > 0 ? 'green' : 'red';
+    const txbitRunesEthChangePercentUniCode = Number(isIncreaseOrDecreaceTxBitETH) > 0 ? '&#9650;' : '&#9660;';
+
     const openExchangeOptions = {
       method: 'GET',
       url: 'https://openexchangerates.org/api/latest.json?app_id=7fe614bf9a0f4d8cb7dd72a468a9ef59&show_alternative=1',
     };
 
     const currencyCoversion = await axios.request(openExchangeOptions);
-    console.log(currencyCoversion);
-    console.log(dataTwo);
-    console.log(dataOne);
 
     const changePercentColor = dataOne.data.quotes.USD.percent_change_24h > 0 ? 'green' : 'red';
     const changePercentUniCode = dataOne.data.quotes.USD.percent_change_24h > 0 ? '&#9650;' : '&#9660;';
@@ -1703,10 +1728,7 @@ export const sendAdminMassMail = async (req, res, next) => {
         high = dataTwo.data[0].high.toFixed(8).toString();
         open = dataTwo.data[0].open.toFixed(8).toString();
       }
-      console.log(price);
-      console.log(low);
-      console.log(high);
-      console.log(open);
+
       const returnValue = (high - low).toFixed(8).toString();
       const returnColor = returnValue > 0 ? 'green' : 'red';
       const returnUniCode = returnValue > 0 ? '&#9650;' : '&#9660;';
@@ -1718,8 +1740,7 @@ export const sendAdminMassMail = async (req, res, next) => {
       newtitle = newtitle.replace(/\[country_name\]/gi, user.country.name);
       newtitle = newtitle.replace(/\[currency_iso\]/gi, user.country.currency.iso);
       newtitle = newtitle.replace(/\[currency_name\]/gi, user.country.currency.currency_name);
-      console.log('newtitle');
-      console.log(newtitle);
+
       let newMessage;
       newMessage = req.body.message.replace(/\n/g, "<br />");
       newMessage = newMessage.replace(/\[firstname\]/gi, user.firstname);
@@ -1778,205 +1799,242 @@ export const sendAdminMassMail = async (req, res, next) => {
       `);
 
       const bololexRunesUsdt = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/USDT');
-      console.log(bololexRunesUsdt);
       const bololexRunesUsdtPrice = user.country.currency.iso !== 'USD'
         ? ((bololexRunesUsdt[0].quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
         : bololexRunesUsdt[0].quotes.USD.price.toFixed(8).toString();
-      const bololexRunesUsdtVolume = user.country.currency.iso !== 'USD'
-        ? ((bololexRunesUsdt[0].quotes.USD.volume_24h) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
-        : bololexRunesUsdt[0].quotes.USD.volume_24h.toFixed(8).toString();
 
       const bololexRunesBtc = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/BTC');
-      console.log(bololexRunesBtc);
       const bololexRunesBtcPrice = user.country.currency.iso !== 'USD'
         ? ((bololexRunesBtc[0].quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
         : bololexRunesBtc[0].quotes.USD.price.toFixed(8).toString();
-      const bololexRunesBtcVolume = user.country.currency.iso !== 'USD'
-        ? ((bololexRunesBtc[0].quotes.USD.volume_24h) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
-        : bololexRunesBtc[0].quotes.USD.volume_24h.toFixed(8).toString();
 
-      const altmarketsRunesDoge = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/BTC');
-      console.log(bololexRunesBtc);
+      const altmarketsRunesDoge = markets.data.filter((item) => item.exchange_name === 'AltMarkets' && item.pair === 'RUNES/DOGE');
       const altmarketsRunesDogePrice = user.country.currency.iso !== 'USD'
         ? ((altmarketsRunesDoge[0].quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
         : altmarketsRunesDoge[0].quotes.USD.price.toFixed(8).toString();
-      const altmarketsRunesDogeVolume = user.country.currency.iso !== 'USD'
-        ? ((altmarketsRunesDoge[0].quotes.USD.volume_24h) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
-        : altmarketsRunesDoge[0].quotes.USD.volume_24h.toFixed(8).toString();
+
+      const txbitRunesBtc = markets.data.filter((item) => item.exchange_name === 'Txbit' && item.pair === 'RUNES/BTC');
+      const txbitRunesBtcPrice = user.country.currency.iso !== 'USD'
+        ? ((txbitRunesBtc[0].quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
+        : txbitRunesBtc[0].quotes.USD.price.toFixed(8).toString();
+
+      const txbitRunesEth = markets.data.filter((item) => item.exchange_name === 'Txbit' && item.pair === 'RUNES/ETH');
+      const txbitRunesEthPrice = user.country.currency.iso !== 'USD'
+        ? ((txbitRunesEth[0].quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
+        : txbitRunesEth[0].quotes.USD.price.toFixed(8).toString();
 
       newMessage = newMessage.replace(/\[markets\]/gi, `
       <div style="width: 100%;">
         <p style="width: 100%; text-decoration: underline; font-size: 20px; margin-bottom: 5px;">Trade RUNES on Exchanges</p>
         <table cellspacing="0" width="100%" align="center" style="width:100%; color: black;">
           <tr>
-            <th style="background: #ccc; border: 1px solid black">Exchange</th>
             <th style="background: #ccc; border: 1px solid black">Pair</th>
-            <th style="background: #ccc; border: 1px solid black">Volume</th>
-            <th style="background: #ccc; border: 1px solid black">Price</th>
+            <th style="background: #ccc; border: 1px solid black">24h Change</th>
+            <th style="background: #ccc; border: 1px solid black">Trade</th>
           </tr>
           <tr>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://bololex.com/trading/?symbol=RUNES-USDT"><img style="float: left;" src="https://downloads.runebase.io/bololex-thumb.png"><p>Bololex</p></a>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/bololex-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/USDT</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                ${bololexRunesUsdtPrice} ${user.country.currency.iso}
+              </p>              
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://bololex.com/trading/?symbol=RUNES-USDT">RUNES/USDT</a>
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${bololexRunesUsdtChangePercentColor}">
+              ${bololexRunesUsdtChangePercentUniCode} ${bololexRunesUsdtCh.data.result[0].priceChange}%
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              ${bololexRunesUsdtPrice} ${user.country.currency.iso}
-            </td>
-            <td style=" text-align: center; border: 1px solid black">
-              ${bololexRunesUsdtVolume} ${user.country.currency.iso}
-            </td>
-          </tr>
-          <tr>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://bololex.com/trading/?symbol=RUNES-BTC"><img style="float: left;" src="https://downloads.runebase.io/bololex-thumb.png"><p>Bololex</p></a>
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://bololex.com/trading/?symbol=RUNES-BTC">RUNES/BTC</a>
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              ${bololexRunesBtcPrice} ${user.country.currency.iso}
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              ${bololexRunesBtcVolume} ${user.country.currency.iso}
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://bololex.com/trading/?symbol=RUNES-USDT" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on Bololex &rarr;
+              </a>
             </td>
           </tr>
+
           <tr>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://v2.altmarkets.io/trading/runesdoge"><img style="float: left;" src="https://downloads.runebase.io/altmarkets-thumb.png"><p>AltMarkets</p></a>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/bololex-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/BTC</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                ${bololexRunesBtcPrice} ${user.country.currency.iso}
+              </p>              
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://v2.altmarkets.io/trading/runesdoge">RUNES/DOGE</a>
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${bololexRunesBtcChangePercentColor}">
+            ${bololexRunesBtcChangePercentUniCode} ${bololexRunesBtcCh.data.result[0].priceChange}%
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              ${altmarketsRunesDogePrice} ${user.country.currency.iso}
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              ${altmarketsRunesDogeVolume} ${user.country.currency.iso}
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://bololex.com/trading/?symbol=RUNES-BTC" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on Bololex &rarr;
+              </a>
             </td>
           </tr>
+
+
           <tr>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://txbit.io/Trade/RUNES/BTC"><img style="float: left;" src="https://downloads.runebase.io/txbit-thumb.png"><p>TxBit</p></a>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/altmarkets-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/DOGE</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                ${altmarketsRunesDogePrice} ${user.country.currency.iso}
+              </p>              
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://txbit.io/Trade/RUNES/BTC">RUNES/BTC</a>
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${altmarketsRunesDogeChangePercentColor}">
+            ${altmarketsRunesDogeChangePercentUniCode} ${altmarketsruneDogePriceChange}
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available ${user.country.currency.iso}
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available ${user.country.currency.iso}
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://v2.altmarkets.io/trading/runesdoge" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on Altmarkets &rarr;
+              </a>
             </td>
           </tr>
+
           <tr>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://txbit.io/Trade/RUNES/ETH"><img style="float: left;" src="https://downloads.runebase.io/txbit-thumb.png"><p>TxBit</p></a>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/txbit-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/BTC</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                ${txbitRunesBtcPrice} ${user.country.currency.iso}
+              </p>              
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://txbit.io/Trade/RUNES/ETH">RUNES/ETH</a>
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${txbitRunesBtcChangePercentColor}">
+              ${txbitRunesBtcChangePercentUniCode} ${isIncreaseOrDecreaceTxBitBTC}%
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available ${user.country.currency.iso}
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available ${user.country.currency.iso}
-            </td>
-          </tr>         
-          <tr>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://txbit.io/Trade/RUNES/EUR"><img style="float: left;" src="https://downloads.runebase.io/txbit-thumb.png"><p>TxBit</p></a>
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://txbit.io/Trade/RUNES/EUR">RUNES/EUR</a>
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://txbit.io/Trade/RUNES/BTC" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on Txbit &rarr;
+              </a>
             </td>
           </tr>
+
           <tr>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://txbit.io/Trade/RUNES/USD"><img style="float: left;" src="https://downloads.runebase.io/txbit-thumb.png"><p>TxBit</p></a>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/txbit-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/ETH</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                ${txbitRunesEthPrice} ${user.country.currency.iso}
+              </p>              
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://txbit.io/Trade/RUNES/USD">RUNES/USD</a>
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${txbitRunesEthChangePercentColor}">
+              ${txbitRunesEthChangePercentUniCode} ${isIncreaseOrDecreaceTxBitETH}%
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://txbit.io/Trade/RUNES/ETH" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on Txbit &rarr;
+              </a>
             </td>
           </tr>
-          
+
           <tr>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://stakecenter.co/client/exchange/BTC/RUNES"><p>StakeCenter</p></a>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/stakecenter-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/BTC</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                Price not available
+              </p>              
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://stakecenter.co/client/exchange/BTC/RUNES">RUNES/BTC</a>
+            <td style="text-align: center; border-bottom: 1px solid black">
+              Change not available
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://stakecenter.co/client/exchange/BTC/RUNES" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on StakeCenter &rarr;
+              </a>
             </td>
           </tr>
+
           <tr>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://stakecenter.co/client/exchange/LTC/RUNES"><p>StakeCenter</p></a>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/stakecenter-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/LTC</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                Price not available
+              </p>              
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://stakecenter.co/client/exchange/LTC/RUNES">RUNES/LTC</a>
+            <td style="text-align: center; border-bottom: 1px solid black">
+              Change not available
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://stakecenter.co/client/exchange/LTC/RUNES" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on StakeCenter &rarr;
+              </a>
             </td>
           </tr>
+
           <tr>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://stakecenter.co/client/exchange/DOGE/RUNES"><p>StakeCenter</p></a>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/stakecenter-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/DOGE</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                Price not available
+              </p>              
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://stakecenter.co/client/exchange/DOGE/RUNES">RUNES/DOGE</a>
+            <td style="text-align: center; border-bottom: 1px solid black">
+              Change not available
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://stakecenter.co/client/exchange/DOGE/RUNES" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on StakeCenter &rarr;
+              </a>
             </td>
           </tr>
+
           <tr>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://stakecenter.co/client/exchange/RDD/RUNES"><p>StakeCenter</p></a>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/stakecenter-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/RDD</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                Price not available
+              </p>              
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              <a href="https://stakecenter.co/client/exchange/RDD/RUNES">RUNES/RDD</a>
+            <td style="text-align: center; border-bottom: 1px solid black">
+              Change not available
             </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
-            </td>
-            <td style="text-align: center; border: 1px solid black">
-              not available
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://stakecenter.co/client/exchange/RDD/RUNES" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on StakeCenter &rarr;
+              </a>
             </td>
           </tr>
+
         </table>
       </div>
       `);
 
-      console.log('newtitle');
-      console.log(newtitle);
-      console.log('newMessage');
-      console.log(newMessage);
       const fixColorDivFront = ``;
       const fixColorDivBack = "";
       const finalMessage = fixColorDivFront.concat(newMessage).concat(fixColorDivBack);

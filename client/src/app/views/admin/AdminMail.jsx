@@ -191,6 +191,7 @@ const AdminMassMailView = (props) => {
               <li>Currency ISO: [currency_iso]</li>
               <li>Username: [username]</li>
               <li>Metrics: [metrics]</li>
+              <li>Markets: [markets]</li>
               <li>Social Links: [socials]</li>
             </ul>
           </Card>
@@ -264,7 +265,7 @@ const selector = formValueSelector('massmail');
 
 const mapStateToProps = (state) => ({
   errorMessage: state.auth.error,
-  adminMassMail: state.adminMassMail.data,
+  adminMassMail: state.adminMassMail,
 })
 
 // export default withRouter(connect(mapStateToProps, actions)(PostAd));

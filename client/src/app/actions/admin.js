@@ -2031,16 +2031,19 @@ export function sendMassMailAction(obj) {
     });
     axios.post(`${process.env.API_URL}/admin/massmail/send`, obj)
       .then((response) => {
+        console.log('response');
+        console.log('response');
+        console.log('response');
+        console.log('response');
+        console.log(response.data.mail);
         dispatch({
           type: SEND_MASS_MAIL_SUCCESS,
-          payload: response,
+          payload: response.data.mail,
         })
-        console.log('webslot/order/create');
-        console.log(response);
         dispatch({
           type: ENQUEUE_SNACKBAR,
           notification: {
-            message: `Success: order created #${response.data.order.id}`,
+            message: 'Success: Mass mail send',
             key: new Date().getTime() + Math.random(),
             options: {
               variant: 'success',
