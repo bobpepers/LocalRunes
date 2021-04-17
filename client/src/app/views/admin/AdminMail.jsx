@@ -190,6 +190,11 @@ const AdminMassMailView = (props) => {
               <li>Currency Name: [currency_name]</li>
               <li>Currency ISO: [currency_iso]</li>
               <li>Username: [username]</li>
+              <li>Referral: [referral]</li>
+              <li>Wallet Balance: [wallet_balance]</li>
+              <li>Wallet Value: [wallet_value]</li>
+              <li>Wallet Value USD: [wallet_value_usd]</li>
+              <li>Wallet android Link: [wallet_android]</li>
               <li>Metrics: [metrics]</li>
               <li>Markets: [markets]</li>
               <li>Social Links: [socials]</li>

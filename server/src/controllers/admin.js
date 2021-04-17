@@ -1658,18 +1658,28 @@ export const sendAdminMassMail = async (req, res, next) => {
       where: {
         authused: true,
       },
-      include: [{
-        model: db.country,
-        as: 'country',
-        required: false,
-        include: [
-          {
-            model: db.currency,
-            as: 'currency',
-            required: false,
-          },
-        ],
-      }],
+
+      include: [
+        {
+          model: db.wallet,
+          as: 'wallet',
+          include: [{
+            model: db.address,
+            as: 'addresses',
+          }],
+        },
+        {
+          model: db.country,
+          as: 'country',
+          required: false,
+          include: [
+            {
+              model: db.currency,
+              as: 'currency',
+              required: false,
+            },
+          ],
+        }],
     });
 
     const dataOne = await axios.get("https://api.coinpaprika.com/v1/tickers/runes-runebase");
@@ -1712,7 +1722,8 @@ export const sendAdminMassMail = async (req, res, next) => {
     const changePercentColor = dataOne.data.quotes.USD.percent_change_24h > 0 ? 'green' : 'red';
     const changePercentUniCode = dataOne.data.quotes.USD.percent_change_24h > 0 ? '&#9650;' : '&#9660;';
 
-    users.forEach(async (user) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const user of users) {
       let price;
       let low;
       let high;
@@ -1740,6 +1751,10 @@ export const sendAdminMassMail = async (req, res, next) => {
       newtitle = newtitle.replace(/\[country_name\]/gi, user.country.name);
       newtitle = newtitle.replace(/\[currency_iso\]/gi, user.country.currency.iso);
       newtitle = newtitle.replace(/\[currency_name\]/gi, user.country.currency.currency_name);
+      newtitle = newtitle.replace(/\[referral\]/gi, `https://www.localrunes.com/signup?referredby=${user.username}`);
+      newtitle = newtitle.replace(/\[wallet_balance\]/gi, `${((user.wallet.available + user.wallet.locked) / 1e8)} RUNES`);
+      newtitle = newtitle.replace(/\[wallet_value\]/gi, `~${(((user.wallet.available + user.wallet.locked) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])))).toFixed(8).toString()} ${user.country.currency.iso}`);
+      newtitle = newtitle.replace(/\[wallet_value_usd\]/gi, `~${(((user.wallet.available + user.wallet.locked) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
 
       let newMessage;
       newMessage = req.body.message.replace(/\n/g, "<br />");
@@ -1750,13 +1765,30 @@ export const sendAdminMassMail = async (req, res, next) => {
       newMessage = newMessage.replace(/\[country_name\]/gi, user.country.name);
       newMessage = newMessage.replace(/\[currency_iso\]/gi, user.country.currency.iso);
       newMessage = newMessage.replace(/\[currency_name\]/gi, user.country.currency.currency_name);
+      newMessage = newMessage.replace(/\[referral\]/gi, `https://www.localrunes.com/signup?referredby=${user.username}`);
+      newMessage = newMessage.replace(/\[wallet_balance\]/gi, `${((user.wallet.available + user.wallet.locked) / 1e8)} RUNES`);
+      newMessage = newMessage.replace(/\[wallet_value\]/gi, `~${(((user.wallet.available + user.wallet.locked) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])))).toFixed(8).toString()} ${user.country.currency.iso}`);
+      newMessage = newMessage.replace(/\[wallet_value_usd\]/gi, `~${(((user.wallet.available + user.wallet.locked) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
+      newMessage = newMessage.replace(/\[wallet_android\]/gi, `
+        <div style="width: 100%;">
+          <div style="width: 100%; color: black">
+            <div style="width: 100%; font-size: 20px;">Download Android Wallet</div>
+          </div>        
+          <div style="width: 100%;">
+            <a href="https://play.google.com/store/apps/details?id=org.runebase.wallet">
+              <img style="width: 150px" src="https://downloads.runebase.io/google-play-store.png">
+            </a>
+          </div>
+        </div>
+      `);
 
       newMessage = newMessage.replace(/\[metrics\]/gi, `
       <table width="100%" align="center" style="width:100%; color: black;">
         <tr>
           <td>
             <div style="width: 100%; color: black">
-            <div style="width: 100%; font-size: 20px;">Key Metrics</div>
+              <div style="width: 100%; font-size: 20px;">Key Metrics</div>
+            </div>
           </td>
         </tr>
         <tr>
@@ -2054,7 +2086,7 @@ export const sendAdminMassMail = async (req, res, next) => {
         // text: "Hello world?", // plain text body
         html: finalMessage, // html body
       });
-    });
+    }
 
     // console.log('123');
     console.log(req.body);
