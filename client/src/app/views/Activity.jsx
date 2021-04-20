@@ -168,8 +168,18 @@ const MyActivity = (props) => {
     dispatch(fetchUserRecentActivity());
   }, [dispatch]);
   useEffect(() => {
-    const tempUserActivity = recenUserActivity.data.reverse().map((userActivity) => {
+    const tempUserActivity = recenUserActivity.data.map((userActivity) => {
       console.log(userActivity);
+      if (userActivity.type === 'referralBonus') {
+        return {
+          date: userActivity.createdAt,
+          type: 'Referral Bonus',
+          ip: userActivity.ip ? userActivity.ip.address : '',
+          balance: new BigNumber(userActivity.earner_balance).dividedBy(1e8).toString() || '',
+          amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+        };
+      }
+
       if (userActivity.type === 'depositAccepted') {
         return {
           date: userActivity.createdAt,
@@ -252,6 +262,7 @@ const MyActivity = (props) => {
           amount: -Math.abs(new BigNumber(userActivity.amount).dividedBy(1e8).toString()) || '',
         };
       }
+
       if (userActivity.type === 'sellTradeInit') {
         return {
           date: userActivity.createdAt,
@@ -339,7 +350,7 @@ const MyActivity = (props) => {
           // ip: userActivity.ip ? userActivity.ip.address : '',
           ip: '',
           balance: new BigNumber(userActivity.earner_balance).dividedBy(1e8).toString() || '',
-          amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+          amount: `${new BigNumber(userActivity.amount).dividedBy(1e8).toString()} - ${new BigNumber((userActivity.amount / 100) * 1).dividedBy(1e8).toString()} fee` || '',
         };
       }
       if (userActivity.type === 'buyTradeComplete') {
@@ -359,7 +370,7 @@ const MyActivity = (props) => {
           // ip: userActivity.ip ? userActivity.ip.address : '',
           ip: '',
           balance: new BigNumber(userActivity.earner_balance).dividedBy(1e8).toString() || '',
-          amount: new BigNumber(userActivity.amount).dividedBy(1e8).toString() || '',
+          amount: `${new BigNumber(userActivity.amount).dividedBy(1e8).toString()} - ${new BigNumber((userActivity.amount / 100) * 1).dividedBy(1e8).toString()} fee` || '',
         };
       }
 

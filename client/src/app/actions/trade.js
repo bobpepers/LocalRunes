@@ -403,7 +403,21 @@ export function acceptMainTradeAction(id) {
         dispatch({
           type: ACCEPT_MAIN_TRADE_SUCCESS,
           payload: response.data.trade,
-        })
+        });
+        console.log('response.data.trade');
+        console.log(response.data.trade);
+        if (response.data.trade.type === 'done') {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Success: Trade Complete',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'success',
+              },
+            },
+          });
+        }
       }).catch((error) => {
         dispatch({
           type: ACCEPT_MAIN_TRADE_FAIL,

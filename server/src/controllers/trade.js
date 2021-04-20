@@ -3,6 +3,8 @@ import db from '../models';
 const { Sequelize, Transaction, Op } = require('sequelize');
 const BigNumber = require('bignumber.js');
 
+const fee = 1;
+
 /**
  * Fetch PriceInfo
  */
@@ -321,7 +323,6 @@ export const fetchCurrentTrade = async (req, res, next) => {
 };
 
 export const secondTrade = async (req, res, next) => {
-  console.log('55555555555555555555555555555554545');
   await db.sequelize.transaction({
     isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   }, async (t) => {
@@ -905,6 +906,7 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           lock: t.LOCK.UPDATE,
         });
       }
+      // res.locals.trade = "accepted";
     }
 
     if (trade.userId === req.user.id) {
@@ -924,7 +926,13 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           lock: t.LOCK.UPDATE,
         });
       }
+      // res.locals.trade = "accepted";
     }
+
+    // fee to deduct
+    const FeeToDeduct = ((trade.amount / 100) * fee);
+    const referralCut = ((FeeToDeduct / 100) * 50);
+    //
 
     if (trade.userOneComplete && trade.userTwoComplete) {
       if (trade.postAd.type === "buy") {
@@ -955,7 +963,7 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           lock: t.LOCK.UPDATE,
         });
         res.locals.walletUserOne = await walletUserOneSell.update({
-          available: walletUserOneSell.available + trade.amount,
+          available: ((walletUserOneSell.available + trade.amount) - FeeToDeduct),
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
@@ -974,6 +982,114 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+
+        // Add Referral Commission
+        // Fetch Referral
+        const isReferredUserTrade = await db.Referrals.findOne({
+          where: {
+            referrerID: trade.userId,
+          },
+          include: [
+            {
+              model: db.user,
+              as: 'userReferred',
+              attributes: [
+                'id',
+                'username',
+              ],
+              include: [
+                {
+                  model: db.wallet,
+                  as: 'wallet',
+                },
+              ],
+            },
+          ],
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        const isReferredUserTradePostAd = await db.Referrals.findOne({
+          where: {
+            referrerID: trade.postAd.userId,
+          },
+          include: [
+            {
+              model: db.user,
+              as: 'userReferred',
+              attributes: [
+                'id',
+                'username',
+              ],
+              include: [
+                {
+                  model: db.wallet,
+                  as: 'wallet',
+                },
+              ],
+            },
+          ],
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        if (isReferredUserTrade) {
+          console.log(isReferredUserTrade.userReferred.wallet);
+          await isReferredUserTrade.update({
+            earned: isReferredUserTrade.earned + referralCut,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+          res.locals.referredWallet1 = await isReferredUserTrade.userReferred.wallet.update({
+            available: isReferredUserTrade.userReferred.wallet.available + referralCut,
+            // earned: isReferredUserTrade.userReferred.wallet.earned + referralCut,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+          const createReferredActivity1 = await db.activity.create({
+            type: 'referralBonus',
+            amount: referralCut,
+            earnerId: res.locals.referredWallet1.userId,
+            earner_balance: ((res.locals.referredWallet1.locked + res.locals.referredWallet1.available)),
+            spenderId: isReferredUserTrade.referrerID,
+            // orderId: ticket.order.id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
+
+        if (isReferredUserTradePostAd) {
+          await isReferredUserTradePostAd.update({
+            earned: isReferredUserTradePostAd.earned + referralCut,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+          res.locals.referredWallet2 = await isReferredUserTradePostAd.userReferred.wallet.update({
+            available: isReferredUserTradePostAd.userReferred.wallet.available + referralCut,
+            earned: isReferredUserTradePostAd.userReferred.wallet.earned + referralCut,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+          const createReferredActivity2 = await db.activity.create({
+            type: 'referralBonus',
+            amount: referralCut,
+            earnerId: res.locals.referredWallet2.userId,
+            earner_balance: ((res.locals.referredWallet2.locked + res.locals.referredWallet2.available)),
+            spenderId: isReferredUserTradePostAd.referrerID,
+            // orderId: ticket.order.id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
+        //
+
+        //
 
         res.locals.trade = await trade.update({
           type: 'done',
@@ -1066,7 +1182,7 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
         });
 
         res.locals.walletUserOne = await walletUserOne.update({
-          available: walletUserOne.available + trade.amount,
+          available: ((walletUserOne.available + trade.amount) - FeeToDeduct),
         }, {
           transaction: t,
           lock: t.LOCK.UPDATE,
@@ -1085,6 +1201,112 @@ export const acceptCurrentMainTrade = async (req, res, next) => {
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+
+        // Add Referral Commission
+        // Fetch Referral
+        const isReferredUserTrade = await db.Referrals.findOne({
+          where: {
+            referrerID: trade.userId,
+          },
+          include: [
+            {
+              model: db.user,
+              as: 'userReferred',
+              attributes: [
+                'id',
+                'username',
+              ],
+              include: [
+                {
+                  model: db.wallet,
+                  as: 'wallet',
+                },
+              ],
+            },
+          ],
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        const isReferredUserTradePostAd = await db.Referrals.findOne({
+          where: {
+            referrerID: trade.postAd.userId,
+          },
+          include: [
+            {
+              model: db.user,
+              as: 'userReferred',
+              attributes: [
+                'id',
+                'username',
+              ],
+              include: [
+                {
+                  model: db.wallet,
+                  as: 'wallet',
+                },
+              ],
+            },
+          ],
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+
+        if (isReferredUserTrade) {
+          console.log(isReferredUserTrade.userReferred.wallet);
+          await isReferredUserTrade.update({
+            earned: isReferredUserTrade.earned + referralCut,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+          res.locals.referredWallet1 = await isReferredUserTrade.userReferred.wallet.update({
+            available: isReferredUserTrade.userReferred.wallet.available + referralCut,
+            // earned: isReferredUserTrade.userReferred.wallet.earned + referralCut,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+          const createReferredActivity1 = await db.activity.create({
+            type: 'referralBonus',
+            amount: referralCut,
+            earnerId: res.locals.referredWallet1.userId,
+            earner_balance: ((res.locals.referredWallet1.locked + res.locals.referredWallet1.available)),
+            spenderId: isReferredUserTrade.referrerID,
+            // orderId: ticket.order.id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
+
+        if (isReferredUserTradePostAd) {
+          await isReferredUserTradePostAd.update({
+            earned: isReferredUserTradePostAd.earned + referralCut,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+          res.locals.referredWallet2 = await isReferredUserTradePostAd.userReferred.wallet.update({
+            available: isReferredUserTradePostAd.userReferred.wallet.available + referralCut,
+            earned: isReferredUserTradePostAd.userReferred.wallet.earned + referralCut,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+          const createReferredActivity2 = await db.activity.create({
+            type: 'referralBonus',
+            amount: referralCut,
+            earnerId: res.locals.referredWallet2.userId,
+            earner_balance: ((res.locals.referredWallet2.locked + res.locals.referredWallet2.available)),
+            spenderId: isReferredUserTradePostAd.referrerID,
+            // orderId: ticket.order.id,
+          }, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          });
+        }
+        //
 
         res.locals.trade = await trade.update({
           type: 'done',

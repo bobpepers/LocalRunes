@@ -288,6 +288,7 @@ const PostAd = (props) => {
               <li>All communication must happen on LocalRunes.com</li>
               <li>Payment methods marked High Risk have a significant risk of fraud. Be careful and always verify your trading partners when using high risk payment methods.</li>
               <li>For your advertisement to show you have to last seen at least 3 days ago</li>
+              <li>Trade Fee: 1%</li>
             </ul>
           </Card>
         </Grid>

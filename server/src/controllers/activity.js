@@ -112,7 +112,7 @@ export const fetchActivity = async (req, res, next) => {
 export const fetchRecentUserActivity = async (req, res, next) => {
   try {
     const activities = await db.activity.findAll({
-      order: [['createdAt', 'DESC']],
+      order: [['id', 'DESC']],
       where: {
         [Op.or]: [
           {

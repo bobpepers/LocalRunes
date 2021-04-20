@@ -1684,27 +1684,62 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
             });
           }
         }
-
-        if (onlineUsers[res.locals.trade.userId.toString()]) {
-          onlineUsers[res.locals.trade.userId.toString()].emit('updateTrade', {
-            trade: res.locals.trade,
-          });
+        if (res.locals.trade.userId) {
+          if (onlineUsers[res.locals.trade.userId.toString()]) {
+            onlineUsers[res.locals.trade.userId.toString()].emit('updateTrade', {
+              trade: res.locals.trade,
+            });
+          }
+        }
+        if (res.locals.trade.postAd) {
+          if (res.locals.trade.postAd.userId) {
+            if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+              onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateTrade', {
+                trade: res.locals.trade,
+              });
+            }
+          }
         }
 
-        if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
-          onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateTrade', {
-            trade: res.locals.trade,
-          });
+        if (res.locals.trade.userId) {
+          if (onlineUsers[res.locals.trade.userId.toString()]) {
+            onlineUsers[res.locals.trade.userId.toString()].emit('updateCurrentTrade', {
+              trade: res.locals.trade,
+            });
+          }
         }
 
-        if (onlineUsers[res.locals.trade.userId.toString()]) {
-          onlineUsers[res.locals.trade.userId.toString()].emit('updateCurrentTrade', {
-            trade: res.locals.trade,
-          });
+        if (res.locals.trade.postAd) {
+          if (res.locals.trade.postAd.userId) {
+            if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
+              onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateCurrentTrade', {
+                trade: res.locals.trade,
+              });
+            }
+          }
         }
 
-        if (onlineUsers[res.locals.trade.postAd.userId.toString()]) {
-          onlineUsers[res.locals.trade.postAd.userId.toString()].emit('updateCurrentTrade', {
+        if (res.locals.referredWallet1) {
+          if (onlineUsers[res.locals.referredWallet1.userId.toString()]) {
+            onlineUsers[res.locals.referredWallet1.userId.toString()].emit('updateWallet', {
+              wallet: res.locals.referredWallet1,
+            });
+          }
+        }
+
+        if (res.locals.referredWallet2) {
+          if (onlineUsers[res.locals.referredWallet2.userId.toString()]) {
+            onlineUsers[res.locals.referredWallet2.userId.toString()].emit('updateWallet', {
+              wallet: res.locals.referredWallet2,
+            });
+          }
+        }
+
+        if (res.locals.trade) {
+          console.log('res.locals.trade');
+          console.log(res.locals.trade);
+          console.log('done');
+          res.json({
             trade: res.locals.trade,
           });
         }
