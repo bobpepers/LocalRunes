@@ -281,7 +281,11 @@ const AdminPublishers = (props) => {
                                           variant="contained"
                                           color="primary"
                                           size="large"
-                                          onClick={() => onSave({ id: country.id, iso: unitIso, name: unitName })}
+                                          onClick={() => onSave({
+                                            id: country.id,
+                                            iso: unitIso,
+                                            name: unitName,
+                                          })}
                                         >
                                           Save
                                         </Button>
@@ -301,7 +305,11 @@ const AdminPublishers = (props) => {
                                         variant="contained"
                                         color="primary"
                                         size="large"
-                                        onClick={() => onEdit({ id: country.id, currentUnitIso: country.iso, currentUnitName: country.name })}
+                                        onClick={() => onEdit({
+                                          id: country.id,
+                                          currentUnitIso: country.iso,
+                                          currentUnitName: country.name,
+                                        })}
                                       >
                                         Edit
                                       </Button>

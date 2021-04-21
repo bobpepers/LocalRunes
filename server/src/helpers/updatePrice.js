@@ -24,75 +24,7 @@ const updatePrice = async (io) => {
 
     // Get data from coinpaprika
     const data = await axios.get("https://api.coinpaprika.com/v1/tickers/runes-runebase");
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log('data');
-    console.log(data);
-    console.log(data.data.quotes);
-    console.log(data.data.quotes.USD);
-    console.log(data.data.quotes.USD.price);
+
     if (data.data) {
       const priceInfo = await db.priceInfo.findOne({
         where: {
@@ -111,40 +43,13 @@ const updatePrice = async (io) => {
 
       const newPrice = Number(data.data.quotes.USD.price) + ((Number(data.data.quotes.USD.price) / 100) * Number(margin[0].value));
 
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-      console.log('newPrice');
-
-      console.log('newPrice');
-      console.log(margin);
-      console.log(margin[0].value);
-      console.log(data.data.quotes.USD.price);
-
-      console.log(newPrice);
-
       const price = await priceInfo.update({
         price: newPrice.toFixed(8).toString(),
       });
 
       const currencies = await db.currency.findAll({ });
-      console.log(currencies);
+
       currencies.forEach(async (currency) => {
-        console.log('loop1');
         if (currency.iso !== null || currency.iso !== "USD") {
           const createFirstRecord = await db.priceInfo.findOrCreate({
             where: {
@@ -155,7 +60,7 @@ const updatePrice = async (io) => {
               currency: currency.iso,
             },
           });
-          console.log(currency.iso);
+
           if (!createFirstRecord) {
             console.log('already exists');
           } else {
@@ -178,18 +83,13 @@ const updatePrice = async (io) => {
       };
 
       axios.request(openExchangeOptions).then(async (response) => {
-        console.log('response.data.openExchangeRates');
-        console.log(response.data.rates);
         Object.keys(response.data.rates).forEach(async (currency) => {
-          console.log('loop 2');
           const currenciesExist = await db.currency.findOne({
             where: {
               iso: currency,
             },
           });
           if (currenciesExist) {
-            console.log(currency);
-            console.log(currency, response.data.rates[currency]);
             const priceRecord = await db.priceInfo.update({
               price: (Number(currentPrice.price) * Number(response.data.rates[currency])).toFixed(8).toString(),
             }, {
@@ -206,7 +106,7 @@ const updatePrice = async (io) => {
       setTimeout(() => {
         Promise.all(promises).then(async () => {
           const priceRecords = await db.priceInfo.findAll({});
-          console.log(priceRecords);
+          // console.log(priceRecords);
           io.emit('updatePrice', priceRecords);
         });
       }, 5000);

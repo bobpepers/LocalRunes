@@ -1113,6 +1113,67 @@ export const fetchAdminPaymentMethod = async (req, res, next) => {
   }
 };
 
+export const updateAdminContestRewards = async (req, res, next) => {
+  console.log(req.body);
+
+  try {
+    const rewards = await db.contestRewards.findAll({
+      limit: 1,
+      order: [['id', 'DESC']],
+    });
+    if (!rewards) {
+      throw new Error('CONTEST_REWARDS_NOT_EXIST');
+    }
+
+    const updatedRewards = await rewards[0].update({
+      firstPlace: req.body.firstPlace,
+      secondPlace: req.body.secondPlace,
+      thirdPlace: req.body.thirdPlace,
+      firstPlaceNext: req.body.firstPlaceNext,
+      secondPlaceNext: req.body.secondPlaceNext,
+      thirdPlaceNext: req.body.thirdPlaceNext,
+    });
+
+    res.locals.rewards = updatedRewards;
+    console.log(req.body);
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
+export const fetchAdminContestRewards = async (req, res, next) => {
+  try {
+    const rewards = await db.contestRewards.findAll({
+      limit: 1,
+      order: [['id', 'DESC']],
+    });
+
+    console.log(rewards);
+
+    if (!rewards || !rewards.length) {
+      res.locals.rewards = await db.contestRewards.create({
+        firstPlace: '50 USD',
+        secondPlace: '2000 RUNES',
+        thirdPlace: '1000 RUNES',
+        firstPlaceNext: '25 USD',
+        secondPlaceNext: '1000 RUNES',
+        thirdPlaceNext: '500 RUNES',
+      });
+      return next();
+    }
+
+    res.locals.rewards = rewards;
+    next();
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+    next();
+  }
+};
+
 export const fetchAdminMargin = async (req, res, next) => {
   try {
     const margin = await db.priceMargin.findAll({

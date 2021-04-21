@@ -211,6 +211,18 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   UserModel.associate = (model) => {
+    UserModel.hasMany(model.referralContest, {
+      as: 'winner_first',
+    });
+
+    UserModel.hasMany(model.referralContest, {
+      as: 'winner_second',
+    });
+
+    UserModel.hasMany(model.referralContest, {
+      as: 'winner_third',
+    });
+
     UserModel.hasMany(model.dispute, {
       as: 'initiator',
       foreignKey: 'initiatorId',

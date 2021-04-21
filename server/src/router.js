@@ -74,7 +74,9 @@ import {
   adminCompleteDispute,
   fetchAdminMargin,
   updateAdminMargin,
+  updateAdminContestRewards,
   sendAdminMassMail,
+  fetchAdminContestRewards,
 } from './controllers/admin';
 
 import {
@@ -561,6 +563,28 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
       }
     });
 
+  app.get('/api/admin/contestrewards',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    fetchAdminContestRewards,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.rewards) {
+        console.log(res.locals.rewards);
+        res.json({
+          rewards: res.locals.rewards,
+        });
+      }
+    });
+
   app.get('/api/admin/countries/all',
     IsAuthenticated,
     isAdmin,
@@ -863,6 +887,29 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         // console.log(res.locals.currency);
         res.json({
           margin: res.locals.margin,
+        });
+      }
+    });
+
+  app.post('/api/admin/contestrewards/update',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    updateAdminContestRewards,
+    (req, res) => {
+      updatePrice(io);
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.rewards) {
+        // console.log(res.locals.currency);
+        res.json({
+          rewards: res.locals.rewards,
         });
       }
     });

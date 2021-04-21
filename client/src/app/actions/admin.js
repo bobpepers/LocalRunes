@@ -85,6 +85,10 @@ import {
   SEND_MASS_MAIL_SUCCESS,
   SEND_MASS_MAIL_FAIL,
   SEND_MASS_MAIL_IDLE,
+  FETCH_ADMINCONTESTREWARD_BEGIN,
+  FETCH_ADMINCONTESTREWARD_SUCCESS,
+  FETCH_ADMINCONTESTREWARD_FAIL,
+  UPDATE_ADMINCONTESTREWARD,
 } from './types/index';
 
 export function adminRejectIdentity(id) {
@@ -1723,6 +1727,86 @@ export function updateMargin(id, margin) {
   }
 }
 
+export function updateAdminContestRewards(
+  id,
+  firstPlace,
+  secondPlace,
+  thirdPlace,
+  firstPlaceNext,
+  secondPlaceNext,
+  thirdPlaceNext,
+) {
+  return function (dispatch) {
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.post(`${process.env.API_URL}/admin/contestrewards/update`, {
+      id,
+      firstPlace,
+      secondPlace,
+      thirdPlace,
+      firstPlaceNext,
+      secondPlaceNext,
+      thirdPlaceNext,
+    })
+      .then((response) => {
+        console.log('response.data.rewards');
+        console.log(response.data.rewards);
+
+        dispatch({
+          type: UPDATE_ADMINCONTESTREWARD,
+          payload: response.data.rewards,
+        });
+        dispatch({
+          type: ENQUEUE_SNACKBAR,
+          notification: {
+            message: 'Success: update margin',
+            key: new Date().getTime() + Math.random(),
+            options: {
+              variant: 'success',
+            },
+          },
+        });
+      }).catch((error) => {
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
 export function updateCurrency(id, name, iso) {
   return function (dispatch) {
     // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
@@ -2105,6 +2189,91 @@ export function sendMassMailAction(obj) {
           type: SEND_MASS_MAIL_FAIL,
           payload: error,
         });
+      });
+  }
+}
+
+export function fetchAdminContestRewardData() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINCONTESTREWARD_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.get(`${process.env.API_URL}/admin/contestrewards`)
+      .then((response) => {
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+        console.log('waaaaaaaaaaaaaaaaaaaa');
+
+        console.log(response.data.rewards);
+        console.log(response.data.rewards);
+
+        dispatch({
+          type: FETCH_ADMINCONTESTREWARD_SUCCESS,
+          payload: response.data.rewards,
+        });
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINCONTESTREWARD_FAIL,
+          payload: error,
+        });
+
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
       });
   }
 }

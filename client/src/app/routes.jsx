@@ -20,6 +20,7 @@ import AdminTradeView from './views/admin/AdminTradeView';
 import AdminPendingDisputes from './views/admin/AdminPendingDisputes';
 import AdminPriceMargin from './views/admin/AdminPriceMargin';
 import AdminMail from './views/admin/AdminMail';
+import AdminContestRewards from './views/admin/AdminContestRewards';
 
 import UserList from './components/users/UserList';
 import Signin from './components/auth/Signin';
@@ -58,6 +59,7 @@ import TradeComplete from './views/TradeComplete';
 import TradeCanceled from './views/TradeCanceled';
 import Settings from './views/Settings';
 import Activity from './views/Activity';
+import ReferralContest from './views/ReferralContest';
 
 const Routes = (props) => {
   const {
@@ -144,6 +146,10 @@ const Routes = (props) => {
       <Route
         path="/policy"
         component={withTracker(Privacy)}
+      />
+      <Route
+        path="/contest"
+        component={withTracker(ReferralContest)}
       />
       <Route
         path="/wallet"
@@ -282,6 +288,11 @@ const Routes = (props) => {
         path="/admin/deposits"
         exact
         component={requireAuth(withTracker(AdminDepositMethodManagement))}
+      />
+      <Route
+        path="/admin/contestrewards"
+        exact
+        component={requireAuth(withTracker(AdminContestRewards))}
       />
 
       <Route

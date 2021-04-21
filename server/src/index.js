@@ -29,6 +29,7 @@ import {
   patchUserOfflineStatus,
 } from './helpers/userOnlineStatus';
 import { patchUnacceptedTrades } from './helpers/trade';
+import drawReferralContest from './helpers/referralContest';
 
 logger.info('logger loader');
 const schedule = require('node-schedule');
@@ -478,6 +479,26 @@ const schedulePriceUpdate = schedule.scheduleJob('*/10 * * * *', () => {
 //  drawJackpot(sub, pub, expired_subKey);
 // });
 // setInterval(drawJackpot, 5 * 60 * 1000);
+
+drawReferralContest(sub, pub, expired_subKey);
+// Run every 2 hours at 5 minute mark
+db.cronjob.findOne({
+  where: {
+    type: 'drawJackpot',
+    state: 'executing',
+  },
+}).then((exist) => {
+  const scheduleReferralContestDrawPatcher = schedule.scheduleJob(new Date(exist.expression), (fireDate) => {
+    console.log(`This job was supposed to run at ${fireDate}, but actually ran at ${new Date()}`);
+    drawReferralContest(sub, pub, expired_subKey);
+  });
+}).catch((error) => {
+  console.log(error);
+});
+
+const scheduleReferralContestDrawPatcher = schedule.scheduleJob('5 */2 * * *', () => {
+  drawReferralContest(sub, pub, expired_subKey);
+});
 
 // Archive activity daily older then 3 days
 

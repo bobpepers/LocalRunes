@@ -205,6 +205,12 @@ const Header = (props) => {
                  </>
                  )
             }
+            <Link
+              className="nav-link"
+              to="/contest"
+            >
+              Referral Contest
+            </Link>
 
           </Nav>
           <ul>
@@ -288,6 +294,22 @@ const Header = (props) => {
                           </Link>
                         </div>
                       </MenuItem>
+                      <MenuItem
+                        onClick={handleCloseAdminMenu}
+                      >
+                        <div>
+                          <Link
+                            style={{ color: '#000' }}
+                            className="nav-link"
+                            to="/admin/contestrewards"
+                          >
+                            <AccountBalanceWalletIcon />
+                            {' '}
+                            Contest Rewards
+                          </Link>
+                        </div>
+                      </MenuItem>
+
                       <MenuItem
                         onClick={handleCloseAdminMenu}
                       >

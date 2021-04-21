@@ -44,6 +44,9 @@ import adminPendingDisputes from "./admin/adminPendingDisputes";
 import adminMargin from "./admin/adminMargin";
 import adminMassMail from "./admin/adminMassMail";
 
+import adminContestReward from "./admin/adminContestReward";
+
+
 
 //import createReport from './createReport';
 
@@ -114,6 +117,7 @@ const rootReducer = combineReducers({
   adminPendingDisputes: adminPendingDisputes,
   adminMargin: adminMargin,
   adminMassMail: adminMassMail,
+  adminContestReward: adminContestReward,
 
   verifyPhoneCode: verifyPhoneCode,
   getPhoneCode: getPhoneCode,
