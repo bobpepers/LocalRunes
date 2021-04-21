@@ -36,7 +36,7 @@ const drawReferralContest = async (sub, pub, expired_subKey) => {
 
     if (!rewards || !rewards.length) {
       await db.contestRewards.create({
-        firstPlace: '50 USD',
+        firstPlace: '173 USD',
         secondPlace: '2000 RUNES',
         thirdPlace: '1000 RUNES',
         firstPlaceNext: '25 USD',
@@ -155,6 +155,9 @@ const drawReferralContest = async (sub, pub, expired_subKey) => {
                     authused: true,
                   },
                   {
+                    phoneNumberVerified: true,
+                  },
+                  {
                     identityVerified: 'accepted',
                   },
                 ],
@@ -180,6 +183,9 @@ const drawReferralContest = async (sub, pub, expired_subKey) => {
                   },
                   {
                     authused: true,
+                  },
+                  {
+                    phoneNumberVerified: true,
                   },
                   {
                     identityVerified: 'accepted',

@@ -22,7 +22,7 @@ export default (state = initialState, action) => {
     case FETCH_REFERRALCONTESTS_SUCCESS:
       return {
         ...state,
-        data: action.payload.data.jackpots,
+        data: action.payload,
         isFetching: false,
       };
     case FETCH_REFERRALCONTESTS_FAIL:

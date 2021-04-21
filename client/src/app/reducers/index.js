@@ -73,6 +73,11 @@ import createUserFeedback from './createUserFeedback';
 import removeUserFeedback from './removeUserFeedback';
 import startTrade from './startTrade';
 
+import referralContestRewards from './referralContestRewards';
+import referralContestStats from './referralContestStats';
+import referralContests from './referralContests';
+
+
 
 const rootReducer = combineReducers({
   form,
@@ -141,6 +146,9 @@ const rootReducer = combineReducers({
   createUserFeedback: createUserFeedback,
   removeUserFeedback: removeUserFeedback,
   startTrade: startTrade,
+  referralContestRewards: referralContestRewards,
+  referralContestStats: referralContestStats,
+  referralContests: referralContests,
 });
 
 export default rootReducer;

@@ -22,6 +22,12 @@ import {
 } from './controllers/upload';
 
 import {
+  fetchReferralContests,
+  fetchReferralRewards,
+  fetchReferralWeekStats,
+} from './controllers/referralContests';
+
+import {
   insertIp,
   isIpBanned,
 } from './controllers/ip';
@@ -716,6 +722,7 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         });
       }
     });
+
   app.post('/api/user/location',
     getLocation,
     (req, res) => {
@@ -731,6 +738,63 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         console.log(res.locals.location);
         res.json({
           location: res.locals.location,
+        });
+      }
+    });
+
+  app.get('/api/referral/contests',
+    fetchReferralContests,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.contests) {
+        console.log(res.locals.contests);
+        res.json({
+          contests: res.locals.contests,
+        });
+      }
+    });
+
+  app.get('/api/referral/rewards',
+    fetchReferralRewards,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.rewards) {
+        console.log(res.locals.rewards);
+        res.json({
+          rewards: res.locals.rewards,
+        });
+      }
+    });
+
+  app.get('/api/referral/stats',
+    fetchReferralWeekStats,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.stats) {
+        console.log(res.locals.stats);
+        res.json({
+          stats: res.locals.stats,
         });
       }
     });
