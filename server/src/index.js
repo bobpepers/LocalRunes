@@ -79,6 +79,10 @@ const volumeInfo = {
   impression: 0,
   impression24: 0,
   impressionVolume24: 0,
+  tradeVolume: 0,
+  trade: 0,
+  tradeVolume24: 0,
+  trade24: 0,
 };
 
 function SubscribeExpired(e, r) {
@@ -223,6 +227,33 @@ const updateSurf = (log_list) => {
   });
 };
 
+const updateTrade = (log_list) => {
+  const dataset = [];
+  const keys = Object.keys(log_list);
+  let i = 0;
+  if (log_list.length === 0) {
+    volumeInfo.tradeVolume24 = 0;
+    volumeInfo.trade24 = 0;
+  }
+  keys.forEach((l) => {
+    pub.get(log_list[l], (e, o) => {
+      i++;
+      if (e) {
+        console.log(e);
+      } else {
+        const temp_data = { key: log_list[l], value: o };
+        dataset.push(temp_data);
+      }
+      if (i == keys.length) {
+        volumeInfo.tradeVolume24 = dataset.reduce((a, { value }) => a + Number(value), 0);
+        volumeInfo.trade24 = dataset.length;
+        console.log(volumeInfo);
+        console.log('nomnomnom');
+      }
+    });
+  });
+};
+
 const updateImpressions = (log_list) => {
   const dataset = [];
   const keys = Object.keys(log_list);
@@ -257,6 +288,10 @@ sub.on('message', (chan, msg) => {
   scanner.scan('impression:*', (err, keys) => {
     if (err) throw (err);
     updateImpressions(keys);
+  });
+  scanner.scan('trade:*', (err, keys) => {
+    if (err) throw (err);
+    updateTrade(keys);
   });
   // scanner.scan('surfVolume:*', (err, keys) => {
   //  if (err) throw (err);
@@ -308,6 +343,11 @@ scanner.scan('surf:*', (err, keys) => {
 scanner.scan('impression:*', (err, keys) => {
   if (err) throw (err);
   updateImpressions(keys);
+});
+
+scanner.scan('trade:*', (err, keys) => {
+  if (err) throw (err);
+  updateTrade(keys);
 });
 
 // .: For example (create a key & set to expire in 10 seconds)
@@ -394,21 +434,10 @@ const onlineUsers = {};
 
 io.on("connection", async (socket) => {
   const userId = socket.request.session.passport ? socket.request.session.passport.user : '';
-  console.log('your user id');
-  console.log('your user id');
-  console.log('your user id');
-  console.log('your user id');
-  console.log('your user id');
-  console.log('your user id');
-  console.log('your user id');
-  console.log('your user id');
-  console.log('your user id');
 
-  console.log('your user id');
-  console.log('your user id');
-  console.log(userId);
-  console.log(onlineUsers);
-  console.log(socket.request.user);
+  // console.log(userId);
+  // console.log(onlineUsers);
+  // console.log(socket.request.user);
   if (socket.request.user.role === 4) {
     socket.join('admin');
   }

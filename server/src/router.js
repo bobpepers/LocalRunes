@@ -1847,6 +1847,17 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         }
 
         if (res.locals.trade) {
+          if (res.locals.trade.type) {
+            if (res.locals.trade.type === 'done') {
+              sub.subscribe(expired_subKey, () => {
+                // pub.setex('tradeVolume:', 9999999999999999, res.locals.lastStats.surf);
+                pub.setex(`trade:${res.locals.trade.id}`, 86400, res.locals.trade.amount);
+              });
+            }
+          }
+        }
+
+        if (res.locals.trade) {
           console.log('res.locals.trade');
           console.log(res.locals.trade);
           console.log('done');

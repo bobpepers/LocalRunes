@@ -22,163 +22,40 @@ const VolumeContainer = (props) => {
       xs={12}
       className="shadow-w"
     >
-      <Grid
-        item
-        xs={6}
-        sm={6}
-        md={3}
-        className="index600 spacing-top"
-      >
-        <ScrollAnimation
-          animateIn="slideInLeft"
-          animateOut="slideOutLeft"
-          duration={2}
-          delay={1}
-          offset={0}
-        >
-          <span className="dashboardWalletItem">24h Surfs</span>
-          <span className="dashboardWalletItem">{volume.surf24 ? volume.surf24 : <CircularProgress disableShrink />}</span>
-        </ScrollAnimation>
-      </Grid>
-      {/*
-      <Grid item xs={4} className="index600">
-        <span className="dashboardWalletItem">24h Clicks</span>
-        <span className="dashboardWalletItem">{props.volume.click24 ? props.volume.click24 : 'Loading...'}</span>
-      </Grid>
-      */}
 
       <Grid
         item
-        xs={6}
+        xs={12}
         sm={6}
-        md={3}
+        md={6}
         className="index600 spacing-top"
       >
-        <ScrollAnimation
-          animateIn="zoomIn"
-          animateOut="zoomOut"
-          duration={2}
-          delay={1}
-          offset={0}
-        >
-          <span className="dashboardWalletItem">24h Surf Volume</span>
-          <span className="dashboardWalletItem">{volume.surfVolume24 ? `${(volume.clickVolume24 + volume.surfVolume24) / 1e8} RUNES` : <CircularProgress disableShrink />}</span>
-        </ScrollAnimation>
-      </Grid>
-      <Grid
-        item
-        xs={6}
-        sm={6}
-        md={3}
-        className="index600 spacing-top"
-      >
-        <ScrollAnimation
-          animateIn="zoomIn"
-          animateOut="zoomOut"
-          duration={2}
-          delay={1}
-          offset={0}
-        >
-          <span className="dashboardWalletItem">Surfs Served</span>
-          <span className="dashboardWalletItem">{volume.surf ? volume.surf : <CircularProgress disableShrink />}</span>
-        </ScrollAnimation>
-      </Grid>
-      {/*
-      <Grid item xs={4} className="index600">
-        <span className="dashboardWalletItem">Clicks Served</span>
-        <span className="dashboardWalletItem">{props.volume.click ? props.volume.click : 'loading...'}</span>
-      </Grid>
-      */}
+        <span className="dashboardWalletItem">
+          24h completed trades
+        </span>
+        <span className="dashboardWalletItem">
+          {volume.trade24
+            ? volume.trade24
+            : <CircularProgress disableShrink />}
+        </span>
 
-      <Grid
-        item
-        xs={6}
-        sm={6}
-        md={3}
-        className="index600 spacing-top"
-      >
-        <ScrollAnimation
-          animateIn="slideInRight"
-          animateOut="slideOutRight"
-          duration={2}
-          delay={1}
-          offset={0}
-        >
-          <span className="dashboardWalletItem">Lotteries Served</span>
-          <span className="dashboardWalletItem">{volume.jackpot ? volume.jackpot : <CircularProgress disableShrink />}</span>
-        </ScrollAnimation>
       </Grid>
       <Grid
         item
-        xs={6}
+        xs={12}
         sm={6}
-        md={3}
+        md={6}
         className="index600 spacing-top"
       >
-        <ScrollAnimation
-          animateIn="slideInLeft"
-          animateOut="slideOutLeft"
-          duration={2}
-          delay={1}
-          offset={0}
-        >
-          <span className="dashboardWalletItem">24h Unique impressions</span>
-          <span className="dashboardWalletItem">{volume.impression24 ? volume.impression24 : <CircularProgress disableShrink />}</span>
-        </ScrollAnimation>
-      </Grid>
-      <Grid
-        item
-        xs={6}
-        sm={6}
-        md={3}
-        className="index600 spacing-top"
-      >
-        <ScrollAnimation
-          animateIn="zoomIn"
-          animateOut="zoomOut"
-          duration={2}
-          delay={1}
-          offset={0}
-        >
-          <span className="dashboardWalletItem">24h impression volume</span>
-          <span className="dashboardWalletItem">{volume.impressionVolume24 ? `${volume.impressionVolume24 / 1e8} RUNES` : <CircularProgress disableShrink />}</span>
-        </ScrollAnimation>
-      </Grid>
-      <Grid
-        item
-        xs={6}
-        sm={6}
-        md={3}
-        className="index600 spacing-top"
-      >
-        <ScrollAnimation
-          animateIn="zoomIn"
-          animateOut="zoomOut"
-          duration={2}
-          delay={1}
-          offset={0}
-        >
-          <span className="dashboardWalletItem">Unique impressions Served</span>
-          <span className="dashboardWalletItem">{volume.impression ? volume.impression : <CircularProgress disableShrink />}</span>
-        </ScrollAnimation>
-      </Grid>
-      <Grid
-        item
-        xs={6}
-        sm={6}
-        md={3}
-        className="index600 spacing-top"
-      >
-        <ScrollAnimation
-          animateIn="slideInRight"
-          animateOut="slideOutRight"
-          duration={2}
-          delay={1}
-          offset={0}
-        >
-          <span className="dashboardWalletItem">24h Total volume</span>
-          <span className="dashboardWalletItem">{volume.impressionVolume24 ? `${(volume.impressionVolume24 + volume.surfVolume24) / 1e8} RUNES` : <CircularProgress disableShrink />}</span>
-        </ScrollAnimation>
+
+        <span className="dashboardWalletItem">
+          24h trade volume
+        </span>
+        <span className="dashboardWalletItem">
+          {volume.tradeVolume24
+            ? `${(volume.tradeVolume24) / 1e8} RUNES`
+            : <CircularProgress disableShrink />}
+        </span>
       </Grid>
     </Grid>
   )

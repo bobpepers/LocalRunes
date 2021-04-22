@@ -145,7 +145,7 @@ const ReferralContestView = (props) => {
             <h3 className="text-center">Contest rules</h3>
             <ul className="listPostAd">
               <li>You have to be fully verfied to participate (email, phone and identity)</li>
-              <li>Your referral needs to registered during contest round</li>
+              <li>Your referral needs to have registered during contest round</li>
               <li>Your referral needs to be fully verified (email, phone and identity)</li>
               <li>Your referral needs to have completed atleast 1 trade</li>
               <li>Your referral needs to have atleast 2000 RUNES available in his/her wallet</li>

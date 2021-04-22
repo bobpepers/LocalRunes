@@ -41,6 +41,7 @@ const Home = () => {
         spacing={0}
       >
         <Info />
+        <Volume />
         {/* <Globe /> */}
       </Grid>
     </div>
