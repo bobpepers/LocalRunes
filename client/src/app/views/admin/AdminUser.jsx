@@ -46,7 +46,7 @@ const adminUserComponent = (props) => {
   const [pageActivity, setPageActivity] = React.useState(0);
   const [rowsPerPageActivityArchive, setRowsPerPageActivityArchive] = React.useState(25);
   const [pageActivityArchive, setPageActivityArchive] = React.useState(0);
-  useEffect(() => dispatch(fetchAdminUserData({ id: 3 })), [dispatch]);
+  useEffect(() => dispatch(fetchAdminUserData({ id })), [dispatch]);
   useEffect(() => {
 
   }, [adminUser]);
