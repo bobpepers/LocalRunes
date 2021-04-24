@@ -3,8 +3,14 @@ import React, {
   useState,
   // Fragment,
 } from 'react';
-import { withRouter, useHistory } from 'react-router-dom';
-import { connect, useDispatch } from 'react-redux';
+import {
+  withRouter,
+  useHistory,
+} from 'react-router-dom';
+import {
+  connect,
+  useDispatch,
+} from 'react-redux';
 import {
   Grid,
   Button,
@@ -15,6 +21,9 @@ import {
   Radio,
   InputLabel,
   Select,
+  OutlinedInput,
+  InputAdornment,
+  FormHelperText,
 } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 
@@ -41,6 +50,74 @@ import {
   cancelTradeIdleAction,
   fetchSingleTradeData,
 } from '../actions/trade';
+
+const renderFieldTotal = ({
+  input,
+  type,
+  placeholder,
+  marking,
+  meta: {
+    touched,
+    error,
+  },
+}) => (
+  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
+    <FormControl
+      variant="outlined"
+      fullWidth
+    >
+      <InputLabel htmlFor="outlined-adornment-total">Total</InputLabel>
+      <OutlinedInput
+        id="outlined-adornment-total"
+        label={placeholder}
+        type={type}
+        endAdornment={<InputAdornment position="end">{marking}</InputAdornment>}
+        aria-describedby="outlined-weight-helper-text"
+        inputProps={{
+          'aria-label': { marking },
+          className: 'outlined-email-field',
+        }}
+        // labelWidth={0}
+        {...input}
+      />
+      { touched && error && <div className="form-error">{error}</div> }
+    </FormControl>
+  </div>
+);
+
+const renderFieldAmount = ({
+  input,
+  type,
+  placeholder,
+  marking,
+  meta: {
+    touched,
+    error,
+  },
+}) => (
+  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
+    <FormControl
+      variant="outlined"
+      fullWidth
+    >
+      <InputLabel htmlFor="outlined-adornment-weight">Amount</InputLabel>
+      <OutlinedInput
+        id="outlined-adornment-weight"
+        label={placeholder}
+        type={type}
+        endAdornment={<InputAdornment position="end">{marking}</InputAdornment>}
+        aria-describedby="outlined-weight-helper-text"
+        inputProps={{
+          'aria-label': 'amount',
+          className: 'outlined-email-field',
+        }}
+        // labelWidth={0}
+        {...input}
+      />
+      { touched && error && <div className="form-error">{error}</div> }
+    </FormControl>
+  </div>
+);
 
 const renderField = ({
   input, type, placeholder, meta: { touched, error },
@@ -277,12 +354,13 @@ const TradeInit = (props) => {
                   </p>
                 </Grid>
                 <Grid item xs={12}>
-                  <p>Amount</p>
+                  <p>Amount (RUNES)</p>
                   <Field
                     name="amount"
-                    component={renderField}
+                    component={renderFieldAmount}
                     type="number"
                     placeholder="Amount"
+                    marking="RUNES"
                     onChange={(event, index, value) => {
                       console.log('nummer');
                       console.log(event.currentTarget.valueAsNumber);
@@ -300,12 +378,32 @@ const TradeInit = (props) => {
                       // }
                     }}
                   />
-                  <p>Total</p>
+                  <p>
+                    Total
+                    {' '}
+                    (
+                    {
+                      currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.currency
+                        ? currentTrade.postAd.currency.iso
+                        : ''
+                    }
+                    )
+
+                  </p>
                   <Field
                     name="total"
-                    component={renderField}
+                    component={renderFieldTotal}
                     type="number"
                     placeholder="Total"
+                    marking={
+                      currentTrade
+                    && currentTrade.postAd
+                    && currentTrade.postAd.currency
+                        ? currentTrade.postAd.currency.iso
+                        : ''
+                    }
                     onChange={(event, index, value) => {
                       if (currentTrade.postAd && currentTrade.postAd.priceType === 'static') {
                         console.log('(event.currentTarget.valueAsNumber / (currentTrade.price / 1e8)).toFixed(8)');
