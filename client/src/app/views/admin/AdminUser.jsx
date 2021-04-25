@@ -114,6 +114,16 @@ const adminUserComponent = (props) => {
 
         </Button>
         <h3 className="shadow-w text-center">{adminUser.data.username}</h3>
+        <p>
+          firstName:
+          {' '}
+          {adminUser.data.firstname}
+        </p>
+        <p>
+          lastname:
+          {' '}
+          {adminUser.data.lastname}
+        </p>
         <Grid container>
           <Grid item xs={4}>
             <p className="shadow-w text-center">Available</p>

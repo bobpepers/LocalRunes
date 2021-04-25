@@ -149,6 +149,7 @@ const ReferralContestView = (props) => {
               <li>Your referral needs to be fully verified (email, phone and identity)</li>
               <li>Your referral needs to have completed atleast 1 trade</li>
               <li>Your referral needs to have atleast 2000 RUNES available in his/her wallet</li>
+              <li>You need to collect atleast 10 referrals in the weeks round to qualify for winning</li>
             </ul>
           </Card>
         </Grid>

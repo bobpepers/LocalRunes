@@ -389,7 +389,7 @@ export const fetchAdminUser = async (req, res, next) => {
       where: {
         id: req.body.id,
       },
-      attributes: ['id', 'username', 'email', 'banned'],
+      attributes: ['id', 'username', 'email', 'banned', 'firstname', 'lastname'],
       include: [
         {
           model: db.wallet,
