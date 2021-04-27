@@ -1711,128 +1711,127 @@ function getPercentageChange(oldNumber, newNumber) {
 
 export const sendAdminMassMail = async (req, res, next) => {
   console.log('start sendadminmail');
-  await db.sequelize.transaction({
-    isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
-  }, async (t) => {
-    console.log('start sendadminmail');
-    const users = await db.user.findAll({
-      where: {
-        authused: true,
-      },
 
-      include: [
-        {
-          model: db.wallet,
-          as: 'wallet',
-          include: [{
-            model: db.address,
-            as: 'addresses',
-          }],
-        },
-        {
-          model: db.country,
-          as: 'country',
-          required: false,
-          include: [
-            {
-              model: db.currency,
-              as: 'currency',
-              required: false,
-            },
-          ],
+  console.log('start sendadminmail');
+  const users = await db.user.findAll({
+    where: {
+      authused: true,
+    },
+
+    include: [
+      {
+        model: db.wallet,
+        as: 'wallet',
+        include: [{
+          model: db.address,
+          as: 'addresses',
         }],
-    });
+      },
+      {
+        model: db.country,
+        as: 'country',
+        required: false,
+        include: [
+          {
+            model: db.currency,
+            as: 'currency',
+            required: false,
+          },
+        ],
+      }],
+  });
 
-    const dataOne = await axios.get("https://api.coinpaprika.com/v1/tickers/runes-runebase");
-    const dataTwo = await axios.get("https://api.coinpaprika.com/v1/coins/runes-runebase/ohlcv/today");
-    const markets = await axios.get("https://api.coinpaprika.com/v1/coins/runes-runebase/markets");
+  const dataOne = await axios.get("https://api.coinpaprika.com/v1/tickers/runes-runebase");
+  const dataTwo = await axios.get("https://api.coinpaprika.com/v1/coins/runes-runebase/ohlcv/today");
+  const markets = await axios.get("https://api.coinpaprika.com/v1/coins/runes-runebase/markets");
 
-    const bololexRunesUsdtCh = await axios.get("https://api.bololex.com/api/prices/RUNES-USDT");
-    const bololexRunesUsdtChangePercentColor = Number(bololexRunesUsdtCh.data.result[0].priceChange) > 0 ? 'green' : 'red';
-    const bololexRunesUsdtChangePercentUniCode = Number(bololexRunesUsdtCh.data.result[0].priceChange) > 0 ? '&#9650;' : '&#9660;';
+  const bololexRunesUsdtCh = await axios.get("https://api.bololex.com/api/prices/RUNES-USDT");
+  const bololexRunesUsdtChangePercentColor = Number(bololexRunesUsdtCh.data.result[0].priceChange) > 0 ? 'green' : 'red';
+  const bololexRunesUsdtChangePercentUniCode = Number(bololexRunesUsdtCh.data.result[0].priceChange) > 0 ? '&#9650;' : '&#9660;';
 
-    const bololexRunesBtcCh = await axios.get("https://api.bololex.com/api/prices/RUNES-BTC");
-    const bololexRunesBtcChangePercentColor = Number(bololexRunesBtcCh.data.result[0].priceChange) > 0 ? 'green' : 'red';
-    const bololexRunesBtcChangePercentUniCode = Number(bololexRunesBtcCh.data.result[0].priceChange) > 0 ? '&#9650;' : '&#9660;';
+  const bololexRunesBtcCh = await axios.get("https://api.bololex.com/api/prices/RUNES-BTC");
+  const bololexRunesBtcChangePercentColor = Number(bololexRunesBtcCh.data.result[0].priceChange) > 0 ? 'green' : 'red';
+  const bololexRunesBtcChangePercentUniCode = Number(bololexRunesBtcCh.data.result[0].priceChange) > 0 ? '&#9650;' : '&#9660;';
 
-    const altmarketsRunesDogeCh = await axios.get("https://v2.altmarkets.io/api/v2/peatio/public/markets/runesdoge/tickers");
-    // console.log(altmarketsRunesDogeCh);
-    let altmarketsruneDogePriceChange;
-    altmarketsruneDogePriceChange = altmarketsRunesDogeCh.data.ticker.price_change_percent.replace(/%/gi, '');
-    altmarketsruneDogePriceChange = altmarketsRunesDogeCh.data.ticker.price_change_percent.replace(/\+/gi, '');
-    const altmarketsRunesDogeChangePercentColor = Number(altmarketsruneDogePriceChange) > 0 ? 'green' : 'red';
-    const altmarketsRunesDogeChangePercentUniCode = Number(altmarketsruneDogePriceChange) > 0 ? '&#9650;' : '&#9660;';
+  const altmarketsRunesDogeCh = await axios.get("https://v2.altmarkets.io/api/v2/peatio/public/markets/runesdoge/tickers");
+  // console.log(altmarketsRunesDogeCh);
+  let altmarketsruneDogePriceChange;
+  altmarketsruneDogePriceChange = altmarketsRunesDogeCh.data.ticker.price_change_percent.replace(/%/gi, '');
+  altmarketsruneDogePriceChange = altmarketsRunesDogeCh.data.ticker.price_change_percent.replace(/\+/gi, '');
+  const altmarketsRunesDogeChangePercentColor = Number(altmarketsruneDogePriceChange) > 0 ? 'green' : 'red';
+  const altmarketsRunesDogeChangePercentUniCode = Number(altmarketsruneDogePriceChange) > 0 ? '&#9650;' : '&#9660;';
 
-    const txbitRunesBtcCh = await axios.get("https://api.txbit.io/api/public/getmarketsummary?market=RUNES/BTC");
-    const isIncreaseOrDecreaceTxBitBTC = ((getPercentageChange(txbitRunesBtcCh.data.result.PrevDay, txbitRunesBtcCh.data.result.Last) * -1)).toFixed(2);
-    const txbitRunesBtcChangePercentColor = Number(isIncreaseOrDecreaceTxBitBTC) > 0 ? 'green' : 'red';
-    const txbitRunesBtcChangePercentUniCode = Number(isIncreaseOrDecreaceTxBitBTC) > 0 ? '&#9650;' : '&#9660;';
+  const txbitRunesBtcCh = await axios.get("https://api.txbit.io/api/public/getmarketsummary?market=RUNES/BTC");
+  const isIncreaseOrDecreaceTxBitBTC = ((getPercentageChange(txbitRunesBtcCh.data.result.PrevDay, txbitRunesBtcCh.data.result.Last) * -1)).toFixed(2);
+  const txbitRunesBtcChangePercentColor = Number(isIncreaseOrDecreaceTxBitBTC) > 0 ? 'green' : 'red';
+  const txbitRunesBtcChangePercentUniCode = Number(isIncreaseOrDecreaceTxBitBTC) > 0 ? '&#9650;' : '&#9660;';
 
-    const txbitRunesEthCh = await axios.get("https://api.txbit.io/api/public/getmarketsummary?market=RUNES/ETH");
-    const isIncreaseOrDecreaceTxBitETH = ((getPercentageChange(txbitRunesEthCh.data.result.PrevDay, txbitRunesEthCh.data.result.Last) * -1)).toFixed(2);
-    const txbitRunesEthChangePercentColor = Number(isIncreaseOrDecreaceTxBitETH) > 0 ? 'green' : 'red';
-    const txbitRunesEthChangePercentUniCode = Number(isIncreaseOrDecreaceTxBitETH) > 0 ? '&#9650;' : '&#9660;';
+  const txbitRunesEthCh = await axios.get("https://api.txbit.io/api/public/getmarketsummary?market=RUNES/ETH");
+  const isIncreaseOrDecreaceTxBitETH = ((getPercentageChange(txbitRunesEthCh.data.result.PrevDay, txbitRunesEthCh.data.result.Last) * -1)).toFixed(2);
+  const txbitRunesEthChangePercentColor = Number(isIncreaseOrDecreaceTxBitETH) > 0 ? 'green' : 'red';
+  const txbitRunesEthChangePercentUniCode = Number(isIncreaseOrDecreaceTxBitETH) > 0 ? '&#9650;' : '&#9660;';
 
-    const openExchangeOptions = {
-      method: 'GET',
-      url: 'https://openexchangerates.org/api/latest.json?app_id=7fe614bf9a0f4d8cb7dd72a468a9ef59&show_alternative=1',
-    };
+  const openExchangeOptions = {
+    method: 'GET',
+    url: 'https://openexchangerates.org/api/latest.json?app_id=7fe614bf9a0f4d8cb7dd72a468a9ef59&show_alternative=1',
+  };
 
-    const currencyCoversion = await axios.request(openExchangeOptions);
+  const currencyCoversion = await axios.request(openExchangeOptions);
 
-    const changePercentColor = dataOne.data.quotes.USD.percent_change_24h > 0 ? 'green' : 'red';
-    const changePercentUniCode = dataOne.data.quotes.USD.percent_change_24h > 0 ? '&#9650;' : '&#9660;';
+  const changePercentColor = dataOne.data.quotes.USD.percent_change_24h > 0 ? 'green' : 'red';
+  const changePercentUniCode = dataOne.data.quotes.USD.percent_change_24h > 0 ? '&#9650;' : '&#9660;';
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const user of users) {
-      let price;
-      let low;
-      let high;
-      let open;
-      if (user.country.currency.iso !== 'USD') {
-        price = (Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
-        low = (Number(dataTwo.data[0].low) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
-        high = (Number(dataTwo.data[0].high) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
-        open = (Number(dataTwo.data[0].open) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
-      } else {
-        price = dataOne.data[0].quotes.USD.price.toFixed(8).toString();
-        low = dataTwo.data[0].low.toFixed(8).toString();
-        high = dataTwo.data[0].high.toFixed(8).toString();
-        open = dataTwo.data[0].open.toFixed(8).toString();
-      }
+  // eslint-disable-next-line no-restricted-syntax
+  for (const user of users) {
+    let price;
+    let low;
+    let high;
+    let open;
+    if (user.country.currency.iso !== 'USD') {
+      price = (Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
+      low = (Number(dataTwo.data[0].low) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
+      high = (Number(dataTwo.data[0].high) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
+      open = (Number(dataTwo.data[0].open) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
+    } else {
+      price = dataOne.data[0].quotes.USD.price.toFixed(8).toString();
+      low = dataTwo.data[0].low.toFixed(8).toString();
+      high = dataTwo.data[0].high.toFixed(8).toString();
+      open = dataTwo.data[0].open.toFixed(8).toString();
+    }
 
-      const returnValue = (high - low).toFixed(8).toString();
-      const returnColor = returnValue > 0 ? 'green' : 'red';
-      const returnUniCode = returnValue > 0 ? '&#9650;' : '&#9660;';
-      // const available = user && user.wallet ? user.wallet.availble : 0;
-      // const locked = user && user.wallet ? user.wallet.locked : 0;
+    const returnValue = (high - low).toFixed(8).toString();
+    const returnColor = returnValue > 0 ? 'green' : 'red';
+    const returnUniCode = returnValue > 0 ? '&#9650;' : '&#9660;';
+    // const available = user && user.wallet ? user.wallet.availble : 0;
+    // const locked = user && user.wallet ? user.wallet.locked : 0;
+    console.log('before message changing');
 
-      let newtitle = req.body.title.replace(/\[firstname\]/gi, user.firstname);
-      newtitle = newtitle.replace(/\[lastname\]/gi, user.lastname);
-      newtitle = newtitle.replace(/\[username\]/gi, user.username);
-      newtitle = newtitle.replace(/\[country_iso\]/gi, user && user.country && user.country.iso);
-      newtitle = newtitle.replace(/\[country_name\]/gi, user && user.country && user.country.name);
-      newtitle = newtitle.replace(/\[currency_iso\]/gi, user && user.country && user.country.currency ? user.country.currency.iso : '');
-      newtitle = newtitle.replace(/\[currency_name\]/gi, user && user.country && user.country.currency ? user.country.currency.currency_name : '');
-      newtitle = newtitle.replace(/\[referral\]/gi, `https://www.localrunes.com/signup?referredby=${user.username}`);
-      newtitle = newtitle.replace(/\[wallet_balance\]/gi, `${(((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8)} RUNES`);
-      newtitle = newtitle.replace(/\[wallet_value\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])))).toFixed(8).toString()} ${user && user.country && user.country.currency && user.country.currency.iso}`);
-      newtitle = newtitle.replace(/\[wallet_value_usd\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
+    let newtitle = req.body.title.replace(/\[firstname\]/gi, user.firstname);
+    newtitle = newtitle.replace(/\[lastname\]/gi, user.lastname);
+    newtitle = newtitle.replace(/\[username\]/gi, user.username);
+    newtitle = newtitle.replace(/\[country_iso\]/gi, user && user.country && user.country.iso);
+    newtitle = newtitle.replace(/\[country_name\]/gi, user && user.country && user.country.name);
+    newtitle = newtitle.replace(/\[currency_iso\]/gi, user && user.country && user.country.currency ? user.country.currency.iso : '');
+    newtitle = newtitle.replace(/\[currency_name\]/gi, user && user.country && user.country.currency ? user.country.currency.currency_name : '');
+    newtitle = newtitle.replace(/\[referral\]/gi, `https://www.localrunes.com/signup?referredby=${user.username}`);
+    newtitle = newtitle.replace(/\[wallet_balance\]/gi, `${(((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8)} RUNES`);
+    newtitle = newtitle.replace(/\[wallet_value\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])))).toFixed(8).toString()} ${user && user.country && user.country.currency && user.country.currency.iso}`);
+    newtitle = newtitle.replace(/\[wallet_value_usd\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
 
-      let newMessage;
-      newMessage = req.body.message.replace(/\n/g, "<br />");
-      newMessage = newMessage.replace(/\[firstname\]/gi, user.firstname);
-      newMessage = newMessage.replace(/\[lastname\]/gi, user.lastname);
-      newMessage = newMessage.replace(/\[username\]/gi, user.username);
-      newMessage = newMessage.replace(/\[country_iso\]/gi, user && user.country && user.country.iso);
-      newMessage = newMessage.replace(/\[country_name\]/gi, user && user.country && user.country.name);
-      newMessage = newMessage.replace(/\[currency_iso\]/gi, user && user.country && user.country.currency ? user.country.currency.iso : '');
-      newMessage = newMessage.replace(/\[currency_name\]/gi, user && user.country && user.country.currency ? user.country.currency.currency_name : '');
-      newMessage = newMessage.replace(/\[referral\]/gi, `https://www.localrunes.com/signup?referredby=${user.username}`);
-      newMessage = newMessage.replace(/\[wallet_balance\]/gi, `${(((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8)} RUNES`);
-      newMessage = newMessage.replace(/\[wallet_value\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])))).toFixed(8).toString()} ${user && user.country && user.country.currency && user.country.currency.iso}`);
-      newMessage = newMessage.replace(/\[wallet_value_usd\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
-      newMessage = newMessage.replace(/\[wallet_android\]/gi, `
+    let newMessage;
+    newMessage = req.body.message.replace(/\n/g, "<br />");
+    newMessage = newMessage.replace(/\[firstname\]/gi, user.firstname);
+    newMessage = newMessage.replace(/\[lastname\]/gi, user.lastname);
+    newMessage = newMessage.replace(/\[username\]/gi, user.username);
+    newMessage = newMessage.replace(/\[country_iso\]/gi, user && user.country && user.country.iso);
+    newMessage = newMessage.replace(/\[country_name\]/gi, user && user.country && user.country.name);
+    newMessage = newMessage.replace(/\[currency_iso\]/gi, user && user.country && user.country.currency ? user.country.currency.iso : '');
+    newMessage = newMessage.replace(/\[currency_name\]/gi, user && user.country && user.country.currency ? user.country.currency.currency_name : '');
+    newMessage = newMessage.replace(/\[referral\]/gi, `https://www.localrunes.com/signup?referredby=${user.username}`);
+    newMessage = newMessage.replace(/\[wallet_balance\]/gi, `${(((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8)} RUNES`);
+    newMessage = newMessage.replace(/\[wallet_value\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])))).toFixed(8).toString()} ${user && user.country && user.country.currency && user.country.currency.iso}`);
+    newMessage = newMessage.replace(/\[wallet_value_usd\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
+    newMessage = newMessage.replace(/\[wallet_android\]/gi, `
         <div style="width: 100%;">
           <div style="width: 100%; color: black">
             <div style="width: 100%; font-size: 20px;">Download Android Wallet</div>
@@ -1845,7 +1844,7 @@ export const sendAdminMassMail = async (req, res, next) => {
         </div>
       `);
 
-      newMessage = newMessage.replace(/\[metrics\]/gi, `
+    newMessage = newMessage.replace(/\[metrics\]/gi, `
       <table width="100%" align="center" style="width:100%; color: black;">
         <tr>
           <td>
@@ -1885,7 +1884,7 @@ export const sendAdminMassMail = async (req, res, next) => {
         </table>      
       `);
 
-      newMessage = newMessage.replace(/\[socials\]/gi, `
+    newMessage = newMessage.replace(/\[socials\]/gi, `
       <div style="width: 100%;">
         <a href="https://www.facebook.com/localrunes"><img style="width: 75px;" src="https://downloads.runebase.io/facebook.png"></a>
         <a href="https://t.me/localrunes"><img style="width: 75px;" src="https://downloads.runebase.io/telegram.png"></a>
@@ -1893,62 +1892,62 @@ export const sendAdminMassMail = async (req, res, next) => {
       </div>
       `);
 
-      const bololexRunesUsdt = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/USDT');
-      const bololexRunesUsdtPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
-        ? ((bololexRunesUsdt[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
-          user
+    const bololexRunesUsdt = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/USDT');
+    const bololexRunesUsdtPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+      ? ((bololexRunesUsdt[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+        user
           && user.country
           && user.country.currency
-            ? user.country.currency.iso
-            : 'USD'
-        ])).toFixed(8).toString()
-        : bololexRunesUsdt[0].quotes.USD.price.toFixed(8).toString();
+          ? user.country.currency.iso
+          : 'USD'
+      ])).toFixed(8).toString()
+      : bololexRunesUsdt[0].quotes.USD.price.toFixed(8).toString();
 
-      const bololexRunesBtc = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/BTC');
-      const bololexRunesBtcPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
-        ? ((bololexRunesBtc[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
-          user
+    const bololexRunesBtc = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/BTC');
+    const bololexRunesBtcPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+      ? ((bololexRunesBtc[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+        user
           && user.country
           && user.country.currency
-            ? user.country.currency.iso
-            : 'USD'
-        ])).toFixed(8).toString()
-        : bololexRunesBtc[0].quotes.USD.price.toFixed(8).toString();
+          ? user.country.currency.iso
+          : 'USD'
+      ])).toFixed(8).toString()
+      : bololexRunesBtc[0].quotes.USD.price.toFixed(8).toString();
 
-      const altmarketsRunesDoge = markets.data.filter((item) => item.exchange_name === 'AltMarkets' && item.pair === 'RUNES/DOGE');
-      const altmarketsRunesDogePrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
-        ? ((altmarketsRunesDoge[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
-          user
+    const altmarketsRunesDoge = markets.data.filter((item) => item.exchange_name === 'AltMarkets' && item.pair === 'RUNES/DOGE');
+    const altmarketsRunesDogePrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+      ? ((altmarketsRunesDoge[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+        user
           && user.country
           && user.country.currency
-            ? user.country.currency.iso
-            : 'USD'
-        ])).toFixed(8).toString()
-        : altmarketsRunesDoge[0].quotes.USD.price.toFixed(8).toString();
+          ? user.country.currency.iso
+          : 'USD'
+      ])).toFixed(8).toString()
+      : altmarketsRunesDoge[0].quotes.USD.price.toFixed(8).toString();
 
-      const txbitRunesBtc = markets.data.filter((item) => item.exchange_name === 'Txbit' && item.pair === 'RUNES/BTC');
-      const txbitRunesBtcPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
-        ? ((txbitRunesBtc[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
-          user
+    const txbitRunesBtc = markets.data.filter((item) => item.exchange_name === 'Txbit' && item.pair === 'RUNES/BTC');
+    const txbitRunesBtcPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+      ? ((txbitRunesBtc[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+        user
           && user.country
           && user.country.currency
-            ? user.country.currency.iso
-            : 'USD'
-        ])).toFixed(8).toString()
-        : txbitRunesBtc[0].quotes.USD.price.toFixed(8).toString();
+          ? user.country.currency.iso
+          : 'USD'
+      ])).toFixed(8).toString()
+      : txbitRunesBtc[0].quotes.USD.price.toFixed(8).toString();
 
-      const txbitRunesEth = markets.data.filter((item) => item.exchange_name === 'Txbit' && item.pair === 'RUNES/ETH');
-      const txbitRunesEthPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
-        ? ((txbitRunesEth[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
-          user
+    const txbitRunesEth = markets.data.filter((item) => item.exchange_name === 'Txbit' && item.pair === 'RUNES/ETH');
+    const txbitRunesEthPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+      ? ((txbitRunesEth[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+        user
           && user.country
           && user.country.currency
-            ? user.country.currency.iso
-            : 'USD'
-        ])).toFixed(8).toString()
-        : txbitRunesEth[0].quotes.USD.price.toFixed(8).toString();
+          ? user.country.currency.iso
+          : 'USD'
+      ])).toFixed(8).toString()
+      : txbitRunesEth[0].quotes.USD.price.toFixed(8).toString();
 
-      newMessage = newMessage.replace(/\[markets\]/gi, `
+    newMessage = newMessage.replace(/\[markets\]/gi, `
       <div style="width: 100%;">
         <p style="width: 100%; text-decoration: underline; font-size: 20px; margin-bottom: 5px;">Trade RUNES on Exchanges</p>
         <table cellspacing="0" width="100%" align="center" style="width:100%; color: black;">
@@ -2103,40 +2102,35 @@ export const sendAdminMassMail = async (req, res, next) => {
       </div>
       `);
 
-      const fixColorDivFront = ``;
-      const fixColorDivBack = "";
-      const finalMessage = fixColorDivFront.concat(newMessage).concat(fixColorDivBack);
-      console.log('newtitle');
-      console.log(newtitle);
-      console.log('finalMessage');
-      console.log(finalMessage);
-      await transporter.verify((error, success) => {
-        if (error) {
-          console.log('failed to verify');
-          console.log(error);
-        } else {
-          console.log("Server is ready to take our messages");
-        }
-      });
-
-      await transporter.sendMail({
-        from: `LocalRunes <${process.env.MAIL_USER}>`, // sender address
-        to: user.email, // list of receivers
-        subject: newtitle, // Subject line
-        // text: "Hello world?", // plain text body
-        html: finalMessage, // html body
-      });
-    }
-
-    // console.log('123');
-    // console.log(req.body);
-    res.locals.mail = 'ok';
-
-    t.afterCommit(() => {
-      next();
+    const fixColorDivFront = ``;
+    const fixColorDivBack = "";
+    const finalMessage = fixColorDivFront.concat(newMessage).concat(fixColorDivBack);
+    // console.log('newtitle');
+    // console.log(newtitle);
+    // console.log('finalMessage');
+    // console.log(finalMessage);
+    console.log('before sned');
+    await transporter.verify((error, success) => {
+      if (error) {
+        console.log('failed to verify');
+        console.log(error);
+      } else {
+        console.log("Server is ready to take our messages");
+      }
     });
-  }).catch((err) => {
-    res.locals.error = err.message;
-    next();
-  });
+
+    await transporter.sendMail({
+      from: `LocalRunes <${process.env.MAIL_USER}>`, // sender address
+      to: user.email, // list of receivers
+      subject: newtitle, // Subject line
+      // text: "Hello world?", // plain text body
+      html: finalMessage, // html body
+    });
+  }
+  console.log('after send');
+
+  // console.log('123');
+  // console.log(req.body);
+  res.locals.mail = 'ok';
+  next();
 };
