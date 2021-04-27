@@ -1790,10 +1790,10 @@ export const sendAdminMassMail = async (req, res, next) => {
       let high;
       let open;
       if (user.country.currency.iso !== 'USD') {
-        price = (Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString();
-        low = (Number(dataTwo.data[0].low) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString();
-        high = (Number(dataTwo.data[0].high) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString();
-        open = (Number(dataTwo.data[0].open) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString();
+        price = (Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
+        low = (Number(dataTwo.data[0].low) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
+        high = (Number(dataTwo.data[0].high) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
+        open = (Number(dataTwo.data[0].open) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])).toFixed(8).toString();
       } else {
         price = dataOne.data[0].quotes.USD.price.toFixed(8).toString();
         low = dataTwo.data[0].low.toFixed(8).toString();
@@ -1804,32 +1804,34 @@ export const sendAdminMassMail = async (req, res, next) => {
       const returnValue = (high - low).toFixed(8).toString();
       const returnColor = returnValue > 0 ? 'green' : 'red';
       const returnUniCode = returnValue > 0 ? '&#9650;' : '&#9660;';
+      const available = user && user.wallet ? user.wallet.availble : 0;
+      const locked = user && user.wallet ? user.wallet.locked : 0;
 
       let newtitle = req.body.title.replace(/\[firstname\]/gi, user.firstname);
       newtitle = newtitle.replace(/\[lastname\]/gi, user.lastname);
       newtitle = newtitle.replace(/\[username\]/gi, user.username);
-      newtitle = newtitle.replace(/\[country_iso\]/gi, user.country.iso);
-      newtitle = newtitle.replace(/\[country_name\]/gi, user.country.name);
-      newtitle = newtitle.replace(/\[currency_iso\]/gi, user.country.currency.iso);
-      newtitle = newtitle.replace(/\[currency_name\]/gi, user.country.currency.currency_name);
+      newtitle = newtitle.replace(/\[country_iso\]/gi, user && user.country && user.country.iso);
+      newtitle = newtitle.replace(/\[country_name\]/gi, user && user.country && user.country.name);
+      newtitle = newtitle.replace(/\[currency_iso\]/gi, user && user.country && user.country.currency ? user.country.currency.iso : '');
+      newtitle = newtitle.replace(/\[currency_name\]/gi, user && user.country && user.country.currency ? user.country.currency.currency_name : '');
       newtitle = newtitle.replace(/\[referral\]/gi, `https://www.localrunes.com/signup?referredby=${user.username}`);
-      newtitle = newtitle.replace(/\[wallet_balance\]/gi, `${((user.wallet.available + user.wallet.locked) / 1e8)} RUNES`);
-      newtitle = newtitle.replace(/\[wallet_value\]/gi, `~${(((user.wallet.available + user.wallet.locked) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])))).toFixed(8).toString()} ${user.country.currency.iso}`);
-      newtitle = newtitle.replace(/\[wallet_value_usd\]/gi, `~${(((user.wallet.available + user.wallet.locked) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
+      newtitle = newtitle.replace(/\[wallet_balance\]/gi, `${((available + locked) / 1e8)} RUNES`);
+      newtitle = newtitle.replace(/\[wallet_value\]/gi, `~${(((available + locked) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])))).toFixed(8).toString()} ${user && user.country && user.country.currency && user.country.currency.iso}`);
+      newtitle = newtitle.replace(/\[wallet_value_usd\]/gi, `~${(((available + locked) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
 
       let newMessage;
       newMessage = req.body.message.replace(/\n/g, "<br />");
       newMessage = newMessage.replace(/\[firstname\]/gi, user.firstname);
       newMessage = newMessage.replace(/\[lastname\]/gi, user.lastname);
       newMessage = newMessage.replace(/\[username\]/gi, user.username);
-      newMessage = newMessage.replace(/\[country_iso\]/gi, user.country.iso);
-      newMessage = newMessage.replace(/\[country_name\]/gi, user.country.name);
-      newMessage = newMessage.replace(/\[currency_iso\]/gi, user.country.currency.iso);
-      newMessage = newMessage.replace(/\[currency_name\]/gi, user.country.currency.currency_name);
+      newMessage = newMessage.replace(/\[country_iso\]/gi, user && user.country && user.country.iso);
+      newMessage = newMessage.replace(/\[country_name\]/gi, user && user.country && user.country.name);
+      newMessage = newMessage.replace(/\[currency_iso\]/gi, user && user.country && user.country.currency ? user.country.currency.iso : '');
+      newMessage = newMessage.replace(/\[currency_name\]/gi, user && user.country && user.country.currency ? user.country.currency.currency_name : '');
       newMessage = newMessage.replace(/\[referral\]/gi, `https://www.localrunes.com/signup?referredby=${user.username}`);
-      newMessage = newMessage.replace(/\[wallet_balance\]/gi, `${((user.wallet.available + user.wallet.locked) / 1e8)} RUNES`);
-      newMessage = newMessage.replace(/\[wallet_value\]/gi, `~${(((user.wallet.available + user.wallet.locked) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])))).toFixed(8).toString()} ${user.country.currency.iso}`);
-      newMessage = newMessage.replace(/\[wallet_value_usd\]/gi, `~${(((user.wallet.available + user.wallet.locked) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
+      newMessage = newMessage.replace(/\[wallet_balance\]/gi, `${((available + locked) / 1e8)} RUNES`);
+      newMessage = newMessage.replace(/\[wallet_value\]/gi, `~${(((available + locked) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])))).toFixed(8).toString()} ${user && user.country && user.country.currency && user.country.currency.iso}`);
+      newMessage = newMessage.replace(/\[wallet_value_usd\]/gi, `~${(((available + locked) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
       newMessage = newMessage.replace(/\[wallet_android\]/gi, `
         <div style="width: 100%;">
           <div style="width: 100%; color: black">
@@ -1855,29 +1857,29 @@ export const sendAdminMassMail = async (req, res, next) => {
         <tr>
           <td style="border: 2px solid black; text-align: center;">
             <div style="width: 100%; font-size: 18px; text-decoration: underline;">24h low</div>
-            <div style="width: 100%; font-size: 14px; font-weight:bold;">${low} ${user.country.currency.iso}</div>
+            <div style="width: 100%; font-size: 14px; font-weight:bold;">${low && low} ${user && user.country && user.country.currency && user.country.currency.iso}</div>
           </td>
           <td style="border: 2px solid black; text-align: center;">
             <div style="width: 100%; font-size: 18px; text-decoration: underline;">24h high</div>
-            <div style="width: 100%; font-size: 14px; font-weight:bold;">${high} ${user.country.currency.iso}</div>
+            <div style="width: 100%; font-size: 14px; font-weight:bold;">${high && high} ${user && user.country && user.country.currency && user.country.currency.iso}</div>
           </td>
           <td style="border: 2px solid black; text-align: center;">
             <div style="width: 100%; font-size: 18px; text-decoration: underline;">24h open</div>
-            <div style="width: 100%; font-size: 14px; font-weight:bold;">${open} ${user.country.currency.iso}</div>
+            <div style="width: 100%; font-size: 14px; font-weight:bold;">${open && open} ${user && user.country && user.country.currency && user.country.currency.iso}</div>
           </td>
         </tr>
         <tr>
           <td style="border: 2px solid black; text-align: center;">
             <div style="width: 100%; font-size: 18px; text-decoration: underline;">Current Price</div>
-            <div style="width: 100%; font-size: 14px; font-weight:bold;">${price} ${user.country.currency.iso}</div>
+            <div style="width: 100%; font-size: 14px; font-weight:bold;">${price && price} ${user && user.country && user.country.currency && user.country.currency.iso}</div>
           </td>
           <td style="border: 2px solid black; text-align: center;">
             <div style="width: 100%; font-size: 18px; text-decoration: underline;">24h change</div>
-            <div style="width: 100%; font-size: 14px; font-weight:bold; color: ${changePercentColor}">${changePercentUniCode} ${dataOne.data.quotes.USD.percent_change_24h} %</div>
+            <div style="width: 100%; font-size: 14px; font-weight:bold; color: ${changePercentColor && changePercentColor}">${changePercentUniCode && changePercentUniCode} ${dataOne && dataOne.data && dataOne.data.quotes && dataOne.data.quotes.USD.percent_change_24h} %</div>
           </td>
           <td style="border: 2px solid black; text-align: center;">
             <div style="width: 100%; font-size: 18px; text-decoration: underline;">24h returns</div>
-            <div style="width: 100%; font-size: 14px; font-weight:bold; color: ${returnColor}">${returnUniCode} ${returnValue} ${user.country.currency.iso}</div>
+            <div style="width: 100%; font-size: 14px; font-weight:bold; color: ${returnColor && returnColor}">${returnUniCode && returnUniCode} ${returnValue && returnValue} ${user && user.country && user.country.currency && user.country.currency.iso}</div>
           </td>
         </tr>
         </table>      
@@ -1892,28 +1894,58 @@ export const sendAdminMassMail = async (req, res, next) => {
       `);
 
       const bololexRunesUsdt = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/USDT');
-      const bololexRunesUsdtPrice = user.country.currency.iso !== 'USD'
-        ? ((bololexRunesUsdt[0].quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
+      const bololexRunesUsdtPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+        ? ((bololexRunesUsdt[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+          user
+          && user.country
+          && user.country.currency
+            ? user.country.currency.iso
+            : 'USD'
+        ])).toFixed(8).toString()
         : bololexRunesUsdt[0].quotes.USD.price.toFixed(8).toString();
 
       const bololexRunesBtc = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/BTC');
-      const bololexRunesBtcPrice = user.country.currency.iso !== 'USD'
-        ? ((bololexRunesBtc[0].quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
+      const bololexRunesBtcPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+        ? ((bololexRunesBtc[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+          user
+          && user.country
+          && user.country.currency
+            ? user.country.currency.iso
+            : 'USD'
+        ])).toFixed(8).toString()
         : bololexRunesBtc[0].quotes.USD.price.toFixed(8).toString();
 
       const altmarketsRunesDoge = markets.data.filter((item) => item.exchange_name === 'AltMarkets' && item.pair === 'RUNES/DOGE');
-      const altmarketsRunesDogePrice = user.country.currency.iso !== 'USD'
-        ? ((altmarketsRunesDoge[0].quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
+      const altmarketsRunesDogePrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+        ? ((altmarketsRunesDoge[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+          user
+          && user.country
+          && user.country.currency
+            ? user.country.currency.iso
+            : 'USD'
+        ])).toFixed(8).toString()
         : altmarketsRunesDoge[0].quotes.USD.price.toFixed(8).toString();
 
       const txbitRunesBtc = markets.data.filter((item) => item.exchange_name === 'Txbit' && item.pair === 'RUNES/BTC');
-      const txbitRunesBtcPrice = user.country.currency.iso !== 'USD'
-        ? ((txbitRunesBtc[0].quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
+      const txbitRunesBtcPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+        ? ((txbitRunesBtc[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+          user
+          && user.country
+          && user.country.currency
+            ? user.country.currency.iso
+            : 'USD'
+        ])).toFixed(8).toString()
         : txbitRunesBtc[0].quotes.USD.price.toFixed(8).toString();
 
       const txbitRunesEth = markets.data.filter((item) => item.exchange_name === 'Txbit' && item.pair === 'RUNES/ETH');
-      const txbitRunesEthPrice = user.country.currency.iso !== 'USD'
-        ? ((txbitRunesEth[0].quotes.USD.price) * Number(currencyCoversion.data.rates[user.country.currency.iso])).toFixed(8).toString()
+      const txbitRunesEthPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+        ? ((txbitRunesEth[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+          user
+          && user.country
+          && user.country.currency
+            ? user.country.currency.iso
+            : 'USD'
+        ])).toFixed(8).toString()
         : txbitRunesEth[0].quotes.USD.price.toFixed(8).toString();
 
       newMessage = newMessage.replace(/\[markets\]/gi, `
@@ -1930,11 +1962,20 @@ export const sendAdminMassMail = async (req, res, next) => {
               <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/bololex-thumb-2.png">
               <p style="font-size: 18px; margin: 0;">RUNES/USDT</p>
               <p style="margin-top: 0; margin-bottom: 5px">
-                ${bololexRunesUsdtPrice} ${user.country.currency.iso}
+                ${bololexRunesUsdtPrice && bololexRunesUsdtPrice} ${
+  user
+                  && user.country
+                  && user.country.currency
+                  && user.country.currency.iso
+}
               </p>              
             </td>
-            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${bololexRunesUsdtChangePercentColor}">
-              ${bololexRunesUsdtChangePercentUniCode} ${bololexRunesUsdtCh.data.result[0].priceChange}%
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${bololexRunesUsdtChangePercentColor && bololexRunesUsdtChangePercentColor}">
+              ${bololexRunesUsdtChangePercentUniCode && bololexRunesUsdtChangePercentUniCode} ${
+  bololexRunesUsdtCh
+                && bololexRunesUsdtCh.data
+                && bololexRunesUsdtCh.data.result
+                && bololexRunesUsdtCh.data.result[0].priceChange}%
             </td>
             <td style="text-align: center; border-bottom: 1px solid black">
               <a 
@@ -1952,11 +1993,20 @@ export const sendAdminMassMail = async (req, res, next) => {
               <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/bololex-thumb-2.png">
               <p style="font-size: 18px; margin: 0;">RUNES/BTC</p>
               <p style="margin-top: 0; margin-bottom: 5px">
-                ${bololexRunesBtcPrice} ${user.country.currency.iso}
+                ${bololexRunesBtcPrice && bololexRunesBtcPrice} ${
+  user
+                  && user.country
+                  && user.country.currency
+                  && user.country.currency.iso
+}
               </p>              
             </td>
-            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${bololexRunesBtcChangePercentColor}">
-            ${bololexRunesBtcChangePercentUniCode} ${bololexRunesBtcCh.data.result[0].priceChange}%
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${bololexRunesBtcChangePercentColor && bololexRunesBtcChangePercentColor}">
+            ${bololexRunesBtcChangePercentUniCode && bololexRunesBtcChangePercentUniCode} ${
+  bololexRunesBtcCh
+              && bololexRunesBtcCh.data
+              && bololexRunesBtcCh.data.result
+              && bololexRunesBtcCh.data.result[0].priceChange}%
             </td>
             <td style="text-align: center; border-bottom: 1px solid black">
               <a 
@@ -1975,11 +2025,16 @@ export const sendAdminMassMail = async (req, res, next) => {
               <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/altmarkets-thumb-2.png">
               <p style="font-size: 18px; margin: 0;">RUNES/DOGE</p>
               <p style="margin-top: 0; margin-bottom: 5px">
-                ${altmarketsRunesDogePrice} ${user.country.currency.iso}
+                ${altmarketsRunesDogePrice && altmarketsRunesDogePrice} ${
+  user
+                  && user.country
+                  && user.country.currency
+                  && user.country.currency.iso
+}
               </p>              
             </td>
-            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${altmarketsRunesDogeChangePercentColor}">
-            ${altmarketsRunesDogeChangePercentUniCode} ${altmarketsruneDogePriceChange}
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${altmarketsRunesDogeChangePercentColor && altmarketsRunesDogeChangePercentColor}">
+            ${altmarketsRunesDogeChangePercentUniCode && altmarketsRunesDogeChangePercentUniCode} ${altmarketsruneDogePriceChange && altmarketsruneDogePriceChange}
             </td>
             <td style="text-align: center; border-bottom: 1px solid black">
               <a 
@@ -1997,11 +2052,15 @@ export const sendAdminMassMail = async (req, res, next) => {
               <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/txbit-thumb-2.png">
               <p style="font-size: 18px; margin: 0;">RUNES/BTC</p>
               <p style="margin-top: 0; margin-bottom: 5px">
-                ${txbitRunesBtcPrice} ${user.country.currency.iso}
+                ${txbitRunesBtcPrice} ${
+  user
+                  && user.country
+                  && user.country.currency
+                  && user.country.currency.iso}
               </p>              
             </td>
-            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${txbitRunesBtcChangePercentColor}">
-              ${txbitRunesBtcChangePercentUniCode} ${isIncreaseOrDecreaceTxBitBTC}%
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${txbitRunesBtcChangePercentColor && txbitRunesBtcChangePercentColor}">
+              ${txbitRunesBtcChangePercentUniCode && txbitRunesBtcChangePercentUniCode} ${isIncreaseOrDecreaceTxBitBTC && isIncreaseOrDecreaceTxBitBTC}%
             </td>
             <td style="text-align: center; border-bottom: 1px solid black">
               <a 
@@ -2019,11 +2078,16 @@ export const sendAdminMassMail = async (req, res, next) => {
               <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/txbit-thumb-2.png">
               <p style="font-size: 18px; margin: 0;">RUNES/ETH</p>
               <p style="margin-top: 0; margin-bottom: 5px">
-                ${txbitRunesEthPrice} ${user.country.currency.iso}
+                ${txbitRunesEthPrice && txbitRunesEthPrice} ${
+  user
+                  && user.country
+                  && user.country.currency
+                  && user.country.currency.iso
+}
               </p>              
             </td>
-            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${txbitRunesEthChangePercentColor}">
-              ${txbitRunesEthChangePercentUniCode} ${isIncreaseOrDecreaceTxBitETH}%
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${txbitRunesEthChangePercentColor && txbitRunesEthChangePercentColor}">
+              ${txbitRunesEthChangePercentUniCode && txbitRunesEthChangePercentUniCode} ${isIncreaseOrDecreaceTxBitETH && isIncreaseOrDecreaceTxBitETH}%
             </td>
             <td style="text-align: center; border-bottom: 1px solid black">
               <a 
@@ -2042,6 +2106,10 @@ export const sendAdminMassMail = async (req, res, next) => {
       const fixColorDivFront = ``;
       const fixColorDivBack = "";
       const finalMessage = fixColorDivFront.concat(newMessage).concat(fixColorDivBack);
+      console.log('newtitle');
+      console.log(newtitle);
+      console.log('finalMessage');
+      console.log(finalMessage);
       await transporter.verify((error, success) => {
         if (error) {
           console.log('failed to verify');
@@ -2061,7 +2129,7 @@ export const sendAdminMassMail = async (req, res, next) => {
     }
 
     // console.log('123');
-    console.log(req.body);
+    // console.log(req.body);
     res.locals.mail = 'ok';
 
     t.afterCommit(() => {
