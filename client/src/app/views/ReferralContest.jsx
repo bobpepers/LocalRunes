@@ -253,7 +253,7 @@ const ReferralContestView = (props) => {
                 ? (
                   <>
                     <p>
-                      {previousContests[page - 1].winner_first.username}
+                      {previousContests[page - 1].winner_first ? previousContests[page - 1].winner_first.username : 'n/a'}
                     </p>
                     <p>
                       {previousContests[page - 1].first_place_reward}
@@ -279,7 +279,7 @@ const ReferralContestView = (props) => {
                 ? (
                   <>
                     <p>
-                      {previousContests[page - 1].winner_second.username}
+                      {previousContests[page - 1].winner_second ? previousContests[page - 1].winner_second.username : 'n/a'}
                     </p>
                     <p>
                       {previousContests[page - 1].second_place_reward}
@@ -305,7 +305,7 @@ const ReferralContestView = (props) => {
                 ? (
                   <>
                     <p>
-                      {previousContests[page - 1].winner_third.username}
+                      {previousContests[page - 1].winner_third ? previousContests[page - 1].winner_third.username : 'n/a'}
                     </p>
                     <p>
                       {previousContests[page - 1].third_place_reward}

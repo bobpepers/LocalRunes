@@ -305,9 +305,9 @@ const drawReferralContest = async (sub, pub, expired_subKey) => {
           first_place_reward: contestRewards[0].firstPlace,
           second_place_reward: contestRewards[0].secondPlace,
           third_place_reward: contestRewards[0].thirdPlace,
-          winnerFirstId: revSorted[0] ? revSorted[0].key : null,
-          winnerSecondId: revSorted[1] ? revSorted[1].key : null,
-          winnerThirdId: revSorted[2] ? revSorted[2].key : null,
+          winnerFirstId: revSorted[0] && revSorted[0].value >= 10 ? revSorted[0].key : null,
+          winnerSecondId: revSorted[1] && revSorted[1].value >= 10 ? revSorted[1].key : null,
+          winnerThirdId: revSorted[2] && revSorted[2].value >= 10 ? revSorted[2].key : null,
           phase: 'complete',
         }, {
           transaction: t,
