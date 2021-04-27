@@ -1804,8 +1804,8 @@ export const sendAdminMassMail = async (req, res, next) => {
       const returnValue = (high - low).toFixed(8).toString();
       const returnColor = returnValue > 0 ? 'green' : 'red';
       const returnUniCode = returnValue > 0 ? '&#9650;' : '&#9660;';
-      const available = user && user.wallet ? user.wallet.availble : 0;
-      const locked = user && user.wallet ? user.wallet.locked : 0;
+      // const available = user && user.wallet ? user.wallet.availble : 0;
+      // const locked = user && user.wallet ? user.wallet.locked : 0;
 
       let newtitle = req.body.title.replace(/\[firstname\]/gi, user.firstname);
       newtitle = newtitle.replace(/\[lastname\]/gi, user.lastname);
@@ -1815,9 +1815,9 @@ export const sendAdminMassMail = async (req, res, next) => {
       newtitle = newtitle.replace(/\[currency_iso\]/gi, user && user.country && user.country.currency ? user.country.currency.iso : '');
       newtitle = newtitle.replace(/\[currency_name\]/gi, user && user.country && user.country.currency ? user.country.currency.currency_name : '');
       newtitle = newtitle.replace(/\[referral\]/gi, `https://www.localrunes.com/signup?referredby=${user.username}`);
-      newtitle = newtitle.replace(/\[wallet_balance\]/gi, `${((available + locked) / 1e8)} RUNES`);
-      newtitle = newtitle.replace(/\[wallet_value\]/gi, `~${(((available + locked) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])))).toFixed(8).toString()} ${user && user.country && user.country.currency && user.country.currency.iso}`);
-      newtitle = newtitle.replace(/\[wallet_value_usd\]/gi, `~${(((available + locked) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
+      newtitle = newtitle.replace(/\[wallet_balance\]/gi, `${(((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8)} RUNES`);
+      newtitle = newtitle.replace(/\[wallet_value\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])))).toFixed(8).toString()} ${user && user.country && user.country.currency && user.country.currency.iso}`);
+      newtitle = newtitle.replace(/\[wallet_value_usd\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
 
       let newMessage;
       newMessage = req.body.message.replace(/\n/g, "<br />");
@@ -1829,9 +1829,9 @@ export const sendAdminMassMail = async (req, res, next) => {
       newMessage = newMessage.replace(/\[currency_iso\]/gi, user && user.country && user.country.currency ? user.country.currency.iso : '');
       newMessage = newMessage.replace(/\[currency_name\]/gi, user && user.country && user.country.currency ? user.country.currency.currency_name : '');
       newMessage = newMessage.replace(/\[referral\]/gi, `https://www.localrunes.com/signup?referredby=${user.username}`);
-      newMessage = newMessage.replace(/\[wallet_balance\]/gi, `${((available + locked) / 1e8)} RUNES`);
-      newMessage = newMessage.replace(/\[wallet_value\]/gi, `~${(((available + locked) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])))).toFixed(8).toString()} ${user && user.country && user.country.currency && user.country.currency.iso}`);
-      newMessage = newMessage.replace(/\[wallet_value_usd\]/gi, `~${(((available + locked) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
+      newMessage = newMessage.replace(/\[wallet_balance\]/gi, `${(((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8)} RUNES`);
+      newMessage = newMessage.replace(/\[wallet_value\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * ((Number(dataOne.data.quotes.USD.price) * Number(currencyCoversion.data.rates[user && user.country && user.country.currency ? user.country.currency.iso : 'USD'])))).toFixed(8).toString()} ${user && user.country && user.country.currency && user.country.currency.iso}`);
+      newMessage = newMessage.replace(/\[wallet_value_usd\]/gi, `~${((((user && user.wallet ? user.wallet.available : 0) + (user && user.wallet ? user.wallet.locked : 0)) / 1e8) * Number(dataOne.data.quotes.USD.price)).toFixed(8).toString()} USD`);
       newMessage = newMessage.replace(/\[wallet_android\]/gi, `
         <div style="width: 100%;">
           <div style="width: 100%; color: black">
