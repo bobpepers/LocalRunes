@@ -483,6 +483,9 @@ export const acceptWithdraw = async (req, res, next) => {
     const amount = (((transaction.amount / 100) * 99) / 1e8);
     console.log((amount.toFixed(8)).toString());
     console.log('before reps');
+    console.log(transaction.to_from);
+    console.log(amount.toFixed(8).toString());
+
     const response = await getInstance().sendToAddress(transaction.to_from, (amount.toFixed(8)).toString());
     console.log('999999999999');
     console.log('999999999999');
@@ -500,6 +503,7 @@ export const acceptWithdraw = async (req, res, next) => {
       {
         txid: response,
         phase: 'confirming',
+        type: 'send',
       },
       {
         transaction: t,

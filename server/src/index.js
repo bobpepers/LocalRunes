@@ -478,10 +478,10 @@ startSync(io, onlineUsers);
 //  removeStaleTickets(onlineUsers);
 // });
 
-// patchDeposits();
-// const schedulePatchDeposits = schedule.scheduleJob('10 */1 * * *', () => {
-//  patchDeposits();
-// });
+patchDeposits();
+const schedulePatchDeposits = schedule.scheduleJob('10 */1 * * *', () => {
+  patchDeposits();
+});
 
 updatePrice(io);
 // Update Price every 5 minutes

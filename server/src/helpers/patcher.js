@@ -5,8 +5,51 @@ const { getInstance } = require('../services/rclient');
 
 async function patchDeposits() {
   console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+  console.log('patchDeposits');
+
   const transactions = await getInstance().listTransactions(1000);
   transactions.forEach(async (trans) => {
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log('patchDeposits');
+    console.log(trans);
     if (trans.address) {
       const address = await db.address.findOne({
         where: {
@@ -22,12 +65,15 @@ async function patchDeposits() {
       if (!address) {
         return;
       }
+      console.log(trans);
+      console.log(address);
       await db.sequelize.transaction({
         isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
       }, async (t) => {
         await db.transaction.findOrCreate({
           where: {
             txid: trans.txid,
+            type: trans.category,
           },
           defaults: {
             txid: trans.txid,
