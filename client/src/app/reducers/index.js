@@ -45,6 +45,8 @@ import adminMargin from "./admin/adminMargin";
 import adminMassMail from "./admin/adminMassMail";
 
 import adminContestReward from "./admin/adminContestReward";
+import adminNodeBalance from "./admin/adminNodeBalance";
+import adminLiability from "./admin/adminLiability";
 
 
 
@@ -123,6 +125,8 @@ const rootReducer = combineReducers({
   adminMargin: adminMargin,
   adminMassMail: adminMassMail,
   adminContestReward: adminContestReward,
+  adminLiability: adminLiability,
+  adminNodeBalance: adminNodeBalance,
 
   verifyPhoneCode: verifyPhoneCode,
   getPhoneCode: getPhoneCode,
@@ -149,6 +153,7 @@ const rootReducer = combineReducers({
   referralContestRewards: referralContestRewards,
   referralContestStats: referralContestStats,
   referralContests: referralContests,
+  
 });
 
 export default rootReducer;

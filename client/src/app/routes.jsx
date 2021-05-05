@@ -21,6 +21,7 @@ import AdminPendingDisputes from './views/admin/AdminPendingDisputes';
 import AdminPriceMargin from './views/admin/AdminPriceMargin';
 import AdminMail from './views/admin/AdminMail';
 import AdminContestRewards from './views/admin/AdminContestRewards';
+import AdminDashboard from './views/admin/AdminDashboard';
 
 import UserList from './components/users/UserList';
 import Signin from './components/auth/Signin';
@@ -221,7 +222,7 @@ const Routes = (props) => {
       <Route
         path="/admin"
         exact
-        component={requireAuth(withTracker(Admin))}
+        component={requireAuth(withTracker(AdminDashboard))}
       />
       <Route
         path="/admin/countries"

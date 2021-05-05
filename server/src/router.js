@@ -83,6 +83,8 @@ import {
   updateAdminContestRewards,
   sendAdminMassMail,
   fetchAdminContestRewards,
+  fetchAdminNodeBalance,
+  fetchAdminLiability,
 } from './controllers/admin';
 
 import {
@@ -456,6 +458,50 @@ const router = (app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers) => {
         console.log(res.locals.withdrawals);
         res.json({
           withdrawals: res.locals.withdrawals,
+        });
+      }
+    });
+
+  app.get('/api/admin/node/balance',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    fetchAdminNodeBalance,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.balance) {
+        console.log(res.locals.balance);
+        res.json({
+          balance: res.locals.balance,
+        });
+      }
+    });
+
+  app.get('/api/admin/liability',
+    IsAuthenticated,
+    isAdmin,
+    ensuretfa,
+    fetchAdminLiability,
+    (req, res) => {
+      if (res.locals.error) {
+        res.status(401).send({
+          error: {
+            message: res.locals.error,
+            resend: false,
+          },
+        });
+      }
+      if (res.locals.liability) {
+        console.log(res.locals.liability);
+        res.json({
+          liability: res.locals.liability,
         });
       }
     });

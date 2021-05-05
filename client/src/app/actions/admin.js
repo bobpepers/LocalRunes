@@ -89,6 +89,12 @@ import {
   FETCH_ADMINCONTESTREWARD_SUCCESS,
   FETCH_ADMINCONTESTREWARD_FAIL,
   UPDATE_ADMINCONTESTREWARD,
+  FETCH_ADMINNODEBALANCE_BEGIN,
+  FETCH_ADMINNODEBALANCE_SUCCESS,
+  FETCH_ADMINNODEBALANCE_FAIL,
+  FETCH_ADMINLIABILITY_BEGIN,
+  FETCH_ADMINLIABILITY_SUCCESS,
+  FETCH_ADMINLIABILITY_FAIL,
 } from './types/index';
 
 export function adminRejectIdentity(id) {
@@ -2201,32 +2207,6 @@ export function fetchAdminContestRewardData() {
     // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
     axios.get(`${process.env.API_URL}/admin/contestrewards`)
       .then((response) => {
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-        console.log('waaaaaaaaaaaaaaaaaaaa');
-
-        console.log(response.data.rewards);
-        console.log(response.data.rewards);
-
         dispatch({
           type: FETCH_ADMINCONTESTREWARD_SUCCESS,
           payload: response.data.rewards,
@@ -2234,6 +2214,124 @@ export function fetchAdminContestRewardData() {
       }).catch((error) => {
         dispatch({
           type: FETCH_ADMINCONTESTREWARD_FAIL,
+          payload: error,
+        });
+
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function fetchAdminLiabilityData() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINLIABILITY_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.get(`${process.env.API_URL}/admin/liability`)
+      .then((response) => {
+        dispatch({
+          type: FETCH_ADMINLIABILITY_SUCCESS,
+          payload: response.data.liability,
+        });
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINLIABILITY_FAIL,
+          payload: error,
+        });
+
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          console.log(error.response);
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: `${error.response.status}: ${error.response.data.error}`,
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else if (error.request) {
+          // client never received a response, or request never left
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Connection Timeout',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        } else {
+          dispatch({
+            type: ENQUEUE_SNACKBAR,
+            notification: {
+              message: 'Unknown Error',
+              key: new Date().getTime() + Math.random(),
+              options: {
+                variant: 'error',
+              },
+            },
+          });
+        }
+      });
+  }
+}
+
+export function fetchAdminNodeBalanceData() {
+  return function (dispatch) {
+    dispatch({
+      type: FETCH_ADMINNODEBALANCE_BEGIN,
+    });
+    // axios.get(`${API_URL}/user`, { headers: { authorization: user.token } })
+    axios.get(`${process.env.API_URL}/admin/node/balance`)
+      .then((response) => {
+        dispatch({
+          type: FETCH_ADMINNODEBALANCE_SUCCESS,
+          payload: response.data.balance,
+        });
+      }).catch((error) => {
+        dispatch({
+          type: FETCH_ADMINNODEBALANCE_FAIL,
           payload: error,
         });
 
