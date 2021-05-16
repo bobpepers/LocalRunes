@@ -1,10 +1,12 @@
 #!/bin/bash -l
 
-cd /home/bago/runebase.io/server
-/usr/bin/screen -X -S websiteapi quit
-/usr/bin/screen -dmS websiteapi
-/usr/bin/screen -S websiteapi -p 0 -X stuff "bash $(printf \\r)"
+cd /home/app/LocalRunes/server
+/usr/bin/screen -X -S api quit
+/usr/bin/screen -dmS api
+/usr/bin/screen -S api -p 0 -X stuff "bash $(printf \\r)"
 sleep 10
-/usr/bin/screen -S websiteapi -p 0 -X stuff "npm run start $(printf \\r)"
+/usr/bin/screen -S api -p 0 -X stuff "nvm use 13 $(printf \\r)"
+sleep 10
+/usr/bin/screen -S api -p 0 -X stuff "npm run dev $(printf \\r)"
 sleep 10
 
