@@ -1852,6 +1852,18 @@ export const sendAdminMassMail = async (req, res, next) => {
   const bololexRunesBtcChangePercentColor = Number(bololexRunesBtcCh.data.result[0].priceChange) > 0 ? 'green' : 'red';
   const bololexRunesBtcChangePercentUniCode = Number(bololexRunesBtcCh.data.result[0].priceChange) > 0 ? '&#9650;' : '&#9660;';
 
+  const bololexRunesDogeCh = await axios.get("https://api.bololex.com/api/prices/RUNES-DOGE");
+  const bololexRunesDogeChangePercentColor = Number(bololexRunesDogeCh.data.result[0].priceChange) > 0 ? 'green' : 'red';
+  const bololexRunesDogeChangePercentUniCode = Number(bololexRunesDogeCh.data.result[0].priceChange) > 0 ? '&#9650;' : '&#9660;';
+
+  const bololexRunesEthCh = await axios.get("https://api.bololex.com/api/prices/RUNES-ETH");
+  const bololexRunesEthChangePercentColor = Number(bololexRunesEthCh.data.result[0].priceChange) > 0 ? 'green' : 'red';
+  const bololexRunesEthChangePercentUniCode = Number(bololexRunesEthCh.data.result[0].priceChange) > 0 ? '&#9650;' : '&#9660;';
+
+  const bololexRunesBoloCh = await axios.get("https://api.bololex.com/api/prices/RUNES-BOLO");
+  const bololexRunesBoloChangePercentColor = Number(bololexRunesBoloCh.data.result[0].priceChange) > 0 ? 'green' : 'red';
+  const bololexRunesBoloChangePercentUniCode = Number(bololexRunesBoloCh.data.result[0].priceChange) > 0 ? '&#9650;' : '&#9660;';
+
   const altmarketsRunesDogeCh = await axios.get("https://v2.altmarkets.io/api/v2/peatio/public/markets/runesdoge/tickers");
   // console.log(altmarketsRunesDogeCh);
   let altmarketsruneDogePriceChange;
@@ -2013,6 +2025,39 @@ export const sendAdminMassMail = async (req, res, next) => {
       ])).toFixed(8).toString()
       : bololexRunesBtc[0].quotes.USD.price.toFixed(8).toString();
 
+    const bololexRunesDoge = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/DOGE');
+    const bololexRunesDogePrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+      ? ((bololexRunesDoge[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+        user
+            && user.country
+            && user.country.currency
+          ? user.country.currency.iso
+          : 'USD'
+      ])).toFixed(8).toString()
+      : bololexRunesDoge[0].quotes.USD.price.toFixed(8).toString();
+
+    const bololexRunesEth = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/ETH');
+    const bololexRunesEthPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+      ? ((bololexRunesEth[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+        user
+              && user.country
+              && user.country.currency
+          ? user.country.currency.iso
+          : 'USD'
+      ])).toFixed(8).toString()
+      : bololexRunesEth[0].quotes.USD.price.toFixed(8).toString();
+
+    const bololexRunesBolo = markets.data.filter((item) => item.exchange_name === 'Bololex' && item.pair === 'RUNES/BOLO');
+    const bololexRunesBoloPrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
+      ? ((bololexRunesBolo[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
+        user
+              && user.country
+              && user.country.currency
+          ? user.country.currency.iso
+          : 'USD'
+      ])).toFixed(8).toString()
+      : bololexRunesBolo[0].quotes.USD.price.toFixed(8).toString();
+
     const altmarketsRunesDoge = markets.data.filter((item) => item.exchange_name === 'AltMarkets' && item.pair === 'RUNES/DOGE');
     const altmarketsRunesDogePrice = user && user.country && user.country.currency && user.country.currency.iso !== 'USD'
       ? ((altmarketsRunesDoge[0].quotes.USD.price) * Number(currencyCoversion.data.rates[
@@ -2109,6 +2154,99 @@ export const sendAdminMassMail = async (req, res, next) => {
             <td style="text-align: center; border-bottom: 1px solid black">
               <a 
                 href="https://bololex.com/trading/?symbol=RUNES-BTC" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on Bololex &rarr;
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/bololex-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/DOGE</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                ${bololexRunesDogePrice && bololexRunesDogePrice} ${
+  user
+                  && user.country
+                  && user.country.currency
+                  && user.country.currency.iso
+}
+              </p>              
+            </td>
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${bololexRunesDogeChangePercentColor && bololexRunesDogeChangePercentColor}">
+            ${bololexRunesDogeChangePercentUniCode && bololexRunesDogeChangePercentUniCode} ${
+  bololexRunesDogeCh
+              && bololexRunesDogeCh.data
+              && bololexRunesDogeCh.data.result
+              && bololexRunesDogeCh.data.result[0].priceChange}%
+            </td>
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://bololex.com/trading/?symbol=RUNES-DOGE" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on Bololex &rarr;
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/bololex-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/ETH</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                ${bololexRunesEthPrice && bololexRunesEthPrice} ${
+  user
+                  && user.country
+                  && user.country.currency
+                  && user.country.currency.iso
+}
+              </p>              
+            </td>
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${bololexRunesEthChangePercentColor && bololexRunesEthChangePercentColor}">
+            ${bololexRunesEthChangePercentUniCode && bololexRunesEthChangePercentUniCode} ${
+  bololexRunesEthCh
+              && bololexRunesEthCh.data
+              && bololexRunesEthCh.data.result
+              && bololexRunesEthCh.data.result[0].priceChange}%
+            </td>
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://bololex.com/trading/?symbol=RUNES-ETH" 
+                target="_blank" 
+                style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
+              >
+                Trade on Bololex &rarr;
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="text-align: center; border-bottom: 1px solid black; margin: 0;">
+              <img style="width: 30px; height: 30px; margin-top: 5px;" src="https://downloads.runebase.io/bololex-thumb-2.png">
+              <p style="font-size: 18px; margin: 0;">RUNES/BOLO</p>
+              <p style="margin-top: 0; margin-bottom: 5px">
+                ${bololexRunesBtcPrice && bololexRunesBtcPrice} ${
+  user
+                  && user.country
+                  && user.country.currency
+                  && user.country.currency.iso
+}
+              </p>              
+            </td>
+            <td style="font-size: 18px; text-align: center; border-bottom: 1px solid black; color: ${bololexRunesBoloChangePercentColor && bololexRunesBoloChangePercentColor}">
+            ${bololexRunesBoloChangePercentUniCode && bololexRunesBoloChangePercentUniCode} ${
+  bololexRunesBoloCh
+              && bololexRunesBoloCh.data
+              && bololexRunesBoloCh.data.result
+              && bololexRunesBoloCh.data.result[0].priceChange}%
+            </td>
+            <td style="text-align: center; border-bottom: 1px solid black">
+              <a 
+                href="https://bololex.com/trading/?symbol=RUNES-BOLO" 
                 target="_blank" 
                 style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 3px; background-color: #EB7035; border-top: 12px solid #EB7035; border-bottom: 12px solid #EB7035; border-right: 18px solid #EB7035; border-left: 18px solid #EB7035; display: inline-block;"
               >
