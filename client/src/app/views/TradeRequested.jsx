@@ -56,6 +56,8 @@ const renderer = ({
     <span className="w-100 text-center">
       <h3 style={{ margin: 0, padding: 0 }}>Time Left</h3>
       <h3 style={{ margin: 0, padding: 0 }}>
+        {hours}
+        :
         {minutes}
         :
         {seconds}
@@ -263,9 +265,10 @@ const TradeRequested = (props) => {
                     && (
                     <Countdown
                       key={new Date(currentTrade.reponseTime).valueOf()}
-                      date={new Date(currentTrade.reponseTime).valueOf() + (10 * 60 * 1000)}
+                      date={new Date(currentTrade.reponseTime).valueOf()}
                       renderer={renderer}
                     />
+
                     )
                   }
               </Grid>
