@@ -520,11 +520,13 @@ export const fetchAdminUser = async (req, res, next) => {
           model: db.activity,
           // required: false,
           as: 'spender',
+          limit: 300,
         },
         {
           model: db.activity,
           // required: false,
           as: 'earner',
+          limit: 300,
         },
         // {
         //  model: db.activityArchive,
