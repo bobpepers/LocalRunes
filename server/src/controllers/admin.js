@@ -520,7 +520,7 @@ export const fetchAdminUser = async (req, res, next) => {
           model: db.activity,
           // required: false,
           as: 'spender',
-          limit: 1000,
+          limit: 3000,
           order: [
             ['id', 'desc'],
           ],
@@ -529,7 +529,7 @@ export const fetchAdminUser = async (req, res, next) => {
           model: db.activity,
           // required: false,
           as: 'earner',
-          limit: 1000,
+          limit: 3000,
           order: [
             ['id', 'desc'],
           ],
