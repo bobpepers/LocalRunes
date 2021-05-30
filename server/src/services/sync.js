@@ -93,6 +93,39 @@ const syncTransactions = async (startBlock, endBlock, io, onlineUsers) => {
       await db.sequelize.transaction({
         isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
       }, async (t) => {
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log('transaction getinstance');
+        console.log(transaction);
         const wallet = await db.wallet.findOne({
           where: {
             userId: trans.address.wallet.userId,
@@ -101,12 +134,31 @@ const syncTransactions = async (startBlock, endBlock, io, onlineUsers) => {
           lock: t.LOCK.UPDATE,
         });
 
-        console.log('update transaction');
-        console.log(transaction);
         let updatedTransaction;
         let updatedWallet;
         console.log(transaction.confirmations);
         if (transaction.confirmations < 10) {
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log('update transaction');
+          console.log(transaction);
           updatedTransaction = await trans.update({
             confirmations: transaction.confirmations,
           }, {
@@ -115,22 +167,6 @@ const syncTransactions = async (startBlock, endBlock, io, onlineUsers) => {
           });
         }
         if (transaction.confirmations >= 10) {
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
-          console.log('transaction');
           console.log(transaction);
           // transaction.details.forEach(async (detail) => {
 
