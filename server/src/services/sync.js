@@ -81,10 +81,15 @@ const syncTransactions = async (startBlock, endBlock, io, onlineUsers) => {
     }],
   });
   console.log(transactions);
-  transactions.forEach(async (trans) => {
+  // transactions.forEach(async (trans) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const trans of transactions) {
+  // for await (const trans of transactions) {
     const transaction = await getInstance().getTransaction(trans.txid);
-    await Promise.all(transaction.details.map(async (detail) => {
-      db.sequelize.transaction({
+    // eslint-disable-next-line no-restricted-syntax
+    for (const detail of transaction.details) {
+      // eslint-disable-next-line no-await-in-loop
+      await db.sequelize.transaction({
         isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
       }, async (t) => {
         const wallet = await db.wallet.findOne({
@@ -286,8 +291,12 @@ const syncTransactions = async (startBlock, endBlock, io, onlineUsers) => {
           }
         });
       });
-    }));
-  });
+    }
+    // await Promise.all(transaction.details.map(async (detail) => {
+    //
+    // }));
+  // });
+  }
   console.log(transactions.length);
 };
 
