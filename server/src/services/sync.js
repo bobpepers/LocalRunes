@@ -85,6 +85,7 @@ const syncTransactions = async (startBlock, endBlock, io, onlineUsers) => {
   // eslint-disable-next-line no-restricted-syntax
   for (const trans of transactions) {
   // for await (const trans of transactions) {
+    // eslint-disable-next-line no-await-in-loop
     const transaction = await getInstance().getTransaction(trans.txid);
     // eslint-disable-next-line no-restricted-syntax
     for (const detail of transaction.details) {
