@@ -160,11 +160,12 @@ const syncTransactions = async (startBlock, endBlock, io, onlineUsers) => {
           console.log('update transaction');
           console.log(transaction);
           updatedTransaction = await trans.update({
-            confirmations: transaction.confirmations,
+            confirmations: transaction.confirmations > 30000 ? 30000 : transaction.confirmations,
           }, {
             transaction: t,
             lock: t.LOCK.UPDATE,
           });
+          console.log(updatedTransaction);
         }
         if (transaction.confirmations >= 10) {
           console.log(transaction);
