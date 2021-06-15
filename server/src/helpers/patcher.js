@@ -5,9 +5,12 @@ const { getInstance } = require('../services/rclient');
 
 async function patchDeposits() {
   const transactions = await getInstance().listTransactions(1000);
+  let x = 1;
   // eslint-disable-next-line no-restricted-syntax
   for await (const trans of transactions) {
-  // transactions.forEach(async (trans) => {
+    console.log(x);
+    x += 1;
+    // transactions.forEach(async (trans) => {
     console.log('patchDeposits');
     console.log('patchDeposits');
     console.log('patchDeposits');
