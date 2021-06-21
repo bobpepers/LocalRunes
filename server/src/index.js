@@ -464,7 +464,13 @@ router(app, io, pub, sub, expired_subKey, volumeInfo, onlineUsers);
 // db.sequelize.sync().then(() => {
 server.listen(port);
 // setRunebaseEnv('Mainnet', process.env.RUNEBASE_ENV_PATH);
-startSync(io, onlineUsers);
+
+(async function () {
+  await startSync(io, onlineUsers);
+  await patchDeposits();
+}());
+
+// startSync(io, onlineUsers);
 // patchDeposits();
 // }).catch((err) => {
 //  console.log(err);
@@ -478,7 +484,7 @@ startSync(io, onlineUsers);
 //  removeStaleTickets(onlineUsers);
 // });
 
-patchDeposits();
+// patchDeposits();
 const schedulePatchDeposits = schedule.scheduleJob('10 */1 * * *', () => {
   patchDeposits();
 });

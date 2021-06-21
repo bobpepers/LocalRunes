@@ -1,5 +1,6 @@
 /* eslint no-underscore-dangle: [2, { "allow": ["_eventName", "_address", "_time", "_orderId"] }] */
 
+import PQueue from 'p-queue';
 import db from '../models';
 
 const _ = require('lodash');
@@ -17,6 +18,8 @@ const { isMainnet } = require('./rclientConfig');
 // const MarketMaker = require('../models/marketMaker');
 // const network = require('../api/network');
 
+const queue = new PQueue({ concurrency: 1 });
+
 const { getInstance } = require('./rclient');
 
 const RPC_BATCH_SIZE = 1;
@@ -28,13 +31,13 @@ const BLOCK_0_TIMESTAMP = 0;
 // let MetaData;
 let senderAddress;
 
-const sequentialLoop = (iterations, process, exit) => {
+const sequentialLoop = async (iterations, process, exit) => {
   let index = 0;
   let done = false;
   let shouldExit = false;
 
   const loop = {
-    next() {
+    async next() {
       if (done) {
         if (shouldExit && exit) {
           return exit();
@@ -43,7 +46,9 @@ const sequentialLoop = (iterations, process, exit) => {
 
       if (index < iterations) {
         index++;
-        process(loop);
+        console.log('index');
+        console.log(index);
+        await process(loop);
       } else {
         done = true;
 
@@ -54,6 +59,8 @@ const sequentialLoop = (iterations, process, exit) => {
     },
 
     iteration() {
+      console.log('iteration');
+      console.log(index - 1);
       return index - 1; // Return the loop number we're on
     },
 
@@ -62,7 +69,7 @@ const sequentialLoop = (iterations, process, exit) => {
       shouldExit = end;
     },
   };
-  loop.next();
+  await loop.next();
   return loop;
 };
 
@@ -336,6 +343,8 @@ const syncTransactions = async (startBlock, endBlock, io, onlineUsers) => {
   // });
   }
   console.log(transactions.length);
+  console.log('end sync transaction');
+  return true;
 };
 
 const getInsertBlockPromises = async (startBlock, endBlock) => {
@@ -385,39 +394,6 @@ const getInsertBlockPromises = async (startBlock, endBlock) => {
   return { insertBlockPromises };
 };
 
-const peerHighestSyncedHeader = async () => {
-  let peerBlockHeader = null;
-  try {
-    const res = await getInstance().getPeerInfo();
-    _.each(res, (nodeInfo) => {
-      if (_.isNumber(nodeInfo.synced_headers) && nodeInfo.synced_headers !== -1) {
-        peerBlockHeader = Math.max(nodeInfo.synced_headers, peerBlockHeader);
-      }
-    });
-  } catch (err) {
-    console.log(`Error calling getPeerInfo: ${err.message}`);
-    return null;
-  }
-
-  return peerBlockHeader;
-};
-
-const calculateSyncPercent = async (blockCount, blockTime) => {
-  const peerBlockHeader = await peerHighestSyncedHeader();
-  if (_.isNull(peerBlockHeader)) {
-    // estimate by blockTime
-    let syncPercent = 100;
-    const timestampNow = moment().unix();
-    // if blockTime is 20 min behind, we are not fully synced
-    if (blockTime < timestampNow - SYNC_THRESHOLD_SECS) {
-      syncPercent = Math.floor(((blockTime - BLOCK_0_TIMESTAMP) / (timestampNow - BLOCK_0_TIMESTAMP)) * 100);
-    }
-    return syncPercent;
-  }
-
-  return Math.floor((blockCount / peerBlockHeader) * 100);
-};
-
 const sync = async (io, onlineUsers) => {
   const currentBlockCount = Math.max(0, await getInstance().getBlockCount());
   const currentBlockHash = await getInstance().getBlockHash(currentBlockCount);
@@ -435,21 +411,32 @@ const sync = async (io, onlineUsers) => {
   }
 
   const numOfIterations = Math.ceil(((currentBlockCount - startBlock) + 1) / BLOCK_BATCH_SIZE);
+  console.log('numOfIterations');
+  console.log(numOfIterations);
+  console.log('BLOCK_BATCH_SIZE');
+  console.log(BLOCK_BATCH_SIZE);
+  console.log('currentBlockCount');
+  console.log(currentBlockCount);
 
   await sequentialLoop(
     numOfIterations,
+    // 1,
     async (loop) => {
       const endBlock = Math.min((startBlock + BLOCK_BATCH_SIZE) - 1, currentBlockCount);
 
-      await syncTransactions(startBlock, endBlock, io, onlineUsers);
-      console.log('Synced syncTrade');
+      // const taskTansaction = await syncTransactions(startBlock, endBlock, io, onlineUsers);
+      // await queue.add(() => taskTansaction);
+
+      await queue.add(() => syncTransactions(startBlock, endBlock, io, onlineUsers));
 
       const { insertBlockPromises } = await getInsertBlockPromises(startBlock, endBlock);
-      await Promise.all(insertBlockPromises);
+      await queue.add(() => Promise.all(insertBlockPromises));
+      // await Promise.all(insertBlockPromises);
+
       console.log('Inserted Blocks');
 
       startBlock = endBlock + 1;
-      loop.next();
+      await loop.next();
     },
     async () => {
       if (numOfIterations > 0) {
@@ -480,6 +467,6 @@ async function startSync(io, onlineUsers) {
 
 module.exports = {
   startSync,
-  calculateSyncPercent,
+  // calculateSyncPercent,
   // getAddressBalances,
 };
